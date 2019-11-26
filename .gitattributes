@@ -1,0 +1,5 @@
+# Excluding files and folders from export
+/chat-plugin export-ignore
+/chat/Depends export-ignore
+
+.gitattributes export-ignore
