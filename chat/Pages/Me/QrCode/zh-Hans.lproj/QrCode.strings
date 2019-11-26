@@ -1,0 +1,9 @@
+
+/* Class = "UILabel"; text = "我的二维码"; ObjectID = "K3M-hi-LD9"; */
+"K3M-hi-LD9.text" = "我的二维码";
+
+/* Class = "UIButton"; normalTitle = "保存到手机"; ObjectID = "UMr-Kf-Eoc"; */
+"UMr-Kf-Eoc.normalTitle" = "保存到手机";
+
+/* Class = "UILabel"; text = "扫描上方二维码，可添加我\n保存二维码分享给好友"; ObjectID = "bc9-wZ-gO2"; */
+"bc9-wZ-gO2.text" = "扫描上方二维码，可添加我\n保存二维码分享给好友";

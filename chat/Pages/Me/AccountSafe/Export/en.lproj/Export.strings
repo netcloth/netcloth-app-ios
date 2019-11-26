@@ -1,0 +1,164 @@
+
+/* Class = "UILabel"; text = "Use pen and paper to copy the private key in alphabetical order correctly (case-sensitive), or use usb flash drives to save the private key offline, do not share to email, photo album, IM softwares and other social applications."; ObjectID = "1gV-qw-FCc"; */
+"1gV-qw-FCc.text" = "Use pen and paper to copy the private key in alphabetical order correctly (case-sensitive), or use usb flash drives to save the private key offline, do not share to email, photo album, IM softwares and other social applications.";
+
+/* Class = "UILabel"; text = "您的Account Password安全性较低，为了您的账户安全，请重新设置密码。"; ObjectID = "3GS-2i-ati"; */
+"3GS-2i-ati.text" = "Your account is low security in Password. Please reset your password for account security.";
+
+/* Class = "UILabel"; text = "If you like to store online please make sure some password vault apps, such as 1Password/Keeppass."; ObjectID = "3Lt-tR-cKM"; */
+"3Lt-tR-cKM.text" = "If you like to store online please make sure some password vault apps, such as 1Password/Keeppass.";
+
+/* Class = "UINavigationItem"; title = "Confirm"; ObjectID = "3qz-Qf-Itc"; */
+"3qz-Qf-Itc.title" = "Confirm";
+
+/* Class = "UILabel"; text = "Store Offline"; ObjectID = "3z1-0L-ZEW"; */
+"3z1-0L-ZEW.text" = "Store Offline";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "4zH-pm-tgB"; */
+"4zH-pm-tgB.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "Don't Transfer via Internet Tools"; ObjectID = "7KC-W0-cou"; */
+"7KC-W0-cou.text" = "Don't Transfer via Internet Tools";
+
+/* Class = "UILabel"; text = "Please store the Keystore to a safe offline place,such as a flash drive. Never upload to the internet."; ObjectID = "7sc-St-hQg"; */
+"7sc-St-hQg.text" = "Please store the Keystore to a safe offline place,such as a flash drive. Never upload to the internet.";
+
+/* Class = "UILabel"; text = "Don't Transfer via Internet Tools"; ObjectID = "8ZN-JJ-F1p"; */
+"8ZN-JJ-F1p.text" = "Don't Transfer via Internet Tools";
+
+/* Class = "UILabel"; text = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss."; ObjectID = "8hM-Zq-Iva"; */
+"8hM-Zq-Iva.text" = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss.";
+
+/* Class = "UILabel"; text = "Store Offline"; ObjectID = "A51-Ac-Vd5"; */
+"A51-Ac-Vd5.text" = "Store Offline";
+
+/* Class = "UILabel"; text = "Set Account Password"; ObjectID = "Adt-Nh-8Nj"; */
+"Adt-Nh-8Nj.text" = "Set Account Password";
+
+/* Class = "UILabel"; text = "How to backup Private Key?"; ObjectID = "AeM-80-8UR"; */
+"AeM-80-8UR.text" = "How to backup Private Key?";
+
+/* Class = "UILabel"; text = "Please store the Keystore to a safe offline place,such as a flash drive. Never upload to the internet."; ObjectID = "BCI-4s-uWe"; */
+"BCI-4s-uWe.text" = "Please store the Keystore to a safe offline place,such as a flash drive. Never upload to the internet.";
+
+/* Class = "UILabel"; text = "Keystore can be regarded as the encrypted private key, which needs to be used together with the account password to restore the account.
+restore account from Keystore: import Keystore+ account password confirmation"; ObjectID = "GCX-mW-Qw4"; */
+"GCX-mW-Qw4.text" = "Keystore can be regarded as the encrypted private key, which needs to be used together with the account password to restore the account.\nrestore account from Keystore: import Keystore+ account password confirmation";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "I5f-nl-fAP"; */
+"I5f-nl-fAP.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss."; ObjectID = "JWV-yF-UhQ"; */
+"JWV-yF-UhQ.text" = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss.";
+
+/* Class = "UILabel"; text = "What's Keystore？"; ObjectID = "K30-00-DZ1"; */
+"K30-00-DZ1.text" = "What's Keystore？";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "LhA-RV-oWl"; */
+"LhA-RV-oWl.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Confirm"; ObjectID = "O1V-EW-7rr"; */
+"O1V-EW-7rr.title" = "Confirm";
+
+/* Class = "UILabel"; text = "What's Private Key？"; ObjectID = "RDp-RA-CSR"; */
+"RDp-RA-CSR.text" = "What's Private Key？";
+
+/* Class = "UINavigationItem"; title = "Account Backup"; ObjectID = "T5W-5s-o3X"; */
+"T5W-5s-o3X.title" = "Account Backup";
+
+/* Class = "UILabel"; text = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss."; ObjectID = "UW6-5o-rEj"; */
+"UW6-5o-rEj.text" = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss.";
+
+/* Class = "UILabel"; text = "Enter the keystore that was backed up in the previous step."; ObjectID = "UaS-CL-tgm"; */
+"UaS-CL-tgm.text" = "Enter the keystore that was backed up in the previous step.";
+
+/* Class = "UILabel"; text = "Use pen and paper to copy the private key in alphabetical order correctly (case-sensitive), or use usb flash drives to save the private key offline, do not share to email, photo album, IM softwares and other social applications."; ObjectID = "WBV-2a-kst"; */
+"WBV-2a-kst.text" = "Use pen and paper to copy the private key in alphabetical order correctly (case-sensitive), or use usb flash drives to save the private key offline, do not share to email, photo album, IM softwares and other social applications.";
+
+/* Class = "UIButton"; normalTitle = "Copy Keystore"; ObjectID = "XTC-2R-JXF"; */
+"XTC-2R-JXF.normalTitle" = "Copy Keystore";
+
+/* Class = "UILabel"; text = "Store to Password Vault"; ObjectID = "YLH-Vq-ndF"; */
+"YLH-Vq-ndF.text" = "Store to Password Vault";
+
+/* Class = "UILabel"; text = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss."; ObjectID = "YW8-Ju-Jnz"; */
+"YW8-Ju-Jnz.text" = "Don't use Email/Cloud Storage/Notepad/IM softwares to transfer Keystore. It easily gets hacked and result in loss.";
+
+/* Class = "UILabel"; text = "弱"; ObjectID = "Z5X-DH-nam"; */
+"Z5X-DH-nam.text" = "弱";
+
+/* Class = "UILabel"; text = "The private key is a 256-bit random number, and the ownership of the private key means the ownership of the account.\nrestore account from private key: import private key (no password required)"; ObjectID = "aLg-Tx-IjR"; */
+"aLg-Tx-IjR.text" = "The private key is a 256-bit random number, and the ownership of the private key means the ownership of the account.\nrestore account from private key: import private key (no password required)";
+
+/* Class = "UILabel"; text = "Store to Password Vault"; ObjectID = "bSH-1t-Q61"; */
+"bSH-1t-Q61.text" = "Store to Password Vault";
+
+/* Class = "UILabel"; text = "Account Password"; ObjectID = "cej-Vn-qIq"; */
+"cej-Vn-qIq.text" = "Account Password";
+
+/* Class = "UILabel"; text = "Don't Transfer via Internet Tools"; ObjectID = "dVi-f1-byQ"; */
+"dVi-f1-byQ.text" = "Don't Transfer via Internet Tools";
+
+/* Class = "UILabel"; text = "Private Key"; ObjectID = "dwC-U1-xiX"; */
+"dwC-U1-xiX.text" = "Private Key";
+
+/* Class = "UINavigationItem"; title = "Confirm"; ObjectID = "ekJ-Rx-KJY"; */
+"ekJ-Rx-KJY.title" = "Confirm";
+
+/* Class = "UILabel"; text = "If you like to store online please make sure some password vault apps, such as 1Password/Keeppass."; ObjectID = "gN7-96-Suf"; */
+"gN7-96-Suf.text" = "If you like to store online please make sure some password vault apps, such as 1Password/Keeppass.";
+
+/* Class = "UILabel"; text = "Keystore"; ObjectID = "h59-8O-bw4"; */
+"h59-8O-bw4.text" = "Keystore";
+
+/* Class = "UILabel"; text = "What's Keystore？"; ObjectID = "hsu-ui-nyg"; */
+"hsu-ui-nyg.text" = "What's Keystore？";
+
+/* Class = "UILabel"; text = "Keystore can be regarded as the encrypted private key, which needs to be used together with the account password to restore the account.
+restore account from Keystore: import Keystore+ account password confirmation"; ObjectID = "ix4-6k-hzH"; */
+"ix4-6k-hzH.text" = "Keystore can be regarded as the encrypted private key, which needs to be used together with the account password to restore the account.\nrestore account from Keystore: import Keystore+ account password confirmation";
+
+/* Class = "UILabel"; text = "What's Private Key？"; ObjectID = "kgJ-0d-hfv"; */
+"kgJ-0d-hfv.text" = "What's Private Key？";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "nFO-iT-YOb"; */
+"nFO-iT-YOb.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "Don't Transfer via Internet Tools"; ObjectID = "nl5-iS-00k"; */
+"nl5-iS-00k.text" = "Don't Transfer via Internet Tools";
+
+/* Class = "UILabel"; text = "请再次输入密码"; ObjectID = "oVC-y4-9PM"; */
+"oVC-y4-9PM.text" = "Confirm Password Again";
+
+/* Class = "UILabel"; text = "How to backup Private Key?"; ObjectID = "ooH-Vt-Epa"; */
+"ooH-Vt-Epa.text" = "How to backup Private Key?";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "ox9-td-bng"; */
+"ox9-td-bng.normalTitle" = "Next";
+
+/* Class = "UILabel"; text = "The private key is a 256-bit random number, and the ownership of the private key means the ownership of the account.\nrestore account from private key: import private key (no password required)"; ObjectID = "pl4-gW-JH9"; */
+"pl4-gW-JH9.text" = "The private key is a 256-bit random number, and the ownership of the private key means the ownership of the account.\nrestore account from private key: import private key (no password required)";
+
+/* Class = "UILabel"; text = "Enter the private key that was backed up in the previous step."; ObjectID = "ufX-fE-3Tk"; */
+"ufX-fE-3Tk.text" = "Enter the private key that was backed up in the previous step.";
+
+/* Class = "UILabel"; text = "If the local account is lost, or if the device needs to be replaced, the account can be restored by importing the private key. Make sure your private key is stored in a secure, offline location. Do not transfer the private key through any networking application."; ObjectID = "voU-15-GMR"; */
+"voU-15-GMR.text" = "If the local account is lost, or if the device needs to be replaced, the account can be restored by importing the private key. Make sure your private key is stored in a secure, offline location. Do not transfer the private key through any networking application.";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "vy6-vm-1jJ"; */
+"vy6-vm-1jJ.normalTitle" = "Next";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "xPh-6R-CVl"; */
+"xPh-6R-CVl.normalTitle" = "Confirm";
+
+/* Class = "UINavigationItem"; title = "Account Backup"; ObjectID = "xtu-yP-JLQ"; */
+"xtu-yP-JLQ.title" = "Account Backup";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "yPY-Rx-zQI"; */
+"yPY-Rx-zQI.text" = "Label";
+
+/* Class = "UILabel"; text = "Enter the previous account password"; ObjectID = "yZk-61-usK"; */
+"yZk-61-usK.text" = "Enter the previous account password";
+
+/* Class = "UILabel"; text = "You can import the Keystore and confirm with the account password to restore the account again. Make sure the Keystore file is saved in a secure, offline location."; ObjectID = "zDG-ez-Zdh"; */
+"zDG-ez-Zdh.text" = "You can import the Keystore and confirm with the account password to restore the account again. Make sure the Keystore file is saved in a secure, offline location.";

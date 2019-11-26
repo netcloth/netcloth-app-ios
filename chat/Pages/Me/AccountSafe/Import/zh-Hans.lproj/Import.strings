@@ -1,0 +1,48 @@
+
+/* Class = "UITextField"; placeholder = "请输入账户名称"; ObjectID = "5uH-Jl-HlZ"; */
+"5uH-Jl-HlZ.placeholder" = "请输入账户名称";
+
+/* Class = "UIButton"; normalTitle = "确认导入"; ObjectID = "8Lf-6x-AIR"; */
+"8Lf-6x-AIR.normalTitle" = "确认导入";
+
+/* Class = "UITextField"; placeholder = "请再次输入密码"; ObjectID = "8Zl-89-sXG"; */
+"8Zl-89-sXG.placeholder" = "请再次输入密码";
+
+/* Class = "UILabel"; text = "设置账户名称"; ObjectID = "BaL-2a-sVD"; */
+"BaL-2a-sVD.text" = "设置账户名称";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "I8W-rG-jHa"; */
+"I8W-rG-jHa.text" = "Label";
+
+/* Class = "UILabel"; text = "从私钥导入账户"; ObjectID = "NEJ-Ra-1TJ"; */
+"NEJ-Ra-1TJ.text" = "从私钥导入账户";
+
+/* Class = "UILabel"; text = "设置账户名称"; ObjectID = "Och-0s-KYW"; */
+"Och-0s-KYW.text" = "设置账户名称";
+
+/* Class = "UITextField"; placeholder = "请输入密码（至少8位）"; ObjectID = "Qul-YN-KPu"; */
+"Qul-YN-KPu.placeholder" = "请输入密码（至少8位）";
+
+/* Class = "UILabel"; text = "设置账户密码"; ObjectID = "RM2-9r-mbb"; */
+"RM2-9r-mbb.text" = "设置账户密码";
+
+/* Class = "UILabel"; text = "请输入之前设定的账户登录密码"; ObjectID = "VK4-sW-W1v"; */
+"VK4-sW-W1v.text" = "请输入之前设定的账户登录密码";
+
+/* Class = "UILabel"; text = "请输入Keystore字符"; ObjectID = "a2C-pd-tpy"; */
+"a2C-pd-tpy.text" = "请输入Keystore字符";
+
+/* Class = "UILabel"; text = "从Keystore导入账户"; ObjectID = "gjo-gb-45y"; */
+"gjo-gb-45y.text" = "从Keystore导入账户";
+
+/* Class = "UILabel"; text = "账户密码"; ObjectID = "gp2-Q3-aIH"; */
+"gp2-Q3-aIH.text" = "账户密码";
+
+/* Class = "UIButton"; normalTitle = "确认导入"; ObjectID = "qZk-Mx-35a"; */
+"qZk-Mx-35a.normalTitle" = "确认导入";
+
+/* Class = "UILabel"; text = "请输入私钥（注意区分大小写）"; ObjectID = "uCs-1g-RvX"; */
+"uCs-1g-RvX.text" = "请输入私钥（注意区分大小写）";
+
+/* Class = "UINavigationItem"; title = "导入账户"; ObjectID = "zib-cR-ePd"; */
+"zib-cR-ePd.title" = "导入账户";

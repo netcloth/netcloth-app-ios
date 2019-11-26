@@ -1,0 +1,8 @@
+
+/* Class = "UILabel"; text = "消息"; ObjectID = "2Xw-r5-ir9"; */
+"2Xw-r5-ir9.text" = "消息";
+/* Class = "UITabBarItem"; title = "消息"; ObjectID = "dAr-DJ-zTS"; */
+"dAr-DJ-zTS.title" = "消息";
+
+/* Class = "UILabel"; text = "Network connection is unsuccessful"; ObjectID = "i4k-Hn-oab"; */
+"i4k-Hn-oab.text" = "网络连接不成功";

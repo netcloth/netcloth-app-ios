@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "备份通讯录"; ObjectID = "gha-qy-WxB"; */
+"gha-qy-WxB.text" = "Contacts Backup";
+
+/* Class = "UILabel"; text = "修改密码"; ObjectID = "s89-GE-MQY"; */
+"s89-GE-MQY.text" = "Change Password";
+
+/* Class = "UILabel"; text = "备份账户"; ObjectID = "tXL-VV-zkS"; */
+"tXL-VV-zkS.text" = "Account Backup";
+
+/* Class = "UINavigationItem"; title = "账户与安全"; ObjectID = "tmV-RK-aXz"; */
+"tmV-RK-aXz.title" = "Account and Security";
+
+/* Class = "UILabel"; text = "恢复通讯录"; ObjectID = "xeK-4s-4EF"; */
+"xeK-4s-4EF.text" = "Restore Contacts";

@@ -1,0 +1,42 @@
+
+/* Class = "UILabel"; text = "连接失败"; ObjectID = "4UA-Dv-UcD"; */
+"4UA-Dv-UcD.text" = "连接失败";
+
+/* Class = "UIButton"; normalTitle = "连接"; ObjectID = "4Z9-R0-ELX"; */
+"4Z9-R0-ELX.normalTitle" = "连接";
+
+/* Class = "UILabel"; text = "延迟：460ms"; ObjectID = "4do-24-oQv"; */
+"4do-24-oQv.text" = "延迟：460ms";
+
+/* Class = "UILabel"; text = "Polychain"; ObjectID = "6s9-j2-Aqg"; */
+"6s9-j2-Aqg.text" = "Polychain";
+
+/* Class = "UILabel"; text = "1."; ObjectID = "B5Y-wq-68V"; */
+"B5Y-wq-68V.text" = "1.";
+
+/* Class = "UILabel"; text = "Polychain"; ObjectID = "IWw-JF-t0r"; */
+"IWw-JF-t0r.text" = "Polychain";
+
+/* Class = "UILabel"; text = "延迟：460ms"; ObjectID = "OCX-bM-T83"; */
+"OCX-bM-T83.text" = "延迟：460ms";
+
+/* Class = "UILabel"; text = "1."; ObjectID = "TBa-BX-zRt"; */
+"TBa-BX-zRt.text" = "1.";
+
+/* Class = "UIButton"; normalTitle = "历史记录"; ObjectID = "VzB-il-FD2"; */
+"VzB-il-FD2.normalTitle" = "History";
+
+/* Class = "UILabel"; text = "中"; ObjectID = "XS2-6l-U3c"; */
+"XS2-6l-U3c.text" = "中";
+
+/* Class = "UILabel"; text = "中"; ObjectID = "eg2-oZ-XoV"; */
+"eg2-oZ-XoV.text" = "中";
+
+/* Class = "UIButton"; normalTitle = "连接"; ObjectID = "iRp-nN-28q"; */
+"iRp-nN-28q.normalTitle" = "连接";
+
+/* Class = "UILabel"; text = "Polychain"; ObjectID = "mjV-Sf-BgN"; */
+"mjV-Sf-BgN.text" = "Polychain";
+
+/* Class = "UILabel"; text = "已申明C-IPAL"; ObjectID = "xTo-2Y-vln"; */
+"xTo-2Y-vln.text" = "Claimed Communication Address";

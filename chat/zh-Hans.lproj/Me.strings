@@ -1,0 +1,26 @@
+/* Class = "UIButton"; normalTitle = "Log Out"; ObjectID = "2PI-UQ-1WN"; */
+"2PI-UQ-1WN.normalTitle" = "退出登录";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "6mg-nm-3vQ"; */
+"6mg-nm-3vQ.text" = "关于";
+
+/* Class = "UILabel"; text = "edit"; ObjectID = "FGo-EE-7A9"; */
+"FGo-EE-7A9.text" = "编辑";
+
+/* Class = "UILabel"; text = "我的地址"; ObjectID = "JlK-i2-xVZ"; */
+"JlK-i2-xVZ.text" = "我的地址";
+
+/* Class = "UILabel"; text = "Settings"; ObjectID = "XUF-Zh-QpP"; */
+"XUF-Zh-QpP.text" = "设置";
+
+/* Class = "UILabel"; text = "name"; ObjectID = "adw-yc-H3p"; */
+"adw-yc-H3p.text" = "name";
+
+/* Class = "UILabel"; text = "复制此链接，或扫面下方二维码，可添加我"; ObjectID = "kYv-KH-qt1"; */
+"kYv-KH-qt1.text" = "复制此链接，或扫描二维码";
+
+/* Class = "UITabBarItem"; title = "我的"; ObjectID = "mXO-X2-JxE"; */
+"mXO-X2-JxE.title" = "我的";
+
+/* Class = "UILabel"; text = "Account and Security"; ObjectID = "vFV-Kj-vn4"; */
+"Wma-r2-plV.text" = "账户与安全";

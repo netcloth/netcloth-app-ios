@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Messages"; ObjectID = "2Xw-r5-ir9"; */
+"2Xw-r5-ir9.text" = "Messages";
+
+/* Class = "UITabBarItem"; title = "Messages"; ObjectID = "dAr-DJ-zTS"; */
+"dAr-DJ-zTS.title" = "Messages";
+
+/* Class = "UILabel"; text = "Network connection is unsuccessful"; ObjectID = "i4k-Hn-oab"; */
+"i4k-Hn-oab.text" = "Network connection is unsuccessful";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "oly-RJ-V2H"; */
+"oly-RJ-V2H.text" = "0";

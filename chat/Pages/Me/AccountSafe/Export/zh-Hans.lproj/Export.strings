@@ -1,0 +1,162 @@
+
+/* Class = "UILabel"; text = "使用纸和笔按照字母排列顺序正确抄写私钥（区分大小写），或者用U盘离线保存私钥，请勿分享至邮箱、相册、微信等社交应用。"; ObjectID = "1gV-qw-FCc"; */
+"1gV-qw-FCc.text" = "使用纸和笔按照字母排列顺序正确抄写私钥（区分大小写），或者用U盘离线保存私钥，请勿分享至邮箱、相册、微信等社交应用。";
+
+/* Class = "UILabel"; text = "您的账户密码安全性较低，为了您的账户安全，请重新设置密码。"; ObjectID = "3GS-2i-ati"; */
+"3GS-2i-ati.text" = "您的账户密码安全性较低，为了您的账户安全，请重新设置密码。";
+
+/* Class = "UILabel"; text = "如果需要在线保存，建议使用1Password等密码保管软件保存Keystore。"; ObjectID = "3Lt-tR-cKM"; */
+"3Lt-tR-cKM.text" = "如果需要在线保存，建议使用1Password等密码保管软件保存Keystore。";
+
+/* Class = "UINavigationItem"; title = "验证备份"; ObjectID = "3qz-Qf-Itc"; */
+"3qz-Qf-Itc.title" = "验证备份";
+
+/* Class = "UILabel"; text = "离线保存"; ObjectID = "3z1-0L-ZEW"; */
+"3z1-0L-ZEW.text" = "离线保存";
+
+/* Class = "UIButton"; normalTitle = "确认备份"; ObjectID = "4zH-pm-tgB"; */
+"4zH-pm-tgB.normalTitle" = "确认备份";
+
+/* Class = "UILabel"; text = "请勿使用网络传输"; ObjectID = "7KC-W0-cou"; */
+"7KC-W0-cou.text" = "请勿使用网络传输";
+
+/* Class = "UILabel"; text = "请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、记事本、网盘、聊天工具等危险环境。"; ObjectID = "7sc-St-hQg"; */
+"7sc-St-hQg.text" = "请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、记事本、网盘、聊天工具等危险环境。";
+
+/* Class = "UILabel"; text = "请勿使用网络传输"; ObjectID = "8ZN-JJ-F1p"; */
+"8ZN-JJ-F1p.text" = "请勿使用网络传输";
+
+/* Class = "UILabel"; text = "请勿通过网络工具传输Keystore文件，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。"; ObjectID = "8hM-Zq-Iva"; */
+"8hM-Zq-Iva.text" = "请勿通过网络工具传输Keystore文件，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。";
+
+/* Class = "UILabel"; text = "离线保存"; ObjectID = "A51-Ac-Vd5"; */
+"A51-Ac-Vd5.text" = "离线保存";
+
+/* Class = "UILabel"; text = "请输入密码"; ObjectID = "Adt-Nh-8Nj"; */
+"Adt-Nh-8Nj.text" = "请输入密码";
+
+/* Class = "UILabel"; text = "如何备份私钥？"; ObjectID = "AeM-80-8UR"; */
+"AeM-80-8UR.text" = "如何备份私钥？";
+
+/* Class = "UILabel"; text = "请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、记事本、网盘、聊天工具等危险环境。"; ObjectID = "BCI-4s-uWe"; */
+"BCI-4s-uWe.text" = "请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、记事本、网盘、聊天工具等危险环境。";
+
+/* Class = "UILabel"; text = "Keystore可以理解为经过加密的私钥，需要配合账户的密码使用才能恢复账户。\n从Keystore恢复账户：导入Keystore+账户密码确认"; ObjectID = "GCX-mW-Qw4"; */
+"GCX-mW-Qw4.text" = "Keystore可以理解为经过加密的私钥，需要配合账户的密码使用才能恢复账户。\n从Keystore恢复账户：导入Keystore+账户密码确认";
+
+/* Class = "UIButton"; normalTitle = "验证备份"; ObjectID = "I5f-nl-fAP"; */
+"I5f-nl-fAP.normalTitle" = "验证备份";
+
+/* Class = "UILabel"; text = "请勿通过网络工具传输Keystore文件，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。"; ObjectID = "JWV-yF-UhQ"; */
+"JWV-yF-UhQ.text" = "请勿通过网络工具传输Keystore文件，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。";
+
+/* Class = "UILabel"; text = "什么是keystore？"; ObjectID = "K30-00-DZ1"; */
+"K30-00-DZ1.text" = "什么是keystore？";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "LhA-RV-oWl"; */
+"LhA-RV-oWl.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "验证备份"; ObjectID = "O1V-EW-7rr"; */
+"O1V-EW-7rr.title" = "验证备份";
+
+/* Class = "UILabel"; text = "什么是私钥？"; ObjectID = "RDp-RA-CSR"; */
+"RDp-RA-CSR.text" = "什么是私钥？";
+
+/* Class = "UINavigationItem"; title = "备份账户"; ObjectID = "T5W-5s-o3X"; */
+"T5W-5s-o3X.title" = "备份账户";
+
+/* Class = "UILabel"; text = "请勿通过网络工具传输私钥，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。"; ObjectID = "UW6-5o-rEj"; */
+"UW6-5o-rEj.text" = "请勿通过网络工具传输私钥，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。";
+
+/* Class = "UILabel"; text = "请输入上一步备份的Keystore"; ObjectID = "UaS-CL-tgm"; */
+"UaS-CL-tgm.text" = "请输入上一步备份的Keystore";
+
+/* Class = "UILabel"; text = "使用纸和笔按照字母排列顺序正确抄写私钥（区分大小写），或者用U盘离线保存私钥，请勿分享至邮箱、相册、微信等社交应用。"; ObjectID = "WBV-2a-kst"; */
+"WBV-2a-kst.text" = "使用纸和笔按照字母排列顺序正确抄写私钥（区分大小写），或者用U盘离线保存私钥，请勿分享至邮箱、相册、微信等社交应用。";
+
+/* Class = "UIButton"; normalTitle = "复制Keystore"; ObjectID = "XTC-2R-JXF"; */
+"XTC-2R-JXF.normalTitle" = "复制Keystore";
+
+/* Class = "UILabel"; text = "密码保险箱保存"; ObjectID = "YLH-Vq-ndF"; */
+"YLH-Vq-ndF.text" = "密码保险箱保存";
+
+/* Class = "UILabel"; text = "请勿通过网络工具传输私钥，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。"; ObjectID = "YW8-Ju-Jnz"; */
+"YW8-Ju-Jnz.text" = "请勿通过网络工具传输私钥，一旦被截获或泄露，会造成您账户信息泄露及资产安全的威胁。";
+
+/* Class = "UILabel"; text = "弱"; ObjectID = "Z5X-DH-nam"; */
+"Z5X-DH-nam.text" = "弱";
+
+/* Class = "UILabel"; text = "私钥是一个256位的随机数，拥有私钥，即拥有账户的所有权。\n从私钥恢复账户：导入私钥即可（无需密码）"; ObjectID = "aLg-Tx-IjR"; */
+"aLg-Tx-IjR.text" = "私钥是一个256位的随机数，拥有私钥，即拥有账户的所有权。\n从私钥恢复账户：导入私钥即可（无需密码）";
+
+/* Class = "UILabel"; text = "密码保险箱保存"; ObjectID = "bSH-1t-Q61"; */
+"bSH-1t-Q61.text" = "密码保险箱保存";
+
+/* Class = "UILabel"; text = "账户密码"; ObjectID = "cej-Vn-qIq"; */
+"cej-Vn-qIq.text" = "账户密码";
+
+/* Class = "UILabel"; text = "请勿使用网络传输"; ObjectID = "dVi-f1-byQ"; */
+"dVi-f1-byQ.text" = "请勿使用网络传输";
+
+/* Class = "UILabel"; text = "私钥"; ObjectID = "dwC-U1-xiX"; */
+"dwC-U1-xiX.text" = "私钥";
+
+/* Class = "UINavigationItem"; title = "验证备份"; ObjectID = "ekJ-Rx-KJY"; */
+"ekJ-Rx-KJY.title" = "验证备份";
+
+/* Class = "UILabel"; text = "如果需要在线保存，建议使用1Password等密码保管软件保存Keystore。"; ObjectID = "gN7-96-Suf"; */
+"gN7-96-Suf.text" = "如果需要在线保存，建议使用1Password等密码保管软件保存Keystore。";
+
+/* Class = "UILabel"; text = "Keystore"; ObjectID = "h59-8O-bw4"; */
+"h59-8O-bw4.text" = "Keystore";
+
+/* Class = "UILabel"; text = "什么是keystore？"; ObjectID = "hsu-ui-nyg"; */
+"hsu-ui-nyg.text" = "什么是keystore？";
+
+/* Class = "UILabel"; text = "Keystore可以理解为经过加密的私钥，需要配合账户的密码使用才能恢复账户。\n从Keystore恢复账户：导入Keystore+账户密码确认"; ObjectID = "ix4-6k-hzH"; */
+"ix4-6k-hzH.text" = "Keystore可以理解为经过加密的私钥，需要配合账户的密码使用才能恢复账户。\n从Keystore恢复账户：导入Keystore+账户密码确认";
+
+/* Class = "UILabel"; text = "什么是私钥？"; ObjectID = "kgJ-0d-hfv"; */
+"kgJ-0d-hfv.text" = "什么是私钥？";
+
+/* Class = "UIButton"; normalTitle = "验证备份"; ObjectID = "nFO-iT-YOb"; */
+"nFO-iT-YOb.normalTitle" = "验证备份";
+
+/* Class = "UILabel"; text = "请勿使用网络传输"; ObjectID = "nl5-iS-00k"; */
+"nl5-iS-00k.text" = "请勿使用网络传输";
+
+/* Class = "UILabel"; text = "请再次输入密码"; ObjectID = "oVC-y4-9PM"; */
+"oVC-y4-9PM.text" = "请再次输入密码";
+
+/* Class = "UILabel"; text = "如何备份私钥？"; ObjectID = "ooH-Vt-Epa"; */
+"ooH-Vt-Epa.text" = "如何备份私钥？";
+
+/* Class = "UIButton"; normalTitle = "下一步"; ObjectID = "ox9-td-bng"; */
+"ox9-td-bng.normalTitle" = "下一步";
+
+/* Class = "UILabel"; text = "私钥是一个256位的随机数，拥有私钥，即拥有账户的所有权。\n从私钥恢复账户：导入私钥即可（无需密码）"; ObjectID = "pl4-gW-JH9"; */
+"pl4-gW-JH9.text" = "私钥是一个256位的随机数，拥有私钥，即拥有账户的所有权。\n从私钥恢复账户：导入私钥即可（无需密码）";
+
+/* Class = "UILabel"; text = "请输入上一步备份的私钥"; ObjectID = "ufX-fE-3Tk"; */
+"ufX-fE-3Tk.text" = "请输入上一步备份的私钥";
+
+/* Class = "UILabel"; text = "如果本地账户丢失，或者需要更换设备，可通过导入私钥恢复账户。请确认私钥已在安全、离线的地方保存。请勿通过任何联网应用传输私钥。"; ObjectID = "voU-15-GMR"; */
+"voU-15-GMR.text" = "如果本地账户丢失，或者需要更换设备，可通过导入私钥恢复账户。请确认私钥已在安全、离线的地方保存。请勿通过任何联网应用传输私钥。";
+
+/* Class = "UIButton"; normalTitle = "下一步"; ObjectID = "vy6-vm-1jJ"; */
+"vy6-vm-1jJ.normalTitle" = "下一步";
+
+/* Class = "UIButton"; normalTitle = "确认备份"; ObjectID = "xPh-6R-CVl"; */
+"xPh-6R-CVl.normalTitle" = "确认备份";
+
+/* Class = "UINavigationItem"; title = "备份账户"; ObjectID = "xtu-yP-JLQ"; */
+"xtu-yP-JLQ.title" = "备份账户";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "yPY-Rx-zQI"; */
+"yPY-Rx-zQI.text" = "Label";
+
+/* Class = "UILabel"; text = "请输入之前设定的账户登录密码"; ObjectID = "yZk-61-usK"; */
+"yZk-61-usK.text" = "请输入之前设定的账户登录密码";
+
+/* Class = "UILabel"; text = "如果本地账户丢失，可导入Keystore 并用账户密码确认，即可再次恢复账户。请确认Keystore文件已在安全、离线的地方保存妥当。"; ObjectID = "zDG-ez-Zdh"; */
+"zDG-ez-Zdh.text" = "如果本地账户丢失，可导入Keystore 并用账户密码确认，即可再次恢复账户。请确认Keystore文件已在安全、离线的地方保存妥当。";

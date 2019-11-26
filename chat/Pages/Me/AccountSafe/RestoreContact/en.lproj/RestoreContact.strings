@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "您的通讯录将用您的非对称密钥进行解密恢复，服务器无法解密通讯录信息。"; ObjectID = "Cef-me-y9Y"; */
+"Cef-me-y9Y.text" = "Contacts will be encrypted with your asymmetric keys and the server is unable to decrypt any data.";
+
+/* Class = "UINavigationItem"; title = "恢复通讯录"; ObjectID = "Ift-Ag-VcD"; */
+"Ift-Ag-VcD.title" = "Restore Contacts";
+
+/* Class = "UIButton"; normalTitle = "确认恢复"; ObjectID = "IvD-c5-dAZ"; */
+"IvD-c5-dAZ.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "备份时间"; ObjectID = "Q5O-9a-ZTI"; */
+"Q5O-9a-ZTI.text" = "Backup Time";
+
+/* Class = "UILabel"; text = "请确认您需要备份的数据"; ObjectID = "RVI-dh-fWP"; */
+"RVI-dh-fWP.text" = "You will restore the following contacts information.";
+
+/* Class = "UILabel"; text = " "; ObjectID = "SNr-4X-CeN"; */
+"SNr-4X-CeN.text" = " ";
+
+/* Class = "UILabel"; text = "恢复的最新通讯录将自动对比合并现有通讯录，不会删除现有的联系人。"; ObjectID = "XXE-iJ-8vm"; */
+"XXE-iJ-8vm.text" = "The restored contacts will automatically compare and merge existing contacts without deleting existing data.";
+
+/* Class = "UILabel"; text = " "; ObjectID = "Ydp-x5-kCQ"; */
+"Ydp-x5-kCQ.text" = " ";
+
+/* Class = "UINavigationItem"; title = "恢复通讯录"; ObjectID = "uQE-Ut-xez"; */
+"uQE-Ut-xez.title" = "Restore Contacts";
+
+/* Class = "UILabel"; text = "名单"; ObjectID = "uRh-F9-kDq"; */
+"uRh-F9-kDq.text" = "Contacts";
+
+/* Class = "UILabel"; text = "您将从云端服务器中恢复最新备份的加密通讯录。"; ObjectID = "vuv-rP-ZIh"; */
+"vuv-rP-ZIh.text" = "You will restore the latest backup encrypted contacts from the cloud server.";
+
+/* Class = "UIButton"; normalTitle = "恢复通讯录"; ObjectID = "xas-7b-d9g"; */
+"xas-7b-d9g.normalTitle" = "Restore Contacts";

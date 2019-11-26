@@ -1,0 +1,36 @@
+
+/* Class = "UINavigationItem"; title = "修改备注名"; ObjectID = "0QX-J9-lYC"; */
+"0QX-J9-lYC.title" = "修改备注名";
+
+/* Class = "UILabel"; text = "nick name"; ObjectID = "37T-Ij-5GM"; */
+"37T-Ij-5GM.text" = "nick name";
+
+/* Class = "UILabel"; text = "holder"; ObjectID = "3ip-dt-dFH"; */
+"3ip-dt-dFH.text" = "holder";
+
+/* Class = "UILabel"; text = "账户地址"; ObjectID = "A2k-hw-clv"; */
+"A2k-hw-clv.text" = "账户地址";
+
+/* Class = "UILabel"; text = "i am lucy"; ObjectID = "UBe-ft-ari"; */
+"UBe-ft-ari.text" = "i am lucy";
+
+/* Class = "UILabel"; text = "123"; ObjectID = "UEY-Mp-b8i"; */
+"UEY-Mp-b8i.text" = "123";
+
+/* Class = "UILabel"; text = "删除联系人"; ObjectID = "bas-cA-PTd"; */
+"bas-cA-PTd.text" = "删除联系人";
+
+/* Class = "UILabel"; text = "修改备注"; ObjectID = "bk4-xm-YOP"; */
+"bk4-xm-YOP.text" = "修改备注";
+
+/* Class = "UIButton"; normalTitle = "发消息"; ObjectID = "hKE-fm-7Ee"; */
+"hKE-fm-7Ee.normalTitle" = "发消息";
+
+/* Class = "UILabel"; text = "加入黑名单"; ObjectID = "hU3-kW-noz"; */
+"hU3-kW-noz.text" = "加入黑名单";
+
+/* Class = "UIButton"; normalTitle = "确定修改"; ObjectID = "nJ5-GI-xd7"; */
+"nJ5-GI-xd7.normalTitle" = "确定修改";
+
+/* Class = "UILabel"; text = "lu"; ObjectID = "wux-pJ-n2b"; */
+"wux-pJ-n2b.text" = "lu";

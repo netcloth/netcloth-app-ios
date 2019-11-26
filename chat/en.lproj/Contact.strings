@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "Blacklist"; ObjectID = "Fkr-lm-4zY"; */
+"Fkr-lm-4zY.text" = "Blacklist";
+
+/* Class = "UILabel"; text = "Subscriptions"; ObjectID = "JP7-7d-gbS"; */
+"JP7-7d-gbS.text" = "Subscriptions";
+
+/* Class = "UIButton"; normalTitle = "Add Contacts"; ObjectID = "RB9-fb-vxe"; */
+"RB9-fb-vxe.normalTitle" = "Add Contacts";
+
+/* Class = "UILabel"; text = "Add Contacts"; ObjectID = "VKX-dc-jXb"; */
+"VKX-dc-jXb.text" = "Add Contacts";
+
+/* Class = "UILabel"; text = "Account Address"; ObjectID = "VxJ-e9-Gtw"; */
+"VxJ-e9-Gtw.text" = "Account Address";
+
+/* Class = "UILabel"; text = "Contacts"; ObjectID = "jFj-Ur-qBe"; */
+"jFj-Ur-qBe.text" = "Contacts";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "qiC-SB-4ZL"; */
+"qiC-SB-4ZL.title" = "Contacts";
+
+/* Class = "UIButton"; normalTitle = "Add Contacts"; ObjectID = "rX2-zz-kGD"; */
+"rX2-zz-kGD.normalTitle" = "Add Contacts";
+
+/* Class = "UITextField"; placeholder = "Add Alias"; ObjectID = "uWF-6d-VYr"; */
+"uWF-6d-VYr.placeholder" = "Add Alias";

@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = "账户名"; ObjectID = "2I3-ph-q9k"; */
+"2I3-ph-q9k.text" = "账户名";
+
+/* Class = "UILabel"; text = "Import Account"; ObjectID = "48h-PV-VL0"; */
+"48h-PV-VL0.text" = "导入账户";
+
+/* Class = "UITextField"; placeholder = "请输入账号名称"; ObjectID = "4SH-4Y-Skw"; */
+"4SH-4Y-Skw.placeholder" = "请输入账号名称";
+
+/* Class = "UITextField"; placeholder = "请输入密码"; ObjectID = "Bok-sW-aJn"; */
+"Bok-sW-aJn.placeholder" = "请输入密码";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "Gk7-3d-SsU"; */
+"Gk7-3d-SsU.text" = "密码";
+
+/* Class = "UILabel"; text = "账户名"; ObjectID = "Ick-HO-rBI"; */
+"Ick-HO-rBI.text" = "账户名";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "MqS-sa-AhC"; */
+"MqS-sa-AhC.text" = "密码";
+
+/* Class = "UIButton"; normalTitle = "登录"; ObjectID = "U9f-5V-3Zf"; */
+"U9f-5V-3Zf.normalTitle" = "登录";
+
+/* Class = "UILabel"; text = "已有账户？"; ObjectID = "Z3P-UT-0cF"; */
+"Z3P-UT-0cF.text" = "已有账户？";
+
+/* Class = "UILabel"; text = "NetCloth can't retrieve the password,\nplease keep your password safe."; ObjectID = "bTK-kN-eCb"; */
+"bTK-kN-eCb.text" = "NetCloth无法找回密码，请妥善保管您的密码";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "dus-m7-hG0"; */
+"dus-m7-hG0.text" = "密码";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "hG3-13-WFC"; */
+"hG3-13-WFC.text" = "Title";
+
+/* Class = "UIButton"; normalTitle = "立即登录"; ObjectID = "iKo-Kc-d24"; */
+"iKo-Kc-d24.normalTitle" = "立即登录";
+
+/* Class = "UITextField"; placeholder = "请输入密码"; ObjectID = "jlO-Sy-f2s"; */
+"jlO-Sy-f2s.placeholder" = "请输入密码";
+
+/* Class = "UIButton"; normalTitle = "注册"; ObjectID = "kr8-Um-aXa"; */
+"kr8-Um-aXa.normalTitle" = "注册";
+
+/* Class = "UITextField"; placeholder = "请输入账号名称"; ObjectID = "oLb-zL-mlR"; */
+"oLb-zL-mlR.placeholder" = "请输入账号名称";
+
+/* Class = "UILabel"; text = "欢迎创建账户"; ObjectID = "tL1-Z5-fRB"; */
+"tL1-Z5-fRB.text" = "欢迎创建账户";
+
+/* Class = "UILabel"; text = "欢迎来到NetCloth"; ObjectID = "tzq-Yn-kd3"; */
+"tzq-Yn-kd3.text" = "欢迎来到NetCloth";
+
+/* Class = "UILabel"; text = "还没有账户？"; ObjectID = "vPe-8A-Y9Y"; */
+"vPe-8A-Y9Y.text" = "还没有账户？";
+
+/* Class = "UIButton"; normalTitle = "创建账户"; ObjectID = "vQQ-k0-KNu"; */
+"vQQ-k0-KNu.normalTitle" = "创建账户";
+
+/* Class = "UITextField"; placeholder = "请确认密码"; ObjectID = "ydK-6Y-hVU"; */
+"ydK-6Y-hVU.placeholder" = "请确认密码";

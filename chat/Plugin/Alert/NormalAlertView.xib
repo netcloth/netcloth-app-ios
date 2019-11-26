@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="Nek-Iv-Z68" customClass="NormalAlertView" customModule="chat" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="194"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="警告" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wto-zr-MHA">
+                    <rect key="frame" x="133.5" y="25" width="33" height="19.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                    <color key="textColor" red="0.18823529411764706" green="0.19215686274509802" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NetCloth" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dye-fH-atQ">
+                    <rect key="frame" x="25" y="62" width="250" height="42"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.37647058823529411" green="0.38431372549019605" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="5UE-uX-WAh">
+                    <rect key="frame" x="25" y="129" width="250" height="40"/>
+                    <subviews>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1z-iL-oAd">
+                            <rect key="frame" x="0.0" y="0.0" width="115" height="40"/>
+                            <color key="backgroundColor" red="0.23921568627450979" green="0.49411764705882355" blue="1" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="Srk-mI-udt"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <state key="normal" title="返回"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onCancelTap" destination="Nek-Iv-Z68" eventType="touchUpInside" id="ei5-C4-x7z"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gum-Mj-yD6">
+                            <rect key="frame" x="135" y="0.0" width="115" height="40"/>
+                            <color key="backgroundColor" red="0.23921568627450979" green="0.49411764705882355" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="Wny-tX-W11"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <state key="normal" title="确认注册">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onOkTap" destination="Nek-Iv-Z68" eventType="touchUpInside" id="bFe-cC-dqW"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Dye-fH-atQ" firstAttribute="top" secondItem="Nek-Iv-Z68" secondAttribute="top" constant="62" id="3Gz-ws-YjN"/>
+                <constraint firstItem="5UE-uX-WAh" firstAttribute="top" secondItem="Dye-fH-atQ" secondAttribute="bottom" constant="25" id="4qo-7c-3Q6"/>
+                <constraint firstAttribute="trailing" secondItem="5UE-uX-WAh" secondAttribute="trailing" constant="25" id="FKl-IS-i7H"/>
+                <constraint firstAttribute="trailing" secondItem="Dye-fH-atQ" secondAttribute="trailing" constant="25" id="NOK-xR-rA4"/>
+                <constraint firstItem="5UE-uX-WAh" firstAttribute="leading" secondItem="Nek-Iv-Z68" secondAttribute="leading" constant="25" id="VVJ-Pd-db1"/>
+                <constraint firstItem="Wto-zr-MHA" firstAttribute="top" secondItem="Nek-Iv-Z68" secondAttribute="top" constant="25" id="VVt-zC-LPO"/>
+                <constraint firstItem="Wto-zr-MHA" firstAttribute="centerX" secondItem="Nek-Iv-Z68" secondAttribute="centerX" id="dAe-zi-fjT"/>
+                <constraint firstItem="Dye-fH-atQ" firstAttribute="leading" secondItem="Nek-Iv-Z68" secondAttribute="leading" constant="25" id="jxZ-IZ-gSf"/>
+                <constraint firstAttribute="bottom" secondItem="5UE-uX-WAh" secondAttribute="bottom" constant="25" id="n7l-c8-O3e"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="cancelButton" destination="i1z-iL-oAd" id="4Nt-4g-HVb"/>
+                <outlet property="msgLabel" destination="Dye-fH-atQ" id="iYE-3B-tzO"/>
+                <outlet property="okButton" destination="gum-Mj-yD6" id="DeQ-uY-ivf"/>
+                <outlet property="titleLabel" destination="Wto-zr-MHA" id="nvC-mO-Ece"/>
+            </connections>
+            <point key="canvasLocation" x="-190.57971014492756" y="-363.28125"/>
+        </view>
+    </objects>
+</document>

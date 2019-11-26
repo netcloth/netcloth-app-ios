@@ -1,0 +1,9 @@
+
+/* Class = "UITabBarItem"; title = "Messages"; ObjectID = "ILc-BQ-RyP"; */
+"ILc-BQ-RyP.title" = "Messages";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "nZv-vz-Nfa"; */
+"nZv-vz-Nfa.title" = "Contacts";
+
+/* Class = "UITabBarItem"; title = "Me"; ObjectID = "ydJ-Tg-vQv"; */
+"ydJ-Tg-vQv.title" = "Me";

@@ -1,0 +1,27 @@
+
+/* Class = "UIButton"; normalTitle = "Log Out"; ObjectID = "2PI-UQ-1WN"; */
+"2PI-UQ-1WN.normalTitle" = "Log Out";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "6mg-nm-3vQ"; */
+"6mg-nm-3vQ.text" = "About";
+
+/* Class = "UILabel"; text = "edit"; ObjectID = "FGo-EE-7A9"; */
+"FGo-EE-7A9.text" = "edit";
+
+/* Class = "UILabel"; text = "My Account Address"; ObjectID = "JlK-i2-xVZ"; */
+"JlK-i2-xVZ.text" = "My Account Address";
+
+/* Class = "UILabel"; text = "Account and Security"; ObjectID = "Wma-r2-plV"; */
+"Wma-r2-plV.text" = "Account and Security";
+
+/* Class = "UILabel"; text = "Settings"; ObjectID = "XUF-Zh-QpP"; */
+"XUF-Zh-QpP.text" = "Settings";
+
+/* Class = "UILabel"; text = "i am lucy"; ObjectID = "adw-yc-H3p"; */
+"adw-yc-H3p.text" = "i am lucy";
+
+/* Class = "UILabel"; text = "Copy the address or Scan the QR code to add me."; ObjectID = "kYv-KH-qt1"; */
+"kYv-KH-qt1.text" = "Copy the address or Scan the QR code to add me.";
+
+/* Class = "UITabBarItem"; title = "Me"; ObjectID = "mXO-X2-JxE"; */
+"mXO-X2-JxE.title" = "Me";

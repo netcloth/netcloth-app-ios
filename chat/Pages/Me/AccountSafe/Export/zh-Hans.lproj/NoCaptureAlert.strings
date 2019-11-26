@@ -1,0 +1,9 @@
+
+/* Class = "UIButton"; normalTitle = "我明白了"; ObjectID = "WY8-hi-kkf"; */
+"WY8-hi-kkf.normalTitle" = "我明白了";
+
+/* Class = "UILabel"; text = "请勿截图"; ObjectID = "hTF-BJ-C6q"; */
+"hTF-BJ-C6q.text" = "请勿截图";
+
+/* Class = "UILabel"; text = "请确保四周无人及无摄像头！请勿截图或使用拍照的方式保存Keystore文件。"; ObjectID = "whE-Gz-5nO"; */
+"whE-Gz-5nO.text" = "请确保四周无人及无摄像头！请勿截图或使用拍照的方式保存Keystore文件。";

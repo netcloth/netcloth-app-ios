@@ -1,0 +1,24 @@
+
+/* Class = "UILabel"; text = "Tips：请重试或重新设置C-IPAL"; ObjectID = "2ny-Vx-zkx"; */
+"2ny-Vx-zkx.text" = "Tips: Retry or Switch C-IPAL";
+
+/* Class = "UILabel"; text = "正在连接聊天服务器"; ObjectID = "35O-nj-yVf"; */
+"35O-nj-yVf.text" = "Connecting to chat sever";
+
+/* Class = "UIButton"; normalTitle = "确认注册"; ObjectID = "3Q1-at-Rvd"; */
+"3Q1-at-Rvd.normalTitle" = "Switch C-IPAL";
+
+/* Class = "UIButton"; normalTitle = "返回"; ObjectID = "NWX-bR-nLx"; */
+"NWX-bR-nLx.normalTitle" = "Retry";
+
+/* Class = "UILabel"; text = "连接失败"; ObjectID = "lV9-5V-GRZ"; */
+"lV9-5V-GRZ.text" = "Connecting";
+
+/* Class = "UILabel"; text = "正在连接区块链节点"; ObjectID = "o71-Qp-dwr"; */
+"o71-Qp-dwr.text" = "Connecting to blockchain node";
+
+/* Class = "UILabel"; text = "正在连接服务节点"; ObjectID = "wNn-7n-A3t"; */
+"wNn-7n-A3t.text" = "Connecting to service node ";
+
+/* Class = "UIButton"; normalTitle = "开始体验"; ObjectID = "xU4-X9-zAQ"; */
+"xU4-X9-zAQ.normalTitle" = "Enjoy";

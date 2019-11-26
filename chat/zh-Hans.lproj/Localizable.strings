@@ -1,0 +1,245 @@
+/* 
+  Localizable.strings
+  chat
+
+  Created by Grand on 2019/8/21.
+  Copyright © 2019 netcloth. All rights reserved.
+*/
+
+//MARK:- Login
+"login_wrong_pwd" = "密码错误，请重新输入";
+"login_invalid_data" = "密码至少6位";
+"Please check your network" = "请检查网络连接";
+
+"login_delete_title" = "确认删除账户";
+"login_delete_message" = "确认删除账户“#account#”吗？";
+"login_delete_re_message" = "删除账户的同时，与该账户关联的联系人、聊天记录等数据也会删除，无法恢复。";
+"confirm_delete" = "确认删除";
+"Delete the Account" = "删除该账户";
+
+//MARK:- Register
+"Register_invalid_account" = "账户名称至少1位";
+"Register_invalid_pwd" = "密码至少6位";
+"Register_repeat_pwd" = "密码不一致";
+"Successful registration" = "注册成功";
+"Register_Warning！" = "警告";
+"Register_W_msg" = "NetCloth无法找回密码，请牢记您的账户密码。";
+"Register_Ok" = "确认注册";
+
+//MARK:- Export
+"Private Key" = "私钥";
+"Export_invalid_pwd" = "密码至少8位";
+"Insufficient password strength" = "密码强度不足";
+"Weak" = "弱";
+"Weaker" = "较弱";
+"Strong" = "强";
+"Stronger" = "较强";
+"Export_tip_1" = "密码长度至少8位，需要包含以下元素的三个：";
+"Export_tip_2" = "大写字母、小写字母、数字、符号";
+"Account Backup" = "备份账户";
+"Successful copy" = "复制成功";
+
+"export_verify_error_title" = "验证失败";
+"export_verify_error_msg" = "请再次确认备份的Keystore及输入的密码是否正确。";
+"export_prikey_verify_error_msg" = "请再次确认备份的私钥是否正确。";
+"export_verify_error_btn" = "返回确认";
+
+"export_verify_valid_title" = "验证通过";
+"export_verify_valid_msg" = "您已成功备份您的账户！";
+"export_verify_valid_btn" = "好的";
+
+"Export_Alert_Prikey" = "请确保四周无人及无摄像头！请勿截图或使用拍照的方式保存私钥";
+
+// Import
+"import_valid_title" = "导入成功";
+"import_valid_message" = "欢迎回到NetCloth";
+"import_valid_btn" = "确认";
+
+"import_invalid_title" = "导入失败";
+"import_invalid_message" = "请再次确认Keystore与密码是否正确.或者通过私钥导入账户。";
+"import_invalid_btn" = "再次尝试";
+"import_invalid_prikey_message" = "请再次确认私钥是否正确，或者通过Keystore导入账户。";
+
+"Account is existed" = "该账户已存在";
+
+//change pwd
+"change_valid_title" = "修改成功";
+"change_valid_message" = "欢迎回到NetCloth";
+"change_valid_btn" = "确认";
+"change_input_len" = "（#Len#位)";
+
+"change_invalid_title" = "修改失败";
+"change_invalid_message" = "请再次确认私钥是否正确，或者通过Keystore导入账户。";
+"change_invalid_btn" = "再次尝试";
+
+
+
+// Wallet Manager Errors
+"WalletManager.Error.invalidPassword" = "密码不正确";
+"WalletManager.Error.invalidPrivateKey" = "私钥不正确";
+"WalletManager.Error.invalidKeystore" = "Keystore不正确";
+"WalletManager.Error.invalidMnemonic" = "助记词不正确";
+"WalletManager.Error.emptyMnemonic" = "助记词不能为空";
+"WalletManager.Error.accountAlreadyExists" = "该钱包已存在";
+"WalletManager.Error.accountNotFound" = "未找到该钱包";
+"WalletManager.Error.failedToDeleteAccount" = "删除钱包失败";
+"WalletManager.Error.failedToUpdatePassword" = "修改密码失败";
+"WalletManager.Error.failedToSaveKeystore" = "保存keystore失败";
+"WalletManager.Error.unknown" = "未知错误";
+"WalletManager.Error.invalidData" = "请输入有效数据验证";
+
+
+//MARK:- Session
+"Session_W_Title" = "确认删除消息";
+"Session_W_Msg" = "消息删除后将无法恢复";
+"Sticky on top" = "置顶";
+"Remove From Top" = "取消置顶";
+"Resend the message？" = "是否重新发送？";
+
+
+//MARK:- Contact
+"Contact_Alias" = "备注名";
+"Contact_Delete" = "删除";
+"Contact_W_Title" = "确认删除联系人";
+"Contact_W_msg" = "确认删除联系人“#remark#”和他的消息记录吗？";
+"Contact_Re_Title" = "请输入备注名";
+"Contact_Re_Placeholder" = "至少1位";
+"QR code not found" = "未发现二维码";
+"Processing" = "正在处理...";
+"Blacklist" = "黑名单";
+"Blacklist_msg" = "确认将“#remark#”加入黑名单吗？您将不在接收到来自对方的任何消息。";
+"This contact is in your blacklist." = "对方是您的黑名单用户";
+
+"NetCloth Support" = "NetCloth小助手";
+"Support_Content" = "欢迎使用NetCloth。如您在使用过程中遇到问题，或是您有新的产品建议，欢迎给我留言哦。";
+
+//MARK:- Add Contact
+"Contact_invalid_address" = "账户地址错误";
+"Contact_invalid_remark" = "备注名至少1位";
+"Contact_have_added" = "该账号已是你的好友";
+"Added Successfully" = "添加成功";
+"Delete Successfully" = "删除成功";
+"Update Successfully" = "更新成功";
+"No account available yet" = "暂无可用账号";
+
+//MARK:- Me
+"Copy Share" = "已复制到粘贴板，可以发送分享";
+"Log Out" = "退出登录";
+"QR Code Saved" = "保存成功";
+"connect_ok" = "已连接";
+"connect_ing" = "连接中";
+"connect_fail" = "离线";
+
+//MARK:- Setting - Account
+"Enter Password" = "请输入密码";
+"Language" = "语言";
+"Notifications" = "消息提醒";
+"Change Password" = "修改密码";
+"Contacts Backup" = "备份通讯录";
+"Restore Contacts" = "恢复通讯录";
+"Contact data is empty" = "联系人数据为空";
+"Contact_info" = "联系人 #white# 名，黑名单 #black# 名";
+"C-IPAL Settings" = "C-IPAL设置";
+
+
+
+"Contact_backup_tip" = "正在加密备份通讯录···";
+"Contact_backup_result_success" = "备份通讯录成功！";
+"Contact_backup_result_fail" = "备份失败，请检查网络链接是否正常";
+"Wrong data format" = "数据格式错误";
+
+"Contact_restore_tip" = "正在恢复···请耐心等待";
+"Contact_restore_result_success" = "恢复通讯录成功！";
+"Contact_restore_result_fail" = "恢复失败，请检查网络链接是否正常";
+
+
+//MARK:- Chat Room
+"Audio" = "语音";
+"Text" = "文字";
+"Picture" = "图片";
+"Message" = "消息";
+
+"Slide up to cancel" = "手指上滑，取消发送";
+"Release to cancel" = "松开手指，取消发送";
+"Hold to Talk" = "按住 说话";
+"Release to Send" = "松开 结束";
+"Message too short" = "录音时间太短了";
+/// Time
+"Just now" = "刚刚";
+"Yesterday" = "昨天";
+"Sunday" = "周日";
+"Monday" = "周一";
+"Tuesday" = "周二";
+"Wednesday" = "周三";
+"Thursday" = "周四";
+"Friday" = "周五";
+"Saturday" = "周六";
+
+
+//MARK:- Device Auth
+"Device_camera" = "请去-> [设置 - 隐私 - 相机] 打开访问开关";
+"Device_photos" = "请去-> [设置 - 隐私 - 相册] 打开访问开关";
+"Device_microphone" = "请去-> [设置 - 隐私 - 麦克风] 打开访问开关";
+
+
+//MARK:- Notice Center
+"center_new_msg_in" = "你收到一条消息";
+
+//MARK:- Scan Third
+"Scan" = "扫一扫";
+"Album" = "相册";
+"Align QR Code within frame to scan" = "将二维码/条码放入框内, 即可自动扫描";
+"My QR Code" = "我的二维码";
+"QR Code" = "二维码";
+
+//MARK:- others
+"Cancel" = "取消";
+"Back" = "返回";
+"OK" = "确定";
+"Confirm" = "确认";
+"System error" = "系统错误";
+"Delete" = "删除";
+"Copy" = "复制";
+"Send" = "发送";
+
+//IPAL
+"Messages" = "消息";
+"ipal_connect_ing" = "正在连接";
+"ipal_connect_fail" = "连接失败";
+"ipal_connect_ok" = "连接成功";
+"ipal_step1_fail_tip" = "Tips：请稍后重新登录APP";
+"ipal_step2_fail_tip" = "Tips：请重试或重新设置C-IPAL";
+"Return" = "返回";
+"Enjoy" = "开始体验";
+
+"Search" = "搜索";
+
+"Tips_Title" = "温馨提示";
+"Tips_Msg" = "使用NetCloth发送消息，需要选择一个服务节点作为您的通讯地址";
+"Tips_Ok" = "好的";
+
+"Tips_Msg_Switch" = "您当前选择的通信地址与上一次成功连接的通信地址不一致，确认连接后，无法同步上一次连接通信地址时的聊天记录。";
+
+
+"Communication Address" = "通信地址";
+"Latency" = "延迟";
+"medium" = "中";
+"low" = "低";
+"high" = "高";
+"testing…" = "测试中…";
+"unable to connect" = "无法连接";
+
+"Connected" = "已连接";
+"Connect" = "连接";
+
+
+"history_Pending" = "申明中";
+"history_Success" = "已成功";
+"history_Fail" = "失败";
+
+"Copy Success" = "复制成功";
+
+"Communication Address Claim" = "通信地址申明";
+"None" = "无";
+
+"cipal_notify_fail" = "C-IPAL 申明请求发送失败，请稍后重试";

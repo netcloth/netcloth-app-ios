@@ -1,0 +1,24 @@
+
+/* Class = "UIButton"; normalTitle = "确认修改"; ObjectID = "7e5-mw-Ltu"; */
+"7e5-mw-Ltu.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "请输入私钥（注意区分大小写）"; ObjectID = "A2L-QM-6RH"; */
+"A2L-QM-6RH.text" = "Please enter your private key.(case sensitive)";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "HVD-eH-KCt"; */
+"HVD-eH-KCt.text" = "Label";
+
+/* Class = "UILabel"; text = "从私钥导入账户"; ObjectID = "XZ1-i7-WLY"; */
+"XZ1-i7-WLY.text" = "Import account from Private Key";
+
+/* Class = "UILabel"; text = "请输入密码"; ObjectID = "YJd-Ks-dq7"; */
+"YJd-Ks-dq7.text" = "Set Account Pssword";
+
+/* Class = "UITextField"; placeholder = "请输入密码（至少8位）"; ObjectID = "mQV-F4-ntO"; */
+"mQV-F4-ntO.placeholder" = "Enter Password（At least 8 characters）";
+
+/* Class = "UINavigationItem"; title = "修改密码"; ObjectID = "qc0-YG-MpJ"; */
+"qc0-YG-MpJ.title" = "Change Password";
+
+/* Class = "UITextField"; placeholder = "请再次输入密码"; ObjectID = "v0F-aB-IhB"; */
+"v0F-aB-IhB.placeholder" = "Confirm Password";

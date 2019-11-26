@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="EmojKeyBoardView" customModule="NetCloth" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="216"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="iEI-Vv-5iC">
+                    <rect key="frame" x="0.0" y="0.0" width="349" height="180"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="180" id="BkU-MQ-bar"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="9.9999999999999995e-08" minimumInteritemSpacing="10" id="r4S-4L-sXX" customClass="HorizontalItemLayout" customModule="NetCloth" customModuleProvider="target">
+                        <size key="itemSize" width="28" height="37"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KPb-6H-lTT" userLabel="right">
+                    <rect key="frame" x="349" y="0.0" width="65" height="216"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bly-8H-LHd" userLabel="spe">
+                            <rect key="frame" x="0.0" y="0.0" width="1" height="216"/>
+                            <color key="backgroundColor" red="0.92941176470588238" green="0.93725490196078431" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="Kf6-Bc-UnR"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cYA-YF-Key">
+                            <rect key="frame" x="5" y="5" width="55" height="55"/>
+                            <color key="backgroundColor" red="0.96078431372549022" green="0.96862745098039216" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="cYA-YF-Key" secondAttribute="height" id="Ust-WW-Yb8"/>
+                            </constraints>
+                            <state key="normal" image="emoj_back"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                    <real key="value" value="1"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                    <color key="value" red="0.92941176470588238" green="0.93725490196078431" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MMj-B6-dLw">
+                            <rect key="frame" x="5" y="65" width="55" height="100"/>
+                            <color key="backgroundColor" red="0.23921568627450979" green="0.49411764705882355" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="100" id="J6b-9h-NDi"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title="发送"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="65" id="6HD-Hs-h6g"/>
+                        <constraint firstAttribute="trailing" secondItem="cYA-YF-Key" secondAttribute="trailing" constant="5" id="6jW-zI-SNK"/>
+                        <constraint firstItem="MMj-B6-dLw" firstAttribute="leading" secondItem="cYA-YF-Key" secondAttribute="leading" id="6xR-pb-Q5U"/>
+                        <constraint firstItem="bly-8H-LHd" firstAttribute="leading" secondItem="KPb-6H-lTT" secondAttribute="leading" id="BIa-B2-0Ju"/>
+                        <constraint firstItem="cYA-YF-Key" firstAttribute="leading" secondItem="KPb-6H-lTT" secondAttribute="leading" constant="5" id="KGU-bp-dA7"/>
+                        <constraint firstItem="bly-8H-LHd" firstAttribute="top" secondItem="KPb-6H-lTT" secondAttribute="top" id="LPM-VV-eW7"/>
+                        <constraint firstAttribute="bottom" secondItem="bly-8H-LHd" secondAttribute="bottom" id="elw-xm-zt1"/>
+                        <constraint firstItem="cYA-YF-Key" firstAttribute="top" secondItem="KPb-6H-lTT" secondAttribute="top" constant="5" id="h97-Di-gZu"/>
+                        <constraint firstItem="MMj-B6-dLw" firstAttribute="top" secondItem="cYA-YF-Key" secondAttribute="bottom" constant="5" id="sSr-wJ-Qhp"/>
+                        <constraint firstItem="MMj-B6-dLw" firstAttribute="trailing" secondItem="cYA-YF-Key" secondAttribute="trailing" id="vKf-BJ-sfG"/>
+                    </constraints>
+                </view>
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="lTr-jQ-u66">
+                    <rect key="frame" x="155" y="146.5" width="39" height="37"/>
+                    <color key="pageIndicatorTintColor" red="0.92941176470588238" green="0.93725490196078431" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="currentPageIndicatorTintColor" red="0.74901960784313726" green="0.76078431372549016" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </pageControl>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="KPb-6H-lTT" secondAttribute="trailing" id="EWr-Ch-Ldq"/>
+                <constraint firstItem="lTr-jQ-u66" firstAttribute="centerY" secondItem="iEI-Vv-5iC" secondAttribute="bottom" constant="-15" id="Q6J-qJ-Z0y"/>
+                <constraint firstAttribute="bottom" secondItem="KPb-6H-lTT" secondAttribute="bottom" id="UgX-ld-wfc"/>
+                <constraint firstItem="lTr-jQ-u66" firstAttribute="centerX" secondItem="iEI-Vv-5iC" secondAttribute="centerX" id="Vxy-f6-dgN"/>
+                <constraint firstItem="KPb-6H-lTT" firstAttribute="leading" secondItem="iEI-Vv-5iC" secondAttribute="trailing" id="jg6-2U-uSd"/>
+                <constraint firstItem="iEI-Vv-5iC" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="qwi-wc-m8G"/>
+                <constraint firstItem="iEI-Vv-5iC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="r4f-il-p5g"/>
+                <constraint firstItem="KPb-6H-lTT" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="xsG-WW-eKf"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="collectionView" destination="iEI-Vv-5iC" id="SWN-No-AyZ"/>
+                <outlet property="deleteButton" destination="cYA-YF-Key" id="KFl-qi-Jrt"/>
+                <outlet property="pageControl" destination="lTr-jQ-u66" id="MGl-zo-Fkq"/>
+                <outlet property="rightContainer" destination="KPb-6H-lTT" id="QlZ-Ig-Uz5"/>
+                <outlet property="sendButton" destination="MMj-B6-dLw" id="drR-Ya-TMI"/>
+            </connections>
+            <point key="canvasLocation" x="-354" y="-68"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="emoj_back" width="23" height="18"/>
+    </resources>
+</document>

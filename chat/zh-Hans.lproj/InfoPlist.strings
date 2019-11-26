@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  chat
+
+  Created by Grand on 2019/8/21.
+  Copyright © 2019 netcloth. All rights reserved.
+*/
+
+UILaunchStoryboardName = "LaunchScreen_zh";
+NSCameraUsageDescription = "用于扫描二维码添加联系人";
+NSMicrophoneUsageDescription = "用于发送语音";
+NSPhotoLibraryUsageDescription = "用于识别相册内的二维码";
+

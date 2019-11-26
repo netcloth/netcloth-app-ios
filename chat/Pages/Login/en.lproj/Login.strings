@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = "账户名"; ObjectID = "2I3-ph-q9k"; */
+"2I3-ph-q9k.text" = "账户名";
+
+/* Class = "UILabel"; text = "Import Account"; ObjectID = "48h-PV-VL0"; */
+"48h-PV-VL0.text" = "Import Account";
+
+/* Class = "UITextField"; placeholder = "Enter your Account Name"; ObjectID = "4SH-4Y-Skw"; */
+"4SH-4Y-Skw.placeholder" = "Enter your Account Name";
+
+/* Class = "UITextField"; placeholder = "Password(at least 6 characters)"; ObjectID = "Bok-sW-aJn"; */
+"Bok-sW-aJn.placeholder" = "Password(at least 6 characters)";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "Gk7-3d-SsU"; */
+"Gk7-3d-SsU.text" = "密码";
+
+/* Class = "UILabel"; text = "账户名"; ObjectID = "Ick-HO-rBI"; */
+"Ick-HO-rBI.text" = "账户名";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "MqS-sa-AhC"; */
+"MqS-sa-AhC.text" = "密码";
+
+/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "U9f-5V-3Zf"; */
+"U9f-5V-3Zf.normalTitle" = "Log in";
+
+/* Class = "UILabel"; text = "Already have an account？"; ObjectID = "Z3P-UT-0cF"; */
+"Z3P-UT-0cF.text" = "Already have an account？";
+
+/* Class = "UILabel"; text = "NetCloth can't retrieve the password,\nplease keep your password safe."; ObjectID = "bTK-kN-eCb"; */
+"bTK-kN-eCb.text" = "NetCloth can't retrieve the password,\nplease keep your password safe.";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "dus-m7-hG0"; */
+"dus-m7-hG0.text" = "密码";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "hG3-13-WFC"; */
+"hG3-13-WFC.text" = "Title";
+
+/* Class = "UIButton"; normalTitle = "Log in now"; ObjectID = "iKo-Kc-d24"; */
+"iKo-Kc-d24.normalTitle" = "Log in now";
+
+/* Class = "UITextField"; placeholder = "Enter your password"; ObjectID = "jlO-Sy-f2s"; */
+"jlO-Sy-f2s.placeholder" = "Enter your password";
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "kr8-Um-aXa"; */
+"kr8-Um-aXa.normalTitle" = "Register";
+
+/* Class = "UITextField"; placeholder = "Account Name"; ObjectID = "oLb-zL-mlR"; */
+"oLb-zL-mlR.placeholder" = "Account Name";
+
+/* Class = "UILabel"; text = "Welcome to NetCloth"; ObjectID = "tL1-Z5-fRB"; */
+"tL1-Z5-fRB.text" = "Welcome to NetCloth";
+
+/* Class = "UILabel"; text = "Welcome to NetCloth"; ObjectID = "tzq-Yn-kd3"; */
+"tzq-Yn-kd3.text" = "Welcome to NetCloth";
+
+/* Class = "UILabel"; text = "New to NetCloth？"; ObjectID = "vPe-8A-Y9Y"; */
+"vPe-8A-Y9Y.text" = "New to NetCloth？";
+
+/* Class = "UIButton"; normalTitle = "Sign up now"; ObjectID = "vQQ-k0-KNu"; */
+"vQQ-k0-KNu.normalTitle" = "Sign up now";
+
+/* Class = "UITextField"; placeholder = "Enter your password again"; ObjectID = "ydK-6Y-hVU"; */
+"ydK-6Y-hVU.placeholder" = "Enter your password again";

@@ -1,0 +1,42 @@
+
+/* Class = "UILabel"; text = "应用地址是各类应用场景的服务地址，切换应用地址可以在应用区体验不同的应用（应用区建设中）"; ObjectID = "34c-Sl-Wc0"; */
+"34c-Sl-Wc0.text" = "应用地址是各类应用场景的服务地址，切换应用地址可以在应用区体验不同的应用（应用区建设中）";
+
+/* Class = "UILabel"; text = "应用地址"; ObjectID = "4eb-7l-zAp"; */
+"4eb-7l-zAp.text" = "应用地址";
+
+/* Class = "UINavigationItem"; title = "什么是C-IPAL？"; ObjectID = "5nx-az-0sn"; */
+"5nx-az-0sn.title" = "什么是C-IPAL？";
+
+/* Class = "UILabel"; text = "设定通信地址，用于收发各类消息。"; ObjectID = "6tB-cv-4u6"; */
+"6tB-cv-4u6.text" = "设定通信地址，用于收发各类消息。";
+
+/* Class = "UILabel"; text = "C-IPAL（Client IP Address List）是NetCloth特有模块之一，用户使用各类服务，需要通过C-IPAL申明各类地址。 "; ObjectID = "9LT-vU-qyR"; */
+"9LT-vU-qyR.text" = "C-IPAL（Client IP Address List）是NetCloth特有模块之一，用户使用各类服务，需要通过C-IPAL申明各类地址。 ";
+
+/* Class = "UILabel"; text = "应用地址"; ObjectID = "Pl6-eb-trr"; */
+"Pl6-eb-trr.text" = "应用地址";
+
+/* Class = "UILabel"; text = "在NetCloth的通信体系中，我们采用了C-S-C的方式传递消息，由稳定在线的服务器负责消息转发，要成功转发消息，需要得知用户的公钥及用户连接着节点的IP地址。因此，我们可以将对应服务节点的IP视作用户的通信地址。\n使用NetCloth进行通信，用户需要向区块链账本内申明自己连接节点的相关信息以及自己的账户地址，才能正常使用各类服务。"; ObjectID = "VbB-9s-fVo"; */
+"VbB-9s-fVo.text" = "在NetCloth的通信体系中，我们采用了C-S-C的方式传递消息，由稳定在线的服务器负责消息转发，要成功转发消息，需要得知用户的公钥及用户连接着节点的IP地址。因此，我们可以将对应服务节点的IP视作用户的通信地址。\n使用NetCloth进行通信，用户需要向区块链账本内申明自己连接节点的相关信息以及自己的账户地址，才能正常使用各类服务。";
+
+/* Class = "UILabel"; text = "C-IPAL（Client IP Address List）是NetCloth特有模块之一，用户使用各类服务，需要通过C-IPAL申明各类地址。"; ObjectID = "f5h-La-KAm"; */
+"f5h-La-KAm.text" = "C-IPAL（Client IP Address List）是NetCloth特有模块之一，用户使用各类服务，需要通过C-IPAL申明各类地址。";
+
+/* Class = "UILabel"; text = "通信地址"; ObjectID = "gi3-G2-h8A"; */
+"gi3-G2-h8A.text" = "通信地址";
+
+/* Class = "UILabel"; text = "NetCloth会内置一个开放应用平台（开发中），切换不同的应用地址，可以登录不同节点运营的应用平台，体验各类服务。应用地址包括了服务节点的账户公钥、服务器IP等信息。"; ObjectID = "gn8-JM-8xP"; */
+"gn8-JM-8xP.text" = "NetCloth会内置一个开放应用平台（开发中），切换不同的应用地址，可以登录不同节点运营的应用平台，体验各类服务。应用地址包括了服务节点的账户公钥、服务器IP等信息。";
+
+/* Class = "UIButton"; normalTitle = "了解更多"; ObjectID = "qTm-Me-lCg"; */
+"qTm-Me-lCg.normalTitle" = "了解更多";
+
+/* Class = "UILabel"; text = "什么是C-IPAL？"; ObjectID = "ql8-uR-mVp"; */
+"ql8-uR-mVp.text" = "什么是C-IPAL？";
+
+/* Class = "UILabel"; text = "通信地址"; ObjectID = "y6T-rm-Eg9"; */
+"y6T-rm-Eg9.text" = "通信地址";
+
+/* Class = "UINavigationItem"; title = "C-IPAL设置"; ObjectID = "y8e-Tw-PIM"; */
+"y8e-Tw-PIM.title" = "C-IPAL设置";

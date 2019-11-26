@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--账户与安全-->
+        <scene sceneID="fhK-Gs-2e7">
+            <objects>
+                <tableViewController storyboardIdentifier="AccountSafeVC" id="e9O-Xy-lja" customClass="AccountSafeVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="10" id="FHA-Un-WBx">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <sections>
+                            <tableViewSection id="6eu-Md-e1c">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="s89-GE-MQY" style="IBUITableViewCellStyleDefault" id="86c-ba-lA0">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="86c-ba-lA0" id="e5z-j6-3If">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="修改密码" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="s89-GE-MQY">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="tXL-VV-zkS" style="IBUITableViewCellStyleDefault" id="LH2-Nc-dTL" customClass="SystemCell" customModule="NetCloth" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="88" width="414" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LH2-Nc-dTL" id="170-Fr-YzV">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="备份账户" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tXL-VV-zkS">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="showLastSeparator" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="" id="dkk-Nt-jbW">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="gha-qy-WxB" style="IBUITableViewCellStyleDefault" id="aa2-zQ-09t">
+                                        <rect key="frame" x="0.0" y="204" width="414" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aa2-zQ-09t" id="aCS-Nr-why">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="备份通讯录" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gha-qy-WxB">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="xeK-4s-4EF" style="IBUITableViewCellStyleDefault" id="N01-dR-CnF" customClass="SystemCell" customModule="NetCloth" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="264" width="414" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="N01-dR-CnF" id="bCz-G9-mk7">
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="恢复通讯录" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xeK-4s-4EF">
+                                                    <rect key="frame" x="20" y="0.0" width="355" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="showLastSeparator" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="e9O-Xy-lja" id="wmJ-AT-hdw"/>
+                            <outlet property="delegate" destination="e9O-Xy-lja" id="HIt-Ds-BKF"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="账户与安全" largeTitleDisplayMode="always" id="tmV-RK-aXz"/>
+                    <connections>
+                        <outlet property="backupContact" destination="aa2-zQ-09t" id="frB-0h-luR"/>
+                        <outlet property="backupLabel" destination="tXL-VV-zkS" id="Q1b-em-WW2"/>
+                        <outlet property="backupcell" destination="LH2-Nc-dTL" id="Fdg-Hi-LEc"/>
+                        <outlet property="contactBackUp" destination="gha-qy-WxB" id="7Wu-aO-49I"/>
+                        <outlet property="contactRestore" destination="xeK-4s-4EF" id="Wiz-HD-8BA"/>
+                        <outlet property="pwdLabel" destination="s89-GE-MQY" id="60V-aX-wGb"/>
+                        <outlet property="pwdcell" destination="86c-ba-lA0" id="RMw-4g-a1v"/>
+                        <outlet property="restoreContact" destination="N01-dR-CnF" id="aqK-aV-Ya8"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ico-V3-ZOF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-9854" y="-1514"/>
+        </scene>
+    </scenes>
+</document>

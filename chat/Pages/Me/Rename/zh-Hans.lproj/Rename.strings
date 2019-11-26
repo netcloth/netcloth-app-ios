@@ -1,0 +1,9 @@
+
+/* Class = "UILabel"; text = "仅修改本地账户名称，不会修改好友添加的备注名"; ObjectID = "GXK-mm-csp"; */
+"GXK-mm-csp.text" = "仅修改本地账户名称，不会修改好友添加的备注名";
+
+/* Class = "UINavigationItem"; title = "修改账户名称"; ObjectID = "MUl-1z-98l"; */
+"MUl-1z-98l.title" = "修改账户名称";
+
+/* Class = "UIButton"; normalTitle = "确定修改"; ObjectID = "QhW-Q3-bUA"; */
+"QhW-Q3-bUA.normalTitle" = "确定修改";

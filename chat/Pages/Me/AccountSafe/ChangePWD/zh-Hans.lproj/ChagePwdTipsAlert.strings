@@ -1,0 +1,6 @@
+
+/* Class = "UIButton"; normalTitle = "确认修改"; ObjectID = "g4P-HZ-dWE"; */
+"g4P-HZ-dWE.normalTitle" = "确认修改";
+
+/* Class = "UILabel"; text = "NetCloth不设服务器存储用户密码，请妥善保管您的密码。NetCloth没有任何找回密码的方式。"; ObjectID = "tHf-e1-vi4"; */
+"tHf-e1-vi4.text" = "NetCloth不设服务器存储用户密码，请妥善保管您的密码。NetCloth没有任何找回密码的方式。";

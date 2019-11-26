@@ -1,0 +1,8 @@
+/* Class = "UIButton"; normalTitle = "Hold to talk"; ObjectID = "sD7-Tg-Pej"; */
+"sD7-Tg-Pej.normalTitle" = "按住 说话";
+
+/* Class = "UIButton"; normalTitle = "Hold to talk"; ObjectID = "rpU-Lr-ANZ"; */
+"rpU-Lr-ANZ.normalTitle" = "按住 说话";
+
+/* Class = "UILabel"; text = "Network connection is unsuccessful"; ObjectID = "1Rd-P7-Snt"; */
+"1Rd-P7-Snt.text" = "该用户不存在";

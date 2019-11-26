@@ -1,0 +1,30 @@
+
+/* Class = "UILabel"; text = "简体中文"; ObjectID = "2fB-Ni-gbo"; */
+"2fB-Ni-gbo.text" = "简体中文";
+
+/* Class = "UILabel"; text = "振动"; ObjectID = "3eJ-XX-HuD"; */
+"3eJ-XX-HuD.text" = "振动";
+
+/* Class = "UILabel"; text = "消息提醒"; ObjectID = "8Sm-oW-DFd"; */
+"8Sm-oW-DFd.text" = "消息提醒";
+
+/* Class = "UINavigationItem"; title = "语言"; ObjectID = "ABx-2B-SBp"; */
+"ABx-2B-SBp.title" = "语言";
+
+/* Class = "UILabel"; text = "铃声"; ObjectID = "GTZ-s5-a4z"; */
+"GTZ-s5-a4z.text" = "铃声";
+
+/* Class = "UINavigationItem"; title = "设置"; ObjectID = "TFY-UY-FFe"; */
+"TFY-UY-FFe.title" = "设置";
+
+/* Class = "UINavigationItem"; title = "消息通知"; ObjectID = "YDd-fC-804"; */
+"YDd-fC-804.title" = "消息通知";
+
+/* Class = "UILabel"; text = "系统判定"; ObjectID = "YRW-uf-QOb"; */
+"YRW-uf-QOb.text" = "系统判定";
+
+/* Class = "UILabel"; text = "语言"; ObjectID = "p5u-p1-6cP"; */
+"p5u-p1-6cP.text" = "语言";
+
+/* Class = "UILabel"; text = "English"; ObjectID = "vYH-Dx-FhH"; */
+"vYH-Dx-FhH.text" = "English";

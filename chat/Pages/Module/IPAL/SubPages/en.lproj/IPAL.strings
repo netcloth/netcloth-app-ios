@@ -1,0 +1,43 @@
+
+/* Class = "UILabel"; text = "应用地址是各类应用场景的服务地址，切换应用地址可以在应用区体验不同的应用（应用区建设中）"; ObjectID = "34c-Sl-Wc0"; */
+"34c-Sl-Wc0.text" = "Application Address consists of service node addresses of various application scenarios. Switching Application Address can experience different applications in the application portal (under construction)";
+
+/* Class = "UILabel"; text = "应用地址"; ObjectID = "4eb-7l-zAp"; */
+"4eb-7l-zAp.text" = "Application Address";
+
+/* Class = "UINavigationItem"; title = "什么是C-IPAL？"; ObjectID = "5nx-az-0sn"; */
+"5nx-az-0sn.title" = "What is C-IPAL？";
+
+/* Class = "UILabel"; text = "设定通信地址，用于收发各类消息。"; ObjectID = "6tB-cv-4u6"; */
+"6tB-cv-4u6.text" = "Communication Address will be regarded as your address for sending and receiving messages.";
+
+/* Class = "UILabel"; text = "C-IPAL（Client IP Address List）是NetCloth特有模块之一，用户使用各类服务，需要通过C-IPAL申明各类地址。 "; ObjectID = "9LT-vU-qyR"; */
+"9LT-vU-qyR.text" = "C-IPAL is the abbreviation of Client IP Address Lists, which is used to record various addresses required by scenarios. It is one of the unique features of NetCloth.";
+
+/* Class = "UILabel"; text = "应用地址"; ObjectID = "Pl6-eb-trr"; */
+"Pl6-eb-trr.text" = "Application Address";
+
+/* Class = "UILabel"; text = "在NetCloth的通信体系中，我们采用了C-S-C的方式传递消息，由稳定在线的服务器负责消息转发，要成功转发消息，需要得知用户的公钥及用户连接着节点的IP地址。因此，我们可以将对应服务节点的IP视作用户的通信地址。\n使用NetCloth进行通信，用户需要向区块链账本内申明自己连接节点的相关信息以及自己的账户地址，才能正常使用各类服务。"; ObjectID = "VbB-9s-fVo"; */
+"VbB-9s-fVo.text" = "In NetCloth, we use C-S-C(Client-Service Node-Client) to deliver messages. The stable online server is responsible for message transmission. To successfully transmit messages, sever need to acquire the user's public key and the IP address of the service node which user connected. Therefore, we can regard the IP of the service node as the communication address of the user. \
+To communicate on NetCloth, users need to claim the Address of their connected node and their account addresses(Public Key) to Netcloth chain ledger in order to use various services fluently.";
+
+/* Class = "UILabel"; text = "C-IPAL（Client IP Address List）是NetCloth特有模块之一，用户使用各类服务，需要通过C-IPAL申明各类地址。"; ObjectID = "f5h-La-KAm"; */
+"f5h-La-KAm.text" = "C-IPAL (Client IP Address Lists) is one of the NetCloth’s unique features. User should Claim their Address in C-IPAL to enjoy various scenarios.";
+
+/* Class = "UILabel"; text = "通信地址"; ObjectID = "gi3-G2-h8A"; */
+"gi3-G2-h8A.text" = "Communication Address";
+
+/* Class = "UILabel"; text = "NetCloth会内置一个开放应用平台（开发中），切换不同的应用地址，可以登录不同节点运营的应用平台，体验各类服务。应用地址包括了服务节点的账户公钥、服务器IP等信息。"; ObjectID = "gn8-JM-8xP"; */
+"gn8-JM-8xP.text" = "NetCloth will have an open application platform (under construction) that connects to different Application Address and can switch to application platforms operated by different nodes to experience various services. Application Address includes information such as the public key of the service node and the server IP.";
+
+/* Class = "UIButton"; normalTitle = "了解更多"; ObjectID = "qTm-Me-lCg"; */
+"qTm-Me-lCg.normalTitle" = "Learn more";
+
+/* Class = "UILabel"; text = "什么是C-IPAL？"; ObjectID = "ql8-uR-mVp"; */
+"ql8-uR-mVp.text" = "What is C-IPAL？";
+
+/* Class = "UILabel"; text = "通信地址"; ObjectID = "y6T-rm-Eg9"; */
+"y6T-rm-Eg9.text" = "Communication Address";
+
+/* Class = "UINavigationItem"; title = "C-IPAL设置"; ObjectID = "y8e-Tw-PIM"; */
+"y8e-Tw-PIM.title" = "C-IPAL Settings";

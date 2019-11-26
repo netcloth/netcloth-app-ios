@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = "46.102.156.50"; ObjectID = "1P6-nA-mvo"; */
+"1P6-nA-mvo.text" = "46.102.156.50";
+
+/* Class = "UILabel"; text = "时间"; ObjectID = "5lf-gk-EpG"; */
+"5lf-gk-EpG.text" = "时间";
+
+/* Class = "UILabel"; text = "正在申明通信地址，请稍后查看结果"; ObjectID = "6Tr-oj-p9d"; */
+"6Tr-oj-p9d.text" = "正在申明通信地址，请稍后查看结果";
+
+/* Class = "UILabel"; text = "申明服务节点IP"; ObjectID = "BX6-2f-aZk"; */
+"BX6-2f-aZk.text" = "申明服务节点";
+
+/* Class = "UILabel"; text = "2019-10-16 16:33:24"; ObjectID = "D62-W6-n26"; */
+"D62-W6-n26.text" = "2019-10-16 16:33:24";
+
+/* Class = "UILabel"; text = "Polychain"; ObjectID = "FJb-bD-bwv"; */
+"FJb-bD-bwv.text" = "Polychain";
+
+/* Class = "UINavigationItem"; title = "历史记录"; ObjectID = "HKn-ip-oxl"; */
+"HKn-ip-oxl.title" = "历史记录";
+
+/* Class = "UILabel"; text = "2018.09.19 00:12:36"; ObjectID = "T4R-pr-2ZL"; */
+"T4R-pr-2ZL.text" = "2018.09.19 00:12:36";
+
+/* Class = "UILabel"; text = "fwllskdjgwlflkenteflslkengvegelxoelgwdlglxlellhhb"; ObjectID = "aBw-9M-R4v"; */
+"aBw-9M-R4v.text" = "fwllskdjgwlflkenteflslkengvegelxoelgwdlglxlellhhb";
+
+/* Class = "UILabel"; text = "无"; ObjectID = "aVM-t6-7od"; */
+"aVM-t6-7od.text" = "无";
+
+/* Class = "UILabel"; text = "通信地址申明"; ObjectID = "cOY-l7-89H"; */
+"cOY-l7-89H.text" = "通信地址申明";
+
+/* Class = "UILabel"; text = "TXID"; ObjectID = "cvR-X8-iIm"; */
+"cvR-X8-iIm.text" = "TXID";
+
+/* Class = "UIButton"; normalTitle = "去区块链浏览器查询"; ObjectID = "d9j-XJ-F75"; */
+"d9j-XJ-F75.normalTitle" = "去区块链浏览器查询";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "ej2-vs-8Ji"; */
+"ej2-vs-8Ji.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "复制TXID"; ObjectID = "nxa-lP-HJC"; */
+"nxa-lP-HJC.normalTitle" = "复制TXID";
+
+/* Class = "UILabel"; text = "操作类型"; ObjectID = "reB-eK-n7b"; */
+"reB-eK-n7b.text" = "操作类型";
+
+/* Class = "UIButton"; normalTitle = "查看申明详情"; ObjectID = "seC-dX-eAM"; */
+"seC-dX-eAM.normalTitle" = "查看申明详情";
+
+/* Class = "UILabel"; text = "备注"; ObjectID = "tWu-W5-PSr"; */
+"tWu-W5-PSr.text" = "备注";
+
+/* Class = "UILabel"; text = "（0/1）"; ObjectID = "x2q-OB-ao6"; */
+"x2q-OB-ao6.text" = "（0/1）";
+
+/* Class = "UINavigationItem"; title = "历史详情"; ObjectID = "yNo-qj-a4z"; */
+"yNo-qj-a4z.title" = "历史详情";
+
+/* Class = "UILabel"; text = "申明中"; ObjectID = "yqT-Qd-hp7"; */
+"yqT-Qd-hp7.text" = "申明中";

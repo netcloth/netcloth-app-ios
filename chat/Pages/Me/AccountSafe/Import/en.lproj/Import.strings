@@ -1,0 +1,48 @@
+
+/* Class = "UITextField"; placeholder = "Enter account name"; ObjectID = "5uH-Jl-HlZ"; */
+"5uH-Jl-HlZ.placeholder" = "Enter account name";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "8Lf-6x-AIR"; */
+"8Lf-6x-AIR.normalTitle" = "Confirm";
+
+/* Class = "UITextField"; placeholder = "Confirm Password"; ObjectID = "8Zl-89-sXG"; */
+"8Zl-89-sXG.placeholder" = "Confirm Password";
+
+/* Class = "UILabel"; text = "Set an account name"; ObjectID = "BaL-2a-sVD"; */
+"BaL-2a-sVD.text" = "Set an account name";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "I8W-rG-jHa"; */
+"I8W-rG-jHa.text" = "Label";
+
+/* Class = "UILabel"; text = "Import account from Private Key"; ObjectID = "NEJ-Ra-1TJ"; */
+"NEJ-Ra-1TJ.text" = "Import account from Private Key";
+
+/* Class = "UILabel"; text = "Set an account name"; ObjectID = "Och-0s-KYW"; */
+"Och-0s-KYW.text" = "Set an account name";
+
+/* Class = "UITextField"; placeholder = "Enter Password（At least 8 characters）"; ObjectID = "Qul-YN-KPu"; */
+"Qul-YN-KPu.placeholder" = "Enter Password（At least 8 characters）";
+
+/* Class = "UILabel"; text = "Account Password"; ObjectID = "RM2-9r-mbb"; */
+"RM2-9r-mbb.text" = "Account Password";
+
+/* Class = "UILabel"; text = "Enter the previous account password"; ObjectID = "VK4-sW-W1v"; */
+"VK4-sW-W1v.text" = "Enter the previous account password";
+
+/* Class = "UILabel"; text = "Enter Keystore"; ObjectID = "a2C-pd-tpy"; */
+"a2C-pd-tpy.text" = "Enter Keystore";
+
+/* Class = "UILabel"; text = "Import account from Keystore"; ObjectID = "gjo-gb-45y"; */
+"gjo-gb-45y.text" = "Import account from Keystore";
+
+/* Class = "UILabel"; text = "Account Password"; ObjectID = "gp2-Q3-aIH"; */
+"gp2-Q3-aIH.text" = "Account Password";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "qZk-Mx-35a"; */
+"qZk-Mx-35a.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "Please enter your private key.(case sensitive)"; ObjectID = "uCs-1g-RvX"; */
+"uCs-1g-RvX.text" = "Please enter your private key.(case sensitive)";
+
+/* Class = "UINavigationItem"; title = "Import Account"; ObjectID = "zib-cR-ePd"; */
+"zib-cR-ePd.title" = "Import Account";
