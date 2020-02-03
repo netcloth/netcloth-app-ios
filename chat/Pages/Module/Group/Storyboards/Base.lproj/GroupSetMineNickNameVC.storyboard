@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--GroupSetNameVC-->
+        <scene sceneID="iRh-t6-O3L">
+            <objects>
+                <viewController storyboardIdentifier="GroupSetMineNickNameVC" id="q7B-79-ji2" userLabel="GroupSetNameVC" customClass="GroupSetMineNickNameVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hUC-c1-ksO">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qku-yi-sf9">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNC-xl-4Cz" userLabel="Container">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set your alias in this group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yLL-Aa-N8d">
+                                                <rect key="frame" x="15" y="27" width="181" height="18"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="0.56470588239999997" green="0.57647058819999997" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJY-Pd-PtY" userLabel="re_pwd_container">
+                                                <rect key="frame" x="0.0" y="55" width="414" height="55"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tg8-SK-93A">
+                                                        <rect key="frame" x="15" y="0.0" width="384" height="55"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="Tg8-SK-93A" firstAttribute="leading" secondItem="PJY-Pd-PtY" secondAttribute="leading" constant="15" id="4N2-QU-jsv"/>
+                                                    <constraint firstItem="Tg8-SK-93A" firstAttribute="top" secondItem="PJY-Pd-PtY" secondAttribute="top" id="5qY-cD-SlN"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Tg8-SK-93A" secondAttribute="bottom" id="Vmq-9M-e11"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Tg8-SK-93A" secondAttribute="trailing" constant="15" id="fwE-zm-hIv"/>
+                                                    <constraint firstAttribute="height" constant="55" id="qEl-Bs-fMG"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="yLL-Aa-N8d" firstAttribute="bottom" secondItem="PJY-Pd-PtY" secondAttribute="top" constant="-10" id="Sj4-Tc-FJG"/>
+                                            <constraint firstItem="yLL-Aa-N8d" firstAttribute="leading" secondItem="uNC-xl-4Cz" secondAttribute="leading" constant="15" id="U2C-36-3MP"/>
+                                            <constraint firstItem="PJY-Pd-PtY" firstAttribute="leading" secondItem="uNC-xl-4Cz" secondAttribute="leading" id="VHO-Y3-8LP"/>
+                                            <constraint firstAttribute="trailing" secondItem="PJY-Pd-PtY" secondAttribute="trailing" id="rlO-yy-tvF"/>
+                                            <constraint firstItem="PJY-Pd-PtY" firstAttribute="top" secondItem="uNC-xl-4Cz" secondAttribute="top" constant="55" id="wDT-Uo-Uw1"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.96862745100000003" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="uNC-xl-4Cz" firstAttribute="top" secondItem="qku-yi-sf9" secondAttribute="top" id="5ug-oH-KPM"/>
+                                    <constraint firstAttribute="bottom" secondItem="uNC-xl-4Cz" secondAttribute="bottom" id="A9c-x6-yAe"/>
+                                    <constraint firstItem="uNC-xl-4Cz" firstAttribute="width" secondItem="qku-yi-sf9" secondAttribute="width" id="VLi-w0-7vA"/>
+                                    <constraint firstItem="uNC-xl-4Cz" firstAttribute="leading" secondItem="qku-yi-sf9" secondAttribute="leading" id="lUe-r0-JR0"/>
+                                    <constraint firstAttribute="trailing" secondItem="uNC-xl-4Cz" secondAttribute="trailing" id="wp5-6P-9wH"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96862745100000003" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="JYN-y6-4bs" firstAttribute="trailing" secondItem="qku-yi-sf9" secondAttribute="trailing" id="7Yp-46-uFw"/>
+                            <constraint firstItem="qku-yi-sf9" firstAttribute="leading" secondItem="JYN-y6-4bs" secondAttribute="leading" id="9qL-9b-VSs"/>
+                            <constraint firstItem="JYN-y6-4bs" firstAttribute="bottom" secondItem="qku-yi-sf9" secondAttribute="bottom" id="C48-Cj-WnA"/>
+                            <constraint firstItem="qku-yi-sf9" firstAttribute="top" secondItem="JYN-y6-4bs" secondAttribute="top" id="Ezv-V2-LXi"/>
+                            <constraint firstItem="uNC-xl-4Cz" firstAttribute="height" secondItem="JYN-y6-4bs" secondAttribute="height" id="Fen-9I-3wF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JYN-y6-4bs"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="My Alias in Group" id="4Ql-wy-P0y"/>
+                    <connections>
+                        <outlet property="inputTF" destination="Tg8-SK-93A" id="THc-KA-xmM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZNR-DG-gKX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="PKY-Je-mgS"/>
+            </objects>
+            <point key="canvasLocation" x="-4790" y="-1142"/>
+        </scene>
+    </scenes>
+</document>

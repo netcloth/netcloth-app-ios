@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; normalTitle = "保存到手机"; ObjectID = "K1g-Nj-wXx"; */
+"K1g-Nj-wXx.normalTitle" = "保存到手机";
+
+/* Class = "UINavigationItem"; title = "Group QR Code"; ObjectID = "MhV-iY-UTl"; */
+"MhV-iY-UTl.title" = "群二维码";
+
+/* Class = "UILabel"; text = "Only the group admin\ncan invite friends to join the group chat."; ObjectID = "OqP-Sp-GRp"; */
+"OqP-Sp-GRp.text" = "本群仅允许管理员邀请好友进群";
+
+/* Class = "UILabel"; text = "群聊："; ObjectID = "RSk-9q-WEs"; */
+"RSk-9q-WEs.text" = "群聊：";
+
+/* Class = "UILabel"; text = "扫描二维码，即可添加群"; ObjectID = "mUM-tK-z2T"; */
+"mUM-tK-z2T.text" = "扫描二维码，即可添加群";

@@ -1,12 +1,13 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
+import YYKit
 
 class ImageChatCell: ChatCommonCell {
     @IBOutlet weak var smallAvatarImageV: UIImageView?
@@ -14,7 +15,7 @@ class ImageChatCell: ChatCommonCell {
     @IBOutlet weak var stateIndicator: UIActivityIndicatorView?
     @IBOutlet weak var stateIndicatorContainer: UIView?
     
-    @IBOutlet weak var pictureImage: UIImageView?
+    @IBOutlet weak var pictureImage: YYAnimatedImageView?
     @IBOutlet weak var imageWidth: NSLayoutConstraint?
     @IBOutlet weak var imageHeight: NSLayoutConstraint?
     
@@ -40,22 +41,22 @@ class ImageChatCell: ChatCommonCell {
     }
     
     
-
+      
     var imageBtn: UIButton?
     
-
+      
     @IBOutlet weak var avatarBtn: UIButton?
     
     var dataMsg: CPMessage?
     
-
+      
 
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.avatarBtn?.addTarget(self, action: #selector(onTapAvatar), for: .touchUpInside)
         
-
+          
         imageBtn = UIButton()
         self.contentView.addSubview(imageBtn!)
         imageBtn?.snp.makeConstraints({ (maker) in
@@ -84,7 +85,7 @@ class ImageChatCell: ChatCommonCell {
         }
     }
     
-
+      
     override func reloadData(data: Any) {
         guard let msg = data as? CPMessage else {
             return
@@ -96,7 +97,7 @@ class ImageChatCell: ChatCommonCell {
             updateOthers(msg: msg)
         }
         
-
+          
         var width = 140.0
         var height = 140.0
         if let pw = dataMsg?.pixelWidth , let ph = dataMsg?.pixelHeight, pw > 0, ph > 0 {
@@ -134,13 +135,13 @@ class ImageChatCell: ChatCommonCell {
     
     
     func updateSelf(msg: CPMessage) {
-
+          
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-
+          
         var img = UIImage(named: "蓝色-聊天")
         img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
         msgBgImgView?.image = img
@@ -161,7 +162,7 @@ class ImageChatCell: ChatCommonCell {
             self?.hideLoading()
             if result == true && (self?.pictureImage?.image == nil) {
                 if let data =  msg?.msgDecodeContent() as? Data {
-                    self?.pictureImage?.image = UIImage(data: data)
+                    self?.pictureImage?.image = YYImage(data: data)
                 }
             }
             
@@ -175,11 +176,11 @@ class ImageChatCell: ChatCommonCell {
             }
         }
         
-
+          
         pictureImage?.image = UIImage(named: "pic_place")
         pictureImage?.nc_setImageHash(msg)
         
-
+          
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
@@ -188,18 +189,18 @@ class ImageChatCell: ChatCommonCell {
     
     func updateOthers(msg: CPMessage) {
         
-
+          
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-
+          
         var img = UIImage(named: "灰色-聊天")
         img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
         msgBgImgView?.image = img
         
-
+          
         self.showLoading()
         let needRefresh:Bool = msg.pixelWidth == 0
         msg.normalCompleteHandle = { [weak self,weak msg] (result) in
@@ -209,7 +210,7 @@ class ImageChatCell: ChatCommonCell {
             self?.hideLoading()
             if result == true && (self?.pictureImage?.image == nil) {
                 if let data =  msg?.msgDecodeContent() as? Data {
-                    self?.pictureImage?.image = UIImage(data: data)
+                    self?.pictureImage?.image = YYImage(data: data)
                 }
             }
             
@@ -224,11 +225,13 @@ class ImageChatCell: ChatCommonCell {
             }
         }
         
-
+          
         pictureImage?.image = UIImage(named: "pic_place")
+        
+          
         pictureImage?.nc_setImageHash(msg)
         
-
+          
         smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
         
         if msg.senderPubKey == support_account_pubkey {
@@ -240,7 +243,7 @@ class ImageChatCell: ChatCommonCell {
         }
     }
     
-
+      
     override func msgContentView() -> UIView? {
         return self.pictureImage
     }
@@ -248,6 +251,6 @@ class ImageChatCell: ChatCommonCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.dataMsg?.msgData = nil
-
+  
     }
 }

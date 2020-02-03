@@ -1,19 +1,19 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import IQKeyboardManagerSwift
 
 
-
+  
 class ChatRoomVC:BaseViewController,
     UITableViewDelegate, UITableViewDataSource,
-    ChatInterface,
+    ChatDelegate,
     KeyboardManagerDelegate,
     ChatCommonCellDelegate,
     SDPhotoBrowserDelegate
@@ -35,7 +35,7 @@ class ChatRoomVC:BaseViewController,
             RoomStatus.remark = self.remark
         }
     }
-
+      
     @IBOutlet weak var toolbarBottomToSafe: NSLayoutConstraint!
     
     let refreshControl = UIRefreshControl()
@@ -44,34 +44,33 @@ class ChatRoomVC:BaseViewController,
     
     @IBOutlet weak var notFoundTipContainer: UIView?
     
-    var messgeArray: [CPMessage] = []
+    @IBOutlet weak var strangerTipContainer: UIControl?
+    @IBOutlet weak var strangerTipContainerLabel: UILabel?
     
-
+    var messageArray: [CPMessage] = []   
+    
+      
     private var lastMsgId: CLongLong = 1
     
     let disbag = DisposeBag()
     
-    var obv1: NSObjectProtocol?
-    var obv2: NSObjectProtocol?
-    
     var msgPatchQueue : DispatchQueue = OS_dispatch_queue_serial(label: "com.chat.room.msg", qos: .default)
     
-
+      
     
     deinit {
-        RoomStatus.toPublicKey = nil
-        CPChatHelper.setRoomToPubkey(nil)
+        if RoomStatus.toPublicKey == self.toPublicKey {
+            RoomStatus.toPublicKey = nil
+            CPChatHelper.setRoomToPubkey(nil)
+        }
+        
         
         IQKeyboardManager.shared.disabledToolbarClasses.removeLast()
-        NotificationCenter.default.removeObserver(obv1)
-        NotificationCenter.default.removeObserver(obv2)
         
         self.tableView.delegate = nil
         self.tableView.dataSource = nil
         SRRecordingAudioPlayerManager.shared()?.stop()
-        CPChatHelper.remove(self)
-        
-        
+        CPChatHelper.removeInterface(self)
     }
     
     var cellPlaceHolders: [String: ChatCommonCell] = [:]
@@ -81,31 +80,31 @@ class ChatRoomVC:BaseViewController,
         self.navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)]
         
-
+          
         IQKeyboardManager.shared.enable = false
         IQKeyboardManager.shared.disabledToolbarClasses.append(type(of: self))
         
         KeyboardManager.shared.setObserver(self)
         
-        messgeArray = []
+        messageArray = []
         configUI()
         configEvent()
-        Toast.showLoading()
+        self.showLoading()
         fetchDataMsg(createtime: -1, msgId: -1)
         
-        CPChatHelper.add(self)
+        CPChatHelper.addInterface(self)
         calculateCells()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.showBlackLine()
         RoomStatus.inChatRoom = true
-        judgeIsBlackList()
+        judgeChanges()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        CPChatHelper.setAllReadOfSession(sessionId ?? 0, complete: nil)
+        self.setSessionToRead()
         RoomStatus.inChatRoom = false
     }
     
@@ -113,7 +112,9 @@ class ChatRoomVC:BaseViewController,
         let suppert = ["OtherUnknown","SelfUnknown",
                        "OtherText","SelfText",
                        "OtherAudio","SelfAudio",
-                       "SelfImage","OtherImage"]
+                       "SelfImage","OtherImage",
+                       "SelfInvite","OtherInvite",
+                       "SystemMsgCell"]
         
         var cell: ChatCommonCell?
         for iden in suppert {
@@ -123,13 +124,15 @@ class ChatRoomVC:BaseViewController,
         }
     }
     
-
+      
     
     func configUI() {
         
-        self.title = remark
+        let right = UIBarButtonItem(image: UIImage(named: "room_info_more"), style: .plain, target: self, action: #selector(toQuerySessionCard))
+        self.navigationItem.rightBarButtonItem = right
+        
         tableView.refreshControl = refreshControl
-
+          
         tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
@@ -145,6 +148,19 @@ class ChatRoomVC:BaseViewController,
         }
         longgesture.minimumPressDuration = 1
         tableView.addGestureRecognizer(longgesture)
+        
+          
+        var att1 = NSMutableAttributedString(string: "stranger_tip_1".localized())
+        
+        var att2 = NSMutableAttributedString(string: "stranger_tip_2".localized())
+        att2.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: att2.rangeOfAll())
+        att2.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#3D7EFF")!], range: att2.rangeOfAll())
+        
+        let range1 = (att1.string as? NSString)?.range(of: "#mark#")
+        if let r1 = range1, r1.location != NSNotFound {
+            att1.replaceCharacters(in: r1, with: att2)
+        }
+        self.strangerTipContainerLabel?.attributedText = att1
     }
     
     func configEvent() {
@@ -166,41 +182,90 @@ class ChatRoomVC:BaseViewController,
                     self?.sendImage(data: imgdata)
                 }
             }
-            
-            
         }.disposed(by: disbag)
         
-        obv1 =
-        NotificationCenter.default.addObserver(forName: UIMenuController.didHideMenuNotification, object: nil, queue: OperationQueue.main) { [weak self] (notice) in
-            self?.notInMenu = true
-        }
+        self.strangerTipContainer?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe({ [weak self] (e) in
+            if let vc = R.loadSB(name: "ContactCard", iden: "ContactCardVC") as? ContactCardVC, let pubkey = self?.toPublicKey {
+                vc.contactPublicKey = pubkey
+                vc.sourceTag = 1
+                Router.pushViewController(vc: vc)
+            }
+        })
         
-        obv2 =
-            NotificationCenter.default.addObserver(forName: NoticeNameKey.contactRemarkChange.noticeName, object: nil, queue: OperationQueue.main) { [weak self] (notice) in
-                
-                if let contact = notice.object as? CPContact {
-                    self?.onHandleRemarkChange(contact: contact)
-                }
-        }
+        
+        NotificationCenter.default.rx.notification( UIMenuController.didHideMenuNotification).subscribe(onNext: { [weak self] (notice) in
+            self?.notInMenu = true
+        }).disposed(by: disbag)
+        
+        NotificationCenter.default.rx.notification( NoticeNameKey.contactRemarkChange.noticeName).subscribe(onNext: { [weak self] (notice) in
+            if let contact = notice.object as? CPContact {
+                self?.onHandleRemarkChange(contact: contact)
+            }
+        }).disposed(by: disbag)
+        
+        NotificationCenter.default.rx.notification( NoticeNameKey.chatRecordDeletes.noticeName).subscribe(onNext: { [weak self] (notice) in
+            if let pubkey = notice.object as? String, pubkey == self?.toPublicKey {
+                self?.onHandleDeleteAllChatRecored()
+            }
+        }).disposed(by: disbag)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(_onTriggerUnreadChange), name: UIApplication.willResignActiveNotification, object: nil)
+          
     }
     
-    func judgeIsBlackList() {
-        if let pubkey = self.toPublicKey {
-            CPContactHelper.getOneContact(byPubkey: pubkey) { [weak self] (r, msg, contact) in
-                if contact?.isBlack == true {
-                    self?.view.endEditing(true)
-                    self?.toolBar.resetInBlack(isBlack: true)
-                } else {
-                    self?.toolBar.resetInBlack(isBlack: false)
-                }
+    @objc func _onTriggerUnreadChange() {
+        self.setSessionToRead()
+        NotificationCenter.post(name: NoticeNameKey.chatRoomUnreadStatusChange)
+    }
+    
+    func judgeChanges() {
+        guard let pubkey = self.toPublicKey else {
+            return
+        }
+        
+        if pubkey == support_account_pubkey {
+            self.navigationItem.rightBarButtonItem = nil
+        }
+        
+        CPContactHelper.getOneContact(byPubkey: pubkey) { [weak self] (r, msg, contact) in
+            if contact?.isBlack == true {
+                self?.view.endEditing(true)
+                self?.toolBar.resetInBlack(isBlack: true)
+            } else {
+                self?.toolBar.resetInBlack(isBlack: false)
+            }
+            
+            if contact?.isDoNotDisturb == true {
+                self?.setTitleImage(self?.remark ?? "", image: UIImage(named: "room_not_disturb")!)
+            } else {
+                self?.setCustomTitle(self?.remark ?? "")
+            }
+            
+            if contact?.status == ContactStatus.strange {
+                self?.strangerTipContainer?.isHidden = false
+            } else {
+                self?.strangerTipContainer?.isHidden = true
             }
         }
     }
     
-
+    @objc func toQuerySessionCard() {
+        if let vc = R.loadSB(name: "SessionCards", iden: "SessionCardsVC") as? SessionCardsVC {
+            vc.contactPublicKey = self.toPublicKey
+            vc.sourceTag = 1
+            Router.pushViewController(vc: vc)
+        }
+    }
+    
+    @objc func setSessionToRead() {
+        CPSessionHelper.setAllReadOfSession(sessionId ?? 0, with: SessionType.P2P, complete: nil)
+          
+    }
+    
+      
     
     @objc func loadHistroy() {
-        if  let msg = messgeArray.first {
+        if  let msg = messageArray.first {
             fetchDataMsg(createtime: msg.createTime, msgId: msg.msgId)
         } else {
             refreshControl.endRefreshing()
@@ -209,13 +274,13 @@ class ChatRoomVC:BaseViewController,
     
     func fetchDataMsg(createtime: Double ,msgId: CLongLong) {
         
-
+          
         CPChatHelper.getMessagesInSession(sessionId ?? 0, createTime: createtime, fromMsgId: msgId, size: 17) {
             [weak self] (ok, msg, array: [CPMessage]?) in
             
             self?.msgPatchQueue.async {
                 
-
+                  
                 if let toarray = array {
                     for to in toarray {
                         to.msgDecodeContent()
@@ -223,11 +288,11 @@ class ChatRoomVC:BaseViewController,
                 }
                 
                 DispatchQueue.main.async {
-                    Toast.dismissLoading()
+                    self?.dismissLoading()
                     self?.refreshControl.endRefreshing()
                     
                     self?._onHandleMsgsData(array ?? [], complete: {
-
+                          
                         if msgId == -1 || createtime == -1 {
                             self?._refreshToBottom()
                         }
@@ -244,7 +309,7 @@ class ChatRoomVC:BaseViewController,
         }
     }
     
-
+      
     @objc func _refreshVisibleCells() {
         self.msgPatchQueue.async {
             self.reloadData()
@@ -264,7 +329,7 @@ class ChatRoomVC:BaseViewController,
         let tmpId = lastMsgId
         self.reloadData()
         var toRow = 0
-        for (index , item) in self.messgeArray.enumerated() {
+        for (index , item) in self.messageArray.enumerated() {
             if item.msgId == tmpId {
                 toRow = index
                 break
@@ -287,18 +352,18 @@ class ChatRoomVC:BaseViewController,
         }
     }
 
-
+      
     func onHandleRemarkChange(contact: CPContact) {
         msgPatchQueue.async { [weak self] in
-
+              
             if self?.toPublicKey == contact.publicKey {
                 self?.remark = contact.remark
                 DispatchQueue.main.async {
                     self?.title = self?.remark
                 }
             }
-
-            self?.messgeArray.forEach({ (msg) in
+              
+            self?.messageArray.forEach({ (msg) in
                 if msg.senderPubKey == contact.publicKey {
                     msg.senderRemark = contact.remark
                 }
@@ -306,9 +371,16 @@ class ChatRoomVC:BaseViewController,
             self?._refreshVisibleCells()
         }
     }
+    
+    func onHandleDeleteAllChatRecored() {
+        msgPatchQueue.async(flags: .barrier) {
+            self.messageArray = []
+            self.reloadData()
+        }
+    }
 
     
-
+      
     private var menuOpItem: CPMessage?
     private var menuController: UIMenuController?
     private var notInMenu: Bool = true
@@ -349,7 +421,7 @@ class ChatRoomVC:BaseViewController,
             return
         }
         if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-
+              
             alert.titleLabel?.text = NSLocalizedString("Session_W_Title", comment: "")
             alert.msgLabel?.text = NSLocalizedString("Session_W_Msg", comment: "")
             alert.cancelButton?.setTitle(NSLocalizedString("Back", comment: ""), for: .normal)
@@ -358,11 +430,15 @@ class ChatRoomVC:BaseViewController,
             
             alert.okBlock = { [weak self] in
                 self?.msgPatchQueue.async {
-                    guard let idx = self?.messgeArray.firstIndex(of: msg) else { return }
-                                  self?.messgeArray.remove(at: idx)
-                                  self?.reloadData()
-                                  
-                                  CPChatHelper.deleteMessage(msg.msgId, complete: nil)
+                    guard let idx = self?.messageArray.firstIndex(of: msg) else { return }
+                    self?.messageArray.remove(at: idx)
+                    self?.reloadData()
+                    
+                    CPChatHelper.deleteMessage(msg.msgId) { (r, msg) in
+                        if r == false {
+                            Toast.show(msg: "System error".localized())
+                        }
+                    }
                 }
             }
         }
@@ -376,7 +452,7 @@ class ChatRoomVC:BaseViewController,
             menuController?.arrowDirection = .default
         }
         
-        guard let msg = self.messgeArray[safe: indexPath.row] else { return }
+        guard let msg = self.messageArray[safe: indexPath.row] else { return }
         guard let chatCell = cell as? ChatCommonCell else { return }
         menuOpItem = msg
         var items:[UIMenuItem] = []
@@ -393,6 +469,10 @@ class ChatRoomVC:BaseViewController,
                 frame = tof
             }
         }
+        else {
+            return
+        }
+        
         menuController?.setTargetRect(frame, in: self.tableView)
         menuController?.setMenuVisible(true, animated: true)
         self.notInMenu = false
@@ -408,12 +488,12 @@ class ChatRoomVC:BaseViewController,
             guard let indexPath = self.tableView.indexPathForRow(at: location) else { return }
             guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
             
-
+              
             showMenuAtCell(cell,at: indexPath)
         }
     }
 
-
+      
     func onCacheMsgRecieve(_ caches: [CPMessage]!) {
         _onHandleMsgsData(caches) { [weak self] in
             self?._refreshToTop()
@@ -422,7 +502,7 @@ class ChatRoomVC:BaseViewController,
     
     func onMsgSendStateChange(_ msgTmp: CPMessage) {
         msgPatchQueue.async {
-            for msg in self.messgeArray.reversed() {
+            for msg in self.messageArray.reversed() {
                 if msg.msgId == msgTmp.msgId {
                     msg.toServerState = msgTmp.toServerState
                     self._refreshVisibleCells()
@@ -437,17 +517,17 @@ class ChatRoomVC:BaseViewController,
         }
     }
     
-
+      
     func onReceiveMsg(_ msg: CPMessage) {
         self._onHandleMsgsData([msg], isOnline: true) { [weak self] in
-
+              
             if self?.checkShouldToBottom() == true {
                 self?._refreshToBottom(animate: true)
             }
         }
     }
     
-
+      
     func _onHandleMsgsData(_ data: [CPMessage],
                            isOnline: Bool = false,
                            complete: (() -> Void)?) {
@@ -459,7 +539,7 @@ class ChatRoomVC:BaseViewController,
                 }
                 return
             }
-
+              
             var accept = [CPMessage]()
             for tmp in data {
                 if self?.shouldReceiveMsg(tmp) == true {
@@ -467,7 +547,7 @@ class ChatRoomVC:BaseViewController,
                 }
             }
                     
-
+              
             accept = self?._deleteRepeatInDataArray(wantInArray: accept) ?? []
             
             guard accept.count > 0 else {
@@ -477,20 +557,20 @@ class ChatRoomVC:BaseViewController,
                 return
             }
             
-
+              
             accept.forEach { (msg) in
                 msg.msgDecodeContent()
             }
             
-
+              
             self?._orderMsgs(inArray: &accept)
             
-
+              
             var last:CPMessage? = nil;
             for tmp in accept {
                 if last == nil {
                     if isOnline {
-                        let diff = tmp.createTime - (self?.messgeArray.last?.createTime ?? 0)
+                        let diff = tmp.createTime - (self?.messageArray.last?.createTime ?? 0)
                         if diff >= Double(Config.Time_Diff) {
                             tmp.showCreateTime = true
                         }
@@ -507,14 +587,14 @@ class ChatRoomVC:BaseViewController,
                 last = tmp;
             }
             
-
+              
             if isOnline {
                 self?._insertMsgs(accept, atLast: false)
             } else {
                 self?._insertMsgs(accept, atLast: true)
             }
             
-
+              
             DispatchQueue.main.async {
                 complete?()
             }
@@ -535,7 +615,7 @@ class ChatRoomVC:BaseViewController,
         var toInsertA: [CPMessage] = []
         for toIn in wantInArray {
             var toAdd: Bool = true
-            for haved in messgeArray {
+            for haved in messageArray {
                 if toIn.signHash == haved.signHash {
                     toAdd = false
                 }
@@ -553,7 +633,7 @@ class ChatRoomVC:BaseViewController,
             if m1.createTime < m2.createTime {
                 return true
             }
-            if (m1.createTime < m2.createTime) && (m1.msgId < m2.msgId) {
+            if (m1.createTime > m2.createTime) && (m1.msgId < m2.msgId) {
                 return true
             }
             return false
@@ -570,19 +650,19 @@ class ChatRoomVC:BaseViewController,
             return
         }
         
-
+          
         if atLast {
-            messgeArray.append(contentsOf: msg)
+            messageArray.append(contentsOf: msg)
         } else {
-            messgeArray.insert(contentsOf: msg, at: 0)
+            messageArray.insert(contentsOf: msg, at: 0)
         }
         
-
-        _orderMsgs(inArray: &messgeArray)
+          
+        _orderMsgs(inArray: &messageArray)
     }
     
     
-
+      
     func onTapAvatar(pubkey: String) {
         
         if pubkey == support_account_pubkey {
@@ -597,7 +677,7 @@ class ChatRoomVC:BaseViewController,
     }
     func onRetrySendMsg(_ msgId: CLongLong) {
         if let alert = R.loadNib(name: "RetrySendAlert") as? RetrySendAlert {
-
+              
             alert.titleLabel?.text = "Resend the message？".localized()
             alert.cancelButton?.setTitle("Back".localized(), for: .normal)
             alert.okButton?.setTitle("Confirm".localized(), for: .normal)
@@ -610,6 +690,7 @@ class ChatRoomVC:BaseViewController,
     
     var toShowImage: UIImage?
     func onShowBigPhoto(_ img: UIImage, containerView: UIView) {
+        self.view.endEditing(true)
         toShowImage = img
         let pb = SDPhotoBrowser()
         pb.imageCount = 1
@@ -626,7 +707,7 @@ class ChatRoomVC:BaseViewController,
         return toShowImage ?? UIImage()
     }
     
-
+      
 
     func sendMsg(text: String) {
         CPChatHelper.sendText(text, toUser: toPublicKey!)
@@ -640,7 +721,7 @@ class ChatRoomVC:BaseViewController,
         CPChatHelper.sendImageData(data, toUser: toPublicKey!)
     }
     
-
+      
     func onKeyboardFrame(_ toframe: CGRect, dura: Double, aniCurve: Int) {
         print(toframe)
         if toframe.origin.y >= YYScreenSize().height {
@@ -670,7 +751,7 @@ class ChatRoomVC:BaseViewController,
         if #available(iOS 11.0, *) {
              diff = kbH - self.view.safeAreaInsets.bottom
         } else {
-
+              
         }
         
         self.view.layoutIfNeeded()
@@ -686,12 +767,12 @@ class ChatRoomVC:BaseViewController,
 extension ChatRoomVC {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messgeArray.count
+        return messageArray.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if let model = messgeArray[safe: indexPath.row] {
+        if let model = messageArray[safe: indexPath.row] {
             if model.cellHeigth > CGFloat(0) {
                 return model.cellHeigth
             } else {
@@ -704,12 +785,12 @@ extension ChatRoomVC {
                 }
             }
         }
-        return CGFloat.leastNonzeroMagnitude
+        return CGFloat.leastNonzeroMagnitude   
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdForMessage(msg:messgeArray[safe: indexPath.row]), for: indexPath)
-        if let model = messgeArray[safe: indexPath.row] {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdForMessage(msg:messageArray[safe: indexPath.row]), for: indexPath)
+        if let model = messageArray[safe: indexPath.row] {
             cell.reloadData(data: model as Any)
         }
         if let c = cell as? ChatCommonCell, c.delegate == nil {
@@ -720,14 +801,14 @@ extension ChatRoomVC {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let model = messgeArray[safe: indexPath.row] {
+        if let model = messageArray[safe: indexPath.row] {
             lastMsgId = model.msgId
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? ChatCommonCell {
-            cell.playAudio()
+            cell.onTapCell()
         }
     }
     
@@ -735,6 +816,12 @@ extension ChatRoomVC {
         if let message = msg {
             var prefix: String
             var suffix: String
+            
+            if message.msgType.rawValue >= MessageType.groupJoin.rawValue {
+                return "SystemMsgCell"
+            }
+            
+            
             if message.senderPubKey == CPAccountHelper.loginUser()?.publicKey {
                 prefix = "Self"
             } else {
@@ -749,40 +836,15 @@ extension ChatRoomVC {
             else if message.msgType == .image  {
                 suffix = "Image"
             }
+            else if message.msgType == .inviteeUser  {
+                suffix = "Invite"
+            }
             else {
                 suffix = "Unknown"
             }
             return prefix + suffix            
         }
-
+        assert(false, "must resue cell in above, \(String(describing: msg))")
         return "CellID";
-    }
-}
-
-var key_height = "key_Height"
-var key_isAudioPlaying = "key_playing"
-extension CPMessage  {
-    var cellHeigth: CGFloat {
-        set {
-            objc_setAssociatedObject(self, &key_height, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        get {
-            if let n = objc_getAssociatedObject(self, &key_height) as? CGFloat {
-                return n
-            }
-            return 0
-        }
-    }
-    
-    var isAudioPlaying: Bool {
-        set {
-            objc_setAssociatedObject(self, &key_isAudioPlaying, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        get {
-            if let n = objc_getAssociatedObject(self, &key_isAudioPlaying) as? Bool {
-                return n
-            }
-            return false
-        }
     }
 }

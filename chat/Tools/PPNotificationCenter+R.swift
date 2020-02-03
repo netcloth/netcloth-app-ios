@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 import UserNotifications
 import Foundation
 
@@ -41,9 +41,15 @@ class PPNotificationCenter :NSObject, UNUserNotificationCenterDelegate {
         }
     }
     
-    func resetBadge() {
+    func resetZeroBadge() {
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
+    
+    func reCalBadge() {
+        let count = ExtensionShare.unreadStore.getUnreadCount()
+        UIApplication.shared.applicationIconBadgeNumber =  count
+    }
+    
     
     func sendALocalNotice (msg:CPMessage? = nil) {
         var block =
@@ -71,7 +77,7 @@ class PPNotificationCenter :NSObject, UNUserNotificationCenterDelegate {
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
             
-
+              
             let request = UNNotificationRequest(identifier: "msgId\(msg?.msgId)", content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request) { (error) in
@@ -94,13 +100,14 @@ class PPNotificationCenter :NSObject, UNUserNotificationCenterDelegate {
         {
             let content = UNMutableNotificationContent()
             content.title = msg
-            content.badge = 1
+            let count = ExtensionShare.unreadStore.getUnreadCount()
+            content.badge =  NSNumber(value:  count + 1)
             if Config.Settings.bellable == true {
                 content.sound = .default
             }
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
-
+              
             let request = UNNotificationRequest(identifier: self.dealInForegroundIdenty, content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request) { (error) in
@@ -117,10 +124,8 @@ class PPNotificationCenter :NSObject, UNUserNotificationCenterDelegate {
 
 
 extension PPNotificationCenter {
-
+      
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        resetBadge()
         completionHandler()
     }
     

@@ -1,16 +1,18 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
+ 
+
 class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var scanBtn: UIButton!
+    @IBOutlet weak var searchBtn: UIButton?
     @IBOutlet weak var tableView: UITableView!
     
     let disbag = DisposeBag()
@@ -18,7 +20,32 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
     var indexArray: [String] = []
     var models: [String: [CPContact]] = [:]
     
-
+    var newFriendsCount: Int = 0 {
+        didSet {
+            refreshBadgeValue()
+        }
+    }
+    
+    var groupErrorCount: Int = 0 {
+        didSet {
+            refreshBadgeValue()
+        }
+    }
+    
+    func refreshBadgeValue() {
+        let count = self.newFriendsCount + self.groupErrorCount
+        if count == 0 {
+            self.tabBarItem.badgeValue = nil
+        } else {
+            self.tabBarItem.badgeValue = "\(count)"
+            self.tabBarItem.badgeColor = UIColor(hexString: "#FF4141")
+        }
+    }
+    
+    
+    
+    
+      
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,22 +59,73 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
         self.reloadData()
     }
     
+    func configUI() {
+        
+        self.tabBarItem.setStyle(imgName: "通讯录-未选中",
+                                 selectedName: "通讯录选中",
+                                 textColor: UIColor(hexString: "#BFC2CC"),
+                                 selectedColor: UIColor(hexString: "#3D7EFF"))
+        
+        
+        self.tableView.tableHeaderView = nil
+        self.tableView.adjustHeader()
+        self.tableView.adjustFooter()
+        self.tableView.adjustOffset()
+        
+        self.tableView.sectionHeaderHeight = CGFloat.leastNonzeroMagnitude
+        
+        self.tableView.sectionIndexColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
+        self.tableView.sectionIndexTrackingBackgroundColor = UIColor.clear
+        self.tableView.sectionIndexBackgroundColor = UIColor.clear
+        
+        self.tableView.register(ContactSectionHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+    }
+    
+    func configEvent() {
+        self.searchBtn?.rx.tap.subscribe(onNext: { [weak self] in
+            self?.onTapSearch()
+        }).disposed(by: disbag)
+    
+        
+        NotificationCenter.default.rx.notification( NoticeNameKey.newFriendsCountChange.noticeName).subscribe(onNext: { [weak self] (notice) in
+            self?.reloadData()
+        }).disposed(by: disbag)
+    }
+    
+    func onTapSearch() {
+        ContactGroupSearchHelper.onTapSearch()
+    }
+    
     func reloadData() {
         CPContactHelper.getNormalContacts { [weak self]  (contacts) in
-            
             let filter =  contacts.filter { (ct) -> Bool in
                 if ct.publicKey == support_account_pubkey  {
+                    return false
+                }
+                if ct.status == .strange {
                     return false
                 }
                 return true
             }
         
             let contacts: [CPContact]? = filter
-
+            
+              
+            let newFriends = contacts?.filter({ (ct) -> Bool in
+                if ct.status == .newFriend {
+                    return true
+                }
+                return false
+            })
+            self?.newFriendsCount = newFriends?.count ?? 0
+        
+              
             self?.models.removeAll()
             if let array = contacts {
                 for contact in array {
-                    
                     let title = contact.remark as NSString
                     let letters = PinyinHelper.toHanyuPinyinStringArray(withChar: title.character(at: 0)) as? [String]
                     let firstCharacter = String(letters?.first?.prefix(1) ?? (title as String).prefix(1))
@@ -67,7 +145,7 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
                 }
             }
             
-
+              
             let titles = self?.models.keys.sorted(by: { l, r in
                 let lIsEn = l.isEnglish()
                 let rIsEn = r.isEnglish()
@@ -77,67 +155,8 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
                 return lIsEn
             })
             self?.indexArray = titles ?? []
-            
             self?.tableView.reloadData()
         }
-    }
-    
-    func configUI() {
-        
-        self.tabBarItem.setStyle(imgName: "通讯录-未选中",
-                                 selectedName: "通讯录选中",
-                                 textColor: UIColor(hexString: "#BFC2CC"),
-                                 selectedColor: UIColor(hexString: "#3D7EFF"))
-        
-        
-        self.tableView.tableHeaderView = nil
-        self.tableView.adjustHeader()
-        self.tableView.adjustFooter()
-        
-        self.tableView.adjustOffset()
-        self.tableView.sectionHeaderHeight = CGFloat.leastNormalMagnitude
-        
-        self.tableView.sectionIndexColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
-        self.tableView.sectionIndexTrackingBackgroundColor = UIColor.clear
-        self.tableView.sectionIndexBackgroundColor = UIColor.clear
-        
-        self.tableView.register(ContactSectionHeader.self, forHeaderFooterViewReuseIdentifier: "header")
-        
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-    }
-    
-    func configEvent() {
-        self.scanBtn.rx.tap.subscribe(onNext: {
-            #if targetEnvironment(simulator)
-            Toast.show(msg: "请使用真机测试", position: .center)
-            return
-            #endif
-            
-            Authorize.canOpenCamera(autoAccess: true, result: { (can) in
-                if (can) {
-                    let vc = WCQRCodeVC()
-                    vc.callBack = { [weak vc] (pbkey) in
-
-                        vc?.dismiss(animated: false, completion: nil)
-                        let iden = R.className(of: ContactAddVC.self) ?? ""
-                        let addVc = R.loadSB(name: "Contact", iden: iden)
-                        addVc.vcInitData = pbkey as AnyObject?
-                        Router.pushViewController(vc: addVc)
-                        
-                        withUnsafeMutablePointer(to: &vc!.navigationController!.viewControllers, { (v) in
-                            v.pointee.removeSubrange((v.pointee.count - 2 ..< v.pointee.count - 1))
-                        })
-                        
-                    }
-                    Router.pushViewController(vc: vc)
-                }
-                else {
-                    Alert.showSimpleAlert(title: nil, msg: NSLocalizedString("Device_camera", comment: ""), cancelTitle: nil)
-                }
-            })
-            
-        }).disposed(by: disbag)
     }
 }
 
@@ -149,8 +168,9 @@ extension ContactVC {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1
-        } else if section - 1 < indexArray.count {
+            return 3
+        }
+        else if section - 1 < indexArray.count {
             return self.models[indexArray[section - 1]]?.count ?? 0
         }
         return 1
@@ -158,8 +178,27 @@ extension ContactVC {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "observer", for: indexPath)
-            return cell
+            if indexPath.row == 2 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "observer", for: indexPath)
+                return cell
+            }
+            else if indexPath.row == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "groupChats", for: indexPath)
+                if let c = cell as? ContactModuleEnterCell {
+                    c.rightDescL?.text = "\(self.groupErrorCount)"
+                    c.rightDescL?.isHidden = (self.groupErrorCount == 0)
+                }
+                return cell
+            }
+            
+            else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "newFriends", for: indexPath)
+                if let c = cell as? ContactModuleEnterCell {
+                    c.rightDescL?.text = "\(self.newFriendsCount)"
+                    c.rightDescL?.isHidden = (self.newFriendsCount == 0)
+                }
+                return cell
+            }
         }
         else if indexPath.section - 1  < indexArray.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ContactCell
@@ -179,8 +218,20 @@ extension ContactVC {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.section == 0 {
-            if let vc = R.loadSB(name: "Contact_OBV", iden: "ContactObserverListVC") as? ContactObserverListVC {
-                Router.pushViewController(vc: vc)
+            if indexPath.row == 2 {
+                if let vc = R.loadSB(name: "Contact_OBV", iden: "ContactObserverListVC") as? ContactObserverListVC {
+                    Router.pushViewController(vc: vc)
+                }
+            }
+            else if indexPath.row == 1  {
+                if let vc = R.loadSB(name: "GroupList", iden: "GroupListVC") as? GroupListVC {
+                    Router.pushViewController(vc: vc)
+                }
+            }
+            else {
+                if let vc = R.loadSB(name: "NewFriends", iden: "ContactNewFriendsListVC") as? ContactNewFriendsListVC {
+                    Router.pushViewController(vc: vc)
+                }
             }
         }
         else if indexPath.section - 1 < indexArray.count {
@@ -196,7 +247,7 @@ extension ContactVC {
             }
         }
         else {
-
+              
             if let vc = R.loadSB(name: "BlackList", iden: "BlackListVC") as? BlackListVC {
                 Router.pushViewController(vc: vc)
             }
@@ -214,11 +265,15 @@ extension ContactVC {
         if section == 0 {
             return nil
         }
-
+          
         let title = indexArray[safe: section - 1]
+        var header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header")
+        if let _ = header as? ContactSectionHeader {
+        } else {
+            header = ContactSectionHeader(reuseIdentifier: "header")
+        }
         
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! ContactSectionHeader
-        header.leftText?.text = title
+        (header as? ContactSectionHeader)?.leftText?.text = title
         
         return header
     }
@@ -231,15 +286,15 @@ extension ContactVC {
     }
 }
 
-
+  
 extension ContactVC {
     
-
+      
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.indexArray
     }
     
-
+      
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index + 1
     }
@@ -247,7 +302,7 @@ extension ContactVC {
 
 }
 
-
+  
 extension ContactVC {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -266,7 +321,7 @@ extension ContactVC {
             return nil
         }
         else if indexPath.section - 1 < indexArray.count {
-
+              
             let key = indexArray[indexPath.section - 1]
             let model = self.models[key]?[indexPath.row]
             
@@ -275,7 +330,7 @@ extension ContactVC {
                 self?.remarkName(model)
             }
             
-
+              
             let delete = UITableViewRowAction(style: UITableViewRowAction.Style.destructive, title: NSLocalizedString("Contact_Delete", comment: "")) { [weak self] (action, indexpath) in
                 self?.deleteRow(model)
             }
@@ -285,14 +340,14 @@ extension ContactVC {
         return nil
     }
     
-
+      
     func deleteRow(_ contact: CPContact?) {
         
         if let contact = contact {
             
-
+              
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-
+                  
                 alert.titleLabel?.text = NSLocalizedString("Contact_W_Title", comment: "")
                 let msg = NSLocalizedString("Contact_W_msg", comment: "").replacingOccurrences(of: "#remark#", with: contact.remark)
                 alert.msgLabel?.text = msg
@@ -314,9 +369,9 @@ extension ContactVC {
     func remarkName(_ contact: CPContact?) {
         if let contact = contact {
             
-
+              
             if let alert = R.loadNib(name: "NormalInputAlert") as? NormalInputAlert {
-
+                  
                 alert.titleLabel?.text = NSLocalizedString("Contact_Re_Title", comment: "")
     
                 alert.cancelButton?.setTitle(NSLocalizedString("Back", comment: ""), for: .normal)
@@ -344,58 +399,5 @@ extension ContactVC {
                 }
             }
         }
-    }
-}
-
-
-@objc class ContactCell: UITableViewCell {
-    
-    @IBOutlet weak var small: UILabel!
-    @IBOutlet weak var remark: UILabel!
-    @IBOutlet weak var smallAvatarImageV: UIImageView?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.adjustOffset()
-    }
-    
-    override func reloadData(data: Any) {
-        if let d = data as? CPContact {
-            remark.text = d.remark
-            small.text = d.remark.getSmallRemark()
-            
-
-            if d.publicKey == support_account_pubkey {
-                small.text = nil
-                smallAvatarImageV?.isHidden = false
-                smallAvatarImageV?.image = UIImage(named: "subscript_icon")
-            } else {
-                smallAvatarImageV?.isHidden = true
-            }
-        }
-    }
-}
-
-class ContactSectionHeader: UITableViewHeaderFooterView {
-    
-    var leftText: UILabel?
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        
-        leftText = UILabel()
-        leftText?.textColor = UIColor(hexString: "#303133")
-        leftText?.font = UIFont.systemFont(ofSize: 14)
-        self.addSubview(leftText!)
-        
-        leftText?.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(self).offset(15)
-            make.centerY.equalTo(self)
-        }
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
     }
 }

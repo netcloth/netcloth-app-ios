@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--SearchVC-->
+        <scene sceneID="xiT-7Z-D7F">
+            <objects>
+                <viewController storyboardIdentifier="SearchVC" id="I2C-Nn-EOP" customClass="SearchVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QTt-7x-pnm">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNe-RO-857" userLabel="header">
+                                <rect key="frame" x="0.0" y="44" width="414" height="46"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MRe-MA-Ilr" userLabel="searchbarContainer">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="pYe-oG-ZAp"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="MRe-MA-Ilr" secondAttribute="trailing" id="3f4-ta-y9f"/>
+                                    <constraint firstItem="MRe-MA-Ilr" firstAttribute="top" secondItem="uNe-RO-857" secondAttribute="top" id="KtP-nM-XtJ"/>
+                                    <constraint firstItem="MRe-MA-Ilr" firstAttribute="leading" secondItem="uNe-RO-857" secondAttribute="leading" id="S6r-PU-G97"/>
+                                    <constraint firstAttribute="height" constant="46" id="jJf-tx-E5m"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="jET-lS-s2v" firstAttribute="trailing" secondItem="uNe-RO-857" secondAttribute="trailing" id="4q9-Ln-AFj"/>
+                            <constraint firstItem="uNe-RO-857" firstAttribute="top" secondItem="jET-lS-s2v" secondAttribute="top" id="9dk-BS-6P8"/>
+                            <constraint firstItem="uNe-RO-857" firstAttribute="leading" secondItem="jET-lS-s2v" secondAttribute="leading" id="W3M-G4-U0I"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="jET-lS-s2v"/>
+                    </view>
+                    <connections>
+                        <outlet property="searchContainerView" destination="MRe-MA-Ilr" id="OQz-ax-ATu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wnx-iV-ckD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="94"/>
+        </scene>
+    </scenes>
+</document>

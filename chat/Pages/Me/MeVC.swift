@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import FCFileManager
@@ -38,7 +38,7 @@ class MeVC: BaseViewController
     
     let disposeBag = DisposeBag()
     
-
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         self.isHideNavBar = true
@@ -63,7 +63,7 @@ class MeVC: BaseViewController
         if #available(iOS 11.0, *) {
             top = self.view.safeAreaInsets.top + 25
         } else {
-
+              
             top = 45
         }
         
@@ -72,10 +72,10 @@ class MeVC: BaseViewController
         }
     }
     
-
+      
     func configEvent() {
         
-
+          
         editControl?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             let vc = R.loadSB(name: "Rename", iden: "RenameVC")
             Router.pushViewController(vc: vc)
@@ -96,23 +96,23 @@ class MeVC: BaseViewController
         }).disposed(by: disposeBag)
         
         logoutBtn.rx.tap.subscribe(onNext: { [weak self] in
-            self?.onLogout()
+            MeVC.onLogout()
         }).disposed(by: disposeBag)
         
         
-
+          
         safeControl.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             let vc = R.loadSB(name: "AccountSafe", iden: "AccountSafeVC")
             Router.pushViewController(vc: vc)
         }).disposed(by: disposeBag)
         
-
+          
         settingControl.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             let vc = R.loadSB(name: "Setting", iden: "SettingVC")
             Router.pushViewController(vc: vc)
         }).disposed(by: disposeBag)
         
-
+          
         aboutControl.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             let vc = R.loadSB(name: "About", iden: "AboutVC")
             Router.pushViewController(vc: vc)
@@ -135,7 +135,7 @@ class MeVC: BaseViewController
         let pbkey = CPAccountHelper.loginUser()?.publicKey
         self.publicKeyLabel.text = pbkey
         
-
+          
         let tap = UITapGestureRecognizer { [weak self] _ in
             self?.sendDebugDBInfo()
         }
@@ -145,20 +145,38 @@ class MeVC: BaseViewController
         
     }
     
-
-    func onLogout() {
+      
+    static func onLogout() {
         Alert.showSimpleAlert(title: nil, msg: NSLocalizedString("Log Out", comment: ""), cancelAction: nil, okAction: {
             MeVC._logout()
         })
     }
     
     static func _logout(_ post:Bool = true) {
-        CPAccountHelper.logout()
-        if post {
-            _postNotify()
+        
+        let block = {
+            CPAccountHelper.logout { (r, msg) in
+                Router.rootWindow?.hideToastActivity()
+                if post {
+                    _postNotify()
+                }
+            }
+        }
+        
+        Router.rootWindow?.makeToastActivity(.center)
+        if let v =  UserSettings.object(forKey: KClearWhenLogout) as? String, v == "1" {
+             
+            CPSessionHelper.deleteAllSessionComplete { (r, msg) in
+                block()
+            }
+        }
+        else {
+            block()
         }
     }
     
+    
+      
     static func _postNotify() {
         NotificationCenter.post(name: .loginStateChange)
     }
@@ -181,29 +199,29 @@ class MeVC: BaseViewController
         }
     }
     
-
+      
     func sendDebugDBInfo() {
         guard MFMailComposeViewController.canSendMail() else {
             Toast.show(msg: "please check your email")
             return
         }
-        Toast.showLoading()
+        self.showLoading()
         DispatchQueue.global().async {
             
             let logsData = CPChatLog.zipLogs()
             guard let logd = logsData else {
                 DispatchQueue.main.async {
-                    Toast.dismissLoading()
+                    self.dismissLoading()
                 }
                 return;
             }
             
             DispatchQueue.main.async {
-                Toast.dismissLoading()
+                self.dismissLoading()
                 let mf = MFMailComposeViewController()
                 mf.setToRecipients(["log@netcloth.org"])
                 
-
+                  
                 let name = String(CPAccountHelper.loginUser()?.publicKey.prefix(16) ?? "logs")
                 mf.addAttachmentData(logd as Data, mimeType: "zip", fileName: "\(name).zip")
                 

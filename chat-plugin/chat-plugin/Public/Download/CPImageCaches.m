@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "CPImageCaches.h"
 #import "NSString+YYAdd.h"
@@ -25,7 +25,7 @@
         [_cache.memoryCache setCountLimit:10];
         [_cache.memoryCache setCostLimit:10*1024*1024];
         
-
+  
         [_cache.diskCache setAutoTrimInterval:60];
                 
         _cache.diskCache.customFileNameBlock = ^NSString * _Nonnull(NSString * _Nonnull key) {

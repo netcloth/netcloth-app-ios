@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013, 2014 Pieter Wuille                             *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_UTIL_H
 #define SECP256K1_UTIL_H
@@ -16,8 +21,8 @@ typedef struct {
 } secp256k1_callback;
 
 static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * const cb, const char * const text) {
-
-
+      
+      
 }
 
 #ifdef DETERMINISTIC
@@ -52,7 +57,7 @@ static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * 
 } while(0)
 #endif
 
-
+/* Like assert(), but when VERIFY is defined, and side-effect safe. */
 #if defined(COVERAGE)
 #define VERIFY_CHECK(check)
 #define VERIFY_SETUP(stmt)
@@ -80,7 +85,7 @@ static SECP256K1_INLINE void *checked_realloc(const secp256k1_callback* cb, void
     return ret;
 }
 
-
+/* Macro for restrict, when available and not in a VERIFY build. */
 #if defined(SECP256K1_BUILD) && defined(VERIFY)
 # define SECP256K1_RESTRICT
 #else
@@ -114,4 +119,4 @@ static SECP256K1_INLINE void *checked_realloc(const secp256k1_callback* cb, void
 SECP256K1_GNUC_EXT typedef unsigned __int128 uint128_t;
 #endif
 
-#endif 
+#endif  

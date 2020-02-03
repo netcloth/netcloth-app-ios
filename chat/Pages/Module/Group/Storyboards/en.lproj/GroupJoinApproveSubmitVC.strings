@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "81b-V1-PJ2"; */
+"81b-V1-PJ2.normalTitle" = "OK";
+
+/* Class = "UILabel"; text = "Please add reasons"; ObjectID = "TmH-DJ-V4s"; */
+"TmH-DJ-V4s.text" = "Please add reasons";
+
+/* Class = "UILabel"; text = "Group Confirmation"; ObjectID = "Vkt-Y4-0eg"; */
+"Vkt-Y4-0eg.text" = "Group Confirmation";
+
+/* Class = "UILabel"; text = "The group admin has required \"Group Confirmation\",please add reasons to join the group chat."; ObjectID = "atA-WO-Aca"; */
+"atA-WO-Aca.text" = "The group admin has required \"Group Confirmation\",please add reasons to join the group chat.";
+
+/* Class = "UINavigationItem"; title = "Join Group Chat"; ObjectID = "lfb-QO-zYe"; */
+"lfb-QO-zYe.title" = "Join Group Chat";

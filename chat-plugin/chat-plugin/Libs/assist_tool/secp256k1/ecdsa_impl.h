@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013-2015 Pieter Wuille                              *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 
 #ifndef SECP256K1_ECDSA_IMPL_H
@@ -10,11 +15,33 @@
 #include "ecmult_gen.h"
 #include "ecdsa.h"
 
+/** Group order for secp256k1 defined as 'n' in "Standards for Efficient Cryptography" (SEC2) 2.7.1
+ *  sage: for t in xrange(1023, -1, -1):
+ *     ..   p = 2**256 - 2**32 - t
+ *     ..   if p.is_prime():
+ *     ..     print '%x'%p
+ *     ..     break
+ *   'fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f'
+ *  sage: a = 0
+ *  sage: b = 7
+ *  sage: F = FiniteField (p)
+ *  sage: '%x' % (EllipticCurve ([F (a), F (b)]).order())
+ *   'fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141'
+ */
 static const secp256k1_fe secp256k1_ecdsa_const_order_as_fe = SECP256K1_FE_CONST(
     0xFFFFFFFFUL, 0xFFFFFFFFUL, 0xFFFFFFFFUL, 0xFFFFFFFEUL,
     0xBAAEDCE6UL, 0xAF48A03BUL, 0xBFD25E8CUL, 0xD0364141UL
 );
 
+/** Difference between field and order, values 'p' and 'n' values defined in
+ *  "Standards for Efficient Cryptography" (SEC2) 2.7.1.
+ *  sage: p = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
+ *  sage: a = 0
+ *  sage: b = 7
+ *  sage: F = FiniteField (p)
+ *  sage: '%x' % (p - EllipticCurve ([F (a), F (b)]).order())
+ *   '14551231950b75fc4402da1722fc9baee'
+ */
 static const secp256k1_fe secp256k1_ecdsa_const_p_minus_order = SECP256K1_FE_CONST(
     0, 0, 0, 1, 0x45512319UL, 0x50B75FC4UL, 0x402DA172UL, 0x2FC9BAEEUL
 );
@@ -27,40 +54,43 @@ static int secp256k1_der_read_len(const unsigned char **sigp, const unsigned cha
     }
     b1 = *((*sigp)++);
     if (b1 == 0xFF) {
-        
+        /* X.690-0207 8.1.3.5.c the value 0xFF shall not be used. */
         return -1;
     }
     if ((b1 & 0x80) == 0) {
-        
+        /* X.690-0207 8.1.3.4 short form length octets */
         return b1;
     }
     if (b1 == 0x80) {
-        
+        /* Indefinite length is not allowed in DER. */
         return -1;
     }
-    
+    /* X.690-207 8.1.3.5 long form length octets */
     lenleft = b1 & 0x7F;
     if (lenleft > sigend - *sigp) {
         return -1;
     }
     if (**sigp == 0) {
-        
+        /* Not the shortest possible length encoding. */
         return -1;
     }
     if ((size_t)lenleft > sizeof(size_t)) {
+        /* The resulting length would exceed the range of a size_t, so
+         * certainly longer than the passed array size.
+         */
         return -1;
     }
     while (lenleft > 0) {
         ret = (ret << 8) | **sigp;
         if (ret + lenleft > (size_t)(sigend - *sigp)) {
-            
+            /* Result exceeds the length of the passed array. */
             return -1;
         }
         (*sigp)++;
         lenleft--;
     }
     if (ret < 128) {
-        
+        /* Not the shortest possible length encoding. */
         return -1;
     }
     return ret;
@@ -72,29 +102,29 @@ static int secp256k1_der_parse_integer(secp256k1_scalar *r, const unsigned char 
     int rlen;
 
     if (*sig == sigend || **sig != 0x02) {
-        
+        /* Not a primitive integer (X.690-0207 8.3.1). */
         return 0;
     }
     (*sig)++;
     rlen = secp256k1_der_read_len(sig, sigend);
     if (rlen <= 0 || (*sig) + rlen > sigend) {
-        
+        /* Exceeds bounds or not at least length 1 (X.690-0207 8.3.1).  */
         return 0;
     }
     if (**sig == 0x00 && rlen > 1 && (((*sig)[1]) & 0x80) == 0x00) {
-        
+        /* Excessive 0x00 padding. */
         return 0;
     }
     if (**sig == 0xFF && rlen > 1 && (((*sig)[1]) & 0x80) == 0x80) {
-        
+        /* Excessive 0xFF padding. */
         return 0;
     }
     if ((**sig & 0x80) == 0x80) {
-        
+        /* Negative. */
         overflow = 1;
     }
     while (rlen > 0 && **sig == 0) {
-        
+         
         rlen--;
         (*sig)++;
     }
@@ -116,16 +146,16 @@ static int secp256k1_ecdsa_sig_parse(secp256k1_scalar *rr, secp256k1_scalar *rs,
     const unsigned char *sigend = sig + size;
     int rlen;
     if (sig == sigend || *(sig++) != 0x30) {
-        
+        /* The encoding doesn't start with a constructed sequence (X.690-0207 8.9.1). */
         return 0;
     }
     rlen = secp256k1_der_read_len(&sig, sigend);
     if (rlen < 0 || sig + rlen > sigend) {
-        
+         
         return 0;
     }
     if (sig + rlen != sigend) {
-        
+        /* Garbage after tuple. */
         return 0;
     }
 
@@ -137,7 +167,7 @@ static int secp256k1_ecdsa_sig_parse(secp256k1_scalar *rr, secp256k1_scalar *rs,
     }
 
     if (sig != sigend) {
-        
+        /* Trailing garbage inside tuple. */
         return 0;
     }
 
@@ -205,17 +235,33 @@ static int secp256k1_ecdsa_sig_verify(const secp256k1_ecmult_context *ctx, const
     secp256k1_scalar_get_b32(c, sigr);
     secp256k1_fe_set_b32(&xr, c);
 
+    /** We now have the recomputed R point in pr, and its claimed x coordinate (modulo n)
+     *  in xr. Naively, we would extract the x coordinate from pr (requiring a inversion modulo p),
+     *  compute the remainder modulo n, and compare it to xr. However:
+     *
+     *        xr == X(pr) mod n
+     *    <=> exists h. (xr + h * n < p && xr + h * n == X(pr))
+     *    [Since 2 * n > p, h can only be 0 or 1]
+     *    <=> (xr == X(pr)) || (xr + n < p && xr + n == X(pr))
+     *    [In Jacobian coordinates, X(pr) is pr.x / pr.z^2 mod p]
+     *    <=> (xr == pr.x / pr.z^2 mod p) || (xr + n < p && xr + n == pr.x / pr.z^2 mod p)
+     *    [Multiplying both sides of the equations by pr.z^2 mod p]
+     *    <=> (xr * pr.z^2 mod p == pr.x) || (xr + n < p && (xr + n) * pr.z^2 mod p == pr.x)
+     *
+     *  Thus, we can avoid the inversion, but we have to check both cases separately.
+     *  secp256k1_gej_eq_x implements the (xr * pr.z^2 mod p == pr.x) test.
+     */
     if (secp256k1_gej_eq_x_var(&xr, &pr)) {
-        
+        /* xr * pr.z^2 mod p == pr.x, so the signature is valid. */
         return 1;
     }
     if (secp256k1_fe_cmp_var(&xr, &secp256k1_ecdsa_const_p_minus_order) >= 0) {
-        
+        /* xr + n >= p, so we can skip testing the second case. */
         return 0;
     }
     secp256k1_fe_add(&xr, &secp256k1_ecdsa_const_order_as_fe);
     if (secp256k1_gej_eq_x_var(&xr, &pr)) {
-        
+        /* (xr + n) * pr.z^2 mod p == pr.x, so the signature is valid. */
         return 1;
     }
     return 0;
@@ -235,11 +281,14 @@ static int secp256k1_ecdsa_sig_sign(const secp256k1_ecmult_gen_context *ctx, sec
     secp256k1_fe_normalize(&r.y);
     secp256k1_fe_get_b32(b, &r.x);
     secp256k1_scalar_set_b32(sigr, b, &overflow);
-    
+     
     VERIFY_CHECK(!secp256k1_scalar_is_zero(sigr));
     VERIFY_CHECK(overflow == 0);
 
     if (recid) {
+        /* The overflow condition is cryptographically unreachable as hitting it requires finding the discrete log
+         * of some P where P.x >= order, and only 1 in about 2^127 points meet this criteria.
+         */
         *recid = (overflow ? 2 : 0) | (secp256k1_fe_is_odd(&r.y) ? 1 : 0);
     }
     secp256k1_scalar_mul(&n, sigr, seckey);
@@ -261,4 +310,4 @@ static int secp256k1_ecdsa_sig_sign(const secp256k1_ecmult_gen_context *ctx, sec
     return 1;
 }
 
-#endif 
+#endif  

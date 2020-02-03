@@ -1,4 +1,4 @@
-﻿#include "audio_format_tool.h"
+#include "audio_format_tool.h"
 #include "speex/speex.h"
 
 AudioFormatTool::AudioFormatTool(uint32_t version, const std::string &audio, bool encoded){
@@ -25,14 +25,14 @@ std::string AudioFormatTool::Encode(const std::string &audio, uint32_t version){
     int enc_frame_size = 0;
     void *enc_state;
     std::string audio_in = audio;
-    //init
+      
     speex_bits_init(&enc_bits);
     enc_state = speex_encoder_init(&speex_nb_mode);
     int quality = 8;
     speex_encoder_ctl(enc_state, SPEEX_SET_QUALITY, &quality);
     speex_encoder_ctl(enc_state, SPEEX_GET_FRAME_SIZE, &enc_frame_size);
 
-    //encode
+      
     std::string rtn;
     int frames_count = audio_in.size()/2/enc_frame_size+1;
     std::string for_fill(enc_frame_size*2, 0);
@@ -42,7 +42,7 @@ std::string AudioFormatTool::Encode(const std::string &audio, uint32_t version){
         speex_encode_int(enc_state, (int16_t*)audio_in.data()+i*enc_frame_size, &enc_bits);
         int count = speex_bits_nbytes(&enc_bits);
         std::string frame_buf;
-        frame_buf.resize(count+1, 0);//add a byte to save length
+        frame_buf.resize(count+1, 0);  
         (*(uint8_t*)frame_buf.data())=count;
         speex_bits_write(&enc_bits, (char *)frame_buf.data()+1, count+100);
         rtn += frame_buf;
@@ -56,7 +56,7 @@ std::string AudioFormatTool::Decode(const std::string &audio, uint32_t version)
     SpeexBits dec_bits;
     void *dec_state;
 
-    //init
+      
     speex_bits_init(&dec_bits);
     dec_state = speex_decoder_init(&speex_nb_mode);
     speex_decoder_ctl(dec_state, SPEEX_GET_FRAME_SIZE, &dec_frame_size);

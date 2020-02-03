@@ -1,27 +1,29 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SDPhotoBrowser.h"
-
+  
 #import "SDBrowserImageView.h"
 
  
+  
 
-
-
-
-
-
-
+  
+  
+  
+  
+  
 
 #import "SDPhotoBrowserConfig.h"
+#import <Photos/Photos.h>
+#import <swift_cli/swift_cli.h>
 
-
+  
 
 @implementation SDPhotoBrowser 
 {
@@ -57,7 +59,7 @@
 
 - (void)setupToolbars
 {
-
+      
     UILabel *indexLabel = [[UILabel alloc] init];
     indexLabel.bounds = CGRectMake(0, 0, 80, 30);
     indexLabel.textAlignment = NSTextAlignmentCenter;
@@ -70,58 +72,22 @@
         indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)self.imageCount];
     }
     _indexLabel = indexLabel;
-    [self addSubview:indexLabel];
+  
     
-
+      
     UIButton *saveButton = [[UIButton alloc] init];
-    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+    NSString *title = NSLocalizedString(@"Save", nil);
+    [saveButton setTitle:title forState:UIControlStateNormal];
     [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
     saveButton.layer.cornerRadius = 5;
     saveButton.clipsToBounds = YES;
     [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
     _saveButton = saveButton;
-
+    [self addSubview:saveButton];
 }
 
-- (void)saveImage
-{
-    int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
-    UIImageView *currentImageView = _scrollView.subviews[index];
-    
-    UIImageWriteToSavedPhotosAlbum(currentImageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
-    
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] init];
-    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    indicator.center = self.center;
-    _indicatorView = indicator;
-    [[UIApplication sharedApplication].keyWindow addSubview:indicator];
-    [indicator startAnimating];
-}
-
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo;
-{
-    [_indicatorView removeFromSuperview];
-    
-    UILabel *label = [[UILabel alloc] init];
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
-    label.layer.cornerRadius = 5;
-    label.clipsToBounds = YES;
-    label.bounds = CGRectMake(0, 0, 150, 30);
-    label.center = self.center;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:17];
-    [[UIApplication sharedApplication].keyWindow addSubview:label];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
-    if (error) {
-        label.text = SDPhotoBrowserSaveImageFailText;
-    }   else {
-        label.text = SDPhotoBrowserSaveImageSuccessText;
-    }
-    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
-}
-
+  
 - (void)setupScrollView
 {
     _scrollView = [[UIScrollView alloc] init];
@@ -135,10 +101,10 @@
         SDBrowserImageView *imageView = [[SDBrowserImageView alloc] init];
         imageView.tag = i;
 
-
+          
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoClick:)];
         
-
+          
         UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDoubleTaped:)];
         doubleTap.numberOfTapsRequired = 2;
         
@@ -153,7 +119,7 @@
     
 }
 
-
+  
 - (void)setupImageOfImageViewForIndex:(NSInteger)index
 {
     SDBrowserImageView *imageView = _scrollView.subviews[index];
@@ -194,7 +160,7 @@
     tempView.image = currentImageView.image;
     CGFloat h = (self.bounds.size.width / currentImageView.image.size.width) * currentImageView.image.size.height;
     
-    if (!currentImageView.image) {
+    if (!currentImageView.image) {   
         h = self.bounds.size.height;
     }
     
@@ -332,12 +298,13 @@
     return nil;
 }
 
+#pragma mark - scrollview代理方法
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     int index = (scrollView.contentOffset.x + _scrollView.bounds.size.width * 0.5) / _scrollView.bounds.size.width;
     
-
+      
     CGFloat margin = 150;
     CGFloat x = scrollView.contentOffset.x;
     if ((x - index * self.bounds.size.width) > margin || (x - index * self.bounds.size.width) < - margin) {
@@ -356,6 +323,70 @@
         _indexLabel.text = [NSString stringWithFormat:@"%d/%ld", index + 1, (long)self.imageCount];
     }
     [self setupImageOfImageViewForIndex:index];
+}
+
+
+  
+- (void)saveImage
+{
+    int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+    UIImageView *currentImageView = _scrollView.subviews[index];
+    
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] init];
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    indicator.center = self.center;
+    _indicatorView = indicator;
+    [[UIApplication sharedApplication].keyWindow addSubview:indicator];
+    [indicator startAnimating];
+    
+    if ([currentImageView isKindOfClass:YYAnimatedImageView.class]) {
+        YYImage *image = currentImageView.image;
+        NSData *data = image.animatedImageData;
+        
+        if (data == nil) {
+            UIImageWriteToSavedPhotosAlbum(currentImageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+        }
+        else {
+            [PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
+                [[PHAssetCreationRequest creationRequestForAsset]
+                 addResourceWithType:PHAssetResourceTypePhoto data:data options:nil];
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self showResult:success];
+                });
+            }];
+        }
+    }
+    else {
+        UIImageWriteToSavedPhotosAlbum(currentImageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    }
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo;
+{
+    [self showResult:error == nil];
+}
+
+- (void)showResult:(BOOL)success {
+    [self -> _indicatorView removeFromSuperview];
+    UILabel *label = [[UILabel alloc] init];
+    label.textColor = [UIColor whiteColor];
+    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
+    label.layer.cornerRadius = 5;
+    label.clipsToBounds = YES;
+    label.bounds = CGRectMake(0, 0, 150, 30);
+    label.center = self.center;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont boldSystemFontOfSize:17];
+    [[UIApplication sharedApplication].keyWindow addSubview:label];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
+    if (success == false) {
+        label.text = NSLocalizedString(@"System error", nil);
+    }
+    else {
+        label.text = NSLocalizedString(@"Saved", nil);
+    }
+    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
 }
 
 

@@ -1,26 +1,26 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import swift_cli
 import Toast_Swift
-import SVProgressHUD
+
+extension UIViewController {
+    func showLoading() {
+        self.view.makeToastActivity(.center)
+    }
+    
+    func dismissLoading() {
+        self.view.hideToastActivity()
+    }
+}
 
 class Toast: NSObject {
-    
-    static func showLoading()  {
-        Router.currentViewOfVC?.makeToastActivity(.center)
-    }
-    
-    static func dismissLoading() {
-        Router.currentViewOfVC?.hideToastActivity()
-    }
-    
     static func show(msg: String, onWindow:Bool = false) {
         show(msg: msg, position: .center, onWindow: onWindow)
     }

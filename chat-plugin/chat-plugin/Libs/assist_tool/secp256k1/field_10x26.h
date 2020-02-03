@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013, 2014 Pieter Wuille                             *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_FIELD_REPR_H
 #define SECP256K1_FIELD_REPR_H
@@ -5,6 +10,9 @@
 #include <stdint.h>
 
 typedef struct {
+    /* X = sum(i=0..9, n[i]*2^(i*26)) mod p
+     * where p = 2^256 - 0x1000003D1
+     */
     uint32_t n[10];
 #ifdef VERIFY
     int magnitude;
@@ -12,7 +20,7 @@ typedef struct {
 #endif
 } secp256k1_fe;
 
-
+/* Unpacks a constant into a overlapping multi-limbed FE element. */
 #define SECP256K1_FE_CONST_INNER(d7, d6, d5, d4, d3, d2, d1, d0) { \
     (d0) & 0x3FFFFFFUL, \
     (((uint32_t)d0) >> 26) | (((uint32_t)(d1) & 0xFFFFFUL) << 6), \
@@ -39,4 +47,4 @@ typedef struct {
 #define SECP256K1_FE_STORAGE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {{ (d0), (d1), (d2), (d3), (d4), (d5), (d6), (d7) }}
 #define SECP256K1_FE_STORAGE_CONST_GET(d) d.n[7], d.n[6], d.n[5], d.n[4],d.n[3], d.n[2], d.n[1], d.n[0]
 
-#endif 
+#endif  

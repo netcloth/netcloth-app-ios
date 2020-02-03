@@ -1,3 +1,19 @@
+/*
+ * Argon2 reference source code package - reference C implementations
+ *
+ * Copyright 2015
+ * Daniel Dinu, Dmitry Khovratovich, Jean-Philippe Aumasson, and Samuel Neves
+ *
+ * You may use this work under the terms of a Creative Commons CC0 1.0
+ * License/Waiver or the Apache Public License 2.0, at your option. The terms of
+ * these licenses can be found at:
+ *
+ * - CC0 1.0 Universal : http:  
+ * - Apache 2.0        : http:  
+ *
+ * You should have received a copy of both of these licenses along with this
+ * software. If not, they may be obtained at the above URLs.
+ */
 
 #ifndef PORTABLE_BLAKE2_IMPL_H
 #define PORTABLE_BLAKE2_IMPL_H
@@ -13,7 +29,12 @@
 #define BLAKE2_INLINE
 #endif
 
-
+/* Argon2 Team - Begin Code */
+/*
+   Not an exhaustive list, but should cover the majority of modern platforms
+   Additionally, the code will always be correct---this is only a performance
+   tweak.
+*/
 #if (defined(__BYTE_ORDER__) &&                                                \
      (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)) ||                           \
     defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) || defined(__MIPSEL__) || \
@@ -22,7 +43,7 @@
     defined(_M_ARM)
 #define NATIVE_LITTLE_ENDIAN
 #endif
-
+/* Argon2 Team - End Code */
 
 static BLAKE2_INLINE uint32_t load32(const void *src) {
 #if defined(NATIVE_LITTLE_ENDIAN)

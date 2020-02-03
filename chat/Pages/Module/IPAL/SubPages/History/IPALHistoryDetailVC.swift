@@ -1,11 +1,11 @@
 
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -75,7 +75,7 @@ class IPALHistoryDetailVC: BaseViewController {
         })
     }
     
-
+      
 
     func reloadUI() {
         if let n = self.queryHistoryNode {
@@ -90,7 +90,7 @@ class IPALHistoryDetailVC: BaseViewController {
                 stateL?.text = "history_Pending".localized()
                 blockNum?.isHidden = false
             } else if n.chain_status == 1 {
-                hubImg?.image = UIImage(named: "ipal_request_result_success")
+                hubImg?.image = UIImage(named: "history_ipal_success")
                 stateL?.text = "history_Success".localized()
                 blockNum?.isHidden = true
             } else if  n.chain_status == 2 {
@@ -107,7 +107,7 @@ class IPALHistoryDetailVC: BaseViewController {
     }
     
     @IBAction func toQueryInBrowser() {
-        let str = "https://explorer.netcloth.org/transactions/" + (queryHistoryTxHash ?? queryHistoryNode?.txhash ?? "")
+        let str = "https:  
         if let url = URL(string: str) {
             UIApplication.shared.openURL(url)
         }

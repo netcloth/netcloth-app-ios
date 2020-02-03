@@ -1,23 +1,23 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import WMPageController
 
-
+  
 class ExportDetailVC: WMPageController {
 
     deinit {
         print("\(type(of: self))")
     }
     
-    var keyStore: String?
-    var privateKey: String?
+    var keyStore: String?   
+    var privateKey: String?   
     
     var index: Int = 0
     
@@ -28,13 +28,14 @@ class ExportDetailVC: WMPageController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
         } else {
-
+              
         }
         self.configUI()
         if index != 0 {
             self.selectIndex = Int32(index)
         }
         showAlert()
+        UserSettings.setObject("1", forKey: BackupKey.accountBackup.rawValue)
     }
     
     func showAlert() -> Void {
@@ -60,7 +61,7 @@ class ExportDetailVC: WMPageController {
         self.reloadData()
     }
     
-
+      
     override func numbersOfChildControllers(in pageController: WMPageController) -> Int {
         return 2
     }
@@ -99,7 +100,7 @@ class ExportDetailVC: WMPageController {
 }
 
 
-
+  
 class BackUpKSDetailVC: BaseViewController {
     
     @IBOutlet weak var copyBtn: UIButton?
@@ -135,7 +136,7 @@ class BackUpKSDetailVC: BaseViewController {
         }).disposed(by: disbag)
         
         self.nextBtn?.rx.tap.subscribe(onNext: { [weak self] in
-
+              
             if let vc = R.loadSB(name: "Export", iden: "ExportKeyStoreVerifyVC") as? ExportKeyStoreVerifyVC {
                 Router.pushViewController(vc: vc)
             }
@@ -143,7 +144,7 @@ class BackUpKSDetailVC: BaseViewController {
     }
 }
 
-
+  
 class BackUpPrivateKeyVC: BaseViewController {
     
     @IBOutlet weak var nextBtn: UIButton?
@@ -182,7 +183,7 @@ class BackUpPrivateKeyVC: BaseViewController {
     func configEvent() {
         
         self.nextBtn?.rx.tap.subscribe(onNext: { [weak self] in
-
+              
             if let vc = R.loadSB(name: "Export", iden: "ExportPrivateKeyVerifyVC") as? ExportPrivateKeyVerifyVC {
                 vc.originPrivateKey = self?.privateKeyLabel?.text
                 Router.pushViewController(vc: vc)

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
@@ -15,14 +15,14 @@ typedef void(^callBack)(BOOL success, NSString *msg);
 
 + (instancetype)sharedManager;
 
-
+  
 
 @property (nonatomic, strong) callBack call;
 - (void)playData:(NSData *)pcm  withBlock:(callBack)back;
 
 
 
-
+  
 
 - (AVAudioPlayer *)playerWithFilePath:(NSString *)filePath;
 - (AVAudioPlayer *)playerWithURL:(NSURL *)URL;

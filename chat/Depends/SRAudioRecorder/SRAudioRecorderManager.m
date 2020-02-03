@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SRAudioRecorderManager.h"
 #import "SRAudioRecordToastManager.h"
@@ -54,9 +54,9 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     if (!_audioRecorder) {
         NSMutableDictionary *setting = [NSMutableDictionary dictionary];
         setting[AVFormatIDKey] = @(kAudioFormatLinearPCM);
-        setting[AVSampleRateKey] = @(11025);
-        setting[AVNumberOfChannelsKey] = @(1);
-        setting[AVLinearPCMBitDepthKey] = @(16);
+        setting[AVSampleRateKey] = @(11025);   
+        setting[AVNumberOfChannelsKey] = @(1);   
+        setting[AVLinearPCMBitDepthKey] = @(16);   
         setting[AVEncoderAudioQualityKey] = [NSNumber numberWithInt:AVAudioQualityHigh];
        
         NSError *error = nil;
@@ -71,19 +71,24 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     return _audioRecorder;
 }
 
-- (void)startRecording {
+- (void)startRecording:(void(^)(BOOL grand))recordBack {
     
     [self getAudioAuthorized:^(BOOL grand) {
         if (grand == NO) {
             if ([self.delegate respondsToSelector:@selector(audioRecorderManagerAVAuthorizationStatusDenied)]) {
                 [self.delegate audioRecorderManagerAVAuthorizationStatusDenied];
             }
+            if (recordBack) {
+                recordBack(grand);
+            }
             return;
         }
-        
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
         [self.audioRecorder record];
         [self startRecordingTimer];
+        if (recordBack) {
+            recordBack(grand);
+        }
     }];
 }
 
@@ -123,7 +128,7 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
 
 - (void)recordingTimerAction:(NSTimer *)timer {
     self.recordingDuration += timer.timeInterval;
-    NSLog(@"duration %f", self.recordingDuration);
+    NSLog(@"recored duration %f", self.recordingDuration);
     if (self.maxDuration - self.recordingDuration == 0) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SRAudioRecorderManagerDidFinishRecordingNotification object:nil];
         [self stopRecording];
@@ -136,7 +141,7 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     else {
         [self.audioRecorder updateMeters];
         float averagePower = [self.audioRecorder averagePowerForChannel:0];
-        float level = (1.0 / 60.0) * (averagePower + 60.0);
+        float level = (1.0 / 60.0) * (averagePower + 60.0);   
         [[SRAudioRecordToastManager sharedManager] updateAudioPower:level];
     }
 }
@@ -151,7 +156,7 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     return NO;
 }
 
-
+  
 - (void)getAudioAuthorized:(void(^)(BOOL grand))back {
     AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if (status == AVAuthorizationStatusNotDetermined) {
@@ -193,6 +198,7 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     }
 }
 
+#pragma mark - AVAudioRecorderDelegate
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
     if (flag) {

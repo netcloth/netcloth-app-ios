@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "CPContactHelper.h"
 #import "CPDataModel+secpri.h"
@@ -17,15 +17,20 @@
 #import "CPBridge.h"
 #import "MessageObjects.h"
 
+#import "UserSettings.h"
 
+  
 NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f47683409989d15284b347eb1c9f372e87f7f6e95230ef05d36ea9dc8327425433b7cbfc0d8913a769ee2aabfe23b814";
+NSString * const do_not_disturb_tag = @"notdisturb";
+NSString * const group_tag = @"group";
+NSInteger contact_version = 2;
 
 @implementation CPContactHelper
 
 + (void)addContactUser:(NSString *)publicKey
                comment:(NSString *)remark
               callback:(void(^)(BOOL succss, NSString *msg, CPContact * _Nullable contact))result {
-
+      
     [self checkContactUser:publicKey comment:remark callback:^(BOOL succss, NSString *msg) {
         
         void (^block)(BOOL, NSString *, CPContact *) = ^(BOOL succss, NSString *msg, CPContact * _Nullable contact) {
@@ -41,16 +46,44 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
             return;
         }
         
-
+          
         __block BOOL added = NO;
         [self getAllContacts:^(NSArray<CPContact *> * _Nonnull contacts) {
             
+            __block CPContact *haved;
             [contacts enumerateObjectsUsingBlock:^(CPContact * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ([obj.publicKey isEqualToString:publicKey]) {
-                    added = YES;
-                    *stop = YES;
+                    
+                    if (obj.status == ContactStatusStrange) {
+                        haved = obj;
+                        *stop = YES;
+                    } else {
+                        added = YES;
+                        *stop = YES;
+                    }
                 }
             }];
+            
+            if (haved) {
+                BOOL opereation = YES;
+                NSString *reason = NSLocalizedString(@"Added Successfully", nil);
+                haved.remark = remark;
+                haved.status = ContactStatusNormal;
+                if (![CPInnerState.shared.loginUserDataBase
+                      updateRowsInTable:kTableName_Contact
+                      onProperties:{CPContact.remark,CPContact.status}
+                      withRow:@[remark, @(ContactStatusNormal)]
+                      where:CPContact.publicKey == haved.publicKey]) {
+                    opereation = NO;
+                    reason = NSLocalizedString(@"System error", nil);
+                }
+                block(opereation, reason, haved);
+                if (opereation) {
+                    NSInteger loginUid = CPInnerState.shared.loginUser.userId;
+                    [UserSettings deleteKey:@"contactBackup" ofUser:loginUid];
+                }
+                return;
+            }
             
             
             if (added) {
@@ -58,11 +91,12 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
                 return;
             }
             
-
+              
             CPContact *ct = CPContact.alloc.init;
             ct.publicKey = publicKey;
             ct.remark = remark;
             ct.isAutoIncrement = YES;
+            ct.status = ContactStatusNormal;
             
             NSDate *date = NSDate.date;
             ct.createTime = [date timeIntervalSince1970];
@@ -76,6 +110,10 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
             }
             if (opereation) {
                 ct.sessionId = ct.lastInsertedRowID;
+                if ([ct.publicKey isEqualToString:support_account_pubkey] == false) {
+                    NSInteger loginUid = CPInnerState.shared.loginUser.userId;
+                    [UserSettings deleteKey:@"contactBackup" ofUser:loginUid];
+                }
             }
             block(opereation, reason, ct);
         }];
@@ -84,9 +122,7 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
 
 + (void)getAllContacts:(void (^)(NSArray <CPContact *> * contacts))result {
     [CPInnerState.shared asynWriteTask:^{
-        NSArray *carray =  [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPContact.class
-                                                                          fromTable:kTableName_Contact
-                                                                              where:CPContact.sessionType == SessionTypeP2P];
+        NSArray *carray =  [CPInnerState.shared.loginUserDataBase getAllObjectsOfClass:CPContact.class fromTable:kTableName_Contact];
         
         if (result) {
             [CPInnerState.shared asynDoTask:^{
@@ -101,7 +137,8 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     [CPInnerState.shared asynWriteTask:^{
         NSArray *carray =  [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPContact.class
                                                                           fromTable:kTableName_Contact
-                                                                              where:CPContact.sessionType == SessionTypeP2P && CPContact.isBlack == NO];
+                                                                              where:
+                            CPContact.sessionType == SessionTypeP2P && CPContact.isBlack == NO];
         
         if (result) {
             [CPInnerState.shared asynDoTask:^{
@@ -127,23 +164,68 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     }];
 }
 
+  
++ (void)getGroupListContacts:(void (^)(NSArray <CPContact *> * contacts))result {
+    [CPInnerState.shared asynWriteTask:^{
+        NSArray *carray =  [CPInnerState.shared.loginUserDataBase
+                            getObjectsOfClass:CPContact.class
+                            fromTable:kTableName_Contact
+                            where:CPContact.sessionType == SessionTypeGroup &&
+                            CPContact.groupProgress >= GroupCreateProgressCreateOK];
+        
+          
+        for (CPContact *contact in carray) {
+            NSArray *firstMembers =
+            [CPInnerState.shared.loginUserDataBase getObjectsOnResults:{CPGroupMember.nickName}
+                                                             fromTable:kTableName_GroupMember
+                                                                 where:CPGroupMember.sessionId == contact.sessionId
+                                                               orderBy:CPGroupMember.join_time.order(WCTOrderedAscending)
+                                                                 limit:4];
+            NSMutableArray *nicks = NSMutableArray.array;
+            for (CPGroupMember *member in firstMembers) {
+                [nicks addObject:member.nickName];
+            }
+            contact.groupRelateMemberNick = nicks;
+        }
+        
+        if (result) {
+            [CPInnerState.shared asynDoTask:^{
+                result(carray);
+            }];
+        }
+    }];
+}
 
-+ (void)getBackupStatisticsInfo:(void (^)(BOOL success, NSString *msg, NSInteger whiteNum, NSInteger blackNum))result
+  
++ (void)getBackupStatisticsInfo:(void (^)(BOOL success, NSString *msg, NSInteger whiteNum, NSInteger blackNum, NSInteger groupNum))result
 {
     [CPInnerState.shared asynWriteTask:^{
         NSNumber *whiten =  [CPInnerState.shared.loginUserDataBase
                              getOneValueOnResult:CPContact.publicKey.count()
                              fromTable:kTableName_Contact
-                             where:CPContact.sessionType == SessionTypeP2P && CPContact.isBlack == NO && CPContact.publicKey != support_account_pubkey];
+                             where:
+                             CPContact.sessionType == SessionTypeP2P &&
+                             CPContact.isBlack == NO &&
+                             CPContact.publicKey != support_account_pubkey &&
+                             CPContact.status != ContactStatusStrange];
         
         NSNumber *blackn =  [CPInnerState.shared.loginUserDataBase
                              getOneValueOnResult:CPContact.publicKey.count()
                              fromTable:kTableName_Contact
-                             where:CPContact.sessionType == SessionTypeP2P && CPContact.isBlack == YES];
+                             where:
+                             CPContact.sessionType == SessionTypeP2P &&
+                             CPContact.isBlack == YES];
+        
+        NSNumber *groupN =  [CPInnerState.shared.loginUserDataBase
+                             getOneValueOnResult:CPContact.publicKey.count()
+                             fromTable:kTableName_Contact
+                             where:
+                             CPContact.sessionType == SessionTypeGroup &&
+                             CPContact.groupProgress >= GroupCreateProgressCreateOK];
         
         if (result) {
             [CPInnerState.shared asynDoTask:^{
-                result(YES,nil, whiten.integerValue, blackn.integerValue);
+                result(YES,nil, whiten.integerValue, blackn.integerValue, groupN.integerValue);
             }];
         }
     }];
@@ -159,69 +241,105 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
         }
     };
     
-
+      
     [CPInnerState.shared asynWriteTask:^{
-        NSArray *contacts =  [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPContact.class
-                                                                            fromTable:kTableName_Contact
-                                                                                where:CPContact.sessionType == SessionTypeP2P && CPContact.publicKey != support_account_pubkey];
+        NSArray *contacts =  [CPInnerState.shared.loginUserDataBase
+                              getObjectsOfClass:CPContact.class
+                              fromTable:kTableName_Contact
+                              where:
+                              (CPContact.sessionType == SessionTypeP2P &&
+                               CPContact.publicKey != support_account_pubkey &&
+                               CPContact.status != ContactStatusStrange) ||
+                              
+                              (CPContact.sessionType == SessionTypeGroup &&
+                               CPContact.groupProgress >= GroupCreateProgressCreateOK)];
         
         if (contacts.count == 0) {
             finalBack(NO,@"Contact data is empty".localized,nil);
             return;
         }
-
+        
+          
         NSArray *topArray =  [CPInnerState.shared.loginUserDataBase
                               getObjectsOnResults: {CPSession.sessionId}
                               fromTable:kTableName_Session
                               where:CPSession.topMark == 1];
         
+          
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            NSLog(@"%@",topArray);
+            NSLog(@"%@",topArray);   
             NSMutableArray *topIds = NSMutableArray.array;
             for (CPSession *session in topArray) {
                 [topIds addObject:@(session.sessionId)];
             }
             
-
+              
             NSMutableDictionary *Json = NSMutableDictionary.dictionary;
-            Json[@"version"] = @(1);
+            Json[@"version"] = @(contact_version);
             Json[@"netcloth"] = @"contact-backup-data";
             
             NSInteger whiteN = 0;
             NSInteger blackN = 0;
+            NSInteger groupN = 0;
+            
             long long msTime = [NSDate.date timeIntervalSince1970] * 1000;
             
             NSMutableArray *datas = NSMutableArray.array;
             for (CPContact *ct in contacts) {
                 NSMutableDictionary *dic = NSMutableDictionary.dictionary;
                 dic[@"alias"] = ct.remark;
-                dic[@"publicKey"] = ct.publicKey;
+                
+                  
                 NSMutableArray *systemTag = NSMutableArray.array;
                 if ([topIds containsObject:@(ct.sessionId)]) {
                     [systemTag addObject:@"topping"];
                 }
-                if (ct.isBlack) {
-                    [systemTag addObject:@"blacklist"];
-                    blackN ++;
-                } else {
-                    whiteN ++;
+                
+                if (ct.sessionType == SessionTypeP2P) {
+                    dic[@"publicKey"] = ct.publicKey;
+                    if (ct.isBlack) {
+                        [systemTag addObject:@"blacklist"];
+                        blackN ++;
+                    }
+                    else if (ct.isDoNotDisturb) {
+                        [systemTag addObject:do_not_disturb_tag];
+                        whiteN ++;
+                    }
+                    else {
+                        whiteN ++;
+                    }
                 }
+                else if (ct.sessionType == SessionTypeGroup) {
+                    NSString *prikeyHex =  [ct.decodePrivateKey hexString_lower];   
+                    if ([NSString cp_isEmpty:prikeyHex]) {
+                        continue;
+                    }
+                    
+                    dic[@"privateKey"] = prikeyHex;
+                    [systemTag addObject:group_tag];
+                    if (ct.isDoNotDisturb) {
+                        [systemTag addObject:do_not_disturb_tag];
+                    }
+                    groupN++;
+                }
+                
                 dic[@"systemTag"] = systemTag;
                 [datas addObject:dic];
             }
             Json[@"data"] = datas;
             
-
+              
             NSData *jsonData = [Json modelToJSONData];
             NSData *gzip = [jsonData gzipDeflate];
             std::string source = nsdata2bytes(gzip);
-            std::string encode = [self encodeContactData:source];
+            std::string str_pri_key = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password);
+            std::string encode = [CPBridge aesEncodeData:source byPrivateKey:str_pri_key];
             NSData *upload = bytes2nsdata(encode);
             
-
+              
             NSMutableDictionary *sumJson = NSMutableDictionary.dictionary;
-            sumJson[@"version"] = @(1);
+            sumJson[@"version"] = @(contact_version);
             sumJson[@"netcloth"] = @"contact-backup-summary";
             NSMutableDictionary *sinfo = @{}.mutableCopy;
             sumJson[@"data"] = sinfo;
@@ -232,14 +350,15 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
             
             count[@"contact"] = @(whiteN);
             count[@"blacklist"] = @(blackN);
+            count[group_tag] = @(groupN);
             
             NSData *sumData = [sumJson modelToJSONData];
             NSData *sumgzip = [sumData gzipDeflate];
             std::string sumsource = nsdata2bytes(sumgzip);
-            std::string sumencode = [self encodeContactData:sumsource];
+            std::string sumencode = [CPBridge aesEncodeData:sumsource byPrivateKey:str_pri_key];
             NSData *sumupload = bytes2nsdata(sumencode);
-
-
+            
+              
             NCProtoContacts *format = NCProtoContacts.alloc.init;
             format.content = upload;
             format.summary = sumupload;
@@ -270,6 +389,7 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     }];
 }
 
+  
 + (void)restoreContactContent:(NSData *)encodeData complete:(void (^)(BOOL success, NSString *msg))result {
     void (^finalBack)(BOOL, NSString *) = ^(BOOL succss, NSString *msg) {
         if (result) {
@@ -291,23 +411,105 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
             CPContact *contact;
             CPSession *session;
             NSInteger successNum = 0;
+            
             for (NSDictionary *dic in datas) {
+                
+                 
+                NSArray *systemTag = dic[@"systemTag"];
+                if ([systemTag containsObject:group_tag]) {
+                    contact = CPContact.alloc.init;
+                    contact.remark = dic[@"alias"];
+                    contact.sessionType = SessionTypeGroup;
+                    
+                    NSString *privateKey = dic[@"privateKey"];
+                    std::string prikey = bytesFromHexString(privateKey);
+                    NSData *srcPrikey = bytes2nsdata(prikey);
+                    
+                    std::string pubkey = GetPublicKeyByPrivateKey(prikey);
+                    NSString *hexPubkey = hexStringFromBytes(pubkey);
+                    
+                    contact.publicKey = hexPubkey;
+                    
+                    contact.status = ContactStatusNormal;
+                    
+                      
+                    if ([NSData cp_isEmpty:srcPrikey]) {
+                        continue;
+                    }
+                    [contact setSourcePrivateKey:srcPrikey];
+                    
+                    contact.groupProgress = GroupCreateProgressRestoreOk;
+                    
+                    NSDate *date = NSDate.date;
+                    contact.createTime = [date timeIntervalSince1970];
+                    contact.modifiedTime = 0;
+                    
+                    if ([systemTag containsObject:do_not_disturb_tag]) {
+                        contact.isDoNotDisturb = YES;
+                    }
+                    
+                      
+                    contact.isAutoIncrement = YES;
+                    if (![CPInnerState.shared.loginUserDataBase insertObject:contact into:kTableName_Contact]) {
+                        continue;
+                    }
+                    
+                    long long sessionId = contact.lastInsertedRowID;
+                    contact.sessionId == sessionId;
+                    BOOL topping = [systemTag containsObject:@"topping"];
+                    if (topping) {
+                        session = CPSession.alloc.init;
+                        session.sessionId = sessionId;
+                        session.sessionType = SessionTypeGroup;
+                        session.topMark = 1;
+                        session.lastMsgId = 0;   
+                        session.createTime = contact.createTime;
+                        session.updateTime = contact.createTime;
+                        [CPInnerState.shared.loginUserDataBase insertObject:session into:kTableName_Session];
+                    }
+                    
+                    continue;
+                }
+                
+                
                 contact = CPContact.alloc.init;
+                
                 contact.remark = dic[@"alias"];
+                
                 contact.publicKey = dic[@"publicKey"];
                 contact.sessionType = SessionTypeP2P;
                 contact.createTime = [[NSDate date] timeIntervalSince1970];
                 
-                NSArray *systemTag = dic[@"systemTag"];
+                
+                contact.status = ContactStatusNormal;
+                contact.isBlack = NO;
+                contact.isDoNotDisturb = NO;
                 if ([systemTag containsObject:@"blacklist"]) {
                     contact.isBlack = YES;
-                } else {
-                    contact.isBlack = NO;
                 }
+                if ([systemTag containsObject:do_not_disturb_tag]) {
+                    contact.isDoNotDisturb = YES;
+                }
+                
                 contact.isAutoIncrement = YES;
                 
                 BOOL insert_ok = [CPInnerState.shared.loginUserDataBase insertObject:contact into:kTableName_Contact];
                 if (insert_ok == false) {
+                      
+                    CPContact *haved =
+                    [CPInnerState.shared.loginUserDataBase getOneObjectOfClass:CPContact.class
+                                                                     fromTable:kTableName_Contact
+                                                                         where:CPContact.publicKey == contact.publicKey];
+                    
+                    
+                    NSString *oriRemark = [haved.publicKey substringToIndex:12];
+                    if (([haved.remark isEqualToString:oriRemark]) &&
+                        (![contact.remark isEqualToString:oriRemark])) {
+                        [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Contact
+                                                                    onProperties:{CPContact.remark,CPContact.status}
+                                                                         withRow:@[contact.remark, @(ContactStatusNormal)]
+                                                                           where:CPContact.publicKey == contact.publicKey];
+                    }
                     continue;
                 }
                 long long sessionId = contact.lastInsertedRowID;
@@ -318,20 +520,21 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
                     session.sessionId = sessionId;
                     session.sessionType = SessionTypeP2P;
                     session.topMark = 1;
-                    session.lastMsgId = 0;
+                    session.lastMsgId = 0;   
                     session.createTime = contact.createTime;
                     session.updateTime = contact.createTime;
-                    
                     [CPInnerState.shared.loginUserDataBase insertObject:session into:kTableName_Session];
                 }
                 successNum ++;
             }
-
+              
             finalBack(YES, nil);
         });
     }];
 }
 
+
+  
 
 + (void)decodeContact:(NSData *)encodeData complete:(void (^)(BOOL success, NSString *msg, NSDictionary * _Nullable decodeData))result
 {
@@ -349,83 +552,20 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         std::string source = nsdata2bytes(encodeData);
-        NSData *decodeData = [self decodeContactData:source];
+        std::string str_pri_key = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password);
+        NSData *decodeData = [CPBridge aesDecodeData:source byPrivateKey:str_pri_key];
         if ([NSData cp_isEmpty:decodeData]) {
             finalBack(false,@"Wrong data format".localized,nil);
             return;
         }
         NSData *gzipDecode = [decodeData gzipInflate];
         NSDictionary *json = [gzipDecode jsonValueDecoded];
-
+          
         finalBack(YES,nil,json);
     });
 }
 
-
-
-+ (std::string)encodeContactData:(std::string)sourceBytes
-{
-
-    std::string iv = CreateAesIVKey();
-    
-
-    std::string str_pri_key = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password);
-    
-    NSData *data_prikey =  bytes2nsdata(str_pri_key);
-    NSData *data_256 = [data_prikey sha256Data];
-    std::string shared_key = nsdata2bytes(data_256);
-    
-
-    std::string msg_encoded;
-    @try  {
-        std::string out;
-
-        std::string content = sourceBytes;
-        AesEncode(shared_key, iv, content, out);
-        msg_encoded = out;
-    }
-    @finally {
-        
-    }
-    std::string for_send = iv + msg_encoded;
-    return for_send;
-}
-
-
-
-+ (NSData *)decodeContactData:(std::string)encodeData {
-    if (encodeData.length() < 16) {
-        return nil;
-    }
-    
-    std::string str_pri_key = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password);
-    NSData *data_prikey =  bytes2nsdata(str_pri_key);
-    NSData *data_256 = [data_prikey sha256Data];
-    std::string shared_key = nsdata2bytes(data_256);
-    
-    std::string msg_org = encodeData;
-    std::string iv = msg_org.substr(0,16);
-    std::string msg_tmp = msg_org.substr(16,encodeData.length() - 16);
-    
-    std::string msg_decoded;
-    BOOL decR = false;
-    @try  {
-        std::string out;
-        std::string content = msg_tmp;
-        decR = AesDecode(shared_key, iv, content, out);
-        msg_decoded = out;
-    }
-    @finally {
-        if (decR == false || msg_decoded.length() == 0) {
-            return nil;
-        }
-        return bytes2nsdata(msg_decoded);
-    }
-}
-
-
-
-
+  
 + (void)getOneContactByPubkey:(NSString * _Nullable )publicKey
                      callback:(void(^)(BOOL succss, NSString *msg, CPContact * _Nullable contact))result {
     
@@ -445,8 +585,21 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     }];
 }
 
-
-
+  
++ (void)onlyDeleteContactsInSessionIds:(NSArray<NSNumber *> *)sessionIds
+                              callback:(void(^ __nullable)(BOOL succss, NSString *msg))result {
+    
+    [CPInnerState.shared asynWriteTask:^{
+        BOOL r =
+        [CPInnerState.shared.loginUserDataBase deleteObjectsFromTable:kTableName_Contact where:CPContact.sessionId.in(sessionIds)];
+        
+        if (result) {
+            [CPInnerState.shared asynDoTask:^{
+                result(r,nil);
+            }];
+        }
+    }];
+}
 
 
 + (void)deleteContactUser:(NSString *)publicKey
@@ -457,14 +610,34 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
         CPContact *exitContact =  [CPInnerState.shared.loginUserDataBase
                                    getOneObjectOfClass:CPContact.class fromTable:kTableName_Contact where:CPContact.publicKey == publicKey];
         
-
+          
         if (exitContact &&
             ([NSString cp_isEmpty:exitContact.publicKey] == false)) {
             
-
-            [CPChatHelper deleteSession:exitContact.sessionId complete:nil];
+              
+            [CPSessionHelper deleteSession:exitContact.sessionId complete:nil];
             
-
+              
+            if (exitContact.sessionType == SessionTypeGroup) {
+                [CPInnerState.shared.loginUserDataBase deleteObjectsFromTable:kTableName_GroupMessage
+                                                                        where:CPMessage.sessionId == exitContact.sessionId];
+                [CPInnerState.shared.loginUserDataBase deleteObjectsFromTable:kTableName_GroupMember
+                                                                        where:CPGroupMember.sessionId == exitContact.sessionId];
+                
+                
+                CPContact *cache =  [CPInnerState.shared.groupContactCache getObjectBy:^BOOL(CPContact *contact) {
+                    if ([contact.publicKey isEqualToString:exitContact.publicKey]) {
+                        return true;
+                    }
+                    return false;
+                }];
+                
+                if (cache) {
+                    [CPInnerState.shared.groupContactCache removeObject:cache];
+                }
+            }
+            
+              
             [CPContactHelper _deleteContactUser:exitContact.publicKey callback:^(BOOL succss, NSString *msg) {
                 if (result) {
                     [CPInnerState.shared asynDoTask:^{
@@ -491,6 +664,9 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
         NSString *reason = NSLocalizedString(@"Delete Successfully", nil);
         if (res == false) {
             reason = NSLocalizedString(@"System error", nil);
+        } else {
+            NSInteger loginUid = CPInnerState.shared.loginUser.userId;
+            [UserSettings deleteKey:@"contactBackup" ofUser:loginUid];
         }
         
         if (result) {
@@ -501,6 +677,8 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     }];
 }
 
+  
+
 + (void)updateRemark:(NSString *)remark
     whereContactUser:(NSString *)publicKey
             callback:(void(^)(BOOL succss, NSString *msg))result {
@@ -510,6 +688,62 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
                                                                onProperties:{CPContact.remark}
                                                                     withRow:@[remark ?: @""]
                                                                       where:CPContact.publicKey == publicKey];
+        
+        
+        
+        NSString *reason = NSLocalizedString(@"Update Successfully", nil);
+        if (res == false) {
+            reason = NSLocalizedString(@"System error", nil);
+        } else {
+            NSInteger loginUid = CPInnerState.shared.loginUser.userId;
+            [UserSettings deleteKey:@"contactBackup" ofUser:loginUid];
+        }
+        
+        if (result) {
+            [CPInnerState.shared asynDoTask:^{
+                result(res,reason);
+            }];
+        }
+    }];
+}
+
++ (void)updateStatus:(ContactStatus)status
+    whereContactUser:(NSString *)publicKey
+            callback:(void(^)(BOOL succss, NSString *msg))result {
+    
+    [CPInnerState.shared asynWriteTask:^{
+        
+        BOOL res = [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Contact
+                                                               onProperties:{CPContact.status}
+                                                                    withRow:@[@(status)]
+                                                                      where:CPContact.publicKey == publicKey];
+        
+        
+        
+        NSString *reason = NSLocalizedString(@"Update Successfully", nil);
+        if (res == false) {
+            reason = NSLocalizedString(@"System error", nil);
+        } else {
+            NSInteger loginUid = CPInnerState.shared.loginUser.userId;
+            [UserSettings deleteKey:@"contactBackup" ofUser:loginUid];
+        }
+        
+        if (result) {
+            [CPInnerState.shared asynDoTask:^{
+                result(res,reason);
+            }];
+        }
+    }];
+}
+
++ (void)updateAllNewfriendToNormalCallback:(void(^)(BOOL succss, NSString *msg))result {
+    
+    [CPInnerState.shared asynWriteTask:^{
+        
+        BOOL res = [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Contact
+                                                               onProperties:{CPContact.status}
+                                                                    withRow:@[@(ContactStatusNormal)]
+                                                                      where:CPContact.status == ContactStatusNewFriend];
         
         
         
@@ -527,6 +761,7 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
 }
 
 
+  
 
 + (void)addUserToBlacklist:(NSString *)publicKey
                   callback:(void(^)(BOOL succss, NSString *msg))result
@@ -581,7 +816,55 @@ NSString * const support_account_pubkey = @"0449b445774c63c28b6019a1aa5913d252f4
     }];
 }
 
+  
++ (void)addUserToDoNotDisturb:(NSString *)publicKey
+                     callback:(void(^)(BOOL succss, NSString *msg))result {
+    
+    [CPInnerState.shared asynWriteTask:^{
+        
+        BOOL res = [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Contact
+                                                               onProperties:{CPContact.isDoNotDisturb}
+                                                                    withRow:@[@(YES)]
+                                                                      where:CPContact.publicKey == publicKey];
+        
+        if (result == nil) {
+            return;
+        }
+        NSString *reason = @"Update Successfully".localized;
+        if (res == false) {
+            reason = @"System error".localized;
+        }
+        [CPInnerState.shared asynDoTask:^{
+            result(res,reason);
+        }];
+    }];
+    
+}
 
++ (void)removeUserFromDoNotDisturb:(NSString *)publicKey
+                          callback:(void(^)(BOOL succss, NSString *msg))result {
+    [CPInnerState.shared asynWriteTask:^{
+        
+        BOOL res = [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Contact
+                                                               onProperties:{CPContact.isDoNotDisturb}
+                                                                    withRow:@[@(NO)]
+                                                                      where:CPContact.publicKey == publicKey];
+        
+        if (result == nil) {
+            return;
+        }
+        NSString *reason = @"Update Successfully".localized;
+        if (res == false) {
+            reason = @"System error".localized;
+        }
+        [CPInnerState.shared asynDoTask:^{
+            result(res,reason);
+        }];
+    }];
+}
+
+
+  
 + (void)checkContactUser:(NSString *)publicKey
                  comment:(NSString *)remark
                 callback:(void(^)(BOOL succss, NSString *msg))result {

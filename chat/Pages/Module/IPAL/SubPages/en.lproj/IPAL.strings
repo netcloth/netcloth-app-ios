@@ -39,5 +39,5 @@ To communicate on NetCloth, users need to claim the Address of their connected n
 /* Class = "UILabel"; text = "通信地址"; ObjectID = "y6T-rm-Eg9"; */
 "y6T-rm-Eg9.text" = "Communication Address";
 
-/* Class = "UINavigationItem"; title = "C-IPAL设置"; ObjectID = "y8e-Tw-PIM"; */
-"y8e-Tw-PIM.title" = "C-IPAL Settings";
+/* Class = "UINavigationItem"; title = "客户端服务设置（C-IPAL）"; ObjectID = "y8e-Tw-PIM"; */
+"y8e-Tw-PIM.title" = "Client Service Settings(C-IPAL)";

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Q5A-Db-5NX">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Q5A-Db-5NX">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Base NavVC-->
+        <!--Grand NavVC-->
         <scene sceneID="7om-in-uBj">
             <objects>
-                <navigationController id="Q5A-Db-5NX" customClass="BaseNavVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="Q5A-Db-5NX" customClass="GrandNavVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OPk-rO-V1L">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -31,7 +27,7 @@
             <objects>
                 <viewController id="Qgt-lW-7dA" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MRO-cQ-Pgf">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="DEN-eH-KxB"/>
@@ -42,10 +38,10 @@
             </objects>
             <point key="canvasLocation" x="-1986" y="-30"/>
         </scene>
-        <!--Base Tab BarVC-->
+        <!--Grand Tab BarVC-->
         <scene sceneID="37B-MF-pki">
             <objects>
-                <tabBarController storyboardIdentifier="main_tab" id="lvG-Pj-zCW" customClass="BaseTabBarVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="main_tab" id="lvG-Pj-zCW" customClass="GrandTabBarVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="p1B-6V-K4R">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>

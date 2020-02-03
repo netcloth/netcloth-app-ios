@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import WMPageController
@@ -21,7 +21,7 @@ class ImportAccountContainerVC: WMPageController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
         } else {
-
+              
         }
         self.configUI()
         IQKeyboardManager.shared.enable = true
@@ -39,7 +39,7 @@ class ImportAccountContainerVC: WMPageController {
         self.reloadData()
     }
     
-
+      
     override func numbersOfChildControllers(in pageController: WMPageController) -> Int {
         return 2
     }

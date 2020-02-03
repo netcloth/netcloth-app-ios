@@ -1,4 +1,36 @@
-
+/* Copyright (C) 2005 Analog Devices */
+/**
+   @file filters_bfin.h
+   @brief Various analysis/synthesis filters (Blackfin version)
+*/
+/*
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+   
+   - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+   
+   - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+   
+   - Neither the name of the Xiph.org Foundation nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+   
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #include "bfin.h"
 
@@ -72,33 +104,33 @@ void filter_mem16(const spx_word16_t *_x, const spx_coef_t *num, const spx_coef_
    }
    __asm__ __volatile__
    (
-   
-   "R0 = %5;\n\t"      
+    
+   "R0 = %5;\n\t"       
    
    "P0 = %3;\n\t"
    "I0 = P0;\n\t"
-   "B0 = P0;\n\t" 
+   "B0 = P0;\n\t"  
    "L0 = 0;\n\t"
       
-   "P2 = %0;\n\t" 
+   "P2 = %0;\n\t"  
    "I2 = P2;\n\t"
    "L2 = 0;\n\t"
    
-   "P4 = %6;\n\t" 
-   "P0 = %1;\n\t" 
-   "P1 = %2;\n\t" 
+   "P4 = %6;\n\t"  
+   "P0 = %1;\n\t"  
+   "P1 = %2;\n\t"  
    
-   
+    
    "R1 = [P4++];\n\t"
-   "R1 <<= 3;\n\t" 
+   "R1 <<= 3;\n\t"  
    "R1.L = R1 (RND);\n\t"
-   "R2 = W[P0++];\n\t" 
+   "R2 = W[P0++];\n\t" /* load x[0] */
    "R1.L = R1.L + R2.L;\n\t"
-   "W[P1++] = R1;\n\t" 
-   "R2 = PACK(R1.L, R2.L);\n\t" 
+   "W[P1++] = R1;\n\t" /* store y[0] */
+   "R2 = PACK(R1.L, R2.L);\n\t"  
    "[P2] = R2;\n\t"
                
-   
+   /* Samples 1 to ord-1 (using memory) */
    "R0 += -1;\n\t"
    "R3 = 0;\n\t"
    "LC0 = R0;\n\t"
@@ -120,29 +152,29 @@ void filter_mem16(const spx_word16_t *_x, const spx_coef_t *num, const spx_coef_
       "LOOP_END filter_start_inner%=;\n\t"
       "A0 += A1;\n\t"
       "R4 = A0;\n\t"
-      "R4 <<= 3;\n\t" 
+      "R4 <<= 3;\n\t"  
       "R4.L = R4 (RND);\n\t"
-      "R2 = W[P0++];\n\t" 
+      "R2 = W[P0++];\n\t"  
       "R4.L = R4.L + R2.L;\n\t"
-      "W[P1++] = R4;\n\t" 
-
-
-      "R2 = PACK(R4.L, R2.L);\n\t" 
+      "W[P1++] = R4;\n\t"  
+        
+        
+      "R2 = PACK(R4.L, R2.L);\n\t"  
       "[P2] = R2;\n\t"
 
    "LOOP_END filter_start%=;\n\t"
 
-      
+       
    "R0 = %5;\n\t"
    "R0 <<= 1;\n\t"
-   "I0 = B0;\n\t" 
+   "I0 = B0;\n\t"  
    "R0 <<= 1;\n\t"   
    "L0 = R0;\n\t"
    
-   "R0 = %5;\n\t" 
-   "R2 = %4;\n\t" 
+   "R0 = %5;\n\t"  
+   "R2 = %4;\n\t"  
    "R2 = R2 - R0;\n\t"
-   "R4 = [I0++];\n\t" 
+   "R4 = [I0++];\n\t"  
    "LC0 = R2;\n\t"
    "P3 = R0;\n\t"
    "R0 <<= 2;\n\t"
@@ -150,7 +182,7 @@ void filter_mem16(const spx_word16_t *_x, const spx_coef_t *num, const spx_coef_
    "I2 = P2;\n\t"
    "M0 = R0;\n\t"
    "A1 = A0 = 0;\n\t"
-   "R5 = [I2--];\n\t" 
+   "R5 = [I2--];\n\t"  
    "LOOP filter_mid%= LC0;\n\t"
    "LOOP_BEGIN filter_mid%=;\n\t"
       "LOOP filter_mid_inner%= LC1=P3;\n\t"
@@ -158,15 +190,15 @@ void filter_mem16(const spx_word16_t *_x, const spx_coef_t *num, const spx_coef_
          "A1 -= R4.H*R5.H, A0 += R4.L*R5.L (IS) || R4 = [I0++] || R5 = [I2--];\n\t"
       "LOOP_END filter_mid_inner%=;\n\t"
       "R0 = (A0 += A1) || I2 += M0;\n\t"
-      "R0 = R0 << 3 || R5 = W[P0++];\n\t" 
+      "R0 = R0 << 3 || R5 = W[P0++];\n\t"  
       "R0.L = R0 (RND);\n\t"
       "R0.L = R0.L + R5.L;\n\t"
-      "R5 = PACK(R0.L, R5.L) || W[P1++] = R0;\n\t" 
+      "R5 = PACK(R0.L, R5.L) || W[P1++] = R0;\n\t" /* shift y | store y */
       "A1 = A0 = 0 || [I2--] = R5\n\t"
       "LOOP_END filter_mid%=;\n\t"
    "I2 += 4;\n\t"
    "P2 = I2;\n\t"
-   
+    
    "P4 = %6;\n\t"
    "R0 = %5;\n\t"
    "LC0 = R0;\n\t"
@@ -208,8 +240,8 @@ void iir_mem16(const spx_word16_t *_x, const spx_coef_t *den, spx_word16_t *_y, 
 
    __asm__ __volatile__
    (
-   
-   "R0 = %5;\n\t"      
+    
+   "R0 = %5;\n\t"       
    
    "P1 = %3;\n\t"
    "I1 = P1;\n\t"
@@ -224,7 +256,7 @@ void iir_mem16(const spx_word16_t *_x, const spx_coef_t *den, spx_word16_t *_y, 
    "P0 = %1;\n\t"
    "P1 = %2;\n\t"
    
-   
+    
    "R1 = [P4++];\n\t"
    "R1 = R1 << 3 (S);\n\t"
    "R1.L = R1 (RND);\n\t"
@@ -233,7 +265,7 @@ void iir_mem16(const spx_word16_t *_x, const spx_coef_t *den, spx_word16_t *_y, 
    "W[P1++] = R1;\n\t"
    "W[P3] = R1;\n\t"
 
-   
+   /* Samples 1 to ord-1 (using memory) */
    "R0 += -1;\n\t"
    "R3 = 0;\n\t"
    "LC0 = R0;\n\t"
@@ -263,7 +295,7 @@ void iir_mem16(const spx_word16_t *_x, const spx_coef_t *den, spx_word16_t *_y, 
       "W[P3] = R1;\n\t"
    "LOOP_END filter_start%=;\n\t"
 
-      
+       
    "R0 = %5;\n\t"
    "R0 <<= 1;\n\t"
    "I1 = B1;\n\t"
@@ -293,7 +325,7 @@ void iir_mem16(const spx_word16_t *_x, const spx_coef_t *den, spx_word16_t *_y, 
       "W[P3] = R1;\n\t"
    "LOOP_END filter_mid%=;\n\t"
      
-   
+    
    "P4 = %6;\n\t"
    "R0 = %5;\n\t"
    "LC0 = R0;\n\t"
@@ -405,7 +437,7 @@ void compute_impulse_response(const spx_coef_t *ak, const spx_coef_t *awk1, cons
 
 
 
-#if 0 
+#if 0  
 #define min(a,b) ((a)<(b) ? (a):(b))
 
 void compute_impulse_response(const spx_coef_t *ak, const spx_coef_t *awk1, const spx_coef_t *awk2, spx_word16_t *y, int N, int ord, char *stack)

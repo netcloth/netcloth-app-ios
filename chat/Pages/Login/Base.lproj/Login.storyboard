@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,10 +28,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWT-N7-BSe">
-                                <rect key="frame" x="30" y="135" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u5W-af-EK1" customClass="UIControl">
                                 <rect key="frame" x="226.33333333333334" y="64" width="118.66666666666666" height="17"/>
                                 <subviews>
@@ -78,6 +74,7 @@
                                     </textField>
                                     <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="triangle" translatesAutoresizingMaskIntoConstraints="NO" id="7fR-Tg-4hf">
                                         <rect key="frame" x="305" y="24" width="10" height="10"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="10" id="cA9-Yw-uI4"/>
                                             <constraint firstAttribute="width" constant="10" id="g2a-Gx-hh5"/>
@@ -271,12 +268,10 @@
                             <constraint firstItem="7Za-Gm-V4h" firstAttribute="trailing" secondItem="U9f-5V-3Zf" secondAttribute="trailing" constant="30" id="72O-1P-zNR"/>
                             <constraint firstItem="U9f-5V-3Zf" firstAttribute="top" secondItem="tvH-Uw-OBT" secondAttribute="bottom" constant="80" id="9VF-mp-qnB"/>
                             <constraint firstItem="u5W-af-EK1" firstAttribute="top" secondItem="7Za-Gm-V4h" secondAttribute="top" constant="20" id="Ccm-jm-HeS"/>
-                            <constraint firstItem="YWT-N7-BSe" firstAttribute="leading" secondItem="tzq-Yn-kd3" secondAttribute="leading" id="Dh3-P1-DSS"/>
                             <constraint firstItem="w9c-TB-pWZ" firstAttribute="width" secondItem="WzO-om-dRm" secondAttribute="width" id="LLZ-Xs-2Dk"/>
                             <constraint firstItem="WzO-om-dRm" firstAttribute="trailing" secondItem="5Bn-qf-OAw" secondAttribute="trailing" id="MMe-Th-vzf"/>
                             <constraint firstItem="yES-0v-dcL" firstAttribute="top" secondItem="U9f-5V-3Zf" secondAttribute="bottom" constant="20" id="NOU-0K-3H4"/>
                             <constraint firstItem="tvH-Uw-OBT" firstAttribute="leading" secondItem="7Za-Gm-V4h" secondAttribute="leading" constant="30" id="Q9I-bh-Kv5"/>
-                            <constraint firstItem="YWT-N7-BSe" firstAttribute="top" secondItem="tzq-Yn-kd3" secondAttribute="bottom" id="TZe-Nd-lEF"/>
                             <constraint firstItem="5Bn-qf-OAw" firstAttribute="top" secondItem="yQJ-wS-hNp" secondAttribute="bottom" constant="12" id="XQb-0f-TF1"/>
                             <constraint firstItem="U9f-5V-3Zf" firstAttribute="leading" secondItem="7Za-Gm-V4h" secondAttribute="leading" constant="30" id="Z9I-Zu-52M"/>
                             <constraint firstItem="yQJ-wS-hNp" firstAttribute="leading" secondItem="7Za-Gm-V4h" secondAttribute="leading" id="aBi-Jh-mPM"/>
@@ -305,7 +300,6 @@
                         <outlet property="accountTF" destination="oLb-zL-mlR" id="UID-0R-1ha"/>
                         <outlet property="accountTable" destination="WzO-om-dRm" id="X6k-Qa-f6O"/>
                         <outlet property="accountTableHeight" destination="YP4-et-4v1" id="ram-Dn-BuU"/>
-                        <outlet property="envBtn" destination="YWT-N7-BSe" id="ahj-Q5-jju"/>
                         <outlet property="imageVEye" destination="pfC-xk-4tM" id="QgS-nK-RQ2"/>
                         <outlet property="importControl" destination="u5W-af-EK1" id="t1f-to-rbl"/>
                         <outlet property="loginBtn" destination="U9f-5V-3Zf" id="N4T-3d-87p"/>

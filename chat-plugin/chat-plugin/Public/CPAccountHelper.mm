@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "CPAccountHelper.h"
 #import "CPDataModel+secpri.h"
@@ -22,8 +22,10 @@
 #import "CPChatLog.h"
 #import "CPSendMsgHelper.h"
 #import <chat_plugin/chat_plugin-Swift.h>
+#import "UserSettings.h"
 
-NSNotificationName const kServiceConnectStatusChange = @"kServiceConnectStatusChange";
+NSNotificationName const kServiceConnectStatusChange = @"NCKServiceConnectStatusChange";
+NSNotificationName const kServiceRegisterOk = @"NCKServiceRegisterOk";
 
 NSArray *_allEndPoints;
 NSInteger _rand = 0;
@@ -32,16 +34,24 @@ NSInteger _rand = 0;
 
 + (void)load {
     [super load];
+    
+#if DEBUG
+      
+  
+  
+  
+#endif
+    
     [self fixUserDbBeforeV1];
 }
 
-
+  
 + (void)registerUserByAccount:(NSString *)name
                      password:(NSString *)pwd
                      callback:(void (^)(BOOL success, NSString *msg, User * _Nullable registerUser))result
 {
-
-    std::string prikey =  CreatePrivateKey();
+      
+    std::string prikey =  generationAccountPrivatekey();
     [self _registerUserAccount:name password:pwd privateKey:prikey callback:^(BOOL success, NSString *msg, User * _Nullable registerUser) {
         
         if (result) {
@@ -64,11 +74,11 @@ NSInteger _rand = 0;
     };
     
     User *user = User.alloc.init;
-
+      
     std::string prikey =  privateKey;
     std::string publicKey = GetPublicKeyByPrivateKey(prikey);
     
-
+      
     user.publicKey = hexStringFromBytes(publicKey);
     user.accountName = name;
     long long sign_hash = (long long)GetHash(publicKey);
@@ -77,7 +87,7 @@ NSInteger _rand = 0;
     NSDate *date = NSDate.date;
     user.createTime = [date timeIntervalSince1970];
     
-
+      
     user.isAutoIncrement = YES;
     
     [self createUsersBD];
@@ -91,7 +101,7 @@ NSInteger _rand = 0;
         int uid = user.lastInsertedRowID;
         user.userId = uid;
         
-
+          
         NSString *folder = [NSString stringWithFormat:@"%d",uid];
         [FCFileManager createDirectoriesForPath:folder];
         
@@ -100,7 +110,7 @@ NSInteger _rand = 0;
         [self createTabsAtDb:database];
         [database close];
         
-
+          
         NSData *dpk = bytes2nsdata(prikey);
         NSError *err;
         [NCKeyStore.shared registerWithOriginPrivateKey:dpk pwd:pwd uid:uid error:&err];
@@ -112,6 +122,11 @@ NSInteger _rand = 0;
     }
     
     if (result) {
+          
+        NSInteger userId = user.userId;
+        NSString *key = [UserSettings sourceKey:@"contactBackup" ofUser:userId];
+        [UserSettings setObject:@"1" forSourceKey:key];
+        
         result(YES,@"添加账号成功",user);
     }
     
@@ -128,7 +143,7 @@ NSInteger _rand = 0;
         };
     };
     
-
+      
     NSError *err;
     [NCKeyStore.shared login:uid pwd:pwd error:&err];
     if (err) {
@@ -136,7 +151,7 @@ NSInteger _rand = 0;
         return;
     }
     
-
+      
     if (![self loginUserForUid:uid fromPassword:pwd]) {
         error(nil);
         return;
@@ -144,7 +159,10 @@ NSInteger _rand = 0;
     
     [CPInnerState.shared asynWriteTask:^{
         try {
-
+              
+            [CPInnerState.shared userlogin];
+            
+              
             [CPInnerState.shared asynDoTask:^{
                 if (result) {
                     result(YES, nil);
@@ -156,10 +174,10 @@ NSInteger _rand = 0;
             [CPChatLog enableFileLog];
         }
         catch (std::exception) {
-
+              
         }
         catch (NSError *err) {
-
+              
             NSLog(@"%@",err);
         }
         
@@ -173,7 +191,7 @@ NSInteger _rand = 0;
     return false;
 }
 
-
+  
 + (void)connectAllChatEnterPoint:(NSArray<NSString *> *)points {
     _allEndPoints = points;
     _rand = 0;
@@ -230,22 +248,23 @@ NSInteger _rand = 0;
     return CPInnerState.shared.loginUser;
 }
 
-+ (void)logout {
-    [CPSendMsgHelper unbindDeviceToken];
-    
-    [CPInnerState.shared.chatDelegates removeAllObjects];
-    [CPInnerState.shared disconnect];
-    
-    [CPInnerState.shared.loginUserDataBase close];
-    CPInnerState.shared.loginUserDataBase = nil;
-    CPInnerState.shared.loginUser = nil;
-    decodePrivateKey = "";
-    
-    _allEndPoints = nil;
-    [self setNetworkEnterPoint:@""];
++ (void)logoutWithComplete:(void (^)(BOOL succsss, NSString * _Nullable msg))callBack {
+    [CPSendMsgHelper unbindDeviceTokenComplete:^(NSDictionary *response) {
+        [CPInnerState.shared.chatDelegates removeAllObjects];
+        [CPInnerState.shared disconnect];   
+        
+        _allEndPoints = nil;
+        [self setNetworkEnterPoint:@""];
+        
+        [CPInnerState.shared userlogout];
+        
+        if (callBack != nil) {
+            callBack(true, nil);
+        }
+    }];
 }
 
-
+  
 
 + (BOOL)checkLoginUserPwd:(NSString *)pwd {
     if ([self isLogin] == false) {
@@ -274,7 +293,7 @@ NSInteger _rand = 0;
     }];
 }
 
-
+  
 + (BOOL)fixUserDbBeforeV1 {
     [self createUsersBD];
     return NO;
@@ -301,7 +320,7 @@ NSInteger _rand = 0;
                            callback:^(BOOL succss, NSString * _Nonnull msg, CPContact * _Nullable contact) {
         
         if (succss && contact) {
-
+              
             CPMessage *msg = CPMessage.alloc.init;
             msg.senderPubKey = support_account_pubkey;
             msg.toPubkey = CPInnerState.shared.loginUser.publicKey;
@@ -312,14 +331,14 @@ NSInteger _rand = 0;
             long long hash = (long long)GetHash(sign);
             msg.signHash = hash;
             
-            [CPInnerState.shared storeMessge:msg isCacheMsg:false];
+            [CPInnerState.shared.msgRecieve storeMessge:msg isCacheMsg:false];
         }
         
     }];
 }
 
 
-
+  
 + (void)deleteUser:(NSInteger)uid
           callback:(void (^)(BOOL success, NSString *msg))result
 {
@@ -331,7 +350,7 @@ NSInteger _rand = 0;
            }
        };
     
-
+      
     NSString *path = [self dbFolderForUUID:@(uid).stringValue];
     NSError *err;
     [FCFileManager removeItemAtPath:path error:&err];
@@ -351,7 +370,7 @@ NSInteger _rand = 0;
     }
 }
 
-
+  
 + (void)exportKeystoreAndPrivateKey:(NSString *)loginPwd
                     exportPassword:(NSString *)exportPwd
                           callback:(void (^)(BOOL success, NSString *msg, NSString *keystore, NSString *oriPriKey))result;
@@ -365,13 +384,13 @@ NSInteger _rand = 0;
         }
     };
     
-
+      
     std::string oriPrikey = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, loginPwd);
     if (oriPrikey.length() > 0) {
         NSData *bridgeBytes = bytes2nsdata(oriPrikey); 
         NSAssert(bridgeBytes.length == kPrivateKeySize, @"bridgeBytes must fill data");
         
-
+          
         NSError *err;
         NSString *keystore = [CPWalletWraper encodeKeystore:bridgeBytes exportPwd:exportPwd error:&err];
         
@@ -380,7 +399,7 @@ NSInteger _rand = 0;
         }
         else {
             NSString *priKey =  hexStringFromBytes(oriPrikey);
-
+              
             if ([exportPwd isEqualToString:loginPwd] == NO) {
                 
                 NSError *err;
@@ -427,7 +446,7 @@ NSInteger _rand = 0;
     }
 }
 
-
+  
 + (void)importKeystore:(NSString *)keystore
            accountName:(NSString *)name
               password:(NSString *)exportPwd
@@ -441,7 +460,7 @@ NSInteger _rand = 0;
         }
     };
     
-
+      
     NSError *err;
     NSData *decodePrikey = [CPWalletWraper decodeKeystore:keystore password:exportPwd error:&err];
     if (err) {
@@ -469,7 +488,7 @@ NSInteger _rand = 0;
         }
     };
     
-
+      
     std::string prikey = bytesFromHexString(privateKey);
     if (prikey.length() != kPrivateKeySize) {
         block(false, @"WalletManager.Error.invalidData".localized, nil);
@@ -481,7 +500,7 @@ NSInteger _rand = 0;
     }
 }
 
-
+  
 + (void)verifyPrivateKey:(NSString *)inputPrivateKey
                 callback:(void (^)(BOOL valid, NSString *msg))result
 {
@@ -498,7 +517,7 @@ NSInteger _rand = 0;
         block(false, @"WalletManager.Error.invalidData".localized);
     }
     else {
-        std::string publicKey = GetPublicKeyByPrivateKey(prikey);
+        std::string publicKey = GetPublicKeyByPrivateKey(prikey);   
         NSString *spbkey = [CPInnerState.shared.loginUser publicKey];
         std::string storePbkey = bytesFromHexString(spbkey);
         
@@ -534,7 +553,7 @@ NSInteger _rand = 0;
     }
 }
 
-
+  
 + (void)changeLoginUserName:(NSString *)userName
                 callback:(void (^)(BOOL success, NSString *msg))result
 {
@@ -557,7 +576,7 @@ NSInteger _rand = 0;
     }];
 }
 
-
+  
 + (User *)loginUserForUid:(NSInteger)uid
               fromPassword:(NSString *)pwd {
     
@@ -623,17 +642,11 @@ NSInteger _rand = 0;
     [db createTableAndIndexesOfName:kTableName_Session withClass:CPSession.class];
     [db createTableAndIndexesOfName:kTableName_Message withClass:CPMessage.class];
     [db createTableAndIndexesOfName:kTableName_Claim withClass:CPChainClaim.class];
+    
+    [db createTableAndIndexesOfName:kTableName_GroupMessage withClass:CPMessage.class];
+    [db createTableAndIndexesOfName:kTableName_GroupMember withClass:CPGroupMember.class];
+    [db createTableAndIndexesOfName:kTableName_GroupNotify withClass:CPGroupNotify.class];
 }
-
-
-+ (NSString *)curEnv {
-    return [CPInnerState.shared curEnv];
-}
-
-+ (NSString *)switchEnv {
-    return [CPInnerState.shared switchEnv];
-}
-
 
 static NSString *_domain;
 dispatch_semaphore_t _domainlock = dispatch_semaphore_create(1);
@@ -646,7 +659,7 @@ dispatch_semaphore_t _domainlock = dispatch_semaphore_create(1);
         return;
     }
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://www.netcloth.org/userinfo.php"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https:  
     request.timeoutInterval = 30;
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration];

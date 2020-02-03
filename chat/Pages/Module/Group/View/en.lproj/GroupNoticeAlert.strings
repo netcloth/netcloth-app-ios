@@ -1,0 +1,9 @@
+
+/* Class = "UIButton"; normalTitle = "Back"; ObjectID = "d0c-y3-98V"; */
+"d0c-y3-98V.normalTitle" = "Back";
+
+/* Class = "UILabel"; text = "Mute Notifications"; ObjectID = "mEr-K7-iPm"; */
+"mEr-K7-iPm.text" = "Mute Notifications";
+
+/* Class = "UILabel"; text = "Receive Notifications"; ObjectID = "ulb-M7-V21"; */
+"ulb-M7-V21.text" = "Receive Notifications";

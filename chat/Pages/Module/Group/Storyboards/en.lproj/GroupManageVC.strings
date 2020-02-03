@@ -1,0 +1,15 @@
+
+/* Class = "UINavigationItem"; title = "Manage Group"; ObjectID = "CSf-bN-IFN"; */
+"CSf-bN-IFN.title" = "Manage Group";
+
+/* Class = "UILabel"; text = "Once selected「Only admin can add members」，scanning group QR code to join feature will be disabled."; ObjectID = "X16-1j-MYq"; */
+"X16-1j-MYq.text" = "Once selected「Only admin can add members」，scanning group QR code to join feature will be disabled.";
+
+/* Class = "UILabel"; text = "Dissolve the Group"; ObjectID = "eKf-jD-aMf"; */
+"eKf-jD-aMf.text" = "Dissolve the Group";
+
+/* Class = "UILabel"; text = "Everyone can add members"; ObjectID = "mfd-aK-l9B"; */
+"mfd-aK-l9B.text" = "Everyone can add members";
+
+/* Class = "UILabel"; text = "Join the Group"; ObjectID = "tDA-WI-rmL"; */
+"tDA-WI-rmL.text" = "Join the Group";

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 import AVFoundation
@@ -15,7 +15,8 @@ public protocol Access {
     static func canOpenCamera( autoAccess:Bool?, result: ((_ can:Bool)->Void)?)
 }
 
-open class Authorize: Access {
+open class Authorize : Access {
+    
     static public func canOpenCamera( autoAccess:Bool?, result: ((_ can:Bool)->Void)?) {
         canOpenMedia(media: .video, autoAccess: autoAccess, result: result)
     }

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "NSString+PinYin4Cocoa.h"
 
@@ -41,11 +41,11 @@
 }
 
 - (NSInteger)indexOf:(int)ch {
-
-
-
-
-
+      
+      
+      
+      
+      
     return [self indexOf:ch fromIndex:0];
 }
 
@@ -106,7 +106,7 @@
     
     __block NSMutableArray *retVal = [NSMutableArray array];
     [pattern enumerateMatchesInString:self options:0 range:NSMakeRange(0, [self length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-
+          
         for (int i=1; i<[result numberOfRanges]; i++) {
             NSString *matchedString=[self substringWithRange:[result rangeAtIndex:i]];
             [retVal addObject:matchedString];
@@ -132,7 +132,7 @@
     NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:regex options:options error:&error];
     if (error) {
         PYLog(@"Error creating Regex: %@",[error description]);
-        return NO; 
+        return NO;    
     }
     
     return ([pattern numberOfMatchesInString:self options:0 range:NSMakeRange(0, [self length])] > 0);

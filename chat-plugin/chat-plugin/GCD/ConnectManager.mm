@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "ConnectManager.h"
 #import "SocketConnect.h"
@@ -57,7 +57,7 @@ static ConnectManager *_instance;
     return self;
 }
 
-
+  
 
 - (void)connectHost:(NSString *)host
                port:(uint16_t)port
@@ -76,7 +76,7 @@ static ConnectManager *_instance;
     [self stopHeartTimer];
 }
 
-
+  
 - (void)disconnect {
     [self disconnectDeleteStore:false];
 }
@@ -118,10 +118,10 @@ static ConnectManager *_instance;
 }
 
 - (void)_reconnect {
-
+      
     double diff = MIN(pow(2, _reconnectCount) * 0.5, 5);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(diff * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
+          
         if ([self checkCanReConnect]) {
             if (self->_reconnectCount >= 3) {
                 NSLog(@"coremsg-connect-reinit");
@@ -130,7 +130,7 @@ static ConnectManager *_instance;
                 if ([self.delegate respondsToSelector:@selector(onShouldReinitConnectToUseNewHostAndPort)]) {
                     [self.delegate onShouldReinitConnectToUseNewHostAndPort];
                 }
-
+  
             } else {
                 [self.connect connect];
             }
@@ -140,13 +140,13 @@ static ConnectManager *_instance;
     [self stopHeartTimer];
 }
 
-
-
+  
+  
 - (void)sendMsg:(NCProtoNetMsg *)message {
     [self.connect sendMsg:message];
 }
 
-
+  
 
 - (BOOL)checkCanReConnect {
     if (self.isConnected || self->_initiativeDisconnect || [NSString cp_isEmpty:self->_host]) {
@@ -155,7 +155,7 @@ static ConnectManager *_instance;
     return YES;
 }
 
-
+  
 - (void)startHeartTimer {
     [self stopHeartTimer];
     self.heartTimer = [NSTimer timerWithTimeInterval:kSendHeartInterval target:self selector:@selector(sendHeartMsg) userInfo:nil repeats:YES];
@@ -174,7 +174,7 @@ static ConnectManager *_instance;
     }
 }
 
-
+  
 - (void)onSocketError {
     self.isConnected = false;
     [self stopHeartTimer];
@@ -198,24 +198,24 @@ static ConnectManager *_instance;
 }
 
 - (void)onSocketReadPack:(NCProtoNetMsg *)netmsg {
-
+      
     if ([netmsg.name isEqualToString:kMsg_Heartbeat]) {
         return;
     }
     
-
+      
     if ([self.delegate respondsToSelector:@selector(onConnectReadPack:)]) {
         [self.delegate onConnectReadPack:netmsg];
     }
     
-
+      
     if ([netmsg.name isEqualToString:kMsg_RegisterRsp]) {
         NCProtoRegisterRsp *rsp = [NCProtoRegisterRsp parseFromData:netmsg.data_p error:nil];
         if (!rsp) {
             return;
         }
         if (rsp.result != 0) {
-
+              
         } else {
             self->_reconnectCount = 0;
             [self startHeartTimer];

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -17,10 +17,10 @@ class SearchResultVC: BaseViewController, UITableViewDataSource, UITableViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+  
         self.tableView?.adjustFooter()
         
-
+  
     }
     
     func reloadTable(list: [IPALNode]?) {
@@ -37,7 +37,7 @@ class SearchResultVC: BaseViewController, UITableViewDataSource, UITableViewDele
         let data = self.list?[safe: indexPath.row]
         cell.reloadData(atIndex: indexPath.row + 1, data: data)
         
-
+          
         cell.connectBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.selectedNodeCallBack?(data)
         }).disposed(by: cell.disposeBag)

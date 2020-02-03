@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import PromiseKit
@@ -42,12 +42,11 @@ UISearchResultsUpdating{
     var list:[IPALNode]?
     
     let disbag = DisposeBag()
-
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
         configEvent()
-        self.tableView?.reloadData()
         requestAllCIpals()
     }
     
@@ -61,8 +60,7 @@ UISearchResultsUpdating{
         self.tableView?.adjustFooter()
         
         
-        
-
+          
         let result = R.loadSB(name: "IPALList", iden: "SearchResultVC") as? SearchResultVC
         result?.selectedNodeCallBack = {[weak self] node in
             self?.selectConnectNode(node)
@@ -83,9 +81,9 @@ UISearchResultsUpdating{
         
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         
-
-
-
+  
+  
+  
         
     }
     
@@ -104,16 +102,7 @@ UISearchResultsUpdating{
         }).disposed(by: disbag)
     }
     
-    
-    func reloadTable() {
-        self.tableView?.reloadData()
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10, execute: { [weak self] in
-            self?.requestPings()
-        })
-    }
-    
-
+      
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.calculateHeaderView()
     }
@@ -146,14 +135,14 @@ UISearchResultsUpdating{
 
     
     
-
+      
     func toHistory() {
         if let vc = R.loadSB(name: "IPALResult", iden: "IPALHistoryVC") as? IPALHistoryVC {
             Router.pushViewController(vc: vc)
         }
     }
     
-
+      
     let sessionT = URLSession(configuration: URLSessionConfiguration.default)
     let signal = DispatchSemaphore(value: 3)
     let queue =  OS_dispatch_queue_concurrent(label: "ping.queue")
@@ -162,48 +151,54 @@ UISearchResultsUpdating{
     }
     
     func requestAllCIpals() {
+        self.showLoading()
         ChainService.requestAllChatServer().done { (list:[IPALNode]) in
             let chatEnters = list.filter({ (item:IPALNode) -> Bool in
-                if let endpoints = item.endpoints {
-                    for address in endpoints {
-                        if address.type == "1" {
-                            return true
-                        }
+                if let obj = UserDefaults.standard.object(forKey: "CusDeb") as? String, obj == "cd" {
+                    if item.cIpalEnd() != nil  {
+                        return true
+                    }
+                }
+                else {
+                    if item.cIpalEnd() != nil,
+                        item.details?.starts(with: "test") == false  {
+                        return true
                     }
                 }
                 return false
             })
             self.list = chatEnters
             self.requestPings()
+            self.reloadTableView()
         }
         .catch { (err) in
             
         }
     }
     
-    
+    var total = 0
     func requestPings() {
         guard let seq = self.list else {
             return
         }
-        
-        var total = 0
+        total = 0
         for item in seq {
             if let endPoint = item.cIpalEnd(), let address = endPoint.endpoint {
-
+                  
                 let str = address + "/v1/ping"
                 let url = URL(string: str)
                 if url == nil {
                     continue
                 }
                 total += 1
+                
                 let request = URLRequest(url: url!, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5)
                 self.queue.async {
                     self.signal.wait()
-                    let starttime = Date().timeIntervalSince1970 * 1000
-                    let starttime2 = Date().timeIntervalSince1970 * 1000
+                    let starttime = Date().timeIntervalSince1970 * 1000   
+                    let starttime2 = Date().timeIntervalSince1970 * 1000   
                     let task = self.sessionT.dataTask(with: request, completionHandler: { (data, response, error) in
-                        let endtime = Date().timeIntervalSince1970 * 1000
+                        let endtime = Date().timeIntervalSince1970 * 1000   
                         self.signal.signal()
                         let diff = fabs(endtime - starttime)
                         if error == nil {
@@ -211,18 +206,8 @@ UISearchResultsUpdating{
                         } else {
                             item.ping = NSNotFound
                         }
-                        
-                        total -= 1
-                        if total == 0 {
-                            
-                            self.list?.sort(by: { (l, r) -> Bool in
-                                return l.ping < r.ping
-                            })
-                            
-
-                            DispatchQueue.main.async {
-                                self.reloadTable()
-                            }
+                        DispatchQueue.main.async {
+                            self.exeafterPing()
                         }
                     })
                     task.resume()
@@ -232,18 +217,56 @@ UISearchResultsUpdating{
         }
     }
     
-
+    func exeafterPing() {
+        total -= 1
+        if total % 2 == 0 {
+            self.list?.sort(by: { (l, r) -> Bool in
+                if l.ping == 0 {
+                    if r.ping == 0 {
+                        return true
+                    }
+                    return false
+                }
+                return l.ping < r.ping
+            })
+              
+            self.reloadTableView()
+        }
+        
+        if total == 0 {
+            self.recycleReloadTableAfterPings()
+        }
+    }
+    
+    
+    func reloadTableView() {
+        DispatchQueue.main.async {
+            self.tableView?.reloadData()
+        }
+    }
+    
+    func recycleReloadTableAfterPings() {
+        DispatchQueue.main.async {
+            self.dismissLoading()
+            self.tableView?.reloadData()
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10, execute: { [weak self] in
+            self?.requestPings()
+        })
+    }
+    
+      
     func selectConnectNode(_ node: IPALNode?) {
         guard let n = node else {
             return
         }
         
         if IPALManager.shared.store.currentCIpal == nil {
-
+              
             self.popAlert()
             .done { (result) in
                 if result == "ok" {
-
+                      
                     if let server = node {
                         self.tryToBindCipalService(server)
                     }
@@ -255,7 +278,7 @@ UISearchResultsUpdating{
                 return self.popAlert()
             }).done { (result) in
                 if result == "ok" {
-
+                      
                     if let server = node {
                         self.tryToBindCipalService(server)
                     }
@@ -271,7 +294,7 @@ UISearchResultsUpdating{
     func popTips() -> Promise<String> {
         let alert =  Promise<String> { (resolver) in
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-
+                  
                 alert.titleLabel?.text = "Tips_Title".localized()
                 alert.msgLabel?.text = "Tips_Msg_Switch".localized()
                 
@@ -311,7 +334,7 @@ UISearchResultsUpdating{
             
             alert.checkPreview = { [weak alert] in
                 let pwd = alert?.inputTextField?.text
-
+                  
                 if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                     alert?.checkTipsLabel?.isHidden = false
                     return false
@@ -335,6 +358,16 @@ UISearchResultsUpdating{
 
 
 extension IPAListVC {
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 8
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor =  UIColor.clear 
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list?.count ?? 0
     }
@@ -344,7 +377,7 @@ extension IPAListVC {
         let data = self.list?[safe: indexPath.row]
         cell.reloadData(atIndex: indexPath.row + 1, data: data)
         
-
+          
         cell.connectBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.selectConnectNode(data)
         }).disposed(by: cell.disposeBag)
@@ -378,15 +411,15 @@ extension IPAListVC {
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
-
+  
     }
     
 }
 
 
+  
 
-
-
+  
 class IPAListHeaderView: UIView {
     
     @IBOutlet weak var searchBar: UISearchBar?
@@ -399,7 +432,7 @@ class IPAListHeaderView: UIView {
     @IBOutlet weak var statusL : UILabel?
     @IBOutlet weak var historyBtn : UIButton?
     
-
+      
 
     func reloadData(_ data: IPALNode?) {
         nameL?.text = data?.moniker

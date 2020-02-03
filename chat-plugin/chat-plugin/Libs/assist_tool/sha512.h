@@ -1,4 +1,4 @@
-﻿#ifndef _SHA512_111H_
+#ifndef _SHA512_111H_
 #define _SHA512_111H_
 
 #include <stdint.h>
@@ -23,46 +23,46 @@ typedef struct
     uint8_t      bytes [SHA512_HASH_SIZE];
 } SHA512_HASH;
 
+  
+  
+  
 
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
 void
     Sha512Initialise
     (
-        Sha512Context*      Context        
+        Sha512Context*      Context           
     );
 
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
 void
     Sha512Update
     (
-        Sha512Context*      Context,       
-        void const*         Buffer,        
-        uint32_t            BufferSize     
+        Sha512Context*      Context,          
+        void const*         Buffer,           
+        uint32_t            BufferSize        
     );
 
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
 void
     Sha512Finalise
     (
-        Sha512Context*      Context,       
-        SHA512_HASH*        Digest         
+        Sha512Context*      Context,          
+        SHA512_HASH*        Digest            
     );
 #ifdef __cplusplus
 }

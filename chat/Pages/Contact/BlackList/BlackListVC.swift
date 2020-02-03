@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -17,7 +17,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
     var indexArray: [String] = []
     var models: [String: [CPContact]] = [:]
     
-
+      
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
         CPContactHelper.getBlackListContacts { [weak self]  (contacts) in
         
             let contacts: [CPContact]? = contacts
-
+              
             self?.models.removeAll()
             if let array = contacts {
                 for contact in array {
@@ -58,7 +58,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
                 }
             }
             
-
+              
             let titles = self?.models.keys.sorted(by: { l, r in
                 let lIsEn = l.isEnglish()
                 let rIsEn = r.isEnglish()
@@ -79,7 +79,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
         self.tableView?.adjustFooter()
         
         self.tableView?.adjustOffset()
-        self.tableView?.sectionHeaderHeight = CGFloat.leastNormalMagnitude
+        self.tableView?.sectionHeaderHeight = CGFloat.leastNonzeroMagnitude
         
         self.tableView?.sectionIndexColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
         self.tableView?.sectionIndexTrackingBackgroundColor = UIColor.clear
@@ -135,29 +135,35 @@ extension BlackListVC {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let title = indexArray[safe: section]
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! ContactSectionHeader
-        header.leftText?.text = title
+        
+        var header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header")
+        if let _ = header as? ContactSectionHeader {
+        } else {
+            header = ContactSectionHeader(reuseIdentifier: "header")
+        }
+        
+        (header as? ContactSectionHeader)?.leftText?.text = title
         
         return header
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
+        return CGFloat.leastNonzeroMagnitude
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return nil
     }
 }
 
-
+  
 extension BlackListVC {
     
-
+      
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.indexArray
     }
     
-
+      
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index
     }

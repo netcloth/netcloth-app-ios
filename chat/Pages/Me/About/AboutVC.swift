@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -15,6 +15,8 @@ class AboutVC: BaseViewController {
     @IBOutlet weak var githubL: UIControl?
     @IBOutlet weak var blogL: UIControl?
     @IBOutlet weak var supportUs: UIControl?
+    
+    @IBOutlet weak var logoIcon: UIView?
 
     
     @IBOutlet weak var officialText: UILabel?
@@ -28,9 +30,28 @@ class AboutVC: BaseViewController {
         configUI()
         configEvent()
     }
-    
+        
     func configUI() {
         versionL?.text = "V\(Device.getAppVersion())"
+        
+          
+        let tap = UITapGestureRecognizer { [weak self] _ in
+            self?.addOrRemoveDebug()
+        }
+        tap.numberOfTapsRequired = 8
+        logoIcon?.isUserInteractionEnabled = true;
+        logoIcon?.addGestureRecognizer(tap)
+    }
+    
+    func addOrRemoveDebug() {
+        if let obj = UserDefaults.standard.object(forKey: "CusDeb") as? String, obj == "cd" {
+            UserDefaults.standard.removeObject(forKey: "CusDeb")
+            Toast.show(msg: "Release...".localized())
+        }
+        else {
+            UserDefaults.standard.set("cd", forKey: "CusDeb")
+            Toast.show(msg: "Debug...".localized())
+        }
     }
     
     func configEvent() {

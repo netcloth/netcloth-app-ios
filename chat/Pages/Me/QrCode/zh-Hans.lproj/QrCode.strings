@@ -1,9 +1,27 @@
 
-/* Class = "UILabel"; text = "我的二维码"; ObjectID = "K3M-hi-LD9"; */
-"K3M-hi-LD9.text" = "我的二维码";
+/* Class = "UIButton"; normalTitle = "分享APP给好友"; ObjectID = "1zW-yY-DTQ"; */
+"1zW-yY-DTQ.normalTitle" = "分享APP给好友";
 
-/* Class = "UIButton"; normalTitle = "保存到手机"; ObjectID = "UMr-Kf-Eoc"; */
-"UMr-Kf-Eoc.normalTitle" = "保存到手机";
+/* Class = "UILabel"; text = "NetCloth APP"; ObjectID = "6bB-6h-YXj"; */
+"6bB-6h-YXj.text" = "NetCloth APP";
 
-/* Class = "UILabel"; text = "扫描上方二维码，可添加我\n保存二维码分享给好友"; ObjectID = "bc9-wZ-gO2"; */
-"bc9-wZ-gO2.text" = "扫描上方二维码，可添加我\n保存二维码分享给好友";
+/* Class = "UILabel"; text = "https:  
+"BkV-ET-Hjn.text" = "https:  
+
+/* Class = "UILabel"; text = "账户名："; ObjectID = "DU2-cA-4Jg"; */
+"DU2-cA-4Jg.text" = "账户名：";
+
+/* Class = "UILabel"; text = "扫描上方二维码，可添加我"; ObjectID = "Jcq-aZ-8fk"; */
+"Jcq-aZ-8fk.text" = "扫描二维码，即可添加我";
+
+/* Class = "UINavigationItem"; title = "分享APP"; ObjectID = "On2-XJ-gFH"; */
+"On2-XJ-gFH.title" = "分享APP";
+
+/* Class = "UILabel"; text = "下载链接"; ObjectID = "VNG-re-NTH"; */
+"VNG-re-NTH.text" = "下载链接";
+
+/* Class = "UIButton"; normalTitle = "复制链接"; ObjectID = "dX1-SS-Zae"; */
+"dX1-SS-Zae.normalTitle" = "复制链接";
+
+/* Class = "UIButton"; normalTitle = "保存到手机"; ObjectID = "yYK-8e-Cl1"; */
+"yYK-8e-Cl1.normalTitle" = "保存到手机";

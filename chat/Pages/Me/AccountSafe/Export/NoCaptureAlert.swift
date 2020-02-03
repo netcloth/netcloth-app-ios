@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -20,6 +20,6 @@ class NoCaptureAlert: AlertView, NCAlertInterface {
     }
     
     func ncMaxY() -> CGFloat {
-        return 50;
+        return 35;
     }
 }

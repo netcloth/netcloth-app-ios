@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 NS_ASSUME_NONNULL_BEGIN
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define SharedConnect ([ConnectManager shared])
 
-
+  
 @interface ConnectManager : NSObject
 
 + (instancetype)shared;
@@ -25,10 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
                port:(uint16_t)port
            delegate:(id<ConnectManagerDelegate>)delegate;
 
-
+  
 - (void)sendMsg:(NCProtoNetMsg *)message;
 
-
+  
 - (void)disconnect;
 
 - (void)disconnectDeleteStore:(BOOL)del;
@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_END
 - (void)onConnectSuccess;
 - (void)onConnectReadPack:(NCProtoNetMsg * _Nullable)netmsg;
 
-
+  
 - (void)onShouldReinitConnectToUseNewHostAndPort;
 
 @end

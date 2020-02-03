@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, SRAudioRecorderState) {
 
 + (instancetype)sharedManager;
 
-- (void)startRecording;
+- (void)startRecording:(void(^)(BOOL grand))recordBack;
 - (void)stopRecording;
 
 @property (nonatomic, weak) id<SRAudioRecorderManagerDelegate> delegate;
@@ -44,10 +44,19 @@ typedef NS_ENUM(NSInteger, SRAudioRecorderState) {
 
 @property (nonatomic, strong, readonly) AVAudioRecorder *audioRecorder;
 
+/**
+ The maximum duration of recoding audio, default is 60s.
+ */
 @property (nonatomic, assign) NSTimeInterval maxDuration;
 
+/**
+ The minimum duration of recoding audio, default is 3s.
+ */
 @property (nonatomic, assign) NSTimeInterval minDuration;
 
+/**
+ The point to show countdown, default is 10s.
+ */
 @property (nonatomic, assign) NSTimeInterval showCountdownPoint;
 
 @end

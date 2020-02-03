@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013, 2014 Pieter Wuille                             *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_NUM_REPR_IMPL_H
 #define SECP256K1_NUM_REPR_IMPL_H
@@ -103,6 +108,16 @@ static void secp256k1_num_mod_inverse(secp256k1_num *r, const secp256k1_num *a, 
     secp256k1_num_sanity(a);
     secp256k1_num_sanity(m);
 
+    /** mpn_gcdext computes: (G,S) = gcdext(U,V), where
+     *  * G = gcd(U,V)
+     *  * G = U*S + V*T
+     *  * U has equal or more limbs than V, and V has no padding
+     *  If we set U to be (a padded version of) a, and V = m:
+     *    G = a*S + m*T
+     *    G = a*S mod m
+     *  Assuming G=1:
+     *    S = 1/a mod m
+     */
     VERIFY_CHECK(m->limbs <= NUM_LIMBS);
     VERIFY_CHECK(m->data[m->limbs-1] != 0);
     for (i = 0; i < m->limbs; i++) {
@@ -187,7 +202,7 @@ static int secp256k1_num_eq(const secp256k1_num *a, const secp256k1_num *b) {
 }
 
 static void secp256k1_num_subadd(secp256k1_num *r, const secp256k1_num *a, const secp256k1_num *b, int bneg) {
-    if (!(b->neg ^ bneg ^ a->neg)) { 
+    if (!(b->neg ^ bneg ^ a->neg)) {  
         r->neg = a->neg;
         if (a->limbs >= b->limbs) {
             secp256k1_num_add_abs(r, a, b);
@@ -246,12 +261,12 @@ static void secp256k1_num_mul(secp256k1_num *r, const secp256k1_num *a, const se
 
 static void secp256k1_num_shift(secp256k1_num *r, int bits) {
     if (bits % GMP_NUMB_BITS) {
-        
+        /* Shift within limbs. */
         mpn_rshift(r->data, r->data, r->limbs, bits % GMP_NUMB_BITS);
     }
     if (bits >= GMP_NUMB_BITS) {
         int i;
-        
+        /* Shift full limbs. */
         for (i = 0; i < r->limbs; i++) {
             int index = i + (bits / GMP_NUMB_BITS);
             if (index < r->limbs && index < 2*NUM_LIMBS) {
@@ -270,4 +285,4 @@ static void secp256k1_num_negate(secp256k1_num *r) {
     r->neg ^= 1;
 }
 
-#endif 
+#endif  

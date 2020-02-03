@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import PromiseKit
@@ -23,7 +23,7 @@ class RestoreContactConfirmVC: BaseViewController {
         requestSummary()
     }
     
-
+      
     func configUI() {
         self.scrollView?.adjustOffset()
         self.confirmBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
@@ -32,11 +32,11 @@ class RestoreContactConfirmVC: BaseViewController {
     
     func requestSummary() {
         if let pbkey = CPAccountHelper.loginUser()?.publicKey {
-            Toast.showLoading()
+            self.showLoading()
             let url = APPURL.Config.ContactsSummary.replacingOccurrences(of: "{pubkey}", with: pbkey)
             NW.getDataUrl(path: url, method: .get, para: nil) { [weak self] (success, res) in
                 if success == false {
-                    Toast.dismissLoading()
+                    self?.dismissLoading()
                 } else if let d = res as? Data {
                     CPContactHelper.decodeContactSummary(d) { (r, msg, dic) in
                         if r == true , let result = dic as? NSDictionary {
@@ -47,13 +47,14 @@ class RestoreContactConfirmVC: BaseViewController {
                             
                             let whiteN = json["data"]["count"]["contact"].int ?? 0
                             let blackN = json["data"]["count"]["blacklist"].int ?? 0
+                            let groupN = json["data"]["count"]["group"].int ?? 0
                             
-                            self?.fillUI(time: str_d ?? "", whiteN: whiteN, blackN: blackN)
+                            self?.fillUI(time: str_d ?? "", whiteN: whiteN, blackN: blackN, groupN: groupN)
                         }
-                        Toast.dismissLoading()
+                        self?.dismissLoading()
                     }
                 } else {
-                    Toast.dismissLoading()
+                    self?.dismissLoading()
                 }
             }
         } else {
@@ -61,14 +62,14 @@ class RestoreContactConfirmVC: BaseViewController {
         }
     }
     
-    func fillUI(time: String, whiteN: Int, blackN: Int) {
-
+    func fillUI(time: String, whiteN: Int, blackN: Int, groupN: Int) {
+          
         self.timeL?.text = time
         var tip = "Contact_info".localized()
         var atttip = NSMutableAttributedString(string: tip)
         
         let range1 = (atttip.string as? NSString)?.range(of: "#white#")
-        if let r1 = range1 {
+        if let r1 = range1, r1.location != NSNotFound {
             let a1 = NSMutableAttributedString(string: "\(whiteN)")
             a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
             atttip.replaceCharacters(in: r1, with: a1)
@@ -80,11 +81,17 @@ class RestoreContactConfirmVC: BaseViewController {
             a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
             atttip.replaceCharacters(in: r1, with: a1)
         }
+        let range3 = (atttip.string as? NSString)?.range(of: "#group#")
+        if let r1 = range3 {
+            let a1 = NSMutableAttributedString(string: "\(groupN)")
+            a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+            atttip.replaceCharacters(in: r1, with: a1)
+        }
         
         self.listL?.attributedText = atttip
     }
     
-
+      
 
     
     @IBAction func onTapConfirm() {
@@ -98,6 +105,17 @@ class RestoreContactConfirmVC: BaseViewController {
             return self.decodeDatabase(data)
         }
         .done { (result) in
+            
+              
+            CPContactHelper.getAllContacts { (result) in
+                for contact in result {
+                    if (contact.isDoNotDisturb) {
+                        ExtensionShare.noDisturb.addToDisturb(pubkey: contact.publicKey)
+                    }
+                }
+            }
+            
+            
             self.hideProgress { [weak self] in
                 if result == "success" {
                     self?.showSuccessUploadAlert()
@@ -128,7 +146,7 @@ class RestoreContactConfirmVC: BaseViewController {
         successV.okButton?.setTitle("OK".localized(), for: .normal)
         Router.showAlert(view: successV)
         successV.okBlock = { [weak self] in
-
+              
             if let vcs = self?.navigationController?.viewControllers {
                 for v in vcs {
                     if v is AccountSafeVC {
@@ -154,7 +172,7 @@ class RestoreContactConfirmVC: BaseViewController {
         }
     }
     
-
+      
     
     weak var progressView: UploadProgressView?
     
@@ -200,7 +218,7 @@ class RestoreContactConfirmVC: BaseViewController {
             
             alert.checkPreview = { [weak alert] in
                 let pwd = alert?.inputTextField?.text
-
+                  
                 if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                     alert?.checkTipsLabel?.isHidden = false
                     return false
@@ -234,7 +252,7 @@ class RestoreContactConfirmVC: BaseViewController {
         return data_promise
     }
     
-
+      
     func downloadContact() -> Promise<Data> {
         
         let _promise = Promise<Data> { [weak self] (resolver) in

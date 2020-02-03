@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2015 Andrew Poelstra                                 *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_SCALAR_REPR_IMPL_H
 #define SECP256K1_SCALAR_REPR_IMPL_H
@@ -46,7 +51,7 @@ static void secp256k1_scalar_set_b32(secp256k1_scalar *r, const unsigned char *b
     for (i = 0; i < 32; i++) {
        *r = ((*r * base) + b32[i]) % EXHAUSTIVE_TEST_ORDER;
     }
-    
+    /* just deny overflow, it basically always happens */
     if (overflow) *overflow = 0;
 }
 
@@ -106,4 +111,4 @@ SECP256K1_INLINE static int secp256k1_scalar_eq(const secp256k1_scalar *a, const
     return *a == *b;
 }
 
-#endif 
+#endif  

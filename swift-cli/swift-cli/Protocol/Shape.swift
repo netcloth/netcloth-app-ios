@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -51,7 +51,7 @@ extension UIScrollView: Cell {
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = .never
         } else {
-
+              
         }
     }
 }
@@ -82,7 +82,7 @@ extension UITableView: Cell {
     open func adjustFooter() {
         let footer = UIView()
         var rect = footer.frame
-        rect.size.height = CGFloat.leastNormalMagnitude
+        rect.size.height = CGFloat.leastNonzeroMagnitude
         footer.frame = rect
         self.tableFooterView = footer
     }
@@ -90,7 +90,7 @@ extension UITableView: Cell {
     open func adjustHeader() {
         let footer = UIView()
         var rect = footer.frame
-        rect.size.height = CGFloat.leastNormalMagnitude
+        rect.size.height = CGFloat.leastNonzeroMagnitude
         footer.frame = rect
         self.tableHeaderView = footer
     }
@@ -126,12 +126,12 @@ extension UIView {
     }
     
     
-
-
-
-
-
-
+      
+      
+      
+      
+      
+      
     open func setShadow(color: UIColor,
                         offset: CGSize = CGSize(width: 0,height: -3),
                         radius:CGFloat = 3.0,
@@ -142,55 +142,23 @@ extension UIView {
         self.layer.shadowOpacity = Float(opacity)
     }
     
-    
+      
     open func fakesetLayerCornerRadiusAndShadow(_ cornerRadius: CGFloat,
     color: UIColor,
     offset: CGSize = CGSize(width: 0,height: -3),
     radius:CGFloat = 3.0,
     opacity: CGFloat = 1.0) {
         
-        let sublayer =  self.layer
+        let targetLayer =  self.layer
         
-        sublayer.cornerRadius = cornerRadius
-        sublayer.masksToBounds = false
-        sublayer.backgroundColor = UIColor.white.cgColor
+        targetLayer.cornerRadius = cornerRadius
+        targetLayer.masksToBounds = false
+        targetLayer.backgroundColor = UIColor.white.cgColor
         
-        sublayer.shadowColor = color.cgColor
-        sublayer.shadowOffset = offset
-        sublayer.shadowRadius = radius
-        sublayer.shadowOpacity = Float(opacity)
-    }
-    
-    
-    open func setLayerCornerRadiusAndShadow(_ cornerRadius: CGFloat,
-                                            color: UIColor,
-                                            offset: CGSize = CGSize(width: 0,height: -3),
-                                            radius:CGFloat = 3.0,
-                                            opacity: CGFloat = 1.0) {
-        
-        
-        let sublayer = CALayer()
-        sublayer.frame = self.frame
-        sublayer.cornerRadius = cornerRadius
-        sublayer.masksToBounds = false
-        sublayer.backgroundColor = UIColor.white.cgColor
-        
-        sublayer.shadowColor = color.cgColor
-        sublayer.shadowOffset = offset
-        sublayer.shadowRadius = radius
-        sublayer.shadowOpacity = Float(opacity)
-        
-        self.layer.cornerRadius = cornerRadius
-        self.layer.masksToBounds = true
-        
-        let key = String(format: "%pmu", self)
-        if let sv = self.superview {
-            if let old = objc_getAssociatedObject(self,key) as? CALayer {
-                old.removeFromSuperlayer()
-            }
-            sv.layer.insertSublayer(sublayer, below: self.layer)
-            objc_setAssociatedObject(self, key, sublayer, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
+        targetLayer.shadowColor = color.cgColor
+        targetLayer.shadowOffset = offset
+        targetLayer.shadowRadius = radius
+        targetLayer.shadowOpacity = Float(opacity)
     }
     
     open var viewController: UIViewController? {
@@ -243,12 +211,12 @@ public protocol ExpandHotZone {
 
 extension ExpandHotZone where Self: UIView {
     func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let rect = self.bounds.inset(by: UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10))
+        let rect = self.bounds.inset(by: UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -20))
         return rect.contains(point)
     }
 }
 
-
+  
 open class ExpandBtn: UIButton, ExpandHotZone {
-    
 }
+

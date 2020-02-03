@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #define LXDefaultFirstWaveColor [UIColor colorWithRed:61/255.0 green:126/255.0 blue:255/255.0 alpha:1]
 #define LXDefaultSecondWaveColor [UIColor colorWithRed:61/255.0 green:126/255.0 blue:255/255.0 alpha:0.3]
@@ -63,6 +63,7 @@
     [self startWaveAnimation];
 }
 
+#pragma mark -- 开始波动动画
 - (void)startWaveAnimation
 {
     self.timer = [CADisplayLink displayLinkWithTarget:[YYWeakProxy proxyWithTarget:self] selector:@selector(waveAnimation)];
@@ -71,6 +72,7 @@
 }
 
 
+#pragma mark -- 停止波动动画
 - (void)stopWaveAnimation
 {
     
@@ -78,6 +80,7 @@
     self.timer = nil;
 }
 
+#pragma mark -- 波动动画实现
 - (void)waveAnimation
 {
     CGFloat waveHeight = self.waveHeight;
@@ -86,7 +89,7 @@
     }
 
     self.offset += self.speed;
-
+      
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGFloat startOffY = waveHeight * sinf(self.offset * M_PI * 2 / self.bounds.size.width);
     CGFloat orignOffY = 0.0;
@@ -105,7 +108,7 @@
     self.firstWaveLayer.fillColor = self.firstWaveColor.CGColor;
     CGPathRelease(pathRef);
     
-
+      
     if (!self.isShowSingleWave) {
         CGMutablePathRef pathRef1 = CGPathCreateMutable();
         CGFloat startOffY1 = waveHeight * sinf(self.offset * M_PI * 2 / self.bounds.size.width);
@@ -129,6 +132,7 @@
     
 }
 
+#pragma mark ----- INITUI ----
 -(CAShapeLayer *)firstWaveLayer{
     if (!_firstWaveLayer) {
         _firstWaveLayer = [CAShapeLayer layer];

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import WMPageController
@@ -25,7 +25,7 @@ class BackupContainerVC: WMPageController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
         } else {
-
+              
         }
         self.configUI()
         self.configEvent()
@@ -71,19 +71,19 @@ class BackupContainerVC: WMPageController {
         
         alert.checkPreview = { [weak alert, weak self] in
             let pwd = alert?.inputTextField?.text
-
+              
             if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                 alert?.checkTipsLabel?.isHidden = false
                 return false
             }
-
+              
             if pwd?.checkPassthrough().passthrough == false {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.15, execute: {
                     self?.toResignPwd(loginPwd: pwd)
                 })
                 return true
             }
-
+              
             self?.toNextStep(loginPwd: pwd)
             return true
         }
@@ -102,7 +102,7 @@ class BackupContainerVC: WMPageController {
     struct MyError: Error {
         var msg: String
     }
-
+      
     func toNextStep(loginPwd: String?) {
         if let lpw = loginPwd {
             
@@ -120,48 +120,48 @@ class BackupContainerVC: WMPageController {
                 
             }
             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
         }
     }
     
-
+      
     override func numbersOfChildControllers(in pageController: WMPageController) -> Int {
         return 2
     }

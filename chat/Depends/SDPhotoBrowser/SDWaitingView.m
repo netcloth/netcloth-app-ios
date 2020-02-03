@@ -1,19 +1,19 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SDWaitingView.h"
 
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
 
 
 @implementation SDWaitingView
@@ -34,8 +34,8 @@
 - (void)setProgress:(CGFloat)progress
 {
     _progress = progress;
-
-
+  
+      
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self setNeedsDisplay];
@@ -69,7 +69,7 @@
                 [SDWaitingViewBackgroundColor set];
                 CGContextMoveToPoint(ctx, xCenter, yCenter);
                 CGContextAddLineToPoint(ctx, xCenter, 0);
-                CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.001;
+                CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.001;   
                 CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5, to, 1);
                 CGContextClosePath(ctx);
                 
@@ -81,7 +81,7 @@
             {
                 CGContextSetLineWidth(ctx, 15);
                 CGContextSetLineCap(ctx, kCGLineCapRound);
-                CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.05;
+                CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.05;   
                 CGFloat radius = MIN(rect.size.width, rect.size.height) * 0.5 - SDWaitingViewItemMargin;
                 CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5, to, 0);
                 CGContextStrokePath(ctx);

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -42,18 +42,5 @@ class HistoryCell: UITableViewCell {
         stateL?.text = aync.desc
         stateL?.textColor = aync.color
             
-    }
-}
-
-extension CPChainClaim {
-    func calStates() -> (dotName:String, desc: String, color: UIColor)
-    {
-        if self.chain_status == 1 {
-            return ("dot_green","history_Success".localized(),UIColor(hexString: "#5ABB27")!)
-        } else if self.chain_status == 2 {
-            return ("dot_yellow","history_Fail".localized(),UIColor(hexString: "#F77221")!)
-        } else {
-            return ("dot_blue","history_Pending".localized(),UIColor(hexString: "#3D7EFF")!)
-        }
     }
 }

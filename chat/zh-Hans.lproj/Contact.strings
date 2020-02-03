@@ -1,5 +1,6 @@
-/* Class = "UIButton"; normalTitle = "添加联系人"; ObjectID = "RB9-fb-vxe"; */
-"RB9-fb-vxe.normalTitle" = "添加联系人";
+/* Class = "UILabel"; text = "Group Chats"; ObjectID = "LlD-j9-Tcj"; */
+"LlD-j9-Tcj.text" = "群聊";
+
 
 /* Class = "UILabel"; text = "Blacklist"; ObjectID = "Fkr-lm-4zY"; */
 "Fkr-lm-4zY.text" = "黑名单";
@@ -25,3 +26,13 @@
 
 /* Class = "UITextField"; placeholder = "请输入备注名"; ObjectID = "uWF-6d-VYr"; */
 "uWF-6d-VYr.placeholder" = "请输入备注名";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "71C-T3-Vdx"; */
+"71C-T3-Vdx.text" = "0";
+
+/* Class = "UILabel"; text = "New Friends"; ObjectID = "AvO-pk-46a"; */
+"AvO-pk-46a.text" = "新的朋友";
+
+
+/* Class = "UILabel"; text = "0"; ObjectID = "nhq-ne-IuZ"; */
+"nhq-ne-IuZ.text" = "0";

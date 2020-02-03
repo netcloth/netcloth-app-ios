@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Invitation Approval"; ObjectID = "5pT-SE-P11"; */
+"5pT-SE-P11.text" = "邀请好友进群需群主确认";
+
+/* Class = "UILabel"; text = "Everyone can add members"; ObjectID = "6aG-bd-Ser"; */
+"6aG-bd-Ser.text" = "允许任何人邀请好友进群";
+
+/* Class = "UILabel"; text = "Only admin can add members "; ObjectID = "f30-8l-RAO"; */
+"f30-8l-RAO.text" = "仅允许群主邀请好友进群";
+
+/* Class = "UIButton"; normalTitle = "Back"; ObjectID = "tTj-2P-91P"; */
+"tTj-2P-91P.normalTitle" = "返回";

@@ -1,18 +1,18 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SGQRCodeScanView.h"
 
-
+ 
 #define scanBorderW 0.7 * self.frame.size.width
-
+ 
 #define scanBorderX 0.5 * (1 - 0.7) * self.frame.size.width
-
+ 
 #define scanBorderY 0.5 * (self.frame.size.height - scanBorderW)
 
 @interface SGQRCodeScanView ()
@@ -61,26 +61,26 @@
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
-
+      
     CGFloat borderW = scanBorderW;
     CGFloat borderH = borderW;
     CGFloat borderX = scanBorderX;
     CGFloat borderY = scanBorderY;
     CGFloat borderLineW = 0.2;
 
-
+      
     [[[UIColor blackColor] colorWithAlphaComponent:self.backgroundAlpha] setFill];
     UIRectFill(rect);
-
+      
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetBlendMode(context, kCGBlendModeDestinationOut);
-
+      
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(borderX + 0.5 * borderLineW, borderY + 0.5 *borderLineW, borderW - borderLineW, borderH - borderLineW)];
     [bezierPath fill];
-
+      
     CGContextSetBlendMode(context, kCGBlendModeNormal);
     
-
+      
     UIBezierPath *borderPath = [UIBezierPath bezierPathWithRect:CGRectMake(borderX, borderY, borderW, borderH)];
     borderPath.lineCapStyle = kCGLineCapButt;
     borderPath.lineWidth = borderLineW;
@@ -89,7 +89,7 @@
     
     
     CGFloat cornerLenght = 20;
-
+      
     UIBezierPath *leftTopPath = [UIBezierPath bezierPath];
     leftTopPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -112,7 +112,7 @@
 
     [leftTopPath stroke];
     
-
+      
     UIBezierPath *leftBottomPath = [UIBezierPath bezierPath];
     leftBottomPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -133,7 +133,7 @@
 
     [leftBottomPath stroke];
     
-
+      
     UIBezierPath *rightTopPath = [UIBezierPath bezierPath];
     rightTopPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -154,7 +154,7 @@
 
     [rightTopPath stroke];
     
-
+      
     UIBezierPath *rightBottomPath = [UIBezierPath bezierPath];
     rightBottomPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -176,6 +176,7 @@
     [rightBottomPath stroke];
 }
 
+#pragma mark - - - 添加定时器
 - (void)addTimer {
     CGFloat scanninglineX = 0;
     CGFloat scanninglineY = 0;
@@ -203,12 +204,14 @@
     self.timer = [NSTimer timerWithTimeInterval:self.animationTimeInterval target:self selector:@selector(beginRefreshUI) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
 }
+#pragma mark - - - 移除定时器
 - (void)removeTimer {
     [self.timer invalidate];
     self.timer = nil;
     [_scanningline removeFromSuperview];
     _scanningline = nil;
 }
+#pragma mark - - - 执行定时器方法
 - (void)beginRefreshUI {
     __block CGRect frame = _scanningline.frame;
     static BOOL flag = YES;
@@ -274,10 +277,10 @@
     if (!_scanningline) {
         _scanningline = [[UIImageView alloc] init];
         
-
+          
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"SGQRCode" withExtension:@"bundle"];
         if (!url) {
-
+              
             url = [[NSBundle bundleForClass:[self class]] URLForResource:@"SGQRCode" withExtension:@"bundle"];
         }
         NSBundle *bundle = [NSBundle bundleWithURL:url];
@@ -291,6 +294,7 @@
     return _scanningline;
 }
 
+#pragma mark - - - set
 - (void)setScanAnimationStyle:(ScanAnimationStyle)scanAnimationStyle {
     _scanAnimationStyle = scanAnimationStyle;
 }

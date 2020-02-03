@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "CPChatLog.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
@@ -35,8 +35,8 @@ static NSInteger lastLoginUserId;
     DDLogFileManagerDefault* logFileManager = [[DDLogFileManagerDefault alloc] initWithLogsDirectory:logDoc];
     DDFileLogger *fileLogger = [[DDFileLogger alloc] initWithLogFileManager:logFileManager];
     
-    fileLogger.rollingFrequency = 60 * 60 * 24;
-    fileLogger.maximumFileSize = 1 * 1024 * 1024;
+    fileLogger.rollingFrequency = 60 * 60 * 24;   
+    fileLogger.maximumFileSize = 1 * 1024 * 1024;   
     fileLogger.logFileManager.maximumNumberOfLogFiles = 30;
     
     [DDLog.sharedInstance addLogger:fileLogger withLevel:DDLogLevelVerbose];

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import IQKeyboardManagerSwift
@@ -32,9 +32,9 @@ class RegisterVC: BaseViewController {
     
     let disbag = DisposeBag()
     
-
+      
     
-
+      
     var inputLength: Int = 0 {
         didSet {
             let len = self.inputLength
@@ -48,7 +48,7 @@ class RegisterVC: BaseViewController {
         }
     }
     
-
+      
     var isShowPwd = false {
         didSet {
             pwdTF.isSecureTextEntry = !self.isShowPwd
@@ -57,7 +57,7 @@ class RegisterVC: BaseViewController {
         }
     }
     
-
+      
     var ShowRePwd = false {
         didSet {
             repwdTF.isSecureTextEntry = !self.ShowRePwd
@@ -65,7 +65,7 @@ class RegisterVC: BaseViewController {
         }
     }
     
-
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         IQKeyboardManager.shared.enable = true
@@ -89,7 +89,7 @@ class RegisterVC: BaseViewController {
     
     func configEvent() {
         
-
+          
         self.pwdEyeBtn.rx.tap.subscribe(onNext: { [weak self] in
             self?.isShowPwd = !((self?.isShowPwd)!)
         }).disposed(by: disbag)
@@ -99,7 +99,7 @@ class RegisterVC: BaseViewController {
         }).disposed(by: disbag)
         
         
-
+          
         accountTF.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
                 self?.accountMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
@@ -126,7 +126,7 @@ class RegisterVC: BaseViewController {
             }.disposed(by: disbag)
         
         
-
+          
         self.registerBtn.rx.tap.subscribe(onNext: { [weak self] in
             let r = self?.checkInputAvalid()
             if r?.result == false {
@@ -134,9 +134,9 @@ class RegisterVC: BaseViewController {
             }
             else {
                 
-
+                  
                 if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-
+                      
                     alert.titleLabel?.text = NSLocalizedString("Register_Warning！", comment: "")
                     alert.msgLabel?.text = NSLocalizedString("Register_W_msg", comment: "")
                     alert.cancelButton?.setTitle(NSLocalizedString("Back", comment: ""), for: .normal)
@@ -145,7 +145,7 @@ class RegisterVC: BaseViewController {
                     alert.okBlock = {
                         CPAccountHelper.registerUser(byAccount: (self?.accountTF.text)!, password: (self?.pwdTF.text)!, callback: { (success,msg,user) in
                             if success == true {
-
+                                  
                                 self?.saveLastUser(name: user?.accountName)
                                 Toast.show(msg: NSLocalizedString("Successful registration", comment: ""), position: .center,onWindow: true)
                                 Router.dismissVC()
@@ -183,7 +183,7 @@ class RegisterVC: BaseViewController {
         return (true, "valid data".localized())
     }
     
-
+      
     @IBAction func popBack(_ sender: Any) {
         Router.dismissVC()
     }

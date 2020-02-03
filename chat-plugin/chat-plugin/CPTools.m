@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "CPTools.h"
 
@@ -13,6 +13,10 @@ NSString *kTableName_Contact = @"contact";
 NSString *kTableName_Session = @"session";
 NSString *kTableName_Message = @"message";
 NSString *kTableName_Claim = @"claim";
+
+NSString *kTableName_GroupMember = @"groupmember";
+NSString *kTableName_GroupMessage = @"groupmessage";
+NSString *kTableName_GroupNotify = @"groupnotify";
 
 @implementation CPTools
 
@@ -44,4 +48,15 @@ NSString *kTableName_Claim = @"claim";
     }
     return true;
 }
+
+- (NSString *)hexString_lower {
+    NSUInteger length = self.length;
+    NSMutableString *result = [NSMutableString stringWithCapacity:length * 2];
+    const unsigned char *byte = self.bytes;
+    for (int i = 0; i < length; i++, byte++) {
+        [result appendFormat:@"%02x", *byte];
+    }
+    return result;
+}
+
 @end

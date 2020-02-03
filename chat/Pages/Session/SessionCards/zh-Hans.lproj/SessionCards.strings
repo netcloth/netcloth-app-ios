@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "lu"; ObjectID = "2ra-sx-rD8"; */
+"2ra-sx-rD8.text" = "";
+
+/* Class = "UILabel"; text = "消息免打扰"; ObjectID = "Bi4-zJ-0KT"; */
+"Bi4-zJ-0KT.text" = "消息免打扰";
+
+/* Class = "UILabel"; text = "清空聊天记录"; ObjectID = "Cdf-yn-KLQ"; */
+"Cdf-yn-KLQ.text" = "清空聊天记录";
+
+/* Class = "UILabel"; text = "置顶聊天"; ObjectID = "MPm-VB-4XL"; */
+"MPm-VB-4XL.text" = "置顶聊天";
+
+/* Class = "UILabel"; text = "i am lucy"; ObjectID = "QuM-JU-uS5"; */
+"QuM-JU-uS5.text" = "";
+
+/* Class = "UINavigationItem"; title = "聊天详情"; ObjectID = "lEN-a2-8nM"; */
+"lEN-a2-8nM.title" = "聊天详情";
+
+/* Class = "UILabel"; text = "加入黑名单"; ObjectID = "rQ8-cb-eVo"; */
+"rQ8-cb-eVo.text" = "加入黑名单";

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <UIKit/UIKit.h>
 
@@ -27,7 +27,7 @@
 @interface SDPhotoBrowser : UIView <UIScrollViewDelegate>
 
 @property (nonatomic, weak) UIView *sourceImagesContainerView;
-@property (nonatomic, weak) UIView *sourceImgView;
+@property (nonatomic, weak) UIView *sourceImgView;   
 
 @property (nonatomic, assign) NSInteger currentImageIndex;
 @property (nonatomic, assign) NSInteger imageCount;

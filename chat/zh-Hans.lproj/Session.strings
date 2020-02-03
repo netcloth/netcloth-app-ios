@@ -6,3 +6,10 @@
 
 /* Class = "UILabel"; text = "Network connection is unsuccessful"; ObjectID = "i4k-Hn-oab"; */
 "i4k-Hn-oab.text" = "网络连接不成功";
+
+/* Class = "UILabel"; text = "陌生人消息"; ObjectID = "TYh-KG-iam"; */
+"TYh-KG-iam.text" = "陌生人消息";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "XyL-it-Eqz"; */
+"XyL-it-Eqz.text" = "0";
+

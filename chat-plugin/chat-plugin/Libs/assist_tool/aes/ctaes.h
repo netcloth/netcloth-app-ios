@@ -1,3 +1,8 @@
+ /*********************************************************************
+ * Copyright (c) 2016 Pieter Wuille                                   *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef _CTAES_H_
 #define _CTAES_H_ 1

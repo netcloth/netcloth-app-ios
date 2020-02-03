@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--C-IPAL设置-->
+        <!--客户端服务设置（C-IPAL）-->
         <scene sceneID="U9N-vB-aY5">
             <objects>
                 <viewController storyboardIdentifier="IPALIndexVC" id="HI1-NV-5ZV" customClass="IPALIndexVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
@@ -195,7 +195,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5kz-A4-rW7"/>
                     </view>
-                    <navigationItem key="navigationItem" title="C-IPAL设置" id="y8e-Tw-PIM"/>
+                    <navigationItem key="navigationItem" title="客户端服务设置（C-IPAL）" id="y8e-Tw-PIM"/>
                     <connections>
                         <outlet property="aipalContainer" destination="GnO-6n-m7k" id="ydO-N9-8aa"/>
                         <outlet property="aipalLabel" destination="wGA-3v-QsE" id="jFw-fq-eq5"/>

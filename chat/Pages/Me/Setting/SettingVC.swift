@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -13,12 +13,13 @@ class SettingVC: BaseTableViewController {
     @IBOutlet var languageLabel: UILabel?
     @IBOutlet var msgNoticeLabel: UILabel?
     @IBOutlet var cipalLabel: UILabel?
+    @IBOutlet var commomLabel: UILabel?
     
     override func viewDidLoad() {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-
+              
         }
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(hexString: Config.Color.app_bg_color)
@@ -30,6 +31,7 @@ class SettingVC: BaseTableViewController {
         languageLabel?.text = "Language".localized()
         msgNoticeLabel?.text = "Notifications".localized()
         cipalLabel?.text = "C-IPAL Settings".localized()
+        commomLabel?.text = "General".localized()
     }
 }
 

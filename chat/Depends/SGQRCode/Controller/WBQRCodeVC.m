@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "WBQRCodeVC.h"
 #import "SGQRCode.h"
@@ -45,7 +45,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+      
     self.view.backgroundColor = [UIColor blackColor];
     obtain = [SGQRCodeObtain QRCodeObtain];
     
@@ -61,7 +61,7 @@
     SGQRCodeObtainConfigure *configure = [SGQRCodeObtainConfigure QRCodeObtainConfigure];
     configure.openLog = YES;
     configure.rectOfInterest = CGRectMake(0.05, 0.2, 0.7, 0.6);
-
+      
     NSArray *arr = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];
     configure.metadataObjectTypes = arr;
     
@@ -108,8 +108,8 @@
 - (SGQRCodeScanView *)scanView {
     if (!_scanView) {
         _scanView = [[SGQRCodeScanView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-
-
+          
+          
         _scanView.scanImageName = @"SGQRCode.bundle/QRCodeScanLineGrid";
         _scanView.scanAnimationStyle = ScanAnimationStyleGrid;
         _scanView.cornerLocation = CornerLoactionOutside;

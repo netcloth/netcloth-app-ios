@@ -1,5 +1,5 @@
 
-/* Class = "UILabel"; text = "Tips：请重试或重新设置C-IPAL"; ObjectID = "2ny-Vx-zkx"; */
+/* Class = "UILabel"; text = "提醒：请重试或重新设置客户端服务"; ObjectID = "2ny-Vx-zkx"; */
 "2ny-Vx-zkx.text" = "Tips: Retry or Switch C-IPAL";
 
 /* Class = "UILabel"; text = "正在连接聊天服务器"; ObjectID = "35O-nj-yVf"; */
@@ -17,8 +17,8 @@
 /* Class = "UILabel"; text = "正在连接区块链节点"; ObjectID = "o71-Qp-dwr"; */
 "o71-Qp-dwr.text" = "Connecting to blockchain node";
 
-/* Class = "UILabel"; text = "正在连接服务节点"; ObjectID = "wNn-7n-A3t"; */
-"wNn-7n-A3t.text" = "Connecting to service node ";
+/* Class = "UILabel"; text = "正在连接通信地址"; ObjectID = "wNn-7n-A3t"; */
+"wNn-7n-A3t.text" = "Connecting to Comm.Add.";
 
 /* Class = "UIButton"; normalTitle = "开始体验"; ObjectID = "xU4-X9-zAQ"; */
 "xU4-X9-zAQ.normalTitle" = "Enjoy";

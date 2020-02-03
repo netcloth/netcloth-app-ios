@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2002 Jean-Marc Valin
+/* Copyright (C) 2002 Jean-Marc Valin
    File: speex_bits.c
 
    Handles bit packing/unpacking
@@ -86,12 +86,12 @@ EXPORT void speex_bits_destroy(SpeexBits *bits)
 {
    if (bits->owner)
       speex_free(bits->chars);
-   /* Will do something once the allocation is dynamic */
+    
 }
 
 EXPORT void speex_bits_reset(SpeexBits *bits)
 {
-   /* We only need to clear the first byte now */
+    
    bits->chars[0]=0;
    bits->nbBits=0;
    bits->charPtr=0;
@@ -160,7 +160,7 @@ EXPORT void speex_bits_read_whole_bytes(SpeexBits *bits, const char *chars, int 
 
    if (((bits->nbBits+BITS_PER_CHAR-1)>>LOG2_BITS_PER_CHAR)+nchars > bits->buf_size)
    {
-      /* Packet is larger than allocated buffer */
+       
       if (bits->owner)
       {
          char *tmp = (char*)speex_realloc(bits->chars, (bits->nbBits>>LOG2_BITS_PER_CHAR)+nchars+1);
@@ -272,7 +272,7 @@ EXPORT void speex_bits_pack(SpeexBits *bits, int data, int nbBits)
 EXPORT int speex_bits_unpack_signed(SpeexBits *bits, int nbBits)
 {
    unsigned int d=speex_bits_unpack_unsigned(bits,nbBits);
-   /* If number is negative */
+    
    if (d>>(nbBits-1))
    {
       d |= (-1)<<nbBits;
@@ -346,8 +346,8 @@ EXPORT void speex_bits_advance(SpeexBits *bits, int n)
       bits->overflow=1;
       return;
     }
-   bits->charPtr += (bits->bitPtr+n) >> LOG2_BITS_PER_CHAR; /* divide by BITS_PER_CHAR */
-   bits->bitPtr = (bits->bitPtr+n) & (BITS_PER_CHAR-1);       /* modulo by BITS_PER_CHAR */
+   bits->charPtr += (bits->bitPtr+n) >> LOG2_BITS_PER_CHAR;  
+   bits->bitPtr = (bits->bitPtr+n) & (BITS_PER_CHAR-1);        
 }
 
 EXPORT int speex_bits_remaining(SpeexBits *bits)

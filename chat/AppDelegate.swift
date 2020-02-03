@@ -1,13 +1,31 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import FCFileManager
+import PromiseKit
+
+
+public func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    
+    #if DEBUG
+
+    var idx = items.startIndex
+    let endIdx = items.endIndex
+
+    repeat {
+        Swift.print(items[idx], separator: separator, terminator: idx == (endIdx - 1) ? terminator : separator)
+        idx += 1
+    }
+    while idx < endIdx
+
+    #endif
+}
 
 
 @UIApplicationMain
@@ -16,11 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
         
-        let path = FCFileManager.pathForDocumentsDirectory()
-        print(path)
-        
+          
         Bundle.swizzleImp()
         let cul = Bundle.currentLanguage()
         if cul.isManual {
@@ -31,18 +46,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Router.rootWindow = window
-
+          
         PPNotificationCenter.shared.registerNotice()
         
-
+          
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
         } else {
-
+              
         }
         
-
-        IPALManager.shared.test_for()
+          
+        #if DEBUG
+        
+  
+  
+  
+  
+  
+  
+        
+       
+        
+  
+  
+  
+  
+  
+  
+  
+  
+        
+        #endif
         
         return true
     }
@@ -53,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         RoomStatus.appInBackground = true
+        PPNotificationCenter.shared.reCalBadge()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -60,15 +96,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         RoomStatus.appInBackground = false
-        PPNotificationCenter.shared.resetBadge()
-
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        
+        PPNotificationCenter.shared.resetZeroBadge()
     }
 
-
+      
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("deviceToken error \(error)")
     }

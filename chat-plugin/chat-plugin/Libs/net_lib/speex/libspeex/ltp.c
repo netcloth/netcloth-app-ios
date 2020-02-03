@@ -82,7 +82,7 @@ static void pitch_xcorr(const spx_word16_t *_x, const spx_word16_t *_y, spx_word
    int i,j;
    for (i=0;i<nb_pitch;i+=4)
    {
-      /* Compute correlation*/
+       
       /*corr[nb_pitch-1-i]=inner_prod(x, _y+i, len);*/
       spx_word32_t sum1=0;
       spx_word32_t sum2=0;
@@ -145,7 +145,7 @@ static void pitch_xcorr(const spx_word16_t *_x, const spx_word16_t *_y, spx_word
    int i;
    for (i=0;i<nb_pitch;i++)
    {
-      /* Compute correlation*/
+       
       corr[nb_pitch-1-i]=inner_prod(_x, _y+i, len);
    }
 
@@ -232,7 +232,7 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
    e0=inner_prod(sw, sw, len);
    for (i=start;i<end;i++)
    {
-      /* Update energy for next pitch*/
+       
       energy[i-start+1] = SUB32(ADD32(energy[i-start],SHR32(MULT16_16(sw[-i-1],sw[-i-1]),6)), SHR32(MULT16_16(sw[-i+len-1],sw[-i+len-1]),6));
       if (energy[i-start+1] < 0)
          energy[i-start+1] = 0;
@@ -246,7 +246,7 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
    pitch_xcorr(sw, sw-end, corr, len, end-start+1, stack);
 
 #ifdef FIXED_POINT
-   /* Normalize to 180 so we can square it and it still fits in 16 bits */
+    
    cshift = normalize16(corr, corr16, 180, end-start+1);
    /* If we scaled weighted input down, we need to scale it up again (OK, so we've just lost the LSB, who cares?) */
    if (scaledown)
@@ -258,18 +258,18 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
    }
 #endif
 
-   /* Search for the best pitch prediction gain */
+    
    for (i=start;i<=end;i++)
    {
       spx_word16_t tmp = MULT16_16_16(corr16[i-start],corr16[i-start]);
       /* Instead of dividing the tmp by the energy, we multiply on the other side */
       if (MULT16_16(tmp,best_ener[N-1])>MULT16_16(best_score[N-1],ADD16(1,ener16[i-start])))
       {
-         /* We can safely put it last and then check */
+          
          best_score[N-1]=tmp;
          best_ener[N-1]=ener16[i-start]+1;
          pitch[N-1]=i;
-         /* Check if it comes in front of others */
+          
          for (j=0;j<N-1;j++)
          {
             if (MULT16_16(tmp,best_ener[j])>MULT16_16(best_score[j],ADD16(1,ener16[i-start])))
@@ -347,16 +347,16 @@ static int pitch_gain_search_3tap_vq(
 
 /** Finds the best quantized 3-tap pitch predictor by analysis by synthesis */
 static spx_word32_t pitch_gain_search_3tap(
-const spx_word16_t target[],       /* Target vector */
-const spx_coef_t ak[],          /* LPCs for this subframe */
+const spx_word16_t target[],        
+const spx_coef_t ak[],           
 const spx_coef_t awk1[],        /* Weighted LPCs #1 for this subframe */
 const spx_coef_t awk2[],        /* Weighted LPCs #2 for this subframe */
-spx_sig_t exc[],                /* Excitation */
+spx_sig_t exc[],                 
 const signed char *gain_cdbk,
 int gain_cdbk_size,
-int   pitch,                    /* Pitch value */
-int   p,                        /* Number of LPC coeffs */
-int   nsf,                      /* Number of samples in subframe */
+int   pitch,                     
+int   p,                         
+int   nsf,                       
 SpeexBits *bits,
 char *stack,
 const spx_word16_t *exc2,
@@ -531,18 +531,18 @@ int scaledown
 
 /** Finds the best quantized 3-tap pitch predictor by analysis by synthesis */
 int pitch_search_3tap(
-spx_word16_t target[],                 /* Target vector */
+spx_word16_t target[],                  
 spx_word16_t *sw,
-spx_coef_t ak[],                     /* LPCs for this subframe */
+spx_coef_t ak[],                      
 spx_coef_t awk1[],                   /* Weighted LPCs #1 for this subframe */
 spx_coef_t awk2[],                   /* Weighted LPCs #2 for this subframe */
-spx_sig_t exc[],                    /* Excitation */
+spx_sig_t exc[],                     
 const void *par,
-int   start,                    /* Smallest pitch value allowed */
-int   end,                      /* Largest pitch value allowed */
+int   start,                     
+int   end,                       
 spx_word16_t pitch_coef,               /* Voicing (pitch) coefficient */
-int   p,                        /* Number of LPC coeffs */
-int   nsf,                      /* Number of samples in subframe */
+int   p,                         
+int   nsf,                       
 SpeexBits *bits,
 char *stack,
 spx_word16_t *exc2,
@@ -590,7 +590,7 @@ spx_word32_t *cumul_gain
    }
 
 #ifdef FIXED_POINT
-   /* Check if we need to scale everything down in the pitch search to avoid overflows */
+    
    for (i=0;i<nsf;i++)
    {
       if (ABS16(target[i])>16383)
@@ -647,7 +647,7 @@ spx_word32_t *cumul_gain
    SPEEX_COPY(exc, best_exc, nsf);
    SPEEX_COPY(target, best_target, nsf);
 #ifdef FIXED_POINT
-   /* Scale target back up if needed */
+    
    if (scaledown)
    {
       for (i=0;i<nsf;i++)
@@ -656,17 +656,17 @@ spx_word32_t *cumul_gain
 #endif
    return pitch;
 }
-#endif /* DISABLE_ENCODER */
+#endif  
 
 #ifndef DISABLE_DECODER
 void pitch_unquant_3tap(
-spx_word16_t exc[],             /* Input excitation */
-spx_word32_t exc_out[],         /* Output excitation */
-int   start,                    /* Smallest pitch value allowed */
-int   end,                      /* Largest pitch value allowed */
+spx_word16_t exc[],              
+spx_word32_t exc_out[],          
+int   start,                     
+int   end,                       
 spx_word16_t pitch_coef,        /* Voicing (pitch) coefficient */
 const void *par,
-int   nsf,                      /* Number of samples in subframe */
+int   nsf,                       
 int *pitch_val,
 spx_word16_t *gain_val,
 SpeexBits *bits,
@@ -756,23 +756,23 @@ int cdbk_offset
    /*for (i=0;i<nsf;i++)
    exc[i]=PSHR32(exc32[i],13);*/
 }
-#endif /* DISABLE_DECODER */
+#endif  
 
 #ifndef DISABLE_ENCODER
-/** Forced pitch delay and gain */
+ 
 int forced_pitch_quant(
-spx_word16_t target[],                 /* Target vector */
+spx_word16_t target[],                  
 spx_word16_t *sw,
-spx_coef_t ak[],                     /* LPCs for this subframe */
+spx_coef_t ak[],                      
 spx_coef_t awk1[],                   /* Weighted LPCs #1 for this subframe */
 spx_coef_t awk2[],                   /* Weighted LPCs #2 for this subframe */
-spx_sig_t exc[],                    /* Excitation */
+spx_sig_t exc[],                     
 const void *par,
-int   start,                    /* Smallest pitch value allowed */
-int   end,                      /* Largest pitch value allowed */
+int   start,                     
+int   end,                       
 spx_word16_t pitch_coef,               /* Voicing (pitch) coefficient */
-int   p,                        /* Number of LPC coeffs */
-int   nsf,                      /* Number of samples in subframe */
+int   p,                         
+int   nsf,                       
 SpeexBits *bits,
 char *stack,
 spx_word16_t *exc2,
@@ -808,18 +808,18 @@ spx_word32_t *cumul_gain
       target[i]=EXTRACT16(SATURATE(SUB32(EXTEND32(target[i]),EXTEND32(res[i])),32700));
    return start;
 }
-#endif /* DISABLE_ENCODER */
+#endif  
 
 #ifndef DISABLE_DECODER
-/** Unquantize forced pitch delay and gain */
+ 
 void forced_pitch_unquant(
-spx_word16_t exc[],             /* Input excitation */
-spx_word32_t exc_out[],         /* Output excitation */
-int   start,                    /* Smallest pitch value allowed */
-int   end,                      /* Largest pitch value allowed */
+spx_word16_t exc[],              
+spx_word32_t exc_out[],          
+int   start,                     
+int   end,                       
 spx_word16_t pitch_coef,        /* Voicing (pitch) coefficient */
 const void *par,
-int   nsf,                      /* Number of samples in subframe */
+int   nsf,                       
 int *pitch_val,
 spx_word16_t *gain_val,
 SpeexBits *bits,
@@ -847,4 +847,4 @@ int cdbk_offset
    gain_val[0]=gain_val[2]=0;
    gain_val[1] = pitch_coef;
 }
-#endif /* DISABLE_DECODER */
+#endif  

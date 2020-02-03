@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 import ObjectiveC
@@ -16,7 +16,7 @@ var key_large = "key_large"
 @objc public protocol  BarControl  {
     var isHideNavBar: Bool {get set}
     
-
+       
     @available(iOS 11.0, *)
     var isShowLargeTitleMode: Bool {get set}
     
@@ -88,16 +88,16 @@ extension UIViewController : BarControl, VCInitData {
         btn.setImage(UIImage(named: "返回1")?.resizableImage(withCapInsets: UIEdgeInsets(top: 1, left: 13, bottom: 1, right: 1), resizingMode: .stretch), for: .normal)
         btn.bounds = CGRect(x: 0, y: 0, width: 44, height: 44)
         btn.contentHorizontalAlignment = .left
-
+          
         btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: -7, bottom: 0, right: 0)
         btn.addTarget(self, action: #selector(backAction), for: .touchUpInside)
         
         let item = UIBarButtonItem(customView: btn)
         self.navigationItem.leftBarButtonItem = item
-
-
-
-
+          
+          
+          
+          
     }
     
     @objc public func backAction() {
@@ -105,7 +105,7 @@ extension UIViewController : BarControl, VCInitData {
     }
 }
 
-
+  
 open class BaseViewController: UIViewController {
     
     deinit {
@@ -117,7 +117,7 @@ open class BaseViewController: UIViewController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = self.isShowLargeTitleMode ? .always : .never
         } else {
-
+              
         }
     }
     
@@ -141,7 +141,7 @@ open class BaseTableViewController : UITableViewController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = self.isShowLargeTitleMode ? .automatic : .never
         } else {
-
+              
         }
     }
     
@@ -155,15 +155,15 @@ open class BaseTableViewController : UITableViewController {
 
 
 
-
+  
 extension  UINavigationController {
     
     public func hideBlackLine() {
-
+  
         self.navigationBar.shadowImage = UIImage()
     }
     public func showBlackLine () {
-
+  
         self.navigationBar.shadowImage = nil
     }
     
@@ -188,7 +188,7 @@ extension  UINavigationController {
         }
         
         navigationBar.isTranslucent = true
-
+  
         self.navigationBar.tintColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
     }
     
@@ -275,7 +275,7 @@ extension UITabBarItem {
             stc = tct
         }
         
-
+          
         if img != nil {
             self.image = img
         }
@@ -299,12 +299,18 @@ extension UITabBarItem {
 
 
 extension UIViewController {
-    open func setCustomTitle(_ title: String, color: UIColor = UIColor.black, font: UIFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)) -> UILabel
+    
+      
+    open func setCustomTitle(_ title: String,
+                             color: UIColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1),
+                             font: UIFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)) -> UILabel
     {
         let label = UILabel()
         label.text = title
         label.font = font
         label.textColor = color
+        label.textAlignment = .center
+        
         self.navigationItem.titleView = label
         return label
     }

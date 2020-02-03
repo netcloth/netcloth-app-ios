@@ -1,0 +1,39 @@
+
+/* Class = "UILabel"; text = "添加到通讯录"; ObjectID = "5Y3-FW-DhK"; */
+"5Y3-FW-DhK.text" = "添加到通讯录";
+
+/* Class = "UILabel"; text = " "; ObjectID = "Js0-4n-jjA"; */
+"Js0-4n-jjA.text" = " ";
+
+/* Class = "UILabel"; text = "修改备注"; ObjectID = "S9P-1U-vjy"; */
+"S9P-1U-vjy.text" = "修改备注";
+
+/* Class = "UILabel"; text = "账户地址"; ObjectID = "Wjb-AZ-J3X"; */
+"Wjb-AZ-J3X.text" = "账户地址";
+
+/* Class = "UILabel"; text = "加入黑名单"; ObjectID = "XcO-rW-LK1"; */
+"XcO-rW-LK1.text" = "加入黑名单";
+
+/* Class = "UILabel"; text = "Messages"; ObjectID = "aOF-uE-A4B"; */
+"aOF-uE-A4B.text" = "发消息";
+
+/* Class = "UILabel"; text = " "; ObjectID = "cBA-NW-WTF"; */
+"cBA-NW-WTF.text" = " ";
+
+/* Class = "UILabel"; text = "Remove the Membe"; ObjectID = "d4Z-m9-Ey8"; */
+"d4Z-m9-Ey8.text" = "移出本群";
+
+/* Class = "UILabel"; text = "账户地址"; ObjectID = "jC3-10-qA1"; */
+"jC3-10-qA1.text" = "账户地址";
+
+/* Class = "UILabel"; text = "加入黑名单"; ObjectID = "sgn-qq-YdJ"; */
+"sgn-qq-YdJ.text" = "加入黑名单";
+
+/* Class = "UILabel"; text = "Messages"; ObjectID = "vuF-PU-z8d"; */
+"vuF-PU-z8d.text" = "发消息";
+
+/* Class = "UILabel"; text = "删除联系人"; ObjectID = "vzT-xc-ufD"; */
+"vzT-xc-ufD.text" = "删除联系人";
+
+/* Class = "UILabel"; text = "Remove the Membe"; ObjectID = "y6q-T8-9QK"; */
+"y6q-T8-9QK.text" = "移出本群";

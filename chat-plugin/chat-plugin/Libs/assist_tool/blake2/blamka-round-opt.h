@@ -1,3 +1,19 @@
+/*
+ * Argon2 reference source code package - reference C implementations
+ *
+ * Copyright 2015
+ * Daniel Dinu, Dmitry Khovratovich, Jean-Philippe Aumasson, and Samuel Neves
+ *
+ * You may use this work under the terms of a Creative Commons CC0 1.0
+ * License/Waiver or the Apache Public License 2.0, at your option. The terms of
+ * these licenses can be found at:
+ *
+ * - CC0 1.0 Universal : http:  
+ * - Apache 2.0        : http:  
+ *
+ * You should have received a copy of both of these licenses along with this
+ * software. If not, they may be obtained at the above URLs.
+ */
 
 #ifndef BLAKE_ROUND_MKA_OPT_H
 #define BLAKE_ROUND_MKA_OPT_H
@@ -6,7 +22,7 @@
 
 #include <emmintrin.h>
 #if defined(__SSSE3__)
-#include <tmmintrin.h> 
+#include <tmmintrin.h>  
 #endif
 
 #if defined(__XOP__) && (defined(__GNUC__) || defined(__clang__))
@@ -33,7 +49,7 @@
                                           _mm_add_epi64((x), (x)))             \
                           : _mm_xor_si128(_mm_srli_epi64((x), -(c)),           \
                                           _mm_slli_epi64((x), 64 - (-(c))))
-#else 
+#else /* defined(__SSE2__) */
 #define _mm_roti_epi64(r, c)                                                   \
     _mm_xor_si128(_mm_srli_epi64((r), -(c)), _mm_slli_epi64((r), 64 - (-(c))))
 #endif
@@ -121,7 +137,7 @@ static BLAKE2_INLINE __m128i fBlaMka(__m128i x, __m128i y) {
         D0 = t1;                                                               \
         D1 = t0;                                                               \
     } while ((void)0, 0)
-#else 
+#else  
 #define DIAGONALIZE(A0, B0, C0, D0, A1, B1, C1, D1)                            \
     do {                                                                       \
         __m128i t0 = D0;                                                       \
@@ -162,7 +178,7 @@ static BLAKE2_INLINE __m128i fBlaMka(__m128i x, __m128i y) {
                                                                                \
         UNDIAGONALIZE(A0, B0, C0, D0, A1, B1, C1, D1);                         \
     } while ((void)0, 0)
-#else 
+#else  
 
 #include <immintrin.h>
 
@@ -309,9 +325,9 @@ static BLAKE2_INLINE __m128i fBlaMka(__m128i x, __m128i y) {
         UNDIAGONALIZE_2(A0, A1, B0, B1, C0, C1, D0, D1) \
     } while((void)0, 0);
 
-#endif 
+#endif  
 
-#else 
+#else  
 
 #include <immintrin.h>
 
@@ -451,5 +467,5 @@ static __m512i muladd(__m512i x, __m512i y)
         UNSWAP_QUARTERS(D0, D1); \
     } while ((void)0, 0)
 
-#endif 
-#endif 
+#endif  
+#endif  

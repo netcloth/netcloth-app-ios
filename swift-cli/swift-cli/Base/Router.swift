@@ -1,15 +1,17 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
 open class Router:NSObject {
-    public static var rootWindow: UIWindow? 
+      
+    public static var rootWindow: UIWindow?
+    
     public static func pushViewController(vc: UIViewController, animate:Bool = true) {
         self.pushViewController(vc: vc, animate: animate, checkSameClass: false)
     }
@@ -20,9 +22,9 @@ open class Router:NSObject {
             nav = rootnav
         }
         else if let rootNav = self.rootVC as? UINavigationController {
+              
             nav = rootNav
         }
-        
         
         if checkSameClass == true, let vcArray = nav?.viewControllers.reversed() {
             for viewcontroller in  vcArray {
@@ -40,7 +42,7 @@ open class Router:NSObject {
     
     public static func present(vc: UIViewController, animate: Bool = true) {
         vc.modalPresentationStyle = .overCurrentContext
-
+  
         self.topContianerVC?.present(vc, animated: animate, completion: nil)
     }
     
@@ -56,6 +58,7 @@ open class Router:NSObject {
             } else {
                 topNav.popViewController(animated: animate)
             }
+            completion?()
         }
         else {
             if toRoot == true {
@@ -70,14 +73,14 @@ open class Router:NSObject {
         return self.currentVC?.view
     }
     public static var currentVC: UIViewController? {
-        return self.topVC
+        return self.topOfStackContainerVC
     }
     
     static public var rootVC: UIViewController? {
         return rootWindow?.rootViewController
     }
     
-    private static var topVC: UIViewController? {
+    private static var topOfStackContainerVC: UIViewController? {
         var topVC = self.topContianerVC
         if let topNav =  topVC as? UINavigationController {
             topVC = topNav.topViewController
@@ -89,10 +92,10 @@ open class Router:NSObject {
     }
     
     private static var topContianerVC: UIViewController? {
-        var topVC = self.rootVC
-        while topVC?.presentedViewController != nil {
-            topVC = topVC?.presentedViewController
+        var container = self.rootVC
+        while container?.presentedViewController != nil {
+            container = container?.presentedViewController
         }
-        return topVC
+        return container
     }
 }

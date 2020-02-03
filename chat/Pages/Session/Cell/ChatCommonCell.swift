@@ -1,15 +1,15 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
 protocol CommomChatCellInterface {
-    func playAudio()
+    func onTapCell()
     func msgContentView() -> UIView?
 }
 
@@ -31,9 +31,13 @@ protocol CommomChatCellInterface {
     
     weak var delegate: ChatCommonCellDelegate?
     
-    func playAudio() {}
+    func onTapCell() {}
     
     func msgContentView() -> UIView? {
         return nil
     }
+    
+      
+    @IBOutlet weak var LgroupNick: UILabel?
+
 }

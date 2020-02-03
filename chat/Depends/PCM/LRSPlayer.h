@@ -1,15 +1,15 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 #import "SRRecordingAudioPlayerManager.h"
 
-
+  
 @interface LRSPlayer : NSObject
 
 - (instancetype)initWithFrequency:(int)frequency
@@ -18,7 +18,7 @@
 
 @property (nonatomic, readonly) BOOL isPlaying;
 
-
+  
 @property (nonatomic, strong) callBack call;
 - (void)inputPCMData:(NSData *)pcmDta;
 
@@ -28,10 +28,10 @@
 
 - (void)dataFinished;
 
+  
+  
+  
 
-
-
-
-
+  
 
 @end

@@ -1,8 +1,8 @@
-
-
-
-
-
+  
+  
+  
+  
+  
 
 #include "HanyuPinyinOutputFormat.h"
 #include "PinyinFormatter.h"
@@ -140,7 +140,7 @@ static unichar numericValues[] = {
 +(NSInteger)getNumericValue:(unichar)c
 {
     if (c < 128) {
-
+          
         if (c >= '0' && c <= '9') {
             return c - '0';
         }
@@ -158,7 +158,7 @@ static unichar numericValues[] = {
         if (difference == 0) {
             return -2;
         }
-
+          
         if (difference > c) {
             return c - (short) difference;
         }

@@ -1,22 +1,22 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
 class AlertView: UIView {
     
     var cancelBlock: (() -> Void)?
-    var okBlock: (() -> Void)?
+    var okBlock: (() -> Void)?   
     
     @IBOutlet weak var titleLabel: UILabel?
     @IBOutlet weak var msgLabel: UILabel?
     @IBOutlet weak var cancelButton: UIButton?
-    @IBOutlet weak var okButton: UIButton?
+    @IBOutlet weak var okButton: UIButton?   
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,17 +36,23 @@ class AlertView: UIView {
     }
 }
 
-
+  
 class NormalAlertView: AlertView, NCAlertInterface {
     
 }
 
-
+  
 class OneButtonAlert: AlertView, NCAlertInterface {
 }
 
+class OneButtonOneMsgAlert: AlertView, NCAlertInterface {
+    func ncSize() -> CGSize {
+        return CGSize(width: 300, height: 150)
+    }
+}
 
 
+  
 class NormalInputAlert: AlertView, NCAlertInterface {
     @IBOutlet weak var inputTextField: UITextField?
     
@@ -63,7 +69,7 @@ class NormalInputAlert: AlertView, NCAlertInterface {
     }
 }
 
-
+  
 class ErrorTipsInputAlert: NormalInputAlert {
     @IBOutlet weak var checkTipsLabel: UILabel?
     
@@ -74,7 +80,7 @@ class ErrorTipsInputAlert: NormalInputAlert {
         configEvent()
     }
     
-
+      
     func configEvent() {
         inputTextField?.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
@@ -87,6 +93,14 @@ class ErrorTipsInputAlert: NormalInputAlert {
 
 
 class RetrySendAlert: AlertView, NCAlertInterface {
+    func ncSize() -> CGSize {
+        return CGSize(width: 300, height: 152)
+    }
+}
+
+  
+class MayEmptyAlertView: AlertView, NCAlertInterface {
+    
     func ncSize() -> CGSize {
         return CGSize(width: 300, height: 152)
     }

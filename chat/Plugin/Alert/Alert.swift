@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 import IQKeyboardManagerSwift
@@ -32,21 +32,21 @@ class NCAlertViewController: BaseViewController {
             self.view.backgroundColor = bg
         } else {
             let color = UIColor(hexString: "#303133")?.withAlphaComponent(0.6)
-            self.view.backgroundColor = color// UIColor(rgb: 0, alpha: 0.6)
+            self.view.backgroundColor = color  
         }
         
         if let ct = content {
             self.view.addSubview(ct)
             ct.snp.makeConstraints { (maker) in
 
-
+                  
                 if let point = ct.ncCenter?() {
                     maker.center.equalTo(point)
                 }
                 else if let bottom = ct.ncMaxY?() {
                     maker.centerX.equalTo(self.view)
                     
-
+                      
                     if #available(iOS 11.0, *) {
                         maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-bottom)
                     } else {
@@ -57,7 +57,7 @@ class NCAlertViewController: BaseViewController {
                     maker.center.equalTo(self.view)
                 }
                 
-
+                  
                 if let size = ct.ncSize?() {
                     maker.width.equalTo(size.width)
                     if let _ = ct as? UIImageView {
@@ -108,15 +108,15 @@ class NCAlertViewController: BaseViewController {
 
 
 @objc protocol NCAlertInterface {
-
+      
     @objc optional func ncCenter() -> CGPoint
     @objc optional func ncSize() -> CGSize
     @objc optional func ncMaxY() -> CGFloat
     
-
+      
     @objc optional func ncAutoDismiss() -> Bool
     @objc optional func ncBgColor() -> UIColor
-    @objc optional func ncShowAnimate() -> Bool
+    @objc optional func ncShowAnimate() -> Bool   
 }
 
 extension UIView {
@@ -161,7 +161,7 @@ extension Router {
         Router.present(vc: vc)
     }
     
-    static func dimissAlert(view: UIView & NCAlertInterface) {
+    static func dismissAlert(view: UIView & NCAlertInterface) {
         if view.viewController == nil {
             return
         }

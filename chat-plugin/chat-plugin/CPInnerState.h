@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
@@ -12,63 +12,78 @@
 #import <WCDB/WCDB.h>
 #import "CPChatHelper.h"
 #import "LittleSetStorage.h"
+#import "LittleArrayStorage.h"
 #import "CPImageCaches.h"
 #import "CPTools.h"
 
+#import "ChatMessageHandleRecieve.h"
+#import "GroupChatMessageHandleRecieve.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@class CPOfflineMsgManager, NCProtoNetMsg;
+@class
+CPOfflineMsgManager,NCProtoNetMsg;
 
-#define kPrivateKeySize 32
-#define kPublicKeySize 65
-
-
-
+  
 @interface CPInnerState : NSObject
 
 + (instancetype)shared;
-@property (atomic, strong) NSHashTable<ChatInterface> *chatDelegates;
+@property (atomic, strong) NSHashTable<ChatDelegate> *chatDelegates;
 
-
+  
 @property (nonatomic, strong) User *loginUser;
-@property (nonatomic, strong) WCTDatabase *allUsersDB;
-@property (nonatomic, strong) WCTDatabase *loginUserDataBase;
+@property (nonatomic, strong) WCTDatabase *loginUserDataBase;   
+
+@property (nonatomic, strong) WCTDatabase *allUsersDB;   
 
 
-@property (nonatomic, strong) NSString *chatToPubkey;
+  
+@property (nonatomic, strong) NSString *chatToPubkey;   
 
 
+  
+- (void)userlogin;
+- (void)userlogout;
 
+  
 - (BOOL)connectServiceHost:(NSString *)host
                       port:(uint16_t)port;
 - (void)disconnect;
 - (BOOL)isConnected;
 - (BOOL)isNetworkOk;
 
-
+  
 - (void)_pbmsgSend:(NCProtoNetMsg *)netmsg;
-- (void)_pbmsgSend:(NCProtoNetMsg *)netmsg autoCallNetStatus:(CPMessage *)message;
-- (BOOL)storeMessge:(CPMessage *)message isCacheMsg:(BOOL)isCache;
+- (void)_pbmsgSend:(NCProtoNetMsg *)netmsg autoCallNetStatus:(id)message;
 
-- (void)asynCallBackMsg:(CPMessage *)msg;
-- (void)asynCallStatusChange:(CPMessage *)msg;
+  
+- (void)msgAsynCallBack:(id)msg;
+- (void)msgAsynCallRecieveStatusChange:(id)msg;
+- (void)msgAsynCallRecieveChatCaches:(NSArray<CPMessage *> *)caches;
+
+- (void)msgAsynCallReceiveGroupChatMsgs:(NSArray<CPMessage *> *)groups;
+- (void)msgAsynCallCurrentRoomInfoChange;
+- (void)msgAsynCallonUnreadRsp:(NSArray<CPUnreadResponse *> *)response;
+
+- (void)msgAsynCallonReceiveNotify:(CPGroupNotify *)notice;
+- (void)msgAsynCallonSessionsChange:(id)approved;
+
+- (void)onLogonNotify:(NCProtoNetMsg *)notify;
 
 
+  
+- (void)asynDoTask:(dispatch_block_t)task;      
+- (void)asynReadTask:(dispatch_block_t)task;    
+- (void)asynWriteTask:(dispatch_block_t)task;   
 
-- (void)asynDoTask:(dispatch_block_t)task;   
-- (void)asynReadTask:(dispatch_block_t)task; 
-- (void)asynWriteTask:(dispatch_block_t)task;
-
-
+  
 @property (nonatomic, strong) CPImageCaches *imageCaches;
+@property (nonatomic, strong) CPOfflineMsgManager *cacheMsgManager;
+@property (nonatomic, strong) ChatMessageHandleRecieve *msgRecieve;
+@property (nonatomic, strong) GroupChatMessageHandleRecieve *groupMsgRecieve;
 
+@property (nonatomic, strong) LittleArrayStorage<CPContact *> *groupContactCache;
 
-
-
-- (NSString *)curEnv;
-
-
-- (NSString *)switchEnv;
 
 @end
 

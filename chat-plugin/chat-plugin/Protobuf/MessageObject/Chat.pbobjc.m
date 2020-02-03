@@ -1,8 +1,8 @@
+  
+  
 
-
-
-
-
+  
+  
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
  #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
@@ -14,21 +14,25 @@
 #endif
 
 #import "Chat.pbobjc.h"
+  
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-
+#pragma mark - NCProtoChatRoot
 
 @implementation NCProtoChatRoot
 
-
-
+  
+  
 
 @end
 
+#pragma mark - NCProtoChatRoot_FileDescriptor
 
 static GPBFileDescriptor *NCProtoChatRoot_FileDescriptor(void) {
-
-
+    
+    
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
@@ -39,6 +43,7 @@ static GPBFileDescriptor *NCProtoChatRoot_FileDescriptor(void) {
   return descriptor;
 }
 
+#pragma mark - NCProtoText
 
 @implementation NCProtoText
 
@@ -49,8 +54,8 @@ typedef struct NCProtoText__storage_ {
   NSData *content;
 } NCProtoText__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -75,7 +80,7 @@ typedef struct NCProtoText__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -83,6 +88,7 @@ typedef struct NCProtoText__storage_ {
 
 @end
 
+#pragma mark - NCProtoAudio
 
 @implementation NCProtoAudio
 
@@ -95,8 +101,8 @@ typedef struct NCProtoAudio__storage_ {
   NSData *content;
 } NCProtoAudio__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -130,7 +136,7 @@ typedef struct NCProtoAudio__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -138,6 +144,7 @@ typedef struct NCProtoAudio__storage_ {
 
 @end
 
+#pragma mark - NCProtoImage
 
 @implementation NCProtoImage
 
@@ -152,8 +159,8 @@ typedef struct NCProtoImage__storage_ {
   NSString *id_p;
 } NCProtoImage__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -196,7 +203,7 @@ typedef struct NCProtoImage__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -204,6 +211,7 @@ typedef struct NCProtoImage__storage_ {
 
 @end
 
+#pragma mark - NCProtoVideo
 
 @implementation NCProtoVideo
 
@@ -216,8 +224,8 @@ typedef struct NCProtoVideo__storage_ {
   NSString *id_p;
 } NCProtoVideo__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -251,7 +259,7 @@ typedef struct NCProtoVideo__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -259,20 +267,23 @@ typedef struct NCProtoVideo__storage_ {
 
 @end
 
+#pragma mark - NCProtoFile
 
 @implementation NCProtoFile
 
 @dynamic id_p;
+@dynamic name;
 @dynamic size;
 
 typedef struct NCProtoFile__storage_ {
   uint32_t _has_storage_[1];
   uint32_t size;
   NSString *id_p;
+  NSString *name;
 } NCProtoFile__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -287,10 +298,19 @@ typedef struct NCProtoFile__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "name",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoFile_FieldNumber_Name,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(NCProtoFile__storage_, name),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "size",
         .dataTypeSpecific.className = NULL,
         .number = NCProtoFile_FieldNumber_Size,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(NCProtoFile__storage_, size),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeUInt32,
@@ -306,7 +326,7 @@ typedef struct NCProtoFile__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -315,5 +335,6 @@ typedef struct NCProtoFile__storage_ {
 @end
 
 
+#pragma clang diagnostic pop
 
-
+  

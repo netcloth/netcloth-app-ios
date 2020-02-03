@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2014 Pieter Wuille                                   *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_SCALAR_IMPL_H
 #define SECP256K1_SCALAR_IMPL_H
@@ -26,7 +31,7 @@ static void secp256k1_scalar_get_num(secp256k1_num *r, const secp256k1_scalar *a
     secp256k1_num_set_bin(r, c, 32);
 }
 
-
+/** secp256k1 curve order, see secp256k1_ecdsa_const_order_as_fe in ecdsa_impl.h */
 static void secp256k1_scalar_order_get_num(secp256k1_num *r) {
 #if defined(EXHAUSTIVE_TEST_ORDER)
     static const unsigned char order[32] = {
@@ -54,11 +59,15 @@ static void secp256k1_scalar_inverse(secp256k1_scalar *r, const secp256k1_scalar
     for (i = 0; i < EXHAUSTIVE_TEST_ORDER; i++)
         if ((i * *x) % EXHAUSTIVE_TEST_ORDER == 1)
             *r = i;
+    /* If this VERIFY_CHECK triggers we were given a noninvertible scalar (and thus
+     * have a composite group order; fix it in exhaustive_tests.c). */
     VERIFY_CHECK(*r != 0);
 }
 #else
     secp256k1_scalar *t;
     int i;
+    /* First compute xN as x ^ (2^N - 1) for some values of N,
+     * and uM as x ^ M for some values of M. */
     secp256k1_scalar x2, x3, x6, x8, x14, x28, x56, x112, x126;
     secp256k1_scalar u2, u5, u9, u11, u13;
 
@@ -108,104 +117,104 @@ static void secp256k1_scalar_inverse(secp256k1_scalar *r, const secp256k1_scalar
     }
     secp256k1_scalar_mul(&x126, &x126, &x14);
 
-    
+    /* Then accumulate the final result (t starts at x126). */
     t = &x126;
     for (i = 0; i < 3; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5); 
-    for (i = 0; i < 4; i++) { 
+    secp256k1_scalar_mul(t, t, &u5);  
+    for (i = 0; i < 4; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3); 
-    for (i = 0; i < 4; i++) { 
+    secp256k1_scalar_mul(t, t, &x3);  
+    for (i = 0; i < 4; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5); 
-    for (i = 0; i < 5; i++) { 
+    secp256k1_scalar_mul(t, t, &u5);  
+    for (i = 0; i < 5; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u11); 
+    secp256k1_scalar_mul(t, t, &u11);  
     for (i = 0; i < 4; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u11); 
-    for (i = 0; i < 4; i++) { 
+    secp256k1_scalar_mul(t, t, &u11);  
+    for (i = 0; i < 4; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3); 
-    for (i = 0; i < 5; i++) { 
+    secp256k1_scalar_mul(t, t, &x3);  
+    for (i = 0; i < 5; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3); 
-    for (i = 0; i < 6; i++) { 
+    secp256k1_scalar_mul(t, t, &x3);  
+    for (i = 0; i < 6; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13); 
-    for (i = 0; i < 4; i++) { 
+    secp256k1_scalar_mul(t, t, &u13);  
+    for (i = 0; i < 4; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5); 
+    secp256k1_scalar_mul(t, t, &u5);  
     for (i = 0; i < 3; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3); 
-    for (i = 0; i < 5; i++) { 
+    secp256k1_scalar_mul(t, t, &x3);  
+    for (i = 0; i < 5; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u9); 
-    for (i = 0; i < 6; i++) { 
+    secp256k1_scalar_mul(t, t, &u9);  
+    for (i = 0; i < 6; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5); 
-    for (i = 0; i < 10; i++) { 
+    secp256k1_scalar_mul(t, t, &u5);  
+    for (i = 0; i < 10; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3); 
-    for (i = 0; i < 4; i++) { 
+    secp256k1_scalar_mul(t, t, &x3);  
+    for (i = 0; i < 4; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3); 
-    for (i = 0; i < 9; i++) { 
+    secp256k1_scalar_mul(t, t, &x3);  
+    for (i = 0; i < 9; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x8); 
-    for (i = 0; i < 5; i++) { 
+    secp256k1_scalar_mul(t, t, &x8);  
+    for (i = 0; i < 5; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u9); 
-    for (i = 0; i < 6; i++) { 
+    secp256k1_scalar_mul(t, t, &u9);  
+    for (i = 0; i < 6; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u11); 
+    secp256k1_scalar_mul(t, t, &u11);  
     for (i = 0; i < 4; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13); 
+    secp256k1_scalar_mul(t, t, &u13);  
     for (i = 0; i < 5; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x2); 
-    for (i = 0; i < 6; i++) { 
+    secp256k1_scalar_mul(t, t, &x2);  
+    for (i = 0; i < 6; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13); 
-    for (i = 0; i < 10; i++) { 
+    secp256k1_scalar_mul(t, t, &u13);  
+    for (i = 0; i < 10; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13); 
+    secp256k1_scalar_mul(t, t, &u13);  
     for (i = 0; i < 4; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u9); 
-    for (i = 0; i < 6; i++) { 
+    secp256k1_scalar_mul(t, t, &u9);  
+    for (i = 0; i < 6; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, x); 
-    for (i = 0; i < 8; i++) { 
+    secp256k1_scalar_mul(t, t, x);  
+    for (i = 0; i < 8; i++) {  
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(r, t, &x6); 
+    secp256k1_scalar_mul(r, t, &x6);  
 }
 
 SECP256K1_INLINE static int secp256k1_scalar_is_even(const secp256k1_scalar *a) {
@@ -226,7 +235,7 @@ static void secp256k1_scalar_inverse_var(secp256k1_scalar *r, const secp256k1_sc
     secp256k1_num_mod_inverse(&n, &n, &m);
     secp256k1_num_get_bin(b, 32, &n);
     secp256k1_scalar_set_b32(r, b, NULL);
-    
+    /* Verify that the inverse was computed correctly, without GMP code. */
     secp256k1_scalar_mul(&t, &t, r);
     CHECK(secp256k1_scalar_is_one(&t));
 #else
@@ -236,11 +245,54 @@ static void secp256k1_scalar_inverse_var(secp256k1_scalar *r, const secp256k1_sc
 
 #ifdef USE_ENDOMORPHISM
 #if defined(EXHAUSTIVE_TEST_ORDER)
+/**
+ * Find k1 and k2 given k, such that k1 + k2 * lambda == k mod n; unlike in the
+ * full case we don't bother making k1 and k2 be small, we just want them to be
+ * nontrivial to get full test coverage for the exhaustive tests. We therefore
+ * (arbitrarily) set k2 = k + 5 and k1 = k - k2 * lambda.
+ */
 static void secp256k1_scalar_split_lambda(secp256k1_scalar *r1, secp256k1_scalar *r2, const secp256k1_scalar *a) {
     *r2 = (*a + 5) % EXHAUSTIVE_TEST_ORDER;
     *r1 = (*a + (EXHAUSTIVE_TEST_ORDER - *r2) * EXHAUSTIVE_TEST_LAMBDA) % EXHAUSTIVE_TEST_ORDER;
 }
 #else
+/**
+ * The Secp256k1 curve has an endomorphism, where lambda * (x, y) = (beta * x, y), where
+ * lambda is {0x53,0x63,0xad,0x4c,0xc0,0x5c,0x30,0xe0,0xa5,0x26,0x1c,0x02,0x88,0x12,0x64,0x5a,
+ *            0x12,0x2e,0x22,0xea,0x20,0x81,0x66,0x78,0xdf,0x02,0x96,0x7c,0x1b,0x23,0xbd,0x72}
+ *
+ * "Guide to Elliptic Curve Cryptography" (Hankerson, Menezes, Vanstone) gives an algorithm
+ * (algorithm 3.74) to find k1 and k2 given k, such that k1 + k2 * lambda == k mod n, and k1
+ * and k2 have a small size.
+ * It relies on constants a1, b1, a2, b2. These constants for the value of lambda above are:
+ *
+ * - a1 =      {0x30,0x86,0xd2,0x21,0xa7,0xd4,0x6b,0xcd,0xe8,0x6c,0x90,0xe4,0x92,0x84,0xeb,0x15}
+ * - b1 =     -{0xe4,0x43,0x7e,0xd6,0x01,0x0e,0x88,0x28,0x6f,0x54,0x7f,0xa9,0x0a,0xbf,0xe4,0xc3}
+ * - a2 = {0x01,0x14,0xca,0x50,0xf7,0xa8,0xe2,0xf3,0xf6,0x57,0xc1,0x10,0x8d,0x9d,0x44,0xcf,0xd8}
+ * - b2 =      {0x30,0x86,0xd2,0x21,0xa7,0xd4,0x6b,0xcd,0xe8,0x6c,0x90,0xe4,0x92,0x84,0xeb,0x15}
+ *
+ * The algorithm then computes c1 = round(b1 * k / n) and c2 = round(b2 * k / n), and gives
+ * k1 = k - (c1*a1 + c2*a2) and k2 = -(c1*b1 + c2*b2). Instead, we use modular arithmetic, and
+ * compute k1 as k - k2 * lambda, avoiding the need for constants a1 and a2.
+ *
+ * g1, g2 are precomputed constants used to replace division with a rounded multiplication
+ * when decomposing the scalar for an endomorphism-based point multiplication.
+ *
+ * The possibility of using precomputed estimates is mentioned in "Guide to Elliptic Curve
+ * Cryptography" (Hankerson, Menezes, Vanstone) in section 3.5.
+ *
+ * The derivation is described in the paper "Efficient Software Implementation of Public-Key
+ * Cryptography on Sensor Networks Using the MSP430X Microcontroller" (Gouvea, Oliveira, Lopez),
+ * Section 4.3 (here we use a somewhat higher-precision estimate):
+ * d = a1*b2 - b1*a2
+ * g1 = round((2^272)*b2/d)
+ * g2 = round((2^272)*b1/d)
+ *
+ * (Note that 'd' is also equal to the curve order here because [a1,b1] and [a2,b2] are found
+ * as outputs of the Extended Euclidean Algorithm on inputs 'order' and 'lambda').
+ *
+ * The function below splits a in r1 and r2, such that r1 + lambda * r2 == a (mod order).
+ */
 
 static void secp256k1_scalar_split_lambda(secp256k1_scalar *r1, secp256k1_scalar *r2, const secp256k1_scalar *a) {
     secp256k1_scalar c1, c2;
@@ -266,7 +318,7 @@ static void secp256k1_scalar_split_lambda(secp256k1_scalar *r1, secp256k1_scalar
     );
     VERIFY_CHECK(r1 != a);
     VERIFY_CHECK(r2 != a);
-    
+     
     secp256k1_scalar_mul_shift_var(&c1, a, &g1, 272);
     secp256k1_scalar_mul_shift_var(&c2, a, &g2, 272);
     secp256k1_scalar_mul(&c1, &c1, &minus_b1);
@@ -278,4 +330,4 @@ static void secp256k1_scalar_split_lambda(secp256k1_scalar *r1, secp256k1_scalar
 #endif
 #endif
 
-#endif 
+#endif  

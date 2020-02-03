@@ -1,0 +1,40 @@
+
+/* Class = "UIButton"; normalTitle = "View More Members"; ObjectID = "6cv-fV-kVG"; */
+"6cv-fV-kVG.normalTitle" = "查看更多群成员";
+
+/* Class = "UILabel"; text = "Not Set"; ObjectID = "Ax9-vc-Drz"; */
+"Ax9-vc-Drz.text" = "Not Set";
+
+/* Class = "UILabel"; text = "Sticky on Top"; ObjectID = "IIO-1K-fW5"; */
+"IIO-1K-fW5.text" = "置顶聊天";
+
+/* Class = "UILabel"; text = "Delete and Leave"; ObjectID = "KyU-qg-Itv"; */
+"KyU-qg-Itv.text" = "删除并退出";
+
+/* Class = "UILabel"; text = "Group Notification"; ObjectID = "OsR-p7-QKL"; */
+"OsR-p7-QKL.text" = "群消息设置";
+
+/* Class = "UILabel"; text = "Manage Group"; ObjectID = "PyZ-ak-1lz"; */
+"PyZ-ak-1lz.text" = "群管理";
+
+/* Class = "UILabel"; text = "My Alias in Group"; ObjectID = "gcH-qp-QMp"; */
+"gcH-qp-QMp.text" = "我的群昵称";
+
+/* Class = "UILabel"; text = "Delete Chat History"; ObjectID = "lFm-lq-LH3"; */
+"lFm-lq-LH3.text" = "删除聊天记录";
+
+/* Class = "UINavigationItem"; title = "Group"; ObjectID = "vpY-Bf-ziF"; */
+"vpY-Bf-ziF.title" = "聊天详情";
+
+/* Class = "UILabel"; text = "Group QR Code"; ObjectID = "fF1-Nz-C0b"; */
+"fF1-Nz-C0b.text" = "群二维码";
+
+
+/* Class = "UILabel"; text = "Group Name"; ObjectID = "wDK-Af-VgP"; */
+"wDK-Af-VgP.text" = "群聊名称";
+
+/* Class = "UILabel"; text = "Group Notice"; ObjectID = "way-z4-bX8"; */
+"way-z4-bX8.text" = "群公告";
+
+/* Class = "UILabel"; text = "Receive Notifications"; ObjectID = "zIG-F3-JbW"; */
+"zIG-F3-JbW.text" = "接收消息提醒";

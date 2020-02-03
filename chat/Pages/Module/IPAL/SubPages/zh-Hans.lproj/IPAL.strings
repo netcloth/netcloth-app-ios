@@ -38,5 +38,5 @@
 /* Class = "UILabel"; text = "通信地址"; ObjectID = "y6T-rm-Eg9"; */
 "y6T-rm-Eg9.text" = "通信地址";
 
-/* Class = "UINavigationItem"; title = "C-IPAL设置"; ObjectID = "y8e-Tw-PIM"; */
-"y8e-Tw-PIM.title" = "C-IPAL设置";
+/* Class = "UINavigationItem"; title = "客户端服务设置（C-IPAL）"; ObjectID = "y8e-Tw-PIM"; */
+"y8e-Tw-PIM.title" = "客户端服务设置（C-IPAL）";

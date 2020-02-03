@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="sFz-Fr-svD" customClass="BackupTipView" customModule="NetCloth" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="170"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" text="Your account and contacts have not been backed " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sua-sp-gni">
+                    <rect key="frame" x="15" y="15" width="384" height="38"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.18823529410000001" green="0.19215686269999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NBj-AE-Ojh" userLabel="spe">
+                    <rect key="frame" x="0.0" y="68" width="414" height="1"/>
+                    <color key="backgroundColor" red="0.92941176469999998" green="0.93725490199999995" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="V4i-Cv-apI"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iXd-54-14l" userLabel="spe">
+                    <rect key="frame" x="0.0" y="118" width="414" height="1"/>
+                    <color key="backgroundColor" red="0.92941176469999998" green="0.93725490199999995" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="ZXH-Kl-0f7"/>
+                    </constraints>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="cJ2-go-Zfy">
+                    <rect key="frame" x="0.0" y="68" width="414" height="102"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="kl8-oI-iJ8">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="51"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Skc-DS-lsB">
+                                    <rect key="frame" x="0.0" y="0.0" width="207" height="51"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="51" id="aDM-Mu-wv4"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Account Backup">
+                                        <color key="titleColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="toAccBackup:" destination="sFz-Fr-svD" eventType="touchUpInside" id="R4m-bw-kth"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCp-To-yiK">
+                                    <rect key="frame" x="207" y="0.0" width="207" height="51"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="51" id="XXB-1L-uXC"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Contacts Backup">
+                                        <color key="titleColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="toContactBackup:" destination="sFz-Fr-svD" eventType="touchUpInside" id="S7D-iA-NnB"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G98-wx-XC0">
+                            <rect key="frame" x="0.0" y="51" width="414" height="51"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="51" id="ed6-hL-enG"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title="Backup Later">
+                                <color key="titleColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="toBackupLater:" destination="sFz-Fr-svD" eventType="touchUpInside" id="jjB-fy-DnP"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="0.96862745100000003" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Sua-sp-gni" firstAttribute="top" secondItem="sFz-Fr-svD" secondAttribute="top" constant="15" id="Bcb-At-bNN"/>
+                <constraint firstItem="NBj-AE-Ojh" firstAttribute="leading" secondItem="sFz-Fr-svD" secondAttribute="leading" id="DAl-dG-Zku"/>
+                <constraint firstItem="NBj-AE-Ojh" firstAttribute="top" secondItem="kl8-oI-iJ8" secondAttribute="top" id="GAr-4s-mEQ"/>
+                <constraint firstItem="iXd-54-14l" firstAttribute="bottom" secondItem="kl8-oI-iJ8" secondAttribute="bottom" id="KBq-Uo-HIr"/>
+                <constraint firstAttribute="bottom" secondItem="cJ2-go-Zfy" secondAttribute="bottom" id="Mg6-rV-yTe"/>
+                <constraint firstAttribute="trailing" secondItem="NBj-AE-Ojh" secondAttribute="trailing" id="Svf-8x-5HH"/>
+                <constraint firstItem="cJ2-go-Zfy" firstAttribute="top" secondItem="Sua-sp-gni" secondAttribute="bottom" constant="15" id="Uwj-Qn-ZZD"/>
+                <constraint firstItem="cJ2-go-Zfy" firstAttribute="leading" secondItem="sFz-Fr-svD" secondAttribute="leading" id="b6O-Lh-rJg"/>
+                <constraint firstItem="iXd-54-14l" firstAttribute="trailing" secondItem="NBj-AE-Ojh" secondAttribute="trailing" id="bqq-Kp-G92"/>
+                <constraint firstItem="Sua-sp-gni" firstAttribute="leading" secondItem="sFz-Fr-svD" secondAttribute="leading" constant="15" id="fYg-zC-xLC"/>
+                <constraint firstAttribute="trailing" secondItem="cJ2-go-Zfy" secondAttribute="trailing" id="fe4-cd-TZB"/>
+                <constraint firstAttribute="trailing" secondItem="Sua-sp-gni" secondAttribute="trailing" constant="15" id="p0B-PZ-7Pd"/>
+                <constraint firstItem="iXd-54-14l" firstAttribute="leading" secondItem="NBj-AE-Ojh" secondAttribute="leading" id="tYh-Sn-e9U"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="accountBackupBtn" destination="Skc-DS-lsB" id="Jlc-Sf-GYY"/>
+                <outlet property="backupLaterBtn" destination="G98-wx-XC0" id="KFb-Xi-EeJ"/>
+                <outlet property="contactBackupBtn" destination="uCp-To-yiK" id="KeY-Z7-FYL"/>
+                <outlet property="titleL" destination="Sua-sp-gni" id="ryt-EV-asP"/>
+            </connections>
+            <point key="canvasLocation" x="102.89855072463769" y="-121.20535714285714"/>
+        </view>
+    </objects>
+</document>

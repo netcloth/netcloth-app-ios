@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -39,7 +39,7 @@ import UIKit
         }
     }
     
-
+      
     @IBOutlet weak var avatarBtn: UIButton?
     
     @IBOutlet weak var smallAvatarImageV: UIImageView?
@@ -52,6 +52,22 @@ import UIKit
     @objc func onTapAvatar() {
         if let d = dataMsg {
             delegate?.onTapAvatar?(pubkey: d.senderPubKey)
+        }
+    }
+    
+    override func onTapCell() {
+        guard let content = self.msgContentL?.text else {
+            return
+        }
+        var reg = "[a-zA-z]+:  
+        let range =  content.range(of: reg, options: String.CompareOptions.regularExpression)
+        if range != nil {
+            let suburl = String(content[range!])
+            if suburl.lowercased().hasPrefix("http") {
+                let browser = GrandBrowserVC()
+                browser.loadUrl(string: suburl)
+                Router.pushViewController(vc: browser)
+            }
         }
     }
     
@@ -68,7 +84,7 @@ import UIKit
         }
     }
     
-
+      
 
     
     func updateSelf(msg: CPMessage) {
@@ -124,7 +140,7 @@ import UIKit
         }
     }
     
-
+      
     override func msgContentView() -> UIView? {
         return self.msgContentL
     }

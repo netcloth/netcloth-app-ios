@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "UIImageView+DownloadImageView.h"
 #import <YYKit/YYKit.h>
@@ -27,21 +27,21 @@ char *keyMsg;
 }
 
 - (void)cancel {
-    self.image = nil;
+    self.image = nil;   
     NSOperation *op1 = [self getAssociatedValueForKey:&operationKey];
     [op1 cancel];
 }
 
 - (void)_handleMsg:(CPMessage *)message  autoSendRequest:(BOOL)send
 {
-
+      
     if (message.msgType != MessageTypeImage) {
         return;
     }
     
-
+      
     if ([message->_imageDecode isKindOfClass:[NSData class]]) {
-        self.image = [UIImage imageWithData:message->_imageDecode];
+        self.image = [YYImage imageWithData:message->_imageDecode];
         if (message.normalCompleteHandle) {
             message.normalCompleteHandle(true);
         }
@@ -53,7 +53,7 @@ char *keyMsg;
         return;
     }
     
-
+      
     [self setAssociateValue:message withKey:&keyMsg];
     
     @weakify(self);
@@ -76,21 +76,21 @@ char *keyMsg;
         if ([FileDownloader isInDownloadingMsg:message]) {
             return;
         }
-
+          
         [FileDownloader addDownloadPool:message];
         NSString *url = [CPNetURL.RequestImage stringByReplacingOccurrencesOfString:@"{hash}" withString:hash];
-        [CPNetWork requestDataUrlWithPath:url method:@"GET" para:nil complete:^(BOOL r, id _Nullable data) {
+        [CPNetWork getDataUrlWithPath:url method:@"GET" para:nil complete:^(BOOL r, id _Nullable data) {
             [FileDownloader removeDownloadPool:message];
             if (r && data) {
-
+                  
                 [CPSendMsgHelper onDownloadImageData:data withMessage:message];
-
+                  
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     NSData *imageData = message.msgDecodeContent;
                     [self restoreMsg:message hash:hash withData:imageData inOperation:op];
                 });
             } else {
-
+                  
                 if (message.normalCompleteHandle) {
                     message.normalCompleteHandle(false);
                 }
@@ -98,7 +98,7 @@ char *keyMsg;
         }];
     }];
     
-    [FileDownloader addDownloadOperation:op];
+    [FileDownloader addDownloadOperation:op];   
     [self setAssociateValue:op withKey:&operationKey];
 }
 
@@ -113,7 +113,7 @@ char *keyMsg;
         if (canceled || !equal) {
             return;
         }
-        self.image = [UIImage imageWithData:decodeData];
+        self.image = [YYImage imageWithData:decodeData];
         if (message.normalCompleteHandle) {
             message.normalCompleteHandle(true);
         }

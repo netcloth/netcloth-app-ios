@@ -1,15 +1,15 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
 
-
+  
 class ContactAddVC: BaseViewController {
     
     @IBOutlet weak var pubkeyLabel: AutoHeightTextView!
@@ -19,9 +19,15 @@ class ContactAddVC: BaseViewController {
     @IBOutlet weak var remarkMask: UIView!
     
     @IBOutlet weak var addBtn: UIButton!
+    
     let disbag = DisposeBag()
     
-
+    var wantAddPublicKey: String?
+    var wantRemark: String?
+    
+      
+    
+      
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -39,7 +45,7 @@ class ContactAddVC: BaseViewController {
     }
     
     
-
+      
     var contacts:[CPContact]? = nil
     func checkPubKeyStatus(pbkey: String?) {
         guard let pk = pbkey, let cts = contacts else {
@@ -59,16 +65,15 @@ class ContactAddVC: BaseViewController {
         
         self.addBtn.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
         
-
+          
         let img = UIImage(named: "扫一扫1")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: img, style: .plain, target: self, action: #selector(onTapScan))
     }
     
     func refreshInput() {
-        let r = InnerHelper.decodeJson(str: self.vcInitData, wantType: "contact")
-        if r.valid {
-            pubkeyLabel.text = r.data as? String
-            remarkTF.text = r.minorData as? String
+        if let pk = self.wantAddPublicKey {
+            pubkeyLabel.text = pk
+            remarkTF.text = self.wantRemark
         }
     }
     
@@ -81,14 +86,33 @@ class ContactAddVC: BaseViewController {
         Authorize.canOpenCamera(autoAccess: true, result: { (can) in
             if (can) {
                 let vc = WCQRCodeVC()
-                vc.callBack = { [weak vc, weak self] (pbkey) in
-
+                vc.callBack = { [weak vc, weak self] (output) in
+                      
                     if let svc = self {
                         vc?.dismiss(animated: false, completion: nil)
-                        svc.navigationController?.popToViewController(svc, animated: true)
-                        svc.vcInitData = pbkey as AnyObject?
-                        svc.refreshInput()
-                        svc.checkPubKeyStatus(pbkey: pbkey)
+                        let v2 = InnerHelper.v2_decodeScanInput(str: output, wantType: "contact")
+                        if v2.valid {
+                            let publickey = v2.data as? String  ?? ""
+                            if v2.type == SessionType.P2P {
+                                  
+                                svc.navigationController?.popToViewController(svc, animated: true)
+                                svc.wantAddPublicKey = publickey
+                                svc.wantRemark = v2.minorData as? String
+                                svc.refreshInput()
+                                svc.checkPubKeyStatus(pbkey: publickey)
+                            }
+                            else if v2.type == SessionType.group {
+                                svc.navigationController?.popToViewController(svc, animated: false)
+                                  
+                                if let vc = R.loadSB(name: "GroupInviteDetailVC", iden: "GroupInviteDetailVC") as?  GroupInviteDetailVC {
+                                    vc.qr_groupPublickKey = publickey
+                                    Router.pushViewController(vc: vc)
+                                }
+                            }
+                        }
+                        else {
+                            Toast.show(msg: "System error".localized())
+                        }
                     }
                 }
                 Router.pushViewController(vc: vc)
@@ -101,7 +125,7 @@ class ContactAddVC: BaseViewController {
     
     func configEvent() {
     
-
+          
         pubkeyLabel.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
                 self?.pbkeyMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
@@ -133,7 +157,7 @@ class ContactAddVC: BaseViewController {
                         return
                     }
                     
-
+                      
                     if let vc = R.loadSB(name: "ChatRoom", iden: "ChatRoomVC") as? ChatRoomVC, let contact = addedcontact {
                         vc.toPublicKey = contact.publicKey
                         vc.remark = contact.remark
@@ -141,7 +165,7 @@ class ContactAddVC: BaseViewController {
                         
                         Router.pushViewController(vc: vc)
                         
-
+                          
                         if let _ = vc.navigationController {
                             withUnsafeMutablePointer(to: &vc.navigationController!.viewControllers, { (v) in
                                 v.pointee.removeSubrange((v.pointee.count - 2 ..< v.pointee.count - 1))

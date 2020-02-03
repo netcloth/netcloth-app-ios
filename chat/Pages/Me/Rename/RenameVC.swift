@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -16,13 +16,13 @@ class RenameVC: BaseViewController {
     
     var disbag = DisposeBag()
     
-
+      
     override func viewDidLoad() {
         
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-
+              
         }
         
         super.viewDidLoad()
@@ -45,7 +45,7 @@ class RenameVC: BaseViewController {
     
     func configEvent() {
         
-
+          
         inputTF?.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
                 self?.maskView?.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
@@ -54,7 +54,7 @@ class RenameVC: BaseViewController {
             }
         }.disposed(by: disbag)
         
-
+          
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             
             let r = self?.checkInputAvalid()

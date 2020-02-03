@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -28,7 +28,7 @@ class ChangePwdController: BaseViewController {
     
     var disbag = DisposeBag()
     
-
+      
     var isShowPwd = false {
         didSet {
             passwordInput.isSecureTextEntry = !self.isShowPwd
@@ -38,7 +38,7 @@ class ChangePwdController: BaseViewController {
         }
     }
     
-
+      
     var ShowRePwd = false {
         didSet {
             repwdInput.isSecureTextEntry = !self.ShowRePwd
@@ -47,7 +47,7 @@ class ChangePwdController: BaseViewController {
         }
     }
     
-
+      
     var strength: Int = 0 {
         didSet {
             var p:Float = 0.25
@@ -81,7 +81,7 @@ class ChangePwdController: BaseViewController {
     }
     
     
-
+      
     var inputLength: Int = 0 {
         didSet {
             let len = self.inputLength
@@ -93,21 +93,21 @@ class ChangePwdController: BaseViewController {
         }
     }
     
-
+      
     
     override func viewDidLoad() {
         
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-
+              
         }
         
         super.viewDidLoad()
         configUI()
         configEvent()
         self.inputLength = 0
-        self.strength = 0
+        self.strength = 0   
     }
     
     func configUI() {
@@ -124,12 +124,12 @@ class ChangePwdController: BaseViewController {
         
         passTips.attributedText = att1
         
-        self.view?.backgroundColor = UIColor(hexString: "#F7F8FA")
         self.sureBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+    
     }
     
     func configEvent() {
-
+          
         self.pwdEyeBtn.rx.tap.subscribe(onNext: { [weak self] in
             self?.isShowPwd = !((self?.isShowPwd)!)
         }).disposed(by: disbag)
@@ -138,7 +138,7 @@ class ChangePwdController: BaseViewController {
             self?.ShowRePwd = !((self?.ShowRePwd)!)
         }).disposed(by: disbag)
         
-
+          
         passwordInput.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             } else {
@@ -147,7 +147,7 @@ class ChangePwdController: BaseViewController {
             self?.strength = self?.passwordInput.text?.checkWalletPwdStrength().ruleCount ?? 0
             }.disposed(by: disbag)
         
-
+          
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             let r = (self?.checkInputAvalid())!
             if r.result == false {
@@ -178,7 +178,7 @@ class ChangePwdController: BaseViewController {
         }).disposed(by: disbag)
     }
     
-
+      
     func checkInputAvalid() -> (result:Bool,msg:String) {
         
         guard let priK = privateKeyInput.text, priK.count > 0  else {

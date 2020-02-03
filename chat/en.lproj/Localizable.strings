@@ -6,7 +6,7 @@
   Copyright © 2019 netcloth. All rights reserved.
 */
 
-////MARK:- Login
+  
 "login_wrong_pwd" = "Password error. Enter again.";
 "login_invalid_data" = "Password at least 6 characters long";
 
@@ -15,7 +15,7 @@
 "login_delete_re_message" = "Delete the account “#account#“, the contacts, chat records and other data associated with the account.Can't be recovered.";
 "confirm_delete" = "Confirm";
 
-//MARK:- Register
+  
 "Register_invalid_account" = "Account Name at least 1 characters long";
 "Register_invalid_pwd" = "Password at least 6 characters long";
 "Register_repeat_pwd" = "Inconsistent passwords";
@@ -25,7 +25,7 @@ please keep your password safe.";
 "Back" = "Cancel";
 "Register_Ok" = "Confirm";
 
-//MARK:- Export
+  
 "Export_invalid_pwd" = "Password at least 8 characters long";
 "Export_tip_1" = "Password should be more than 8 characters and must above 3 of 4 following conditions： ";
 "Export_tip_2" = "Capital Letter,Lowercase Letter,Number,Symbol.";
@@ -41,7 +41,7 @@ please keep your password safe.";
 
 "Export_Alert_Prikey" = "Please check around there are no people and no camera! Don't take screenshot or photos to store private key.";
 
-// Import
+  
 "import_valid_title" = "Success！";
 "import_valid_message" = "Welcome to NetCloth!";
 "import_valid_btn" = "Confirm";
@@ -51,7 +51,7 @@ please keep your password safe.";
 "import_invalid_btn" = "Try Again";
 "import_invalid_prikey_message" = "Please double check whether your private key is correct.Or import the account via Keystore.";
 
-//change pwd
+  
 "change_valid_title" = "Success！";
 "change_valid_message" = "Welcome to NetCloth!";
 "change_valid_btn" = "Confirm";
@@ -60,8 +60,8 @@ please keep your password safe.";
 "change_invalid_message" = "Please double check whether your private key is correct.Or import the account via Keystore.";
 "change_invalid_btn" = "Try Again";
 
-// Wallet Manager Errors
-// ---------------------------------------------------------
+  
+  
 "WalletManager.Error.invalidPassword" = "Invalid password";
 "WalletManager.Error.invalidPrivateKey" = "Invalid Private Key";
 "WalletManager.Error.invalidKeystore" = "Invalid Keystore";
@@ -75,11 +75,11 @@ please keep your password safe.";
 "WalletManager.Error.unknown" = "Unknown error";
 "WalletManager.Error.invalidData" = "Please enter valid data verification";
 
-//MARK:- Session
+  
 "Session_W_Title" = "Please Confirm";
 "Session_W_Msg" = "Once deleted, messages will never be restored.";
 
-//MARK:- Contact
+  
 "Contact_Alias" = "Alias";
 "Contact_Delete" = "Delete";
 "Contact_W_Title" = "Please Confirm";
@@ -88,20 +88,20 @@ please keep your password safe.";
 "Contact_Re_Placeholder" = "At least 1 characters long";
 "Blacklist_msg" = "Add“#remark#”to the blacklist? You will not receive any message from this contact.";
 
-//MARK:- Add Contact
+  
 "Contact_invalid_address" = "Account address error";
 "Contact_invalid_remark" = "Remarks at least 1 characters long";
 "Contact_have_added" = "This account is already your contact.";
 "Support_Content" = "Welcome to NetCloth! \
 If you have any questions or suggestions, please send messages to us.";
 
-//MARK:- Me
+  
 "Copy Share" = "Copied to the pasteboard, can be sent to share";
 "connect_ok" = "Connected";
 "connect_ing" = "Connecting ";
 "connect_fail" = "Offline";
 
-"Contact_info" = "You have #white# Contacts , #black# Blacklist Contacts.";
+"Contact_info" = "You have #white# Contacts , #black# Blacklist Contacts, #group# private keys of groups.";
 "Contact_backup_tip" = "Backing up encrypted contacts···";
 "Contact_backup_result_success" = "Success！";
 "Contact_backup_result_fail" = "Backup failed, please check the network connection.";
@@ -110,18 +110,18 @@ If you have any questions or suggestions, please send messages to us.";
 "Contact_restore_result_success" = "Success！";
 "Contact_restore_result_fail" = "Restore failed, please check the network connection.";
 
-//MARK:- Device Auth
+  
 "Device_camera" = "Please allow NetCloth to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
 "Device_photos" = "Please allow NetCloth to access your device's album in \"Settings\"->\"Privacy\"->\"Photos\"";
 "Device_microphone" = "Please allow NetCloth to access your device's album in \"Settings\"->\"Privacy\"->\"Microphone\"";
 
 
-//MARK:- Notice Center
+  
 "center_new_msg_in" = "You've got a message";
 
 "change_input_len" = "（#Len#characters)";
 
-//IPAL
+  
 "ipal_connect_ing" = "Connecting";
 "ipal_connect_fail" = "Disconnected";
 "ipal_connect_ok" = "Success";
@@ -143,7 +143,7 @@ If you have any questions or suggestions, please send messages to us.";
 
 
 
-//MARK:- Time
+  
 "Sunday" = "Sun";
 "Monday" = "Mon";
 "Tuesday" = "Tue";
@@ -151,3 +151,87 @@ If you have any questions or suggestions, please send messages to us.";
 "Thursday" = "Thur";
 "Friday" = "Fri";
 "Saturday" = "Sat";
+
+  
+"clear_alert_title" = "All chat history will be deleted when you log out，and it will never be restored.";
+"clear_alert_btn_text" = "OK";
+
+"clear_now_alert_title" = "Confirm clear chat history";
+"clear_now_alert_msg" = "Once clear all chat history，it will never be restored.";
+"clear_now_btn_ok_text" = "Confirm";
+"Msg_Recieve_Unknown" = "[You have received an unknown message]";
+
+"Enter Password" = "Enter Account Password";
+
+"stranger_tip_1" = "You are not friends, it will be more convenient to #mark#";
+"stranger_tip_2" = "[add to contacts].";
+
+"Welcom_tip" = "You're already friends now, let's chat!";
+
+  
+"Group_Select_Count" = "#mark#Contacts";
+"Group_Select_Empty_tip" =  "Can not find \"#mark#\"  in Contacts";
+"Group_Member_Select_Empty_tip" =  "Can not find \"#mark#\"  in Group Members";
+
+"Group_Invit_Msg_Title" = "Group Chat Invitation";
+"Group_Invit_Msg_Content" = "\"#sendername#\" invited you to join the group chat “#groupname#”";
+"Group_Room_Kick_Msg" = "You have been removed from group chats";
+"Group_Room_Kick_Master" = "You removed #mark# from the group chat";
+
+"Group_Server_Con_fail" = "Failed in connectingGroup's chat sever.";
+"Group_Create_Suc_tip" = "You have created a group chat, now you can invite your friends to join.";
+"Group_Join_Suc_tip" = "You have joined a group chat";
+
+
+"Group_Join_ecc_tip" = "The number of members in this group reached the maximum limitation.";
+"Group_Joined_tip" = "#mark# have joined the group chat.";
+"Group_invalid_name" = "Group Name at least 1 characters long";
+"Group_invalid_nickname" = "Group NickName at least 1 characters long";
+
+"Group_Notice_Change_Title" = "All members will be noticed of this notice. Post it now?";
+"Dissolve_toast" = "Group members will be notified when the group chat is dissolved.\nThe group function will be disabled,but the chat history can still be viewed.";
+"Group_Dissolve_tip" = "This group has been dissolved by group manager, you can only view the chat history.";
+"Group_Kick_tip" = "You have been removed from group chats, you can only view the chat history.";
+
+"Group_Member_Kick_Tip" = "Remove #mark# group members？";
+"Group_Member_Kick_Succ" = "Success";
+"Group_Chat_Dele_Tip" = "Messages can't be recovered after deletion";
+"Group_Chat_Leave_Tip" = "You will delete chat history and leave the group";
+
+"Group_Dele_Member_Msg" = "Are you sure to move this group member out of the group chat？";
+
+"chat_group_kicked" = "You are not in this group";
+"chat_group_dismissed" = "The group has disbanded";
+"New_group_notice" = "[New group notice]";
+
+  
+"acc_con_all_tip" = "Your account and contacts have not been backed up.Please back up in time to prevent the loss of account and contacts information.";
+"acc_only_tip" = "Your account have not been backed up.Please back up in time to prevent the loss of account .";
+"con_only_tip" = "Your contacts have not been backed up.Please back up in time to prevent the loss of contacts information.";
+
+"invite_all_allow" = "Everyone can add members";
+"invite_approve_need" = "Invitation need approval";
+"invite_only_ower" = "Only admin can add members";
+
+"Notify_status_unread" = "To be confirmed";
+"Notify_status_read" = "To be confirmed";
+"Notify_status_fulfilled" = "Confirmed";
+"Notify_status_reject" = "Refused";
+"Notify_status_expired" = "Expired";
+
+"Notify_detail_inviter" = "Invited by #mark#";
+"Only_Group_Admin_Invite_tip" = "Only group admins can invite friends to join the group chat.";
+"Group_Request_From_QR" =  "From QR Code";
+
+"Logon_Notice" = "Your NetCloth account was logged in on other devices at #mark#.";
+
+"Group_Big_Qr_Name" = "Group：";
+"Group_Approve_request_Ok" = "Please wait for the admin's approval.";
+"C-IPAL Settings" = "Client Service Settings(C-IPAL)";
+
+  
+"Network_error_tip" = "Network connection is unsuccessful";
+"Seed_error_tip" = "The blockchain node is not connected，please log out and reconnect.";
+"Group_syn_msg_count" = "#mark# new messages";
+"Group_unread_location_tip" = "⎯⎯⎯⎯⎯⎯ Below are new messages ⎯⎯⎯⎯⎯⎯";
+"Auth_name_tip" = "#mark# is applying for your";

@@ -1,17 +1,17 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "InterfaceResp.h"
 #import <YYKit/YYKit.h>
 
 @implementation IPALNode
 + (NSDictionary *)modelContainerPropertyGenericClass {
-
+      
     return @{@"endpoints" : IPALServiceAddress.class};
 }
 

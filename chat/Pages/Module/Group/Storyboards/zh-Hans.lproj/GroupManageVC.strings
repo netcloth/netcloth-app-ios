@@ -1,0 +1,14 @@
+/* Class = "UINavigationItem"; title = "Title"; ObjectID = "CSf-bN-IFN"; */
+"CSf-bN-IFN.title" = "群管理";
+
+/* Class = "UILabel"; text = "Delete Chat History"; ObjectID = "eKf-jD-aMf"; */
+"eKf-jD-aMf.text" = "解散该群";
+
+/* Class = "UILabel"; text = "Everyone can add members"; ObjectID = "mfd-aK-l9B"; */
+"mfd-aK-l9B.text" = "允许任何人邀请好友进群";
+
+/* Class = "UILabel"; text = "Join the Group"; ObjectID = "tDA-WI-rmL"; */
+"tDA-WI-rmL.text" = "进群方式";
+
+/* Class = "UILabel"; text = "Once selected「Only admin can add members」，scanning group QR code to join feature will be disabled."; ObjectID = "X16-1j-MYq"; */
+"X16-1j-MYq.text" = "选择「仅允许群主邀请好友进群」时，扫描二维码进群将被停用。";

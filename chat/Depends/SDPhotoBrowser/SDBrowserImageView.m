@@ -1,13 +1,13 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SDBrowserImageView.h"
-
+  
 #import "SDPhotoBrowserConfig.h"
 
 @implementation SDBrowserImageView
@@ -30,7 +30,7 @@
         self.contentMode = UIViewContentModeScaleAspectFit;
         _totalScale = 1.0;
         
-
+          
         UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomImage:)];
         pinch.delegate = self;
         [self addGestureRecognizer:pinch];
@@ -77,7 +77,7 @@
         _scroll.contentSize = CGSizeMake(0, _scrollImageView.bounds.size.height);
         
     } else {
-        if (_scroll) [_scroll removeFromSuperview];
+        if (_scroll) [_scroll removeFromSuperview];   
     }
     
 }
@@ -108,7 +108,7 @@
 
 - (void)setTotalScale:(CGFloat)totalScale
 {
-    if ((_totalScale < 0.5 && totalScale < _totalScale) || (_totalScale > 2.0 && totalScale > _totalScale)) return;
+    if ((_totalScale < 0.5 && totalScale < _totalScale) || (_totalScale > 2.0 && totalScale > _totalScale)) return;   
     
     [self zoomWithScale:totalScale];
 }
@@ -129,7 +129,7 @@
         
         CGPoint offset = _zoomingScroolView.contentOffset;
         offset.x = (contentW - _zoomingScroolView.frame.size.width) * 0.5;
-
+  
         _zoomingScroolView.contentOffset = offset;
         
     } else {
@@ -157,7 +157,7 @@
         _zoomingScroolView = [[UIScrollView alloc] initWithFrame:self.bounds];
         _zoomingScroolView.backgroundColor = SDPhotoBrowserBackgrounColor;
         _zoomingScroolView.contentSize = self.bounds.size;
-        UIImageView *zoomingImageView = [[UIImageView alloc] initWithImage:self.image];
+        UIImageView *zoomingImageView = [[YYAnimatedImageView alloc] initWithImage:self.image];
         CGSize imageSize = zoomingImageView.image.size;
         CGFloat imageViewH = self.bounds.size.height;
         if (imageSize.width > 0) {
@@ -178,7 +178,7 @@
     [self setTotalScale:scale];
 }
 
-
+  
 - (void)eliminateScale
 {
     [self clear];

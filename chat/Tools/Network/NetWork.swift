@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 import Alamofire
@@ -17,7 +17,7 @@ extension AFDataResponse {
 
 enum NW {
     
-
+      
     static func requestUrl(path:String,
                            method: HTTPMethod = .get,
                            para:Parameters? = nil,
@@ -31,7 +31,7 @@ enum NW {
         }
     }
     
-    
+      
     static func getDataUrl(path:String,
                            method: HTTPMethod = .get,
                            para:Parameters? = nil,
@@ -46,14 +46,14 @@ enum NW {
     }
     
     
-
+      
     
-
-
-
-
-
-
+      
+      
+      
+      
+      
+      
     static func uploadData(data: Data,
                            toUrl: String,
                            complete: ((_ success:Bool, _ value:Any?) -> Void)? = nil,

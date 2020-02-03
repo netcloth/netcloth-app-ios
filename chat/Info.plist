@@ -30,7 +30,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Scan QR code for adding contacts</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Permission for sending Voice</string>
+	<string>Permission for recording your voice to send voice messages in chat</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Permission for save image to gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission for Scanning QR codes in gallery</string>
 	<key>UIBackgroundModes</key>

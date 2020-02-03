@@ -1,0 +1,24 @@
+
+/* Class = "UIButton"; normalTitle = "Contacts Backup"; ObjectID = "22Q-d4-d70"; */
+"22Q-d4-d70.normalTitle" = "Contacts Backup";
+
+/* Class = "UINavigationItem"; title = "New Group Chat"; ObjectID = "CdV-uh-SUM"; */
+"CdV-uh-SUM.title" = "New Group Chat";
+
+/* Class = "UIButton"; normalTitle = "Confirm"; ObjectID = "D6E-HB-IIN"; */
+"D6E-HB-IIN.normalTitle" = "Confirm";
+
+/* Class = "UITextField"; placeholder = "Search"; ObjectID = "U5P-V1-KSy"; */
+"U5P-V1-KSy.placeholder" = "Search";
+
+/* Class = "UITextField"; placeholder = "Set a Name of the New Group Chat"; ObjectID = "cCy-y7-gHh"; */
+"cCy-y7-gHh.placeholder" = "Set a Name of the New Group Chat";
+
+/* Class = "UILabel"; text = "Success"; ObjectID = "ksq-XJ-6MO"; */
+"ksq-XJ-6MO.text" = "Success";
+
+/* Class = "UILabel"; text = "Group manager has the private key of the group, you can back up the private key by backing up the contracts, in case your group chats can't use normally."; ObjectID = "vN4-Yi-dvt"; */
+"vN4-Yi-dvt.text" = "Group manager has the private key of the group, you can back up the private key by backing up the contracts, in case your group chats can't use normally.";
+
+/* Class = "UINavigationItem"; title = "Add Group Members"; ObjectID = "wPa-sz-YB4"; */
+"wPa-sz-YB4.title" = "Add Group Members";

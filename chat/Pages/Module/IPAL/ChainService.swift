@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import PromiseKit
@@ -15,7 +15,7 @@ import YYKit
 
 class ChainService: NSObject {
     
-
+      
     static func requestLastRegisterInfo() -> Promise<String?> {
         
         let _promise = Promise<String?> { (resolver) in
@@ -44,7 +44,7 @@ class ChainService: NSObject {
         return _promise;
     }
     
-
+      
     static func requestAllChatServer() -> Promise<EnterPoint> {
         let _promise = Promise<EnterPoint> { (resolver) in
             NW.requestUrl(path: APPURL.Chain.CipalServerlist, method: .get, para: nil) { (r, res) in
@@ -80,22 +80,50 @@ class ChainService: NSObject {
     
     
     
-
-
+      
+      
     static func requestBindCIpal(node: IPALNode) -> Promise<String> {
-        
+        let prikey = OC_Chat_Plugin_Bridge.privateKeyOfLoginedUser()
+        return ipalBind(node: node, byPrivateKey: prikey ?? Data())
+    }
+    
+    static func queryServerNodeByAddress(server_address: String) -> Promise<IPALNode> {
+        let _promise = Promise<IPALNode> { (resolver) in
+              
+            let path = APPURL.Chain.QueryServerIPALNode.replacingOccurrences(of: "{addr}", with: server_address)
+            NW.requestUrl(path: path, method: .get, para: nil) { (r, res) in
+                
+                if r == true,  let data = res as? NSDictionary, let result = data["result"] as? NSDictionary  {
+                    let node: IPALNode? =  IPALNode.model(with: result as! [AnyHashable : Any])
+                    if let n = node, n.cIpalEnd() != nil {
+                        resolver.fulfill(n)
+                    } else {
+                        let error = NSError(domain: "queryBindNodeStatus-fail-1", code: 25, userInfo: nil)
+                        resolver.reject(error)
+                    }
+                } else {
+                    let error = NSError(domain: "queryBindNodeStatus-fail", code: 25, userInfo: nil)
+                    resolver.reject(error)
+                }
+            }
+        }
+        return _promise;
+    }
+    
+      
+      
+    static func ipalBind(node:IPALNode,bindType: Int = 1, byPrivateKey: Data) -> Promise<String> {
         let _promise = Promise<String> { (resolver) in
-            
             guard let server = node.cIpalEnd(), let enter = server.endpoint else {
                 let error = NSError(domain: "requestBindCIpal-empty", code: 23, userInfo: nil)
                 resolver.reject(error)
                 return
             }
             
-            let useraddress = OC_Chat_Plugin_Bridge.addressOfLoginUser()
+            let useraddress = OC_Chat_Plugin_Bridge.address(ofUserPrivateKey: byPrivateKey)
             
             let timezone = TimeZone(identifier: "UTC")
-            let locale = Locale.current
+            let locale = Locale.current   
             let time = NSDate(timeIntervalSinceNow: 180)
                 .string(withFormat: "yyyy-MM-dd'T'HH:mm:ss'Z'", timeZone: timezone, locale: locale)
             
@@ -105,21 +133,21 @@ class ChainService: NSObject {
             
             var service_info = NSMutableDictionary()
             service_info["address"] = node.operator_address
-            service_info["type"] = 1
+            service_info["type"] = bindType
             
             params["service_info"] = service_info
             params["user_address"] = useraddress
             
             dic["params"] = params
             
-
+              
             let writer:SBJson5Writer = SBJson5Writer.writer(withMaxDepth: 20, humanReadable: false, sortKeys: true) as! SBJson5Writer
             let jsonData = writer.data(with: params)
             let sha256 = jsonData?.sha256()
-            let cal_signature = OC_Chat_Plugin_Bridge.signedLoginUser(toContentHash: sha256)?.toHexString()
+            let cal_signature = OC_Chat_Plugin_Bridge.signedContentHash(sha256, ofUserPrivateKey: byPrivateKey)?.toHexString()
             
             var signature = NSMutableDictionary()
-            signature["pub_key"] = OC_Chat_Plugin_Bridge.compressedHexStrPubkeyOfLoginUser()
+            signature["pub_key"] = OC_Chat_Plugin_Bridge.compressedHexStrPubkey(ofUserPrivateKey: byPrivateKey)
             signature["signature"] = cal_signature
             
             dic["signature"] = signature
@@ -136,7 +164,7 @@ class ChainService: NSObject {
             Session.default.request(request).responseJSON {(res) in
                 print(res)
                 if let response = res.value as? NSDictionary, let txhash = response["hash"]  as? String {
-
+                      
                     resolver.fulfill(txhash)
                 }
                 else {
@@ -147,30 +175,4 @@ class ChainService: NSObject {
         }
         return _promise;
     }
-    
-    static func queryServerNodeByAddress(address: String) -> Promise<IPALNode> {
-         let _promise = Promise<IPALNode> { (resolver) in
-
-             let path = APPURL.Chain.QueryServerIPALNode.replacingOccurrences(of: "{addr}", with: address)
-             NW.requestUrl(path: path, method: .get, para: nil) { (r, res) in
-                 
-                 if r == true,  let data = res as? NSDictionary, let result = data["result"] as? NSDictionary  {
-                    let node: IPALNode? =  IPALNode.model(with: result as! [AnyHashable : Any])
-                    if let n = node, n.cIpalEnd() != nil {
-                        resolver.fulfill(n)
-                    } else {
-                        let error = NSError(domain: "queryBindNodeStatus-fail-1", code: 25, userInfo: nil)
-                        resolver.reject(error)
-                    }
-                 } else {
-                     let error = NSError(domain: "queryBindNodeStatus-fail", code: 25, userInfo: nil)
-                     resolver.reject(error)
-                 }
-             }
-         }
-         return _promise;
-     }
-    
-    
-    
 }

@@ -1,15 +1,15 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
 
-
+  
 class ExportPrivateKeyVerifyVC: BaseViewController {
     
     @IBOutlet weak var privateKeyInput: AutoHeightTextView?

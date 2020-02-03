@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 import UIKit
 
 class ImportPrivateKeyVC: BaseViewController {
@@ -25,7 +25,7 @@ class ImportPrivateKeyVC: BaseViewController {
     
     var disbag = DisposeBag()
     
-
+      
     var isShowPwd = false {
         didSet {
             passwordInput.isSecureTextEntry = !self.isShowPwd
@@ -35,7 +35,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-
+      
     var ShowRePwd = false {
         didSet {
             repwdInput.isSecureTextEntry = !self.ShowRePwd
@@ -44,7 +44,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-
+      
     var strength: Int = 0 {
         didSet {
             var p:Float = 0.25
@@ -77,7 +77,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-
+      
     var inputLength: Int = 0 {
         didSet {
             let len = self.inputLength
@@ -89,19 +89,19 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-
+      
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
         configEvent()
         self.inputLength = 0
-        self.strength = 0
+        self.strength = 0   
     }
     
     func configUI() {
         
-
+          
         var att1 = NSMutableAttributedString(string: "Export_tip_1".localized(),
                                              attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13),
                                                           NSAttributedString.Key.foregroundColor: UIColor(hexString: "#909399")!])
@@ -119,7 +119,7 @@ class ImportPrivateKeyVC: BaseViewController {
     }
     
     func configEvent() {
-
+          
         self.pwdEyeBtn.rx.tap.subscribe(onNext: { [weak self] in
             self?.isShowPwd = !((self?.isShowPwd)!)
         }).disposed(by: disbag)
@@ -128,7 +128,7 @@ class ImportPrivateKeyVC: BaseViewController {
             self?.ShowRePwd = !((self?.ShowRePwd)!)
         }).disposed(by: disbag)
         
-
+          
         accountInput.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             } else {
@@ -144,7 +144,7 @@ class ImportPrivateKeyVC: BaseViewController {
             
         }.disposed(by: disbag)
         
-
+          
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             let r = (self?.checkInputAvalid())!
             if r.result == false {
@@ -164,6 +164,8 @@ class ImportPrivateKeyVC: BaseViewController {
                         }
                     }
                     else {
+                        let sourckey = UserSettings.sourceKey(BackupKey.accountBackup.rawValue, ofUser: Int(user.userId))
+                        UserSettings.setObject("1", forSourceKey: sourckey)
                         self?.showValidAlert(user, pwd: pwd, account: account)
                     }
                 })
@@ -171,7 +173,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }).disposed(by: disbag)
     }
     
-
+      
     func checkInputAvalid() -> (result:Bool,msg:String) {
         
         guard let priK = privateKeyInput.text, priK.count > 0  else {

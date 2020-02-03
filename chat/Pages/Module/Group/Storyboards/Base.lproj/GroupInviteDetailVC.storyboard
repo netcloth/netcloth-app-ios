@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Group Chat Invitation-->
+        <scene sceneID="XHm-9M-joI">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="33v-Te-wWt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="GroupInviteDetailVC" id="v3B-Oz-yfa" customClass="GroupInviteDetailVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="F4G-pB-Y7H">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tDo-ot-zQL">
+                                <rect key="frame" x="182" y="104" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="08q-7T-YOt"/>
+                                    <constraint firstAttribute="height" constant="50" id="20H-Ku-ZOk"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Imz-f4-SOf">
+                                <rect key="frame" x="182" y="104" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gv2-a6-nhb">
+                                <rect key="frame" x="10" y="169" width="394" height="21.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" id="SCS-t1-Wim"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <color key="textColor" red="0.18823529410000001" green="0.19215686269999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ISD-Lf-ubj">
+                                <rect key="frame" x="205" y="195.5" width="4" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.56470588239999997" green="0.57647058819999997" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UXr-LZ-abo">
+                                <rect key="frame" x="116" y="273.5" width="182" height="44"/>
+                                <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="ifc-Sz-fgB"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="25" minY="0.0" maxX="25" maxY="0.0"/>
+                                <state key="normal" title="Join Group Chat"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="22"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="gv2-a6-nhb" firstAttribute="top" secondItem="tDo-ot-zQL" secondAttribute="bottom" constant="15" id="3qg-UR-goL"/>
+                            <constraint firstItem="Imz-f4-SOf" firstAttribute="top" secondItem="tDo-ot-zQL" secondAttribute="top" id="86T-LE-eSL"/>
+                            <constraint firstItem="tDo-ot-zQL" firstAttribute="top" secondItem="8ev-CQ-amf" secondAttribute="top" constant="60" id="974-rY-1aR"/>
+                            <constraint firstItem="gv2-a6-nhb" firstAttribute="centerX" secondItem="F4G-pB-Y7H" secondAttribute="centerX" id="ADY-Q5-hNT"/>
+                            <constraint firstItem="gv2-a6-nhb" firstAttribute="leading" secondItem="8ev-CQ-amf" secondAttribute="leading" constant="10" id="FWV-3v-hUH"/>
+                            <constraint firstItem="UXr-LZ-abo" firstAttribute="centerX" secondItem="F4G-pB-Y7H" secondAttribute="centerX" id="ICl-am-yA5"/>
+                            <constraint firstItem="UXr-LZ-abo" firstAttribute="top" secondItem="ISD-Lf-ubj" secondAttribute="bottom" constant="60" id="JDx-fK-Slk"/>
+                            <constraint firstItem="Imz-f4-SOf" firstAttribute="leading" secondItem="tDo-ot-zQL" secondAttribute="leading" id="Pm1-Gg-zAp"/>
+                            <constraint firstItem="tDo-ot-zQL" firstAttribute="centerX" secondItem="F4G-pB-Y7H" secondAttribute="centerX" id="QlM-tI-FXO"/>
+                            <constraint firstItem="ISD-Lf-ubj" firstAttribute="centerX" secondItem="F4G-pB-Y7H" secondAttribute="centerX" id="Xcs-2Q-Owq"/>
+                            <constraint firstItem="Imz-f4-SOf" firstAttribute="bottom" secondItem="tDo-ot-zQL" secondAttribute="bottom" id="eZb-tw-QKF"/>
+                            <constraint firstItem="ISD-Lf-ubj" firstAttribute="top" secondItem="gv2-a6-nhb" secondAttribute="bottom" constant="5" id="mdk-6M-fBF"/>
+                            <constraint firstItem="8ev-CQ-amf" firstAttribute="trailing" secondItem="gv2-a6-nhb" secondAttribute="trailing" constant="10" id="n9C-7w-nYp"/>
+                            <constraint firstItem="Imz-f4-SOf" firstAttribute="trailing" secondItem="tDo-ot-zQL" secondAttribute="trailing" id="uH0-CY-8W1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8ev-CQ-amf"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Group Chat Invitation" id="qYz-MB-mq2"/>
+                    <connections>
+                        <outlet property="joinBtn" destination="UXr-LZ-abo" id="d7v-EO-wls"/>
+                        <outlet property="memberCountL" destination="ISD-Lf-ubj" id="Hu6-MB-UI6"/>
+                        <outlet property="remarkL" destination="gv2-a6-nhb" id="ZvD-pE-n7M"/>
+                        <outlet property="smallRemark" destination="Imz-f4-SOf" id="f3s-kJ-ql5"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-3272.4637681159425" y="-1160.4910714285713"/>
+        </scene>
+    </scenes>
+</document>

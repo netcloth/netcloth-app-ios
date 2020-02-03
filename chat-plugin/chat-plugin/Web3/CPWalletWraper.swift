@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import web3swift
@@ -37,7 +37,7 @@ class NCKeyStore: NSObject {
     
     @objc static public var shared = NCKeyStore()
     
-
+      
     @objc public func login(_ uid:Int, pwd: String) throws {
         do {
             let path = self.pathForKeystore(uid)
@@ -45,7 +45,7 @@ class NCKeyStore: NSObject {
             if let ksjson = FCFileManager.readFileAtPath(as: path) {
                 print("keystore path \(path)  content \(ksjson)")
                 _ = try CPWalletWraper.decodeKeystore(ksjson, password: pwd)
-
+                  
                 self.keystore = EthereumKeystoreV3(ksjson)
                 if self.keystore == nil {
                     throw KSError.unknow
@@ -106,7 +106,7 @@ class NCKeyStore: NSObject {
         return FCFileManager.pathForDocumentsDirectory(withPath: "\(uid)/user.data")
     }
     
-
+      
     func saveKeystore(_ ksjson: String, uid: Int) throws {
         let path = self.pathForKeystore(uid)
         if FCFileManager.writeFile(atPath: path, content: ksjson as NSString) == false {
@@ -147,5 +147,13 @@ class CPWalletWraper: NSObject {
         catch {
             throw error
         }
+    }
+    
+      
+    @objc public
+    static func verifyPrivateKey(privateKey: Data) -> Bool {
+        let result =
+            SECP256K1.verifyPrivateKey(privateKey: privateKey)
+        return result
     }
 }

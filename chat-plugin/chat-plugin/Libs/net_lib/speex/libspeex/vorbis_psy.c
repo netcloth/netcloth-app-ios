@@ -45,24 +45,24 @@
 #include <math.h>
 #include <string.h>
 
-/* psychoacoustic setup ********************************************/
+ 
 
 static VorbisPsyInfo example_tuning = {
 
   .5,.5,
   3,3,25,
 
-  /*63     125     250     500      1k      2k      4k      8k     16k*/
-  // vorbis mode 4 style
-  //{-32,-32,-32,-32,-28,-24,-22,-20,-20, -20, -20, -8, -6, -6, -6, -6, -6},
+   
+    
+    
   { -4, -6, -6, -6, -6, -6, -6, -6, -8, -8,-10,-10, -8, -6, -4, -4, -2},
 
   {
-    0, 1, 2, 3, 4, 5, 5,  5,     /* 7dB */
-    6, 6, 6, 5, 4, 4, 4,  4,     /* 15dB */
-    4, 4, 5, 5, 5, 6, 6,  6,     /* 23dB */
-    7, 7, 7, 8, 8, 8, 9, 10,     /* 31dB */
-    11,12,13,14,15,16,17, 18,     /* 39dB */
+    0, 1, 2, 3, 4, 5, 5,  5,      
+    6, 6, 6, 5, 4, 4, 4,  4,      
+    4, 4, 5, 5, 5, 6, 6,  6,      
+    7, 7, 7, 8, 8, 8, 9, 10,      
+    11,12,13,14,15,16,17, 18,      
   }
 
 };
@@ -279,9 +279,9 @@ static void _vp_noisemask(VorbisPsy *p,
       work2[i]=logmask[i]+work[i];
     }
 
-    //_analysis_output("logfreq",seq,logfreq,n,0,0);
-    //_analysis_output("median",seq,work,n,0,0);
-    //_analysis_output("envelope",seq,work2,n,0,0);
+      
+      
+      
     seq++;
   }
 
@@ -306,16 +306,16 @@ VorbisPsy *vorbis_psy_init(int rate, int n)
   p->rate=rate;
   p->vi = &example_tuning;
 
-  /* BH4 window */
+   
   p->window = speex_alloc(sizeof(*p->window)*n);
   float a0 = .35875f;
   float a1 = .48829f;
   float a2 = .14128f;
   float a3 = .01168f;
   for(i=0;i<n;i++)
-    p->window[i] = //a0 - a1*cos(2.*M_PI/n*(i+.5)) + a2*cos(4.*M_PI/n*(i+.5)) - a3*cos(6.*M_PI/n*(i+.5));
+    p->window[i] =   
       sin((i+.5)/n * M_PI)*sin((i+.5)/n * M_PI);
-  /* bark scale lookups */
+   
   for(i=0;i<n;i++){
     float bark=toBARK(rate/(2*n)*i);
 
@@ -329,7 +329,7 @@ VorbisPsy *vorbis_psy_init(int rate, int n)
 
   }
 
-  /* set up rolling noise median */
+   
   p->noiseoffset=speex_alloc(n*sizeof(*p->noiseoffset));
 
   for(i=0;i<n;i++){
@@ -386,7 +386,7 @@ void compute_curve(VorbisPsy *psy, float *audio, float *curve)
    {
      static int seq=0;
 
-     //_analysis_output("win",seq,work,psy->n,0,0);
+       
 
      seq++;
    }
@@ -394,14 +394,14 @@ void compute_curve(VorbisPsy *psy, float *audio, float *curve)
     /* FFT yields more accurate tonal estimation (not phase sensitive) */
     spx_drft_forward(&psy->lookup,work);
 
-    /* magnitudes */
+     
     work[0]=scale_dB+todB(work[0]);
     for(i=1;i<psy->n-1;i+=2){
       float temp = work[i]*work[i] + work[i+1]*work[i+1];
       work[(i+1)>>1] = scale_dB+.5f * todB(temp);
     }
 
-    /* derive a noise curve */
+     
     _vp_noisemask(psy,work,curve);
 #define SIDEL 12
     for (i=0;i<SIDEL;i++)
@@ -415,8 +415,8 @@ void compute_curve(VorbisPsy *psy, float *audio, float *curve)
     }
     for(i=0;i<((psy->n)>>1);i++)
        curve[i] = fromdB(1.2*curve[i]+.2*i);
-       //curve[i] = fromdB(0.8*curve[i]+.35*i);
-       //curve[i] = fromdB(0.9*curve[i])*pow(1.0*i+45,1.3);
+         
+         
 }
 
 /* Transform a masking curve (power spectrum) into a pole-zero filter */
@@ -457,7 +457,7 @@ void curve_to_lpc(VorbisPsy *psy, float *curve, float *awk1, float *awk2, int or
    for (i=1;i<len;i++)
       ac[i] = ac[2*i-1]*ac[2*i-1] + ac[2*i]*ac[2*i];
    ac[len] = ac[2*len-1]*ac[2*len-1];
-   /* Compute correction required */
+    
    for (i=0;i<len;i++)
       curve[i] = 1. / (1e-6f+curve[i]*ac[i]);
 

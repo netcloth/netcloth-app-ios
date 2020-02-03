@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -26,7 +26,7 @@ class ConnectToast: AlertView, NCAlertInterface {
     @IBOutlet weak var bottomTip: UILabel?
     
     @IBOutlet weak var allOkOrFailStack: UIStackView?
-    @IBOutlet weak var allOkOrFailBtn: UIButton?   
+    @IBOutlet weak var allOkOrFailBtn: UIButton?      
     
     @IBOutlet weak var retryStack: UIStackView?
     @IBOutlet weak var retryBtn: UIButton?
@@ -47,7 +47,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         case F_3_1 = "step3_fail"
     }
     
-
+      
     var curStep: Step = .C_1 {
         didSet {
             switch self.curStep {
@@ -78,16 +78,16 @@ class ConnectToast: AlertView, NCAlertInterface {
         }
     }
     
-
+      
     typealias ClickCallBack =  () -> Void
-    var onBackTap: ClickCallBack? 
-    var onEnterpriseTap: ClickCallBack? 
+    var onBackTap: ClickCallBack?    
+    var onEnterpriseTap: ClickCallBack?    
     
-    var onRetryTap: ClickCallBack? 
-    var onSwitchCIpalTap: ClickCallBack? 
+    var onRetryTap: ClickCallBack?    
+    var onSwitchCIpalTap: ClickCallBack?    
     
     
-
+      
     deinit {
         print("dealloc \(type(of: self))")
     }
@@ -97,7 +97,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         configEvent()
     }
     
-
+      
     func configEvent() {
         self.allOkOrFailBtn?.addTarget(self, action: #selector(userTapAllOkOrFail), for: .touchUpInside)
         self.retryBtn?.addTarget(self, action: #selector(userTapRetry), for: .touchUpInside)
@@ -122,7 +122,7 @@ class ConnectToast: AlertView, NCAlertInterface {
     }
     
     
-
+      
     private func deal1() {
         titleLabel?.text = "ipal_connect_ing".localized()
         config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: true, hub: step1Hub)
@@ -170,7 +170,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         
     }
     
-
+      
     private func deal2() {
         titleLabel?.text = "ipal_connect_ing".localized()
         config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
@@ -214,7 +214,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         bottomTip?.text = "ipal_step2_fail_tip".localized()
     }
     
-
+      
     private func deal3() {
         titleLabel?.text = "ipal_connect_ing".localized()
         config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
@@ -257,7 +257,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         bottomTip?.text = "ipal_step2_fail_tip".localized()
     }
     
-
+      
     private func config(label: UILabel?, labcolor: String,
                         imgV: UIImageView?, ishid: Bool, imgName: String? = nil,
                         hub: UIActivityIndicatorView?) {
@@ -275,7 +275,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         animate3 ? step3Hub?.startAnimating() : step3Hub?.stopAnimating()
     }
     
-
+      
     
     func ncSize() -> CGSize {
         return CGSize(width: 280, height: 197)

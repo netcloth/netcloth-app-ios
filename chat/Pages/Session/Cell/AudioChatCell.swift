@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -15,7 +15,7 @@ class AudioChatCell: ChatCommonCell {
     
     @IBOutlet weak var sendStateIndicator: UIActivityIndicatorView?
     
-    @IBOutlet weak var sendErrorBtn: UIButton?
+    @IBOutlet weak var sendErrorBtn: UIButton?   
     @IBAction func onRetrySendAction() {
         if let d = dataMsg {
             delegate?.onRetrySendMsg?(d.msgId)
@@ -29,8 +29,8 @@ class AudioChatCell: ChatCommonCell {
     @IBOutlet weak var audioIcon: UIImageView?
     
     @IBOutlet weak var bgImgVWidth: NSLayoutConstraint?
-    @IBOutlet weak var readTipsImg: UIImageView?
-    @IBOutlet weak var sendStateImgV: UIImageView?
+    @IBOutlet weak var readTipsImg: UIImageView?   
+    @IBOutlet weak var sendStateImgV: UIImageView?   
     
     private var cpMsg: CPMessage?
     
@@ -43,7 +43,7 @@ class AudioChatCell: ChatCommonCell {
         }
     }
     
-
+      
     @IBOutlet weak var avatarBtn: UIButton?
     var dataMsg: CPMessage?
     
@@ -57,17 +57,17 @@ class AudioChatCell: ChatCommonCell {
         }
     }
     
-
+      
     override func msgContentView() -> UIView? {
         return self.msgContentL
     }
     
-
-    override func playAudio() {
+      
+    override func onTapCell() {
         if let m = cpMsg {
             
             if m.isAudioPlaying == true {
-
+                  
                 m.isAudioPlaying = false
                 SRRecordingAudioPlayerManager.shared()?.stop()
                 
@@ -108,7 +108,7 @@ class AudioChatCell: ChatCommonCell {
             updateOthers(msg: msg)
         }
         
-
+          
         if msg.isAudioPlaying == true {
             self.startAudioAnimate()
             SRRecordingAudioPlayerManager.shared()?.call = { [weak self] (res, message) in
@@ -119,24 +119,24 @@ class AudioChatCell: ChatCommonCell {
         }
     }
     
-
+      
     func updateSelf(msg: CPMessage) {
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
         
-
+          
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-
+          
         var img = UIImage(named: "蓝色-聊天")
         img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
         msgBgImgView?.image = img
         
-
+          
         var images:[UIImage] = []
         images.append(UIImage(named: "蓝色-1点")!)
         images.append(UIImage(named: "蓝色-2点")!)
@@ -144,14 +144,14 @@ class AudioChatCell: ChatCommonCell {
         self.audioIcon?.animationImages = images
         self.audioIcon?.animationDuration = 2
         self.audioIcon?.image = UIImage(named: "蓝色-3点")
-
+          
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
         
-
-        self.msgContentL?.text = "\(msg.audioTimes)\""
+          
+        self.msgContentL?.text = "\(min(msg.audioTimes,60))\""
         self.bgImgVWidth?.constant = getWidthOfTime(msg.audioTimes)
         
-
+          
         refreshAudioTips()
         
         let expect = NSDate().timeIntervalSince1970 - 180
@@ -184,7 +184,7 @@ class AudioChatCell: ChatCommonCell {
         
         smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
         
-        self.msgContentL?.text = "\(msg.audioTimes)\""
+        self.msgContentL?.text = "\(min(msg.audioTimes,60))\""
         self.bgImgVWidth?.constant = getWidthOfTime(msg.audioTimes)
         
         refreshAudioTips()
@@ -198,7 +198,7 @@ class AudioChatCell: ChatCommonCell {
         }
     }
     
-
+      
     
     func refreshAudioTips() {
         self.readTipsImg?.image = UIImage(named: "红点")

@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013, 2014 Pieter Wuille                             *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_ECKEY_IMPL_H
 #define SECP256K1_ECKEY_IMPL_H
@@ -92,4 +97,4 @@ static int secp256k1_eckey_pubkey_tweak_mul(const secp256k1_ecmult_context *ctx,
     return 1;
 }
 
-#endif 
+#endif  

@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2002 Jean-Marc Valin
+/* Copyright (C) 2002 Jean-Marc Valin
    File: stereo.c
 
    Redistribution and use in source and binary forms, with or without
@@ -121,13 +121,13 @@ EXPORT void speex_encode_stereo(float *data, int frame_size, SpeexBits *bits)
    balance=(e_left+1)/(e_right+1);
    e_ratio = e_tot/(1+e_left+e_right);
 
-   /*Quantization*/
+    
    speex_bits_pack(bits, 14, 5);
    speex_bits_pack(bits, SPEEX_INBAND_STEREO, 4);
 
    balance=4*log(balance);
 
-   /*Pack sign*/
+    
    if (balance>0)
       speex_bits_pack(bits, 0, 1);
    else
@@ -155,9 +155,9 @@ EXPORT void speex_encode_stereo_int(spx_int16_t *data, int frame_size, SpeexBits
    int shift;
 #endif
 
-   /* In band marker */
+    
    speex_bits_pack(bits, 14, 5);
-   /* Stereo marker */
+    
    speex_bits_pack(bits, SPEEX_INBAND_STEREO, 4);
 
    for (i=0;i<frame_size;i++)
@@ -165,7 +165,7 @@ EXPORT void speex_encode_stereo_int(spx_int16_t *data, int frame_size, SpeexBits
       e_left  += SHR32(MULT16_16(data[2*i],data[2*i]),8);
       e_right += SHR32(MULT16_16(data[2*i+1],data[2*i+1]),8);
 #ifdef FIXED_POINT
-      /* I think this is actually unbiased */
+       
       data[i] =  SHR16(data[2*i],1)+PSHR16(data[2*i+1],1);
 #else
       data[i] =  .5*(((float)data[2*i])+data[2*i+1]);
@@ -183,7 +183,7 @@ EXPORT void speex_encode_stereo_int(spx_int16_t *data, int frame_size, SpeexBits
       smallest = e_left;
    }
 
-   /* Balance quantization */
+    
 #ifdef FIXED_POINT
    shift = spx_ilog2(largest)-15;
    largest = VSHR32(largest, shift-4);
@@ -217,11 +217,11 @@ EXPORT void speex_encode_stereo_int(spx_int16_t *data, int frame_size, SpeexBits
    /*fprintf (stderr, "%d %d %d %d\n", largest, smallest, balance_id, e_ratio);*/
    speex_bits_pack(bits, tmp, 2);
 }
-#else /* DISABLE_ENCODER */
+#else  
 EXPORT void speex_encode_stereo_int(spx_int16_t *data, int frame_size, SpeexBits *bits)
 {
 }
-#endif /* DISABLE_ENCODER */
+#endif  
 
 
 #ifndef DISABLE_FLOAT_API

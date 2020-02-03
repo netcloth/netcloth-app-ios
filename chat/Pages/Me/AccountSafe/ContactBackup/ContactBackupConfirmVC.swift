@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import PromiseKit
@@ -22,20 +22,20 @@ class ContactBackupConfirmVC: BaseViewController {
         configUI()
     }
     
-
+      
     func configUI() {
         self.scrollView?.adjustOffset()
         self.confirmBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
         
-
+          
         self.timeL?.text = NSDate().string(withFormat: "yyyy-MM-dd HH:mm")
         
-        CPContactHelper.getBackupStatisticsInfo {[weak self]  (r, msg, whiteN, blackN) in
+        CPContactHelper.getBackupStatisticsInfo {[weak self]  (r, msg, whiteN, blackN, groupN) in
             var tip = "Contact_info".localized()
             var atttip = NSMutableAttributedString(string: tip)
             
             let range1 = (atttip.string as? NSString)?.range(of: "#white#")
-            if let r1 = range1 {
+            if let r1 = range1, r1.location != NSNotFound {
                 let a1 = NSMutableAttributedString(string: "\(whiteN)")
                 a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
                 atttip.replaceCharacters(in: r1, with: a1)
@@ -48,6 +48,12 @@ class ContactBackupConfirmVC: BaseViewController {
                 atttip.replaceCharacters(in: r1, with: a1)
             }
             
+            let range3 = (atttip.string as? NSString)?.range(of: "#group#")
+            if let r1 = range3 {
+                let a1 = NSMutableAttributedString(string: "\(groupN)")
+                a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+                atttip.replaceCharacters(in: r1, with: a1)
+            }
             self?.listL?.attributedText = atttip
         }
     }
@@ -93,12 +99,27 @@ class ContactBackupConfirmVC: BaseViewController {
         successV.okButton?.setTitle("OK".localized(), for: .normal)
         Router.showAlert(view: successV)
         successV.okBlock = { [weak self] in
-
-            if let vcs = self?.navigationController?.viewControllers {
-                for v in vcs {
-                    if v is AccountSafeVC {
-                        self?.navigationController?.popToViewController(v, animated: true)
-                        break
+            
+            UserSettings.setObject("1", forKey: BackupKey.contactBackup.rawValue)
+            
+            if GroupRoomService.createdGroup != nil {
+                let contact = GroupRoomService.createdGroup!
+                Router.dismissVC(animate: false, completion: {
+                    if let vc = R.loadSB(name: "GroupRoom", iden: "GroupRoomVC") as? GroupRoomVC {
+                        vc.chatContact = contact
+                        Router.pushViewController(vc: vc)
+                    }
+                    GroupRoomService.createdGroup = nil
+                }, toRoot: true)
+            } else {
+                
+                  
+                if let vcs = self?.navigationController?.viewControllers {
+                    for v in vcs {
+                        if v is AccountSafeVC {
+                            self?.navigationController?.popToViewController(v, animated: true)
+                            break
+                        }
                     }
                 }
             }
@@ -119,7 +140,7 @@ class ContactBackupConfirmVC: BaseViewController {
         }
     }
 
-
+      
 
     weak var progressView: UploadProgressView?
     
@@ -165,7 +186,7 @@ class ContactBackupConfirmVC: BaseViewController {
             
             alert.checkPreview = { [weak alert] in
                 let pwd = alert?.inputTextField?.text
-
+                  
                 if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                     alert?.checkTipsLabel?.isHidden = false
                     return false
@@ -199,14 +220,14 @@ class ContactBackupConfirmVC: BaseViewController {
         return data_promise
     }
     
-
+      
     func uploadContactData(_ data:Data) -> Promise<String> {
         
         let _promise = Promise<String> { [weak self] (resolver) in
             NW.uploadData(data: data, toUrl: APPURL.Config.UploadContact , complete: { (success, res) in
-
+                  
                 if success, let data = res {
-
+                      
                     let json = JSON(data)
                     if json["result"].int == 0 {
                         resolver.fulfill("success")
@@ -219,7 +240,7 @@ class ContactBackupConfirmVC: BaseViewController {
                     resolver.reject(error)
                 }
             }) { (progress) in
-
+                  
                 self?.updateProgress(progress)
             }
         }

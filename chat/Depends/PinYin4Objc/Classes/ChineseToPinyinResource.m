@@ -1,8 +1,8 @@
-
-
-
-
-
+  
+  
+  
+  
+  
 
 #include "ChineseToPinyinResource.h"
 #define LEFT_BRACKET @"("
@@ -72,7 +72,7 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 {
     NSError *error=nil;
     NSData *data = [NSData dataWithContentsOfFile:cachePathForKey(_directory, key) options:0 error:&error];
-
+     
     if (!error) {
         if (data) {
             return [NSKeyedUnarchiver unarchiveObjectWithData:data];

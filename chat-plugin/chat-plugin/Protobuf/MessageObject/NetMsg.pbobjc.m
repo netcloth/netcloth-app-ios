@@ -1,8 +1,8 @@
+  
+  
 
-
-
-
-
+  
+  
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
  #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
@@ -16,21 +16,25 @@
 #import <stdatomic.h>
 
 #import "NetMsg.pbobjc.h"
+  
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-
+#pragma mark - NCProtoNetMsgRoot
 
 @implementation NCProtoNetMsgRoot
 
-
-
+  
+  
 
 @end
 
+#pragma mark - NCProtoNetMsgRoot_FileDescriptor
 
 static GPBFileDescriptor *NCProtoNetMsgRoot_FileDescriptor(void) {
-
-
+    
+    
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
@@ -41,6 +45,7 @@ static GPBFileDescriptor *NCProtoNetMsgRoot_FileDescriptor(void) {
   return descriptor;
 }
 
+#pragma mark - Enum NCProtoDeviceType
 
 GPBEnumDescriptor *NCProtoDeviceType_EnumDescriptor(void) {
   static _Atomic(GPBEnumDescriptor*) descriptor = nil;
@@ -77,6 +82,47 @@ BOOL NCProtoDeviceType_IsValidValue(int32_t value__) {
   }
 }
 
+#pragma mark - Enum NCProtoDeleteAction
+
+GPBEnumDescriptor *NCProtoDeleteAction_EnumDescriptor(void) {
+  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  if (!descriptor) {
+    static const char *valueNames =
+        "DeleteActionUnspecified\000DeleteActionHash"
+        "\000DeleteActionSession\000DeleteActionAll\000";
+    static const int32_t values[] = {
+        NCProtoDeleteAction_DeleteActionUnspecified,
+        NCProtoDeleteAction_DeleteActionHash,
+        NCProtoDeleteAction_DeleteActionSession,
+        NCProtoDeleteAction_DeleteActionAll,
+    };
+    GPBEnumDescriptor *worker =
+        [GPBEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(NCProtoDeleteAction)
+                                       valueNames:valueNames
+                                           values:values
+                                            count:(uint32_t)(sizeof(values) / sizeof(int32_t))
+                                     enumVerifier:NCProtoDeleteAction_IsValidValue];
+    GPBEnumDescriptor *expected = nil;
+    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+      [worker release];
+    }
+  }
+  return descriptor;
+}
+
+BOOL NCProtoDeleteAction_IsValidValue(int32_t value__) {
+  switch (value__) {
+    case NCProtoDeleteAction_DeleteActionUnspecified:
+    case NCProtoDeleteAction_DeleteActionHash:
+    case NCProtoDeleteAction_DeleteActionSession:
+    case NCProtoDeleteAction_DeleteActionAll:
+      return YES;
+    default:
+      return NO;
+  }
+}
+
+#pragma mark - NCProtoNetMsg
 
 @implementation NCProtoNetMsg
 
@@ -92,8 +138,8 @@ typedef struct NCProtoNetMsg__storage_ {
   NCProtoHead *head;
 } NCProtoNetMsg__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -121,7 +167,7 @@ typedef struct NCProtoNetMsg__storage_ {
         .dataTypeSpecific.className = NULL,
         .number = NCProtoNetMsg_FieldNumber_Compress,
         .hasIndex = 2,
-        .offset = 3, 
+        .offset = 3,    
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
@@ -145,7 +191,7 @@ typedef struct NCProtoNetMsg__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -153,6 +199,7 @@ typedef struct NCProtoNetMsg__storage_ {
 
 @end
 
+#pragma mark - NCProtoHead
 
 @implementation NCProtoHead
 
@@ -160,6 +207,7 @@ typedef struct NCProtoNetMsg__storage_ {
 @dynamic toPubKey;
 @dynamic signature;
 @dynamic msgTime;
+@dynamic msgId;
 
 typedef struct NCProtoHead__storage_ {
   uint32_t _has_storage_[1];
@@ -167,10 +215,11 @@ typedef struct NCProtoHead__storage_ {
   NSData *toPubKey;
   NSData *signature;
   uint64_t msgTime;
+  int64_t msgId;
 } NCProtoHead__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -211,6 +260,15 @@ typedef struct NCProtoHead__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeUInt64,
       },
+      {
+        .name = "msgId",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoHead_FieldNumber_MsgId,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(NCProtoHead__storage_, msgId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[NCProtoHead class]
@@ -222,7 +280,7 @@ typedef struct NCProtoHead__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -230,6 +288,7 @@ typedef struct NCProtoHead__storage_ {
 
 @end
 
+#pragma mark - NCProtoHeartbeat
 
 @implementation NCProtoHeartbeat
 
@@ -238,8 +297,8 @@ typedef struct NCProtoHeartbeat__storage_ {
   uint32_t _has_storage_[1];
 } NCProtoHeartbeat__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -253,7 +312,7 @@ typedef struct NCProtoHeartbeat__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -261,6 +320,7 @@ typedef struct NCProtoHeartbeat__storage_ {
 
 @end
 
+#pragma mark - NCProtoClientReceipt
 
 @implementation NCProtoClientReceipt
 
@@ -271,8 +331,8 @@ typedef struct NCProtoClientReceipt__storage_ {
   int32_t result;
 } NCProtoClientReceipt__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -297,7 +357,7 @@ typedef struct NCProtoClientReceipt__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -305,18 +365,21 @@ typedef struct NCProtoClientReceipt__storage_ {
 
 @end
 
+#pragma mark - NCProtoServerReceipt
 
 @implementation NCProtoServerReceipt
 
 @dynamic result;
+@dynamic msgName;
 
 typedef struct NCProtoServerReceipt__storage_ {
   uint32_t _has_storage_[1];
   int32_t result;
+  NSString *msgName;
 } NCProtoServerReceipt__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -330,6 +393,15 @@ typedef struct NCProtoServerReceipt__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeInt32,
       },
+      {
+        .name = "msgName",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoServerReceipt_FieldNumber_MsgName,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(NCProtoServerReceipt__storage_, msgName),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[NCProtoServerReceipt class]
@@ -341,7 +413,7 @@ typedef struct NCProtoServerReceipt__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -349,6 +421,7 @@ typedef struct NCProtoServerReceipt__storage_ {
 
 @end
 
+#pragma mark - NCProtoRegisterReq
 
 @implementation NCProtoRegisterReq
 
@@ -361,8 +434,8 @@ typedef struct NCProtoRegisterReq__storage_ {
   uint32_t version;
 } NCProtoRegisterReq__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -396,7 +469,7 @@ typedef struct NCProtoRegisterReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -416,6 +489,7 @@ void SetNCProtoRegisterReq_DeviceType_RawValue(NCProtoRegisterReq *message, int3
   GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
 }
 
+#pragma mark - NCProtoRegisterRsp
 
 @implementation NCProtoRegisterRsp
 
@@ -428,8 +502,8 @@ typedef struct NCProtoRegisterRsp__storage_ {
   NSData *serverPubKey;
 } NCProtoRegisterRsp__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -463,7 +537,7 @@ typedef struct NCProtoRegisterRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -471,6 +545,7 @@ typedef struct NCProtoRegisterRsp__storage_ {
 
 @end
 
+#pragma mark - NCProtoAppleIdBind
 
 @implementation NCProtoAppleIdBind
 
@@ -481,8 +556,8 @@ typedef struct NCProtoAppleIdBind__storage_ {
   NSString *appleId;
 } NCProtoAppleIdBind__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -507,7 +582,7 @@ typedef struct NCProtoAppleIdBind__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -515,6 +590,7 @@ typedef struct NCProtoAppleIdBind__storage_ {
 
 @end
 
+#pragma mark - NCProtoAppleIdUnbind
 
 @implementation NCProtoAppleIdUnbind
 
@@ -525,8 +601,8 @@ typedef struct NCProtoAppleIdUnbind__storage_ {
   NSString *appleId;
 } NCProtoAppleIdUnbind__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -551,7 +627,7 @@ typedef struct NCProtoAppleIdUnbind__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -559,6 +635,7 @@ typedef struct NCProtoAppleIdUnbind__storage_ {
 
 @end
 
+#pragma mark - NCProtoCacheMsgReq
 
 @implementation NCProtoCacheMsgReq
 
@@ -572,11 +649,11 @@ typedef struct NCProtoCacheMsgReq__storage_ {
   uint32_t roundId;
   uint32_t size;
   uint64_t time;
-  uint64_t hash_p;
+  int64_t hash_p;
 } NCProtoCacheMsgReq__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -606,7 +683,7 @@ typedef struct NCProtoCacheMsgReq__storage_ {
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(NCProtoCacheMsgReq__storage_, hash_p),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeUInt64,
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "size",
@@ -628,7 +705,7 @@ typedef struct NCProtoCacheMsgReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -636,6 +713,7 @@ typedef struct NCProtoCacheMsgReq__storage_ {
 
 @end
 
+#pragma mark - NCProtoCacheMsgRsp
 
 @implementation NCProtoCacheMsgRsp
 
@@ -648,8 +726,8 @@ typedef struct NCProtoCacheMsgRsp__storage_ {
   NSMutableArray *msgsArray;
 } NCProtoCacheMsgRsp__storage_;
 
-
-
+  
+  
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -683,7 +761,7 @@ typedef struct NCProtoCacheMsgRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif 
+    #endif    
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -691,6 +769,143 @@ typedef struct NCProtoCacheMsgRsp__storage_ {
 
 @end
 
+#pragma mark - NCProtoDeleteCacheMsg
+
+@implementation NCProtoDeleteCacheMsg
+
+@dynamic action;
+@dynamic hash_p;
+@dynamic relatedPubKey;
+
+typedef struct NCProtoDeleteCacheMsg__storage_ {
+  uint32_t _has_storage_[1];
+  NCProtoDeleteAction action;
+  NSData *relatedPubKey;
+  int64_t hash_p;
+} NCProtoDeleteCacheMsg__storage_;
+
+  
+  
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "action",
+        .dataTypeSpecific.enumDescFunc = NCProtoDeleteAction_EnumDescriptor,
+        .number = NCProtoDeleteCacheMsg_FieldNumber_Action,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(NCProtoDeleteCacheMsg__storage_, action),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "hash_p",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoDeleteCacheMsg_FieldNumber_Hash_p,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(NCProtoDeleteCacheMsg__storage_, hash_p),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "relatedPubKey",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoDeleteCacheMsg_FieldNumber_RelatedPubKey,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(NCProtoDeleteCacheMsg__storage_, relatedPubKey),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBytes,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[NCProtoDeleteCacheMsg class]
+                                     rootClass:[NCProtoNetMsgRoot class]
+                                          file:NCProtoNetMsgRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(NCProtoDeleteCacheMsg__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif    
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+int32_t NCProtoDeleteCacheMsg_Action_RawValue(NCProtoDeleteCacheMsg *message) {
+  GPBDescriptor *descriptor = [NCProtoDeleteCacheMsg descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:NCProtoDeleteCacheMsg_FieldNumber_Action];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetNCProtoDeleteCacheMsg_Action_RawValue(NCProtoDeleteCacheMsg *message, int32_t value) {
+  GPBDescriptor *descriptor = [NCProtoDeleteCacheMsg descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:NCProtoDeleteCacheMsg_FieldNumber_Action];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
+
+#pragma mark - NCProtoLogonNotify
+
+@implementation NCProtoLogonNotify
+
+@dynamic deviceType;
+
+typedef struct NCProtoLogonNotify__storage_ {
+  uint32_t _has_storage_[1];
+  NCProtoDeviceType deviceType;
+} NCProtoLogonNotify__storage_;
+
+  
+  
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "deviceType",
+        .dataTypeSpecific.enumDescFunc = NCProtoDeviceType_EnumDescriptor,
+        .number = NCProtoLogonNotify_FieldNumber_DeviceType,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(NCProtoLogonNotify__storage_, deviceType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[NCProtoLogonNotify class]
+                                     rootClass:[NCProtoNetMsgRoot class]
+                                          file:NCProtoNetMsgRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(NCProtoLogonNotify__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif    
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+int32_t NCProtoLogonNotify_DeviceType_RawValue(NCProtoLogonNotify *message) {
+  GPBDescriptor *descriptor = [NCProtoLogonNotify descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:NCProtoLogonNotify_FieldNumber_DeviceType];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetNCProtoLogonNotify_DeviceType_RawValue(NCProtoLogonNotify *message, int32_t value) {
+  GPBDescriptor *descriptor = [NCProtoLogonNotify descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:NCProtoLogonNotify_FieldNumber_DeviceType];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
 
 
+#pragma clang diagnostic pop
 
+  

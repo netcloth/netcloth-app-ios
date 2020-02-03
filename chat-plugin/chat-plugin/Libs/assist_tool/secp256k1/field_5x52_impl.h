@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013, 2014 Pieter Wuille                             *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_FIELD_REPR_IMPL_H
 #define SECP256K1_FIELD_REPR_IMPL_H
@@ -15,12 +20,19 @@
 #include "field_5x52_int128_impl.h"
 #endif
 
+/** Implements arithmetic modulo FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F,
+ *  represented as 5 uint64_t's in base 2^52. The values are allowed to contain >52 each. In particular,
+ *  each FieldElem has a 'magnitude' associated with it. Internally, a magnitude M means each element
+ *  is at most M*(2^53-1), except the most significant one, which is limited to M*(2^49-1). All operations
+ *  accept any input with magnitude at most M, and have different rules for propagating magnitude to their
+ *  output.
+ */
 
 #ifdef VERIFY
 static void secp256k1_fe_verify(const secp256k1_fe *a) {
     const uint64_t *d = a->n;
     int m = a->normalized ? 1 : 2 * a->magnitude, r = 1;
-   
+   /* secp256k1 'p' value defined in "Standards for Efficient Cryptography" (SEC2) 2.7.1. */
     r &= (d[0] <= 0xFFFFFFFFFFFFFULL * m);
     r &= (d[1] <= 0xFFFFFFFFFFFFFULL * m);
     r &= (d[2] <= 0xFFFFFFFFFFFFFULL * m);
@@ -41,35 +53,35 @@ static void secp256k1_fe_verify(const secp256k1_fe *a) {
 static void secp256k1_fe_normalize(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-    
+     
     uint64_t m;
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
-    
+    /* The first pass ensures the magnitude is 1, ... */
     t0 += x * 0x1000003D1ULL;
     t1 += (t0 >> 52); t0 &= 0xFFFFFFFFFFFFFULL;
     t2 += (t1 >> 52); t1 &= 0xFFFFFFFFFFFFFULL; m = t1;
     t3 += (t2 >> 52); t2 &= 0xFFFFFFFFFFFFFULL; m &= t2;
     t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL; m &= t3;
 
-    
+    /* ... except for a possible carry at bit 48 of t4 (i.e. bit 256 of the field element) */
     VERIFY_CHECK(t4 >> 49 == 0);
 
-    
+    /* At most a single final reduction is needed; check if the value is >= the field characteristic */
     x = (t4 >> 48) | ((t4 == 0x0FFFFFFFFFFFFULL) & (m == 0xFFFFFFFFFFFFFULL)
         & (t0 >= 0xFFFFEFFFFFC2FULL));
 
-    
+    /* Apply the final reduction (for constant-time behaviour, we do it always) */
     t0 += x * 0x1000003D1ULL;
     t1 += (t0 >> 52); t0 &= 0xFFFFFFFFFFFFFULL;
     t2 += (t1 >> 52); t1 &= 0xFFFFFFFFFFFFFULL;
     t3 += (t2 >> 52); t2 &= 0xFFFFFFFFFFFFFULL;
     t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL;
 
-    
+    /* If t4 didn't carry to bit 48 already, then it should have after any final reduction */
     VERIFY_CHECK(t4 >> 48 == x);
 
-    
+    /* Mask off the possible multiple of 2^256 from the final reduction */
     t4 &= 0x0FFFFFFFFFFFFULL;
 
     r->n[0] = t0; r->n[1] = t1; r->n[2] = t2; r->n[3] = t3; r->n[4] = t4;
@@ -84,17 +96,17 @@ static void secp256k1_fe_normalize(secp256k1_fe *r) {
 static void secp256k1_fe_normalize_weak(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-    
+     
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
-    
+    /* The first pass ensures the magnitude is 1, ... */
     t0 += x * 0x1000003D1ULL;
     t1 += (t0 >> 52); t0 &= 0xFFFFFFFFFFFFFULL;
     t2 += (t1 >> 52); t1 &= 0xFFFFFFFFFFFFFULL;
     t3 += (t2 >> 52); t2 &= 0xFFFFFFFFFFFFFULL;
     t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL;
 
-    
+    /* ... except for a possible carry at bit 48 of t4 (i.e. bit 256 of the field element) */
     VERIFY_CHECK(t4 >> 49 == 0);
 
     r->n[0] = t0; r->n[1] = t1; r->n[2] = t2; r->n[3] = t3; r->n[4] = t4;
@@ -108,21 +120,21 @@ static void secp256k1_fe_normalize_weak(secp256k1_fe *r) {
 static void secp256k1_fe_normalize_var(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-    
+     
     uint64_t m;
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
-    
+    /* The first pass ensures the magnitude is 1, ... */
     t0 += x * 0x1000003D1ULL;
     t1 += (t0 >> 52); t0 &= 0xFFFFFFFFFFFFFULL;
     t2 += (t1 >> 52); t1 &= 0xFFFFFFFFFFFFFULL; m = t1;
     t3 += (t2 >> 52); t2 &= 0xFFFFFFFFFFFFFULL; m &= t2;
     t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL; m &= t3;
 
-    
+    /* ... except for a possible carry at bit 48 of t4 (i.e. bit 256 of the field element) */
     VERIFY_CHECK(t4 >> 49 == 0);
 
-    
+    /* At most a single final reduction is needed; check if the value is >= the field characteristic */
     x = (t4 >> 48) | ((t4 == 0x0FFFFFFFFFFFFULL) & (m == 0xFFFFFFFFFFFFFULL)
         & (t0 >= 0xFFFFEFFFFFC2FULL));
 
@@ -133,10 +145,10 @@ static void secp256k1_fe_normalize_var(secp256k1_fe *r) {
         t3 += (t2 >> 52); t2 &= 0xFFFFFFFFFFFFFULL;
         t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL;
 
-        
+        /* If t4 didn't carry to bit 48 already, then it should have after any final reduction */
         VERIFY_CHECK(t4 >> 48 == x);
 
-        
+        /* Mask off the possible multiple of 2^256 from the final reduction */
         t4 &= 0x0FFFFFFFFFFFFULL;
     }
 
@@ -152,13 +164,13 @@ static void secp256k1_fe_normalize_var(secp256k1_fe *r) {
 static int secp256k1_fe_normalizes_to_zero(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-    
+    /* z0 tracks a possible raw value of 0, z1 tracks a possible raw value of P */
     uint64_t z0, z1;
 
-    
+     
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
-    
+    /* The first pass ensures the magnitude is 1, ... */
     t0 += x * 0x1000003D1ULL;
     t1 += (t0 >> 52); t0 &= 0xFFFFFFFFFFFFFULL; z0  = t0; z1  = t0 ^ 0x1000003D0ULL;
     t2 += (t1 >> 52); t1 &= 0xFFFFFFFFFFFFFULL; z0 |= t1; z1 &= t1;
@@ -166,7 +178,7 @@ static int secp256k1_fe_normalizes_to_zero(secp256k1_fe *r) {
     t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL; z0 |= t3; z1 &= t3;
                                                 z0 |= t4; z1 &= t4 ^ 0xF000000000000ULL;
 
-    
+    /* ... except for a possible carry at bit 48 of t4 (i.e. bit 256 of the field element) */
     VERIFY_CHECK(t4 >> 49 == 0);
 
     return (z0 == 0) | (z1 == 0xFFFFFFFFFFFFFULL);
@@ -180,17 +192,17 @@ static int secp256k1_fe_normalizes_to_zero_var(secp256k1_fe *r) {
     t0 = r->n[0];
     t4 = r->n[4];
 
-    
+     
     x = t4 >> 48;
 
-    
+    /* The first pass ensures the magnitude is 1, ... */
     t0 += x * 0x1000003D1ULL;
 
-    
+    /* z0 tracks a possible raw value of 0, z1 tracks a possible raw value of P */
     z0 = t0 & 0xFFFFFFFFFFFFFULL;
     z1 = z0 ^ 0x1000003D0ULL;
 
-    
+     
     if ((z0 != 0ULL) & (z1 != 0xFFFFFFFFFFFFFULL)) {
         return 0;
     }
@@ -207,7 +219,7 @@ static int secp256k1_fe_normalizes_to_zero_var(secp256k1_fe *r) {
     t4 += (t3 >> 52); t3 &= 0xFFFFFFFFFFFFFULL; z0 |= t3; z1 &= t3;
                                                 z0 |= t4; z1 &= t4 ^ 0xF000000000000ULL;
 
-    
+    /* ... except for a possible carry at bit 48 of t4 (i.e. bit 256 of the field element) */
     VERIFY_CHECK(t4 >> 49 == 0);
 
     return (z0 == 0) | (z1 == 0xFFFFFFFFFFFFFULL);
@@ -316,7 +328,7 @@ static int secp256k1_fe_set_b32(secp256k1_fe *r, const unsigned char *a) {
     return 1;
 }
 
-
+/** Convert a field element to a 32-byte big endian value. Requires the input to be normalized */
 static void secp256k1_fe_get_b32(unsigned char *r, const secp256k1_fe *a) {
 #ifdef VERIFY
     VERIFY_CHECK(a->normalized);
@@ -481,4 +493,4 @@ static SECP256K1_INLINE void secp256k1_fe_from_storage(secp256k1_fe *r, const se
 #endif
 }
 
-#endif 
+#endif  

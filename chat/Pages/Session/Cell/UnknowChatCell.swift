@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -26,7 +26,7 @@ import Foundation
     
     @IBOutlet weak var createTimeL: UILabel?
     @IBOutlet weak var avatarTop: NSLayoutConstraint?
-
+      
     @IBOutlet weak var avatarBtn: UIButton?
     
     
@@ -49,13 +49,13 @@ import Foundation
         }
     }
     
-
+      
     override func msgContentView() -> UIView? {
         return self.msgContentL
     }
 
 
-
+      
     
     override func reloadData(data: Any) {
         guard let msg = data as? CPMessage else {
@@ -70,20 +70,20 @@ import Foundation
     }
     
     func updateSelf(msg: CPMessage) {
-
+          
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
-
+          
         var img = UIImage(named: "蓝色-聊天")
         img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
         msgBgImgView?.image = img
         
-
+          
         msgContentL?.text = "[你发送了一条未知消息]"
         
-
+          
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
@@ -91,21 +91,21 @@ import Foundation
     }
     
     func updateOthers(msg: CPMessage) {
-
+          
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-
+          
         var img = UIImage(named: "灰色-聊天")
         img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
         msgBgImgView?.image = img
         
-
-        msgContentL?.text = "[你收到了一条未知消息]"
+          
+        msgContentL?.text = "Msg_Recieve_Unknown".localized()
         
-
+          
         smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
     }
 }

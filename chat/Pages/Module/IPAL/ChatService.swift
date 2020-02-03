@@ -1,20 +1,26 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import PromiseKit
 
 class ChatService: NSObject {
     
+    /*
+     {
+     "result": 0,
+     "endpoints": ["47.104.248.183:4455"]
+     }
+     */
     
-
+      
     static func requestLoadBalancing(endPoint: String) -> Promise<[String]> {
-
+          
         let _promise = Promise<[String]> { (resolver) in
             let path = endPoint + "/v1/service/gateway?pub_key=" + (CPAccountHelper.loginUser()?.publicKey ?? "")
             NW.requestUrl(path: path, method: .get, para: nil) { (r, res) in

@@ -1,3 +1,23 @@
+/********************************************************************
+ *                                                                  *
+ * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *
+ * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
+ * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
+ * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
+ *                                                                  *
+ * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2001             *
+ * by the XIPHOPHORUS Company http:  
+ *                                                                  *
+ ********************************************************************
+
+ function: fft transform
+ last mod: $Id: smallft.h,v 1.3 2003/09/16 18:35:45 jm Exp $
+
+ ********************************************************************/
+/**
+   @file smallft.h
+   @brief Discrete Rotational Fourier Transform (DRFT)
+*/
 
 #ifndef _V_SMFT_H_
 #define _V_SMFT_H_
@@ -7,7 +27,7 @@
 extern "C" {
 #endif
 
-
+ 
 struct drft_lookup{
   int n;
   float *trigcache;

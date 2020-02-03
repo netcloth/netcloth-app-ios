@@ -1,32 +1,37 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
 enum ToolBarStatus: Int {
-    case text
+    case text   
     case audio
     case emoj
     case more
 }
 
-
+  
 class ChatToolBar:UIView,
 UITextFieldDelegate,
 EmojKeyBoardViewDelegate,
 MoreInputViewDelegate
 {
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textField: UITextField!   
+    
     @IBOutlet weak var btnRecord: SRAudioRecordButton!
-    @IBOutlet weak var switchChannelBtn: UIButton!
+    @IBOutlet weak var placeHolderBtn: UIButton?    
+    @IBOutlet weak var resetTextBtn: UIButton?    
+    
+    @IBOutlet weak var switchChannelBtn: UIButton!   
     @IBOutlet weak var emojBtn: UIButton!
     @IBOutlet weak var moreBtn: UIButton!
-    @IBOutlet weak var placeHolderBtn: UIButton?
+    
+    
     
     var clearTextAfterSend: Bool = true
     private let disbag = DisposeBag()
@@ -45,15 +50,20 @@ MoreInputViewDelegate
         return v
     }()
     
-
+      
     var status:ToolBarStatus? = .text {
         didSet {
             btnRecord.isHidden = !(status == .audio);
+            
+              
             let channelImg = (status == .audio)
                 ? UIImage(named: "键盘")
                 : UIImage(named: "编组 2")
             switchChannelBtn.setImage(channelImg, for: .normal)
             textField.isUserInteractionEnabled =  !(status == .audio)
+            
+              
+            resetTextBtn?.isHidden = !(status == .emoj || status == .more)
             
             if status == .text {
                 textField.inputView = nil
@@ -76,9 +86,9 @@ MoreInputViewDelegate
         }
     }
     
-
+      
     var publish:PublishSubject = PublishSubject<Any?>()
-
+      
     deinit {
         publish.onCompleted()
         SRAudioRecorderManager.shared()?.delegate = nil
@@ -90,7 +100,7 @@ MoreInputViewDelegate
         configEvent()
     }
     
-
+      
     func configUI() {
         textField.returnKeyType = .send
         textField.delegate = self
@@ -121,9 +131,13 @@ MoreInputViewDelegate
                 self?.status = (s == .more) ? .text : .more;
             }
         }).disposed(by: disbag)
+        
+        resetTextBtn?.rx.tap.subscribe(onNext: { [weak self] in
+            self?.status = .text
+        }).disposed(by: disbag)
     }
     
-
+      
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         let t = textField.text
         if t?.isEmpty == true {
@@ -148,10 +162,23 @@ MoreInputViewDelegate
         }
     }
     
+    func resetLock(lock:Bool, lockStr: String?) {
+        if lock {
+            self.endEditing(true)
+            self.isUserInteractionEnabled = false
+            self.placeHolderBtn?.isHidden = false
+            self.placeHolderBtn?.titleLabel?.adjustsFontSizeToFitWidth = true
+            self.placeHolderBtn?.setTitle(lockStr, for: .normal)
+        } else {
+            self.isUserInteractionEnabled = true
+            self.placeHolderBtn?.isHidden = true
+        }
+    }
+    
     
 }
 
-
+  
 extension ChatToolBar: SRAudioRecorderManagerDelegate {
     
     func audioRecorderManagerDidFinishRecordingFailed() {
@@ -163,7 +190,7 @@ extension ChatToolBar: SRAudioRecorderManagerDelegate {
     }
     
     func audioRecorderManagerDidFinishRecordingSuccess(_ audioFilePath: String!) {
-
+          
         DispatchQueue.global().async {
             if let data = NSData(contentsOfFile: audioFilePath)  {
                 DispatchQueue.main.async {
@@ -174,7 +201,7 @@ extension ChatToolBar: SRAudioRecorderManagerDelegate {
     }
 }
 
-
+  
 extension ChatToolBar {
     func onInputEmoj(str: String) {
         self.textField.insertText(str)
@@ -185,16 +212,16 @@ extension ChatToolBar {
     }
     
     func onSendKeyTap() {
-
+          
         textFieldShouldReturn(self.textField)
     }
 }
 
 
-
+  
 extension ChatToolBar {
     func onSelectedPicture(image: UIImage?) {
-
+          
         DispatchQueue.global().async {
             
             guard let img = image else {
@@ -202,19 +229,37 @@ extension ChatToolBar {
             }
             
             let data = UIImage.lubanCompressImage(img)
+            let size = data?.count ?? 0
+            if  size > 10 * 1024 * 1024 {
+                Toast.show(msg: "Oversized".localized())
+                return
+            }
             
             DispatchQueue.main.async {
-                               let dic = ["image":data]
-                               self.publish.onNext(dic)
-                           }
+                let dic = ["image":data]
+                self.publish.onNext(dic)
+            }
+            
+        }
+    }
+    
+    
+    func onSelectedGifData(data: Data?) {
+        let size = data?.count ?? 0
+        if size > 10 * 1024 * 1024 {
+            Toast.show(msg: "Oversized".localized())
+            return
+        }
         
+        DispatchQueue.main.async {
+            let dic = ["image":data]
+            self.publish.onNext(dic)
         }
     }
 }
 
 
 extension UIImage {
-
     func compressTo(_ expectedSizeInMb:Int) -> Data? {
         let sizeInBytes = expectedSizeInMb * 1024 * 1024
         var needCompress:Bool = true

@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -39,7 +39,7 @@ extension TextInput where Self : UITextInput {
 }
 
 extension String {
-
+      
     public func localized() -> String {
         return NSLocalizedString(self, comment: "")
     }
@@ -87,7 +87,40 @@ extension UITextField : TextInput {
 
                     if let subStr = no_marked.appley(rule: rule, maxLength: maxLength) {
                         if subStr == no_marked {
+                              
+                            return
+                        }
+                       self.text = subStr
+                       try?  self.setMarkedText(text_marked, selectedRange: NSMakeRange(subStr.count, text_marked.count))
+                    }
 
+                }
+            }
+        }
+        else {
+            if let text = self.text as NSString? {
+                if let subStr: NSString = text.appley(rule: rule, maxLength: maxLength) as? NSString {
+                    if (subStr.isEqual(to: text as String) == false) {
+                        self.text = subStr as String
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension UITextView : TextInput {
+    
+    public func limitLength(by rule: String?, maxLength: Int?) {
+        
+        if let marked = self.markedTextRange {
+            if let text_marked =  self.text(in: marked) {
+                if let oriText: NSString = self.text as? NSString {
+                    var no_marked = oriText.replacingOccurrences(of: text_marked, with: "")
+
+                    if let subStr = no_marked.appley(rule: rule, maxLength: maxLength) {
+                        if subStr == no_marked {
+                              
                             return
                         }
                        self.text = subStr
@@ -110,10 +143,8 @@ extension UITextField : TextInput {
 }
 
 
-
-open class AutoHeightTextView: UITextView {
-    
-    @IBOutlet var placeHolder: UILabel?
+open class PlaceHolderTextView: UITextView {
+    @IBOutlet public var placeHolder: UILabel?
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -121,13 +152,6 @@ open class AutoHeightTextView: UITextView {
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        config()
-    }
-    
-    func config() {
-        self.isScrollEnabled = false
-        self.textContainerInset = UIEdgeInsets.zero
-        self.textContainer.lineFragmentPadding = 0
         NotificationCenter.default.addObserver(self, selector:#selector(textChange) , name: UITextView.textDidChangeNotification, object: nil)
     }
     
@@ -143,6 +167,21 @@ open class AutoHeightTextView: UITextView {
     
     @objc func textChange() {
         self.placeHolder?.isHidden = !self.text.isEmpty
+    }
+}
+
+
+open class AutoHeightTextView: PlaceHolderTextView {
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        config()
+    }
+    
+    func config() {
+        self.isScrollEnabled = false
+        self.textContainerInset = UIEdgeInsets.zero
+        self.textContainer.lineFragmentPadding = 0
     }
     
 }

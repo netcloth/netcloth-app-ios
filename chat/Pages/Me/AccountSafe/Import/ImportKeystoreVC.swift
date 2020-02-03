@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 
@@ -19,7 +19,7 @@ class ImportKeystoreVC: BaseViewController {
     
     var disbag = DisposeBag()
 
-
+      
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class ImportKeystoreVC: BaseViewController {
     }
     
     func configEvent() {
-
+          
         accountInput.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             } else {
@@ -48,7 +48,7 @@ class ImportKeystoreVC: BaseViewController {
             }
             }.disposed(by: disbag)
         
-
+          
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             let r = (self?.checkInputAvalid())!
             if r.result == false {
@@ -67,6 +67,8 @@ class ImportKeystoreVC: BaseViewController {
                         }
                     }
                     else {
+                        let sourckey = UserSettings.sourceKey(BackupKey.accountBackup.rawValue, ofUser: Int(user.userId))
+                        UserSettings.setObject("1", forSourceKey: sourckey)
                         self?.showValidAlert(user, pwd: pwd, account: account)
                     }
                 })
@@ -77,7 +79,7 @@ class ImportKeystoreVC: BaseViewController {
     
     
     
-
+      
     func checkInputAvalid() -> (result:Bool,msg:String) {
         
         guard let ks = keystoreInput.text, ks.count > 0  else {

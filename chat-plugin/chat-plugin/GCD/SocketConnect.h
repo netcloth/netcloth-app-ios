@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 
@@ -15,7 +15,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
+  
 @interface SocketConnect : NSObject
 
 - (instancetype)initWithHost:(NSString *)host

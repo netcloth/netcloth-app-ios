@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -17,12 +17,12 @@ import Foundation
 class KeyboardManager: NSObject {
     static let shared = KeyboardManager()
     
-
+      
     func setObserver(_ obv: KeyboardManagerDelegate ) {
         self.delegate = obv
     }
     
-
+      
     private weak var delegate: KeyboardManagerDelegate?
     override init() {
         super.init()
@@ -43,9 +43,9 @@ class KeyboardManager: NSObject {
             return
         }
         
-
-
-
+  
+  
+  
         
         guard let frame =  userinfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
@@ -59,5 +59,5 @@ class KeyboardManager: NSObject {
         
         self.delegate?.onKeyboardFrame?(frame.cgRectValue, dura: dura.doubleValue,aniCurve: animateCurve.intValue)
     }
-
+      
 }

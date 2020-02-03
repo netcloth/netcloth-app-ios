@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2a9-T4-Ty5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2a9-T4-Ty5">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -235,7 +235,7 @@
                                                                         <color key="textColor" red="0.18823529410000001" green="0.19215686269999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="箭头" translatesAutoresizingMaskIntoConstraints="NO" id="Shc-BJ-LO4">
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="Shc-BJ-LO4">
                                                                         <rect key="frame" x="325" y="21" width="11" height="10"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="11" id="BCn-Vr-nzs"/>
@@ -270,7 +270,7 @@
                                                                         <color key="textColor" red="0.18823529410000001" green="0.19215686269999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="箭头" translatesAutoresizingMaskIntoConstraints="NO" id="Yob-o1-rYs">
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="Yob-o1-rYs">
                                                                         <rect key="frame" x="325" y="21" width="11" height="10"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="10" id="GmS-jD-X0O"/>
@@ -305,7 +305,7 @@
                                                                         <color key="textColor" red="0.18823529410000001" green="0.19215686269999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="箭头" translatesAutoresizingMaskIntoConstraints="NO" id="av2-TX-ucL">
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="av2-TX-ucL">
                                                                         <rect key="frame" x="325" y="21" width="11" height="10"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="11" id="cHg-KA-N9F"/>
@@ -426,13 +426,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow_rigth" width="11" height="10"/>
         <image name="me_edit" width="14" height="14"/>
         <image name="二维码" width="20" height="20"/>
         <image name="关于" width="20" height="20"/>
         <image name="复制" width="14" height="14"/>
         <image name="我的-未选中" width="22" height="22"/>
         <image name="我的-选中" width="22" height="22"/>
-        <image name="箭头" width="11" height="10"/>
         <image name="编组 6" width="68" height="68"/>
         <image name="设置" width="20" height="20"/>
         <image name="账户安全" width="20" height="20"/>

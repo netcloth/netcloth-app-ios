@@ -1,24 +1,24 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
 class LanguageVC: BaseTableViewController {
     
-    @IBOutlet weak var judgeRule: SysSelecterCell!
-    @IBOutlet weak var cn_zh: SysSelecterCell!
-    @IBOutlet weak var en_def: SysSelecterCell!
+    @IBOutlet weak var judgeRule: NCConfigCell!
+    @IBOutlet weak var cn_zh: NCConfigCell!
+    @IBOutlet weak var en_def: NCConfigCell!
     
     override func viewDidLoad() {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-
+              
         }
         super.viewDidLoad()
         self.tableView.adjustFooter()
@@ -26,7 +26,7 @@ class LanguageVC: BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? SysSelecterCell,
+        guard let cell = tableView.cellForRow(at: indexPath) as? NCConfigCell,
             cell.rightOption.isHidden == true else { return }
         
         if cell == judgeRule {
@@ -60,7 +60,7 @@ class LanguageVC: BaseTableViewController {
     }
     
     func restartAppRoot() {
-        if let rootNav = Router.rootVC as? BaseNavVC {
+        if let rootNav = Router.rootVC as? GrandNavVC {
             rootNav.switchLuguage()
         }
     }

@@ -1,17 +1,18 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
-
+import Photos
 
 @objc protocol MoreInputViewDelegate: NSObjectProtocol {
-
+      
     func onSelectedPicture(image: UIImage?)
+    func onSelectedGifData(data: Data?)
 }
 
 class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate
@@ -28,7 +29,7 @@ class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationContro
         if #available(iOS 11.0, *) {
             h += Int(Router.currentViewOfVC?.safeAreaInsets.bottom ?? 0)
         } else {
-
+              
         }
         return CGSize(width: UIView.noIntrinsicMetric, height: CGFloat(h))
     }
@@ -86,23 +87,55 @@ class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationContro
         Router.present(vc: imgpicker)
     }
     
-
+      
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
-        DispatchQueue.global().async {
-            var tosend: UIImage?
-            if let source = info[.originalImage] as? UIImage {
-                tosend = source
-            }
-            if let edit = info[.editedImage] as? UIImage {
-                tosend = edit
-            }
-            DispatchQueue.main.async {
-                self.delegate?.onSelectedPicture(image: tosend)
+        DispatchQueue.global().async { [weak self] in
+            let type:String = (info[UIImagePickerController.InfoKey.mediaType] as! String)
+              
+            if type == "public.image" {
+                var imgUrl:URL?
+                var imageAsset: PHAsset?
+                
+                var img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage   
+                if let editImg = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+                    img = editImg
+                }
+                
+                if #available(iOS 11.0, *) {
+                    imgUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL
+                    imageAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset
+                }
+                else {
+                    imgUrl = info[UIImagePickerController.InfoKey.referenceURL] as? URL
+                    if let url = imgUrl {
+                        imageAsset = PHAsset.fetchAssets(withALAssetURLs: [url], options: nil).firstObject
+                    }
+                }
+                
+                if imgUrl?.absoluteString.uppercased().contains("GIF") == true {
+                    if let asset = imageAsset {
+                        let options = PHImageRequestOptions()
+                        options.version = .current
+                        options.isSynchronous = true
+                        PHImageManager.default().requestImageData(for: asset, options: options) { (data, msg, origin, info) in
+                            DispatchQueue.main.async {
+                                self?.delegate?.onSelectedGifData(data: data)
+                            }
+                        }
+                    }
+                }
+                else {
+                    if let forsend = img {
+                        DispatchQueue.main.async {
+                            self?.delegate?.onSelectedPicture(image: forsend)
+                        }
+                    }
+                }
             }
         }
     }

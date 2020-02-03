@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = " "; ObjectID = "ISD-Lf-ubj"; */
+"ISD-Lf-ubj.text" = " ";
+
+/* Class = "UIButton"; normalTitle = "Join Group Chat"; ObjectID = "UXr-LZ-abo"; */
+"UXr-LZ-abo.normalTitle" = "加入群聊";
+
+/* Class = "UILabel"; text = " "; ObjectID = "gv2-a6-nhb"; */
+"gv2-a6-nhb.text" = " ";
+
+/* Class = "UINavigationItem"; title = "Group Chat Invitation"; ObjectID = "qYz-MB-mq2"; */
+"qYz-MB-mq2.title" = "加入群聊";

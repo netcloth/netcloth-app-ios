@@ -1,22 +1,23 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <UIKit/UIKit.h>
 #import "SDWaitingView.h"
+#import <YYKit.h>
 
 
-@interface SDBrowserImageView : UIImageView <UIGestureRecognizerDelegate>
+@interface SDBrowserImageView : YYAnimatedImageView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) CGFloat progress;
 @property (nonatomic, assign, readonly) BOOL isScaled;
 @property (nonatomic, assign) BOOL hasLoadedImage;
 
-- (void)eliminateScale;
+- (void)eliminateScale;   
 
 - (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder;
 

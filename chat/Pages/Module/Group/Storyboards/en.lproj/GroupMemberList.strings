@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Add Group Members"; ObjectID = "1NN-mZ-A3M"; */
+"1NN-mZ-A3M.text" = "Add Group Members";
+
+/* Class = "UITextField"; placeholder = "Search"; ObjectID = "I45-FH-Gj0"; */
+"I45-FH-Gj0.placeholder" = "Search";
+
+/* Class = "UINavigationItem"; title = "Group Members"; ObjectID = "oL2-LM-3QO"; */
+"oL2-LM-3QO.title" = "Group Members";
+
+/* Class = "UILabel"; text = "Remove Group Members"; ObjectID = "saA-hw-KCe"; */
+"saA-hw-KCe.text" = "Remove Group Members";

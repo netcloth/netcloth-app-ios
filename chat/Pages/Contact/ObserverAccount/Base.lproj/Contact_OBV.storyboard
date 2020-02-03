@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Sunscriptions-->
+        <!--Subscriptions-->
         <scene sceneID="dTk-m5-Utc">
             <objects>
                 <viewController storyboardIdentifier="ContactObserverListVC" id="Kv5-dV-suB" customClass="ContactObserverListVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
@@ -97,7 +97,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HhG-r4-BKs"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Sunscriptions" id="TZB-Gb-MPk"/>
+                    <navigationItem key="navigationItem" title="Subscriptions" id="TZB-Gb-MPk"/>
                     <connections>
                         <outlet property="tableView" destination="hfb-ok-qi3" id="PhP-gq-J57"/>
                     </connections>

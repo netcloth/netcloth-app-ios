@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SGQRCodeObtain.h"
 #import "SGQRCodeObtainConfigure.h"
@@ -36,30 +36,52 @@
     }
 }
 
+#pragma mark - - 生成二维码相关方法
+ 
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size {
     return [self generateQRCodeWithData:data size:size color:[UIColor blackColor] backgroundColor:[UIColor whiteColor]];
 }
+ 
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size color:(UIColor *)color backgroundColor:(UIColor *)backgroundColor {
     NSData *string_data = [data dataUsingEncoding:NSUTF8StringEncoding];
-
+      
     CIFilter *fileter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
     [fileter setValue:string_data forKey:@"inputMessage"];
     [fileter setValue:@"H" forKey:@"inputCorrectionLevel"];
     CIImage *ciImage = fileter.outputImage;
-
+      
     CIFilter *color_filter = [CIFilter filterWithName:@"CIFalseColor"];
     [color_filter setValue:ciImage forKey:@"inputImage"];
     [color_filter setValue:[CIColor colorWithCGColor:color.CGColor] forKey:@"inputColor0"];
     [color_filter setValue:[CIColor colorWithCGColor:backgroundColor.CGColor] forKey:@"inputColor1"];
-
+      
     CIImage *outImage = color_filter.outputImage;
     CGFloat scale = size / outImage.extent.size.width;
     outImage = [outImage imageByApplyingTransform:CGAffineTransformMakeScale(scale, scale)];
     return [UIImage imageWithCIImage:outImage];
 }
+/**
+ *  生成带 logo 的二维码（推荐使用）
+ *
+ *  @param data     二维码数据
+ *  @param size     二维码大小
+ *  @param logoImage    logo
+ *  @param ratio        logo 相对二维码的比例
+ */
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size logoImage:(UIImage *)logoImage ratio:(CGFloat)ratio {
     return [self generateQRCodeWithData:data size:size logoImage:logoImage ratio:ratio logoImageCornerRadius:5 logoImageBorderWidth:5 logoImageBorderColor:[UIColor whiteColor]];
 }
+/**
+ *  生成带 logo 的二维码（拓展）
+ *
+ *  @param data     二维码数据
+ *  @param size     二维码大小
+ *  @param logoImage    logo
+ *  @param ratio        logo 相对二维码的比例
+ *  @param logoImageCornerRadius    logo 外边框圆角
+ *  @param logoImageBorderWidth     logo 外边框宽度
+ *  @param logoImageBorderColor     logo 外边框颜色
+ */
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size logoImage:(UIImage *)logoImage ratio:(CGFloat)ratio logoImageCornerRadius:(CGFloat)logoImageCornerRadius logoImageBorderWidth:(CGFloat)logoImageBorderWidth logoImageBorderColor:(UIColor *)logoImageBorderColor {
     UIImage *image = [self generateQRCodeWithData:data size:size color:[UIColor blackColor] backgroundColor:[UIColor whiteColor]];
     if (logoImage == nil) return image;
@@ -71,7 +93,7 @@
     CGFloat logoImageX = 0.5 * (image.size.width - logoImageW);
     CGFloat logoImageY = 0.5 * (image.size.height - logoImageH);
     CGRect logoImageRect = CGRectMake(logoImageX, logoImageY, logoImageW, logoImageH);
-
+      
     UIGraphicsBeginImageContextWithOptions(image.size, false, [UIScreen mainScreen].scale);
     [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
     if (logoImageCornerRadius < 0.0 || logoImageCornerRadius > 10) {
@@ -91,6 +113,7 @@
     return QRCodeImage;
 }
 
+#pragma mark - - 扫描二维码相关方法
 - (void)establishQRCodeObtainScanWithController:(UIViewController *)controller configure:(SGQRCodeObtainConfigure *)configure {
     if (controller == nil) {
         @throw [NSException exceptionWithName:@"SGQRCode" reason:@"SGQRCodeObtain 中 establishQRCodeObtainScanWithController:configuration:方法的 controller 参数不能为空" userInfo:nil];
@@ -103,39 +126,39 @@
     _configure = configure;
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-
+      
     AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
-
+      
     AVCaptureMetadataOutput *metadataOutput = [[AVCaptureMetadataOutput alloc] init];
     [metadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
     
-
-
+      
+      
     if (configure.rectOfInterest.origin.x == 0 && configure.rectOfInterest.origin.y == 0 && configure.rectOfInterest.size.width == 0 && configure.rectOfInterest.size.height == 0) {
     } else {
         metadataOutput.rectOfInterest = configure.rectOfInterest;
     }
 
-
+      
     self.captureSession.sessionPreset = configure.sessionPreset;
     
-
+      
     [_captureSession addOutput:metadataOutput];
-
+      
     if (configure.sampleBufferDelegate == YES) {
         AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
         [videoDataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
         [_captureSession addOutput:videoDataOutput];
     }
-
+      
     [_captureSession addInput:deviceInput];
     
-
+      
     metadataOutput.metadataObjectTypes = configure.metadataObjectTypes;
     
-
+      
     AVCaptureVideoPreviewLayer *videoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
-
+      
     videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     videoPreviewLayer.frame = controller.view.frame;
     [controller.view.layer insertSublayer:videoPreviewLayer atIndex:0];
@@ -167,6 +190,7 @@
     }
 }
 
+#pragma mark - - AVCaptureMetadataOutputObjectsDelegate 的方法
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
     NSString *resultString = nil;
     if (metadataObjects != nil && metadataObjects.count > 0) {
@@ -182,6 +206,7 @@
         });
     }
 }
+#pragma mark - - AVCaptureVideoDataOutputSampleBufferDelegate 的方法
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     CFDictionaryRef metadataDict = CMCopyDictionaryOfAttachments(NULL,sampleBuffer, kCMAttachmentMode_ShouldPropagate);
     NSDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:(__bridge NSDictionary*)metadataDict];
@@ -206,10 +231,10 @@
 }
 
 - (void)playSoundName:(NSString *)name {
-
+      
     NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:nil];
     if (!path) {
-
+          
         path = [[NSBundle bundleForClass:[self class]] pathForResource:name ofType:nil];
     }
     NSURL *fileUrl = [NSURL fileURLWithPath:path];
@@ -223,6 +248,7 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
     
 }
 
+#pragma mark - - 相册中读取二维码相关方法
 - (void)establishAuthorizationQRCodeObtainAlbumWithController:(UIViewController *)controller {
     if (controller == nil && _controller == nil) {
         @throw [NSException exceptionWithName:@"SGQRCode" reason:@"SGQRCodeObtain 中 establishAuthorizationQRCodeObtainAlbumWithController: 方法的 controller 参数不能为空" userInfo:nil];
@@ -233,12 +259,12 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if (device) {
-
+          
         PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-        if (status == PHAuthorizationStatusNotDetermined) {
-
+        if (status == PHAuthorizationStatusNotDetermined) {   
+              
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {
+                if (status == PHAuthorizationStatusAuthorized) {   
                     self.isPHAuthorization = YES;
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [self P_enterImagePickerController];
@@ -246,19 +272,19 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
                     if (self.configure.openLog == YES) {
                         NSLog(@"用户第一次同意了访问相册权限");
                     }
-                } else {
+                } else {   
                     if (self.configure.openLog == YES) {
                         NSLog(@"用户第一次拒绝了访问相册权限");
                     }
                 }
             }];
-        } else if (status == PHAuthorizationStatusAuthorized) {
+        } else if (status == PHAuthorizationStatusAuthorized) {   
             self.isPHAuthorization = YES;
             if (self.configure.openLog == YES) {
                 NSLog(@"用户允许访问相册权限");
             }
             [self P_enterImagePickerController];
-        } else if (status == PHAuthorizationStatusDenied) {
+        } else if (status == PHAuthorizationStatusDenied) {   
             NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
             NSString *app_Name = [infoDict objectForKey:@"CFBundleDisplayName"];
             if (app_Name == nil) {
@@ -292,6 +318,7 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
     [_controller presentViewController:imagePicker animated:YES completion:nil];
 }
 
+#pragma mark - - UIImagePickerControllerDelegate 的方法
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [_controller dismissViewControllerAnimated:YES completion:nil];
     if (_albumDidCancelImagePickerControllerBlock) {
@@ -300,9 +327,9 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-
+      
     CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@{CIDetectorAccuracy: CIDetectorAccuracyHigh}];
-
+      
     NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];
     if (features.count == 0) {
         [_controller dismissViewControllerAnimated:YES completion:^{
@@ -335,6 +362,7 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
     _albumResultBlock = block;
 }
 
+#pragma mark - - 手电筒相关方法
 - (void)openFlashlight {
     AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     NSError *error = nil;

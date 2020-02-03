@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import UIKit
 import IQKeyboardManagerSwift
@@ -18,8 +18,8 @@ class LoginVC: BaseViewController  {
     @IBOutlet weak var accountTF: UITextField!
     @IBOutlet weak var accountMask: UIView!
     
-    @IBOutlet weak var switchIcon: UIImageView!
-    @IBOutlet weak var switchBtn: UIButton!
+    @IBOutlet weak var switchIcon: UIImageView!   
+    @IBOutlet weak var switchBtn: UIButton!   
 
     @IBOutlet weak var pwdTF: UITextField!
     @IBOutlet weak var imageVEye: UIImageView!
@@ -60,11 +60,9 @@ class LoginVC: BaseViewController  {
         }
     }
     
-    @IBOutlet weak var envBtn: UIButton?
-    
     let disbag = DisposeBag()
     
-
+      
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,12 +75,12 @@ class LoginVC: BaseViewController  {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+  
         fillWithLastUser()
         reloadTable()
     }
     
-
+      
     func reloadTable() {
         CPAccountHelper.allUserListCallback({(result) in
             self.sourceNames = result
@@ -128,7 +126,7 @@ class LoginVC: BaseViewController  {
             cell.nameL?.text = model.accountName
             cell.selectionStyle  = .none
             
-
+              
             cell.xbtn?.rx.tap.subscribe(onNext: { [weak self] in
                 self?.deleteAccount(model)
             }).disposed(by: cell.disposeBag)
@@ -190,9 +188,9 @@ class LoginVC: BaseViewController  {
                 let index = self?.selectedIndex ?? 0
                 let uid = self?.sourceNames?[safe: index]?.userId ?? 0
                 
-                Toast.showLoading()
+                self?.showLoading()
                 CPAccountHelper.login(withUid: Int(uid), password: (self?.pwdTF.text)!, callback: { (success, msg) in
-                    Toast.dismissLoading()
+                    self?.dismissLoading()
                     self?.tmp = 0
                     
                     if success == false {
@@ -207,7 +205,7 @@ class LoginVC: BaseViewController  {
             
         }).disposed(by: disbag)
         
-
+          
         self.importControl.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             
             if let vc = R.loadSB(name: "Import", iden: "ImportAccountContainerVC") as? ImportAccountContainerVC {
@@ -235,12 +233,12 @@ class LoginVC: BaseViewController  {
         self.isSelectedAccount = false
     }
     
-
+      
     static func firstDel(_ user: User) -> Promise<String> {
         let alert =  Promise<String> { (resolver) in
             
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-
+                  
                 alert.titleLabel?.text = "login_delete_title".localized()
                 
                 let msg = "login_delete_message".localized().replacingOccurrences(of: "#account#", with: user.accountName)
@@ -267,7 +265,7 @@ class LoginVC: BaseViewController  {
         let re_alert =  Promise<String> { (resolver) in
                    
                    if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-
+                         
                        alert.titleLabel?.text = "login_delete_title".localized()
                        
                        let msg = "login_delete_re_message".localized().replacingOccurrences(of: "#account#", with: user.accountName)
@@ -295,7 +293,7 @@ class LoginVC: BaseViewController  {
         LoginVC.firstDel(user).then {(res) -> Promise<String>  in
             return LoginVC.reDel(user)
         }.done { (data) in
-
+              
             CPAccountHelper.deleteUser(Int(user.userId)) { [weak self] (r, msg) in
                 if r {
                     if user.accountName == self?.lastLoginUser {

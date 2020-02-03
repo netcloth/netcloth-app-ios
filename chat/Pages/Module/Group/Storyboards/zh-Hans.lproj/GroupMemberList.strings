@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Add Group Members"; ObjectID = "1NN-mZ-A3M"; */
+"1NN-mZ-A3M.text" = "添加群员";
+
+/* Class = "UITextField"; placeholder = "Search"; ObjectID = "I45-FH-Gj0"; */
+"I45-FH-Gj0.placeholder" = "搜索";
+
+/* Class = "UINavigationItem"; title = "Group Members"; ObjectID = "oL2-LM-3QO"; */
+"oL2-LM-3QO.title" = "群成员";
+
+/* Class = "UILabel"; text = "Remove Group Members"; ObjectID = "saA-hw-KCe"; */
+"saA-hw-KCe.text" = "移出群组";

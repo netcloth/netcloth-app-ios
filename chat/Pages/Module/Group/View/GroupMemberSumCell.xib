@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="eU7-bf-7CR" customClass="GroupMemberSumCell" customModule="NetCloth" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="50" height="70"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="d0a-Xg-LIi">
+                <rect key="frame" x="0.0" y="0.0" width="50" height="70"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pzf-9j-1b1">
+                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                    </imageView>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEp-a3-4qd" userLabel="SmallRemark">
+                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="0s7-3s-PH2"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="9Yx-8P-Tif"/>
+                            <constraint firstAttribute="height" constant="50" id="mHe-3w-mac"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="vQb-Ww-stg"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="25"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mpI-fa-gJp">
+                        <rect key="frame" x="0.0" y="55.5" width="50" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.37647058823529411" green="0.38431372549019605" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="mpI-fa-gJp" secondAttribute="trailing" id="Bq7-ao-RRm"/>
+                    <constraint firstItem="Pzf-9j-1b1" firstAttribute="leading" secondItem="BEp-a3-4qd" secondAttribute="leading" id="DLe-EM-sEF"/>
+                    <constraint firstAttribute="bottom" secondItem="mpI-fa-gJp" secondAttribute="bottom" id="cMH-CI-O6P"/>
+                    <constraint firstItem="BEp-a3-4qd" firstAttribute="top" secondItem="d0a-Xg-LIi" secondAttribute="top" id="pXE-KC-Sgi"/>
+                    <constraint firstItem="Pzf-9j-1b1" firstAttribute="trailing" secondItem="BEp-a3-4qd" secondAttribute="trailing" id="ruX-oj-pAG"/>
+                    <constraint firstItem="Pzf-9j-1b1" firstAttribute="top" secondItem="BEp-a3-4qd" secondAttribute="top" id="ubZ-Ua-QyG"/>
+                    <constraint firstItem="mpI-fa-gJp" firstAttribute="leading" secondItem="d0a-Xg-LIi" secondAttribute="leading" id="v6A-Eh-Ggb"/>
+                    <constraint firstItem="BEp-a3-4qd" firstAttribute="centerX" secondItem="d0a-Xg-LIi" secondAttribute="centerX" id="xin-3s-jFp"/>
+                    <constraint firstItem="Pzf-9j-1b1" firstAttribute="bottom" secondItem="BEp-a3-4qd" secondAttribute="bottom" id="zJf-9e-8BM"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <size key="customSize" width="193" height="162"/>
+            <connections>
+                <outlet property="placeIV" destination="Pzf-9j-1b1" id="ZSX-pY-xb8"/>
+                <outlet property="remark" destination="mpI-fa-gJp" id="MAs-oq-1Zx"/>
+                <outlet property="smallRemark" destination="BEp-a3-4qd" id="ZKG-7h-wgB"/>
+            </connections>
+            <point key="canvasLocation" x="-403.62318840579712" y="46.205357142857139"/>
+        </collectionViewCell>
+    </objects>
+</document>

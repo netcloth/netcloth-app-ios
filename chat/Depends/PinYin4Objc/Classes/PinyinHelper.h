@@ -1,8 +1,8 @@
-
-
-
-
-
+  
+  
+  
+  
+  
 
 #ifndef _PinyinHelper_H_
 #define _PinyinHelper_H_
@@ -15,7 +15,7 @@ typedef void(^OutputArrayBlock)(NSArray *array) ;
 @interface PinyinHelper : NSObject {
 }
 
-
+/* async methods, "ui blocking" is gone, make ui update smoothly ,recommend use methods below*/
 
 + (void)toHanyuPinyinStringArrayWithChar:(unichar)ch
                                   outputBlock:(OutputArrayBlock)outputBlock;
@@ -50,7 +50,7 @@ typedef void(^OutputArrayBlock)(NSArray *array) ;
                     withHanyuPinyinOutputFormat:(HanyuPinyinOutputFormat *)outputFormat
                                     outputBlock:(OutputStringBlock)outputBlock;
 
-
+ 
 
 + (NSArray *)toHanyuPinyinStringArrayWithChar:(unichar)ch;
 + (NSArray *)toHanyuPinyinStringArrayWithChar:(unichar)ch
@@ -74,4 +74,4 @@ typedef void(^OutputArrayBlock)(NSArray *array) ;
 
 @end
 
-#endif
+#endif   

@@ -1,4 +1,36 @@
-
+/* Copyright (C) 2002 Jean-Marc Valin */
+/**
+   @file ltp.h
+   @brief Long-Term Prediction functions
+*/
+/*
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+   
+   - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+   
+   - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+   
+   - Neither the name of the Xiph.org Foundation nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+   
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #ifndef LTP_H
 #define LTP_H
@@ -6,7 +38,7 @@
 #include "speex/speex_bits.h"
 #include "arch.h"
 
-
+/** LTP parameters. */
 typedef struct {
    const signed char *gain_cdbk;
    int     gain_bits;
@@ -24,20 +56,20 @@ spx_word32_t inner_prod(const spx_word16_t *x, const spx_word16_t *y, int len);
 void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *pitch, spx_word16_t *gain, int N, char *stack);
 
 
-
+/** Finds the best quantized 3-tap pitch predictor by analysis by synthesis */
 int pitch_search_3tap(
-spx_word16_t target[],                 
+spx_word16_t target[],                  
 spx_word16_t *sw,
-spx_coef_t ak[],                     
-spx_coef_t awk1[],                   
-spx_coef_t awk2[],                   
-spx_sig_t exc[],                    
+spx_coef_t ak[],                      
+spx_coef_t awk1[],                   /* Weighted LPCs #1 for this subframe */
+spx_coef_t awk2[],                   /* Weighted LPCs #2 for this subframe */
+spx_sig_t exc[],                     
 const void *par,
-int   start,                    
-int   end,                      
-spx_word16_t pitch_coef,               
-int   p,                        
-int   nsf,                      
+int   start,                     
+int   end,                       
+spx_word16_t pitch_coef,               /* Voicing (pitch) coefficient */
+int   p,                         
+int   nsf,                       
 SpeexBits *bits,
 char *stack,
 spx_word16_t *exc2,
@@ -48,15 +80,15 @@ int plc_tuning,
 spx_word32_t *cumul_gain
 );
 
-
+ 
 void pitch_unquant_3tap(
-spx_word16_t exc[],             
-spx_word32_t exc_out[],         
-int   start,                    
-int   end,                      
-spx_word16_t pitch_coef,        
+spx_word16_t exc[],              
+spx_word32_t exc_out[],          
+int   start,                     
+int   end,                       
+spx_word16_t pitch_coef,        /* Voicing (pitch) coefficient */
 const void *par,
-int   nsf,                      
+int   nsf,                       
 int *pitch_val,
 spx_word16_t *gain_val,
 SpeexBits *bits,
@@ -67,20 +99,20 @@ spx_word16_t last_pitch_gain,
 int cdbk_offset
 );
 
-
+ 
 int forced_pitch_quant(
-spx_word16_t target[],                 
+spx_word16_t target[],                  
 spx_word16_t *sw,
-spx_coef_t ak[],                     
-spx_coef_t awk1[],                   
-spx_coef_t awk2[],                   
-spx_sig_t exc[],                    
+spx_coef_t ak[],                      
+spx_coef_t awk1[],                   /* Weighted LPCs #1 for this subframe */
+spx_coef_t awk2[],                   /* Weighted LPCs #2 for this subframe */
+spx_sig_t exc[],                     
 const void *par,
-int   start,                    
-int   end,                      
-spx_word16_t pitch_coef,               
-int   p,                        
-int   nsf,                      
+int   start,                     
+int   end,                       
+spx_word16_t pitch_coef,               /* Voicing (pitch) coefficient */
+int   p,                         
+int   nsf,                       
 SpeexBits *bits,
 char *stack,
 spx_word16_t *exc2,
@@ -91,15 +123,15 @@ int plc_tuning,
 spx_word32_t *cumul_gain
 );
 
-
+ 
 void forced_pitch_unquant(
-spx_word16_t exc[],             
-spx_word32_t exc_out[],         
-int   start,                    
-int   end,                      
-spx_word16_t pitch_coef,        
+spx_word16_t exc[],              
+spx_word32_t exc_out[],          
+int   start,                     
+int   end,                       
+spx_word16_t pitch_coef,        /* Voicing (pitch) coefficient */
 const void *par,
-int   nsf,                      
+int   nsf,                       
 int *pitch_val,
 spx_word16_t *gain_val,
 SpeexBits *bits,
@@ -110,4 +142,4 @@ spx_word16_t last_pitch_gain,
 int cdbk_offset
 );
 
-#endif 
+#endif  

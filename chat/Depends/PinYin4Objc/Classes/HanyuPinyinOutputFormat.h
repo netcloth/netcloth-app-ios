@@ -1,3 +1,6 @@
+/**
+ *	Created by kimziv on 13-9-14.
+ */
 #ifndef _HanyuPinyinOutputFormat_H_
 #define _HanyuPinyinOutputFormat_H_
 
@@ -31,4 +34,4 @@ typedef enum {
 - (void)restoreDefault;
 @end
 
-#endif
+#endif   

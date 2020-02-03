@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import "SRRecordingAudioPlayerManager.h"
 #import "LRSPlayer.h"
@@ -31,12 +31,12 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-
+          
     }
     return self;
 }
 
-
+  
 
 - (void)playData:(NSData *)pcm  withBlock:(callBack)back
 {
@@ -66,7 +66,7 @@
 
 
 
-
+  
 
 
 - (AVAudioPlayer *)playerWithFilePath:(NSString *)filePath {
@@ -96,8 +96,8 @@
 }
 
 - (void)setupAudio {
-
-
+  
+  
     NSError *err_1;
     [AVAudioSession.sharedInstance setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&err_1];
     [AVAudioSession.sharedInstance setActive:true error:nil];
@@ -146,7 +146,7 @@
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-
+  
 - (void)audioInterrupte:(NSNotification *)notice {
     if (_audioPlayer == nil) {
         return;
@@ -167,6 +167,7 @@
 }
 
 
+#pragma mark - AVAudioPlayerDelegate
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     NSLog(@"audioPlayerDidFinishPlaying");
     if (self.call) {

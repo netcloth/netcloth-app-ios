@@ -1,93 +1,112 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
+#import "CPSessionHelper.h"
+#import "CPGroupChatHelper.h"
 
-@protocol ChatInterface <NSObject>
+@protocol ChatDelegate <NSObject>
 
 @optional
 - (void)onReceiveMsg:(CPMessage *_Nonnull)msg;
+
+  
 - (void)onCacheMsgRecieve:(NSArray<CPMessage *> *)caches;
 
+  
 - (void)onMsgSendStateChange:(CPMessage *_Nonnull)msg;
 
-@end
+  
+- (void)onReceiveGroupChatMsgs:(NSArray<CPMessage *> * _Nonnull)msgs;
 
+  
+  
+- (void)onCurrentRoomInfoChange;
 
-@protocol ChatDBInterface <NSObject>
+  
+- (void)onUnreadRsp:(NSArray<CPUnreadResponse *> *)response;
 
-+ (void)getAllRecentSessionComplete:(void (^)(BOOL success, NSString *msg, NSArray<CPSession *> * _Nullable recentSessions))complete;
+  
+- (void)onReceiveNotify:(CPGroupNotify * _Nullable)notice;
 
+  
+- (void)onSessionNeedChange:(id)change;
 
-
-+ (void)getMessagesInSession:(NSInteger)sessionId
-                  createTime:(double)createTime
-                   fromMsgId:(long long)msgId
-                        size:(NSInteger)size
-                    complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete;
-
-
-+ (void)setAllReadOfSession:(NSInteger)sessionId
-                   complete:(void (^)(BOOL success, NSString *msg))complete;
-
-
-+ (void)setReadOfMessage:(long long)msgId
-                complete:(void (^)(BOOL success, NSString *msg))complete;
-
-
-+ (void)deleteSession:(NSInteger)sessionId
-             complete:(void (^)(BOOL success, NSString *msg))complete;
-
-
-+ (void)deleteMessage:(long long)msgId
-             complete:(void (^)(BOOL success, NSString *msg))complete;
-
-
-
-+ (void)markTopOfSession:(NSInteger)sessionId
-                complete:(void (^)(BOOL success, NSString *msg))complete;
-
-
-+ (void)unTopOfSession:(NSInteger)sessionId
-              complete:(void (^)(BOOL success, NSString *msg))complete;
-
-
-+ (void)retrySendMsg:(long long)msgId;
+  
+- (void)onLogonNotify:(NCProtoNetMsg *)notify;
 
 
 @end
 
+@protocol ChatRoomInterface;
 
 NS_ASSUME_NONNULL_BEGIN
 
+  
+@interface CPChatHelper : NSObject <ChatRoomInterface>
 
-@interface CPChatHelper : NSObject <ChatDBInterface>
++ (void)addInterface:(id<ChatDelegate>)delegate;
++ (void)removeInterface:(id<ChatDelegate>)delegate;
 
-+ (void)addInterface:(id<ChatInterface>)delegate;
-+ (void)removeInterface:(id<ChatInterface>)delegate;
+  
+  
++ (void)setRoomToPubkey:(NSString * _Nullable)topubkey;
 
-
+  
 + (void)sendText:(NSString *)msg
           toUser:(NSString *)pubkey;
 
 + (void)sendAudioData:(NSData *)data
           toUser:(NSString *)pubkey;
 
-
+  
 + (void)sendImageData:(NSData *)data
                toUser:(NSString *)pubkey;
 
 
+  
++ (void)fakeSendMsg:(CPMessage *)msg complete:(void (^ __nullable)(BOOL success, NSString *msg))complete;
 
-+ (void)setRoomToPubkey:(NSString * _Nullable)topubkey;
+
+  
++ (void)sendDeleteMsgAction:(NCProtoDeleteAction)action
+                       hash:(int64_t)hash
+            relateHexPubkey:(NSString * _Nullable)hexPubkey
+                   complete:(MsgResponseBack)back;
+
 
 @end
 
 
 NS_ASSUME_NONNULL_END
+
+
+@protocol ChatRoomInterface <NSObject>
+
+  
++ (void)getMessagesInSession:(NSInteger)sessionId
+                  createTime:(double)createTime   
+                   fromMsgId:(long long)msgId   
+                        size:(NSInteger)size   
+                    complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete;
+
+  
++ (void)deleteMessage:(long long)msgId
+             complete:(void (^)(BOOL success, NSString *msg))complete;
+
+  
++ (void)setReadOfMessage:(long long)msgId
+                complete:(void (^)(BOOL success, NSString *msg))complete;
+
+
+  
++ (void)retrySendMsg:(long long)msgId;
+
+
+@end

@@ -6,7 +6,7 @@
   Copyright © 2019 netcloth. All rights reserved.
 */
 
-//MARK:- Login
+  
 "login_wrong_pwd" = "密码错误，请重新输入";
 "login_invalid_data" = "密码至少6位";
 "Please check your network" = "请检查网络连接";
@@ -17,7 +17,7 @@
 "confirm_delete" = "确认删除";
 "Delete the Account" = "删除该账户";
 
-//MARK:- Register
+  
 "Register_invalid_account" = "账户名称至少1位";
 "Register_invalid_pwd" = "密码至少6位";
 "Register_repeat_pwd" = "密码不一致";
@@ -26,7 +26,7 @@
 "Register_W_msg" = "NetCloth无法找回密码，请牢记您的账户密码。";
 "Register_Ok" = "确认注册";
 
-//MARK:- Export
+  
 "Private Key" = "私钥";
 "Export_invalid_pwd" = "密码至少8位";
 "Insufficient password strength" = "密码强度不足";
@@ -50,7 +50,7 @@
 
 "Export_Alert_Prikey" = "请确保四周无人及无摄像头！请勿截图或使用拍照的方式保存私钥";
 
-// Import
+  
 "import_valid_title" = "导入成功";
 "import_valid_message" = "欢迎回到NetCloth";
 "import_valid_btn" = "确认";
@@ -62,7 +62,7 @@
 
 "Account is existed" = "该账户已存在";
 
-//change pwd
+  
 "change_valid_title" = "修改成功";
 "change_valid_message" = "欢迎回到NetCloth";
 "change_valid_btn" = "确认";
@@ -74,7 +74,7 @@
 
 
 
-// Wallet Manager Errors
+  
 "WalletManager.Error.invalidPassword" = "密码不正确";
 "WalletManager.Error.invalidPrivateKey" = "私钥不正确";
 "WalletManager.Error.invalidKeystore" = "Keystore不正确";
@@ -89,7 +89,7 @@
 "WalletManager.Error.invalidData" = "请输入有效数据验证";
 
 
-//MARK:- Session
+  
 "Session_W_Title" = "确认删除消息";
 "Session_W_Msg" = "消息删除后将无法恢复";
 "Sticky on top" = "置顶";
@@ -97,7 +97,7 @@
 "Resend the message？" = "是否重新发送？";
 
 
-//MARK:- Contact
+  
 "Contact_Alias" = "备注名";
 "Contact_Delete" = "删除";
 "Contact_W_Title" = "确认删除联系人";
@@ -113,7 +113,7 @@
 "NetCloth Support" = "NetCloth小助手";
 "Support_Content" = "欢迎使用NetCloth。如您在使用过程中遇到问题，或是您有新的产品建议，欢迎给我留言哦。";
 
-//MARK:- Add Contact
+  
 "Contact_invalid_address" = "账户地址错误";
 "Contact_invalid_remark" = "备注名至少1位";
 "Contact_have_added" = "该账号已是你的好友";
@@ -122,7 +122,7 @@
 "Update Successfully" = "更新成功";
 "No account available yet" = "暂无可用账号";
 
-//MARK:- Me
+  
 "Copy Share" = "已复制到粘贴板，可以发送分享";
 "Log Out" = "退出登录";
 "QR Code Saved" = "保存成功";
@@ -130,16 +130,16 @@
 "connect_ing" = "连接中";
 "connect_fail" = "离线";
 
-//MARK:- Setting - Account
-"Enter Password" = "请输入密码";
+  
+"Enter Password" = "请输入账号密码";
 "Language" = "语言";
 "Notifications" = "消息提醒";
 "Change Password" = "修改密码";
 "Contacts Backup" = "备份通讯录";
 "Restore Contacts" = "恢复通讯录";
 "Contact data is empty" = "联系人数据为空";
-"Contact_info" = "联系人 #white# 名，黑名单 #black# 名";
-"C-IPAL Settings" = "C-IPAL设置";
+"Contact_info" = "联系人 #white# 名，黑名单 #black# 名，群私钥 #group# 个";
+"C-IPAL Settings" = "客户端服务设置（C-IPAL）";
 
 
 
@@ -153,7 +153,7 @@
 "Contact_restore_result_fail" = "恢复失败，请检查网络链接是否正常";
 
 
-//MARK:- Chat Room
+  
 "Audio" = "语音";
 "Text" = "文字";
 "Picture" = "图片";
@@ -164,7 +164,7 @@
 "Hold to Talk" = "按住 说话";
 "Release to Send" = "松开 结束";
 "Message too short" = "录音时间太短了";
-/// Time
+  
 "Just now" = "刚刚";
 "Yesterday" = "昨天";
 "Sunday" = "周日";
@@ -176,23 +176,23 @@
 "Saturday" = "周六";
 
 
-//MARK:- Device Auth
+  
 "Device_camera" = "请去-> [设置 - 隐私 - 相机] 打开访问开关";
 "Device_photos" = "请去-> [设置 - 隐私 - 相册] 打开访问开关";
 "Device_microphone" = "请去-> [设置 - 隐私 - 麦克风] 打开访问开关";
 
 
-//MARK:- Notice Center
+  
 "center_new_msg_in" = "你收到一条消息";
 
-//MARK:- Scan Third
+  
 "Scan" = "扫一扫";
 "Album" = "相册";
 "Align QR Code within frame to scan" = "将二维码/条码放入框内, 即可自动扫描";
 "My QR Code" = "我的二维码";
 "QR Code" = "二维码";
 
-//MARK:- others
+  
 "Cancel" = "取消";
 "Back" = "返回";
 "OK" = "确定";
@@ -202,13 +202,13 @@
 "Copy" = "复制";
 "Send" = "发送";
 
-//IPAL
+  
 "Messages" = "消息";
 "ipal_connect_ing" = "正在连接";
 "ipal_connect_fail" = "连接失败";
 "ipal_connect_ok" = "连接成功";
-"ipal_step1_fail_tip" = "Tips：请稍后重新登录APP";
-"ipal_step2_fail_tip" = "Tips：请重试或重新设置C-IPAL";
+"ipal_step1_fail_tip" = "提醒：请稍后重新登录APP";
+"ipal_step2_fail_tip" = "提醒：请重试或重新设置客户端服务";
 "Return" = "返回";
 "Enjoy" = "开始体验";
 
@@ -243,3 +243,131 @@
 "None" = "无";
 
 "cipal_notify_fail" = "C-IPAL 申明请求发送失败，请稍后重试";
+
+  
+"clear_alert_title" = "退出登录后将删除用户的所有聊天记录及对话框，无法恢复。";
+"clear_alert_btn_text" = "好的，我知道了";
+
+"clear_now_alert_title" = "确认清空聊天记录";
+"clear_now_alert_msg" = "将删除所有聊天记录及对话框，无法恢复。";
+"clear_now_btn_ok_text" = "确认删除";
+"Msg_Recieve_Unknown" = "[你收到了一条未知消息]";
+"Stranger Messages" = "陌生人消息";
+"Edit" = "编辑";
+"New Friends" = "新的朋友";
+"Do not disturb" = "免打扰";
+
+"Welcom_tip" = "您已成功添加对方为好友，现在可以开始聊天了。";
+
+"stranger_tip_1" = "对方不是您的好友，#mark#聊天更便捷更顺。";
+"stranger_tip_2" = "添加好友";
+
+  
+"Group Chat" = "群聊";
+"New Group Chat" = "创建群聊";
+"Add Contacts" = "添加联系人";
+"Done" = "确认";
+"Group Members" = "群成员";
+
+"Group_Select_Count" = "已选择#mark#名联系人";
+"Group_Select_Empty_tip" =  "联系人中没有找到“#mark#”";
+"Group_Member_Select_Empty_tip" =  "群成员中没有找到“#mark#”";
+"Please select C-IPAL first" = "请先选择 C-IPAL";
+"people" = "人";
+"C-IPAL registration failed" = "C-IPAL 注册失败";
+"Group_Server_Con_fail" = "群聊天服务器连接失败";
+
+"Group_Join_ecc_tip" = "该群人数已达上限，无法加入";
+"Group_invalid_name" = "群名称至少1位";
+"Group_invalid_nickname" = "群昵称至少1位";
+
+"Invalid Data" = "请输入有效数据";
+
+"Group_Notice_Change_Title" = "该公告会通知全部群成员，是否发布？";
+"Post" = "发布";
+
+"Save" = "保存";
+"Saved" = "保存成功";
+"Dissolve_toast" = "解散群聊后将通知群成员，群功能将失效，但以往对话框及聊天记录仍可查看。";
+"Group_Dissolve_tip" = "本群已被群主解散，仅可查看以往聊天记录。";
+
+"Group_Member_Kick_Tip" = "确认将#mark#位群员移出该群聊？";
+"Group_Member_Kick_Succ" = "移出成功";
+"Concacts" = "联系人";
+"Group Chats" = "群聊";
+"General" = "通用";
+"Chat History" = "聊天记录";
+"Clear Chat History" = "清空所有聊天记录";
+"Group_Chat_Dele_Tip" = "消息删除后将无法恢复";
+"Group_Chat_Leave_Tip" = "退出后不会通知群聊中其他成员,且删除该群及聊天记录。";
+
+"Receive Notifications" = "接收消息提醒";
+"Mute Notifications" = "消息免打扰";
+"Group Alias" = "群昵称";
+
+"Group_Dele_Member_Msg" = "确认将该群员移出该群聊？";
+"Remove Members" = "删除成员";
+"Add Group Members" = "邀请入群";
+
+  
+"New_group_notice" = "【新群公告】";
+"Group_Invit_Msg_Title" = "邀请你加入群聊";
+"Group_Invit_Msg_Content" = "\"#sendername#\"邀请你加入群聊“#groupname#”";
+
+"Group_Create_Suc_tip" = "您已成功创建群聊，可以邀请群员啦";
+
+"Group_Join_Suc_tip" = "您已成功加入群聊";
+"Group_Joined_tip" = "#mark#已加入群聊";
+
+"modify group name" = "修改群名为";
+
+"Group_Room_Kick_Msg" = "你已被移除群聊";
+"Group_Room_Kick_Master" = "您已将 #mark# 移出群聊";
+
+"Group_Kick_tip" = "你已被移除群聊，仅可查看以往聊天记录。";
+
+  
+"chat_group_kicked" = "你已经不在群里";
+"chat_group_dismissed" = "群已经解散";
+
+  
+"acc_con_all_tip" = "您的账户与通讯录尚未备份，请及时备份以防账户与联系人信息丢失。";
+"acc_only_tip" = "您的账户尚未备份，请及时备份以防账户信息丢失。";
+"con_only_tip" = "您的通讯录尚未备份更新，请及时备份以防联系人信息丢失。";
+
+
+"Backup Later" = "暂不备份";
+
+"invite_all_allow" = "允许任何人邀请好友进群";
+"invite_approve_need" = "邀请好友进群需群主确认";
+"invite_only_ower" = "仅允许群主邀请好友进群";
+
+"Group Notices" = "群通知";
+"Group Confirmation" = "入群申请";
+
+"Notify_status_unread" = "待确认";
+"Notify_status_read" = "待确认";
+"Notify_status_fulfilled" = "已通过";
+"Notify_status_reject" = "已拒绝";
+"Notify_status_expired" = "已过期";
+
+"Notify_detail_inviter" = "通过#mark#邀请入群";
+"Only_Group_Admin_Invite_tip" = "本群仅允许管理员邀请好友进群";
+"Group_Request_From_QR" =  "通过二维码扫描入群";
+
+
+"Logon_Notice" = "你的NetCloth账号于#mark#在#device#设备上登录。";
+"Android" = "安卓";
+"iOS" = "iOS";
+"PC" = "PC";
+
+"Group_Big_Qr_Name" = "群聊：";
+"Group_Approve_request_Ok" = "申请已发送，等待管理员同意";
+
+  
+"Oversized" = "尺寸过大";
+"Network_error_tip" = "网络连接不成功";
+"Seed_error_tip" = "区块链节点连接失败，请退出登录重新连接";
+"Group_syn_msg_count" = "#mark#条新消息";
+"Group_unread_location_tip" = "⎯⎯⎯⎯⎯⎯ 以下为新消息 ⎯⎯⎯⎯⎯⎯";
+"Auth_name_tip" = "#mark#正在向您申请";

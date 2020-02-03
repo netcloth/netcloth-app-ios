@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 import PromiseKit
@@ -19,14 +19,9 @@ class IPALManager: NSObject {
     var toast: ConnectToast?
     var canShow: Bool = true
     
-
+      
     var store: IpalStatus = IpalStatus()
     
-    
-    func test_for() {
-
-
-    }
     
     func resetForLogin() {
         self.canShow = true
@@ -34,12 +29,12 @@ class IPALManager: NSObject {
         self.toast = nil
     }
     
-
+      
     deinit {
         print("dealloc \(type(of: self))")
     }
     
-
+      
     func onStep1_QueryInfo() {        
         if self.canShow == false {
             return
@@ -55,6 +50,8 @@ class IPALManager: NSObject {
         .catch { error in
             print("ipal " + error.localizedDescription)
             self.showToast(step: .F_1_1)
+            self.store.isSeedError = true
+            NotificationCenter.default.post(name: NSNotification.Name.serviceConnectStatusChange, object: nil)
             self.toast?.onBackTap = { [weak self] in
                 self?.hideToast(nextCan: true, completion: nil)
             }
@@ -62,7 +59,7 @@ class IPALManager: NSObject {
     }
     
     func onRequestAllIpalNode(hidToast:Bool, address: String?) {
-
+          
         if hidToast {
             self.hideToast(nextCan: true) {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.15, execute: {
@@ -75,13 +72,13 @@ class IPALManager: NSObject {
         }
     }
     
-
+      
     func onStep2_BindNode(_ node: IPALNode) {
         self.showToast(step: .C_2)
         ChainService.requestBindCIpal(node: node).done({ (txHash) in
             node.isClaimOk = 0
             self.store.currentCIpal = node
-
+              
             CPAssetHelper.insertCipalHistroy(txHash,
                                              moniker: node.moniker,
                                              server_address: node.operator_address,
@@ -149,7 +146,7 @@ class IPALManager: NSObject {
         
         let curRand = Rand_id
         
-
+          
         let errorBlock = {
             self.showToast(step: .F_2_1)
             self.toast?.onRetryTap = { [weak self] in
@@ -167,28 +164,19 @@ class IPALManager: NSObject {
         }
         
         self.onQueryBlockStatusInfo(txHash: txHash, requestCount: 0) { (result) in
-
+              
             if curRand != self.Rand_id {
                 return
             }
             
-
+              
             ChainService.requestLastRegisterInfo().done { (address) in
                 if address == nil {
-
+                      
                     errorBlock()
                 } else {
-                    
                     CPAccountHelper.disconnect()
                     self.onStep3_decodeService(address: address!)
-                    
-
-
-
-
-
-
-
                 }
             }
             .catch { error in
@@ -197,13 +185,12 @@ class IPALManager: NSObject {
         }
     }
     
-
-
-
-    
+      
+      
+      
     func onStep3_decodeService(address: String) {
         self.showToast(step: .C_2)
-        ChainService.queryServerNodeByAddress(address: address).done { (node) in
+        ChainService.queryServerNodeByAddress(server_address: address).done { (node) in
             node.isClaimOk = 1
             self.store.currentCIpal = node
             let endpoint = (node.cIpalEnd()?.endpoint)!
@@ -224,6 +211,7 @@ class IPALManager: NSObject {
         }
     }
     
+      
     func onStep3_ConnectChatService(endPoint: String) {
         self.showToast(step: .C_3)
         ChatService.requestLoadBalancing(endPoint: endPoint).done { (node) in
@@ -243,7 +231,7 @@ class IPALManager: NSObject {
         }
     }
     
-
+      
     func onConnectChatAllPoints(point: [String]) {
         self.showToast(step: .C_3)
         ChatService.connectChatServer(allEndPoints: point).done { (result) in
@@ -270,7 +258,7 @@ class IPALManager: NSObject {
     
     
     
-
+      
     func showToast(step: ConnectToast.Step) {
         if self.toast == nil {
             self.toast = R.loadNib(name: "ConnectToast") as? ConnectToast
@@ -311,6 +299,57 @@ class IPALManager: NSObject {
             }
         }
     }
+    
+    
+      
+    func  v2_getIPALStatusInfo(txHash: String,
+                               requestCount: Int,
+                               autoUpdateDB: Bool = false,
+                               stop: UnsafeMutablePointer<Bool>,
+                               complete completeHandle: ((Bool) -> Void)? = nil) {
+        
+        if stop.pointee == true {
+            return
+        }
+        let path = APPURL.Chain.QueryBlockHashStatus.replacingOccurrences(of: "{tx_hash}", with: txHash)
+        NW.requestUrl(path: path, method: .get, para: nil) { [stop] (r, res) in
+            if stop.pointee == true {
+                return
+            }
+            
+            if r == true && ((res as? NSDictionary) != nil) {
+                let json = JSON(res)
+                if  json["logs"][0]["success"].boolValue == true {
+                    if autoUpdateDB {
+                        CPAssetHelper.updateChain_status(1, whereTxHash: txHash, callback: nil)
+                    }
+                    completeHandle?(true)
+                } else {
+                    if autoUpdateDB {
+                        CPAssetHelper.updateChain_status(2, whereTxHash: txHash, callback: nil)
+                        PPNotificationCenter.shared.sendALocalNotifyMsg(msg: "cipal_notify_fail".localized())
+                    }
+                    completeHandle?(false)
+                }
+            }
+            else {
+                if requestCount > 20 {
+                    if autoUpdateDB {
+                        CPAssetHelper.updateChain_status(2, whereTxHash: txHash, callback: nil)
+                        PPNotificationCenter.shared.sendALocalNotifyMsg(msg: "cipal_notify_fail".localized())
+                    }
+                    completeHandle?(false)
+                    return
+                }
+                
+                let diff = 3
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime(integerLiteral: diff)) { [weak self, stop] in
+                    self?.v2_getIPALStatusInfo(txHash: txHash, requestCount: requestCount + 1, autoUpdateDB: autoUpdateDB, stop: stop, complete: completeHandle)
+                }
+            }
+        }
+    }
+
 }
 
 extension String {

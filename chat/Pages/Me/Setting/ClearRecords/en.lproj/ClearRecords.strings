@@ -1,0 +1,15 @@
+
+/* Class = "UINavigationItem"; title = "聊天记录"; ObjectID = "CKP-My-8v6"; */
+"CKP-My-8v6.title" = "Chat History";
+
+/* Class = "UILabel"; text = "聊天记录"; ObjectID = "OCU-rh-4Ma"; */
+"OCU-rh-4Ma.text" = "Chat History";
+
+/* Class = "UILabel"; text = "清空所有聊天记录"; ObjectID = "b1q-xP-KYj"; */
+"b1q-xP-KYj.text" = "Clear Chat History";
+
+/* Class = "UILabel"; text = "退出登录后清空所有聊天记录"; ObjectID = "dno-qk-7xu"; */
+"dno-qk-7xu.text" = "Clear all chats when you log out";
+
+/* Class = "UINavigationItem"; title = "通用"; ObjectID = "yFP-AW-fvL"; */
+"yFP-AW-fvL.title" = "General";

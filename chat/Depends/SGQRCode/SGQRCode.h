@@ -1,11 +1,11 @@
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
 
 #import "SGQRCodeObtainConfigure.h"
 #import "SGQRCodeObtain.h"

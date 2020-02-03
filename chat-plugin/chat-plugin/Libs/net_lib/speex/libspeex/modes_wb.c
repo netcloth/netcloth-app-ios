@@ -62,7 +62,7 @@
 #define sb_encode NULL
 #define sb_encoder_ctl NULL
 #define lsp_quant_high NULL
-#endif /* DISABLE_ENCODER */
+#endif  
 
 #if defined(DISABLE_DECODER) || defined(DISABLE_WIDEBAND)
 #define noise_codebook_unquant NULL
@@ -72,7 +72,7 @@
 #define sb_decoder_destroy NULL
 #define sb_decode NULL
 #define sb_decoder_ctl NULL
-#endif /* DISABLE_DECODER */
+#endif  
 
 EXPORT const SpeexMode * const speex_mode_list[SPEEX_NB_MODES] = {&speex_nb_mode, &speex_wb_mode, &speex_uwb_mode};
 
@@ -83,20 +83,20 @@ extern const signed char hexc_10_32_table[];
 
 /* Split-VQ innovation for high-band wideband */
 static const split_cb_params split_cb_high = {
-   8,               /*subvect_size*/
-   5,               /*nb_subvect*/
-   hexc_table,       /*shape_cb*/
-   7,               /*shape_bits*/
+   8,                
+   5,                
+   hexc_table,        
+   7,                
    1,
 };
 
 
 /* Split-VQ innovation for high-band wideband */
 static const split_cb_params split_cb_high_lbr = {
-   10,               /*subvect_size*/
-   4,               /*nb_subvect*/
-   hexc_10_32_table,       /*shape_cb*/
-   5,               /*shape_bits*/
+   10,                
+   4,                
+   hexc_10_32_table,        
+   5,                
    0,
 };
 
@@ -108,14 +108,14 @@ static const SpeexSubmode wb_submode1 = {
    0,
    1,
    0,
-   /*LSP quantization*/
+    
    lsp_quant_high,
    lsp_unquant_high,
-   /*Pitch quantization*/
+    
    NULL,
    NULL,
    NULL,
-   /*No innovation quantization*/
+    
    NULL,
    NULL,
    NULL,
@@ -129,14 +129,14 @@ static const SpeexSubmode wb_submode2 = {
    0,
    1,
    0,
-   /*LSP quantization*/
+    
    lsp_quant_high,
    lsp_unquant_high,
-   /*Pitch quantization*/
+    
    NULL,
    NULL,
    NULL,
-   /*Innovation quantization*/
+    
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
 #ifdef DISABLE_WIDEBAND
@@ -154,14 +154,14 @@ static const SpeexSubmode wb_submode3 = {
    0,
    1,
    0,
-   /*LSP quantization*/
+    
    lsp_quant_high,
    lsp_unquant_high,
-   /*Pitch quantization*/
+    
    NULL,
    NULL,
    NULL,
-   /*Innovation quantization*/
+    
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
 #ifdef DISABLE_WIDEBAND
@@ -178,14 +178,14 @@ static const SpeexSubmode wb_submode4 = {
    0,
    1,
    1,
-   /*LSP quantization*/
+    
    lsp_quant_high,
    lsp_unquant_high,
-   /*Pitch quantization*/
+    
    NULL,
    NULL,
    NULL,
-   /*Innovation quantization*/
+    
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
 #ifdef DISABLE_WIDEBAND
@@ -201,15 +201,15 @@ static const SpeexSubmode wb_submode4 = {
 /* Split-band wideband CELP mode*/
 static const SpeexSBMode sb_wb_mode = {
    &speex_nb_mode,
-   160,    /*frameSize*/
-   40,     /*subframeSize*/
-   8,     /*lpcSize*/
+   160,     
+   40,      
+   8,      
 #ifdef FIXED_POINT
    29491, 19661, /* gamma1, gamma2 */
 #else
    0.9, 0.6, /* gamma1, gamma2 */
 #endif
-   QCONST16(.0002,15), /*lpc_floor*/
+   QCONST16(.0002,15),  
    QCONST16(0.9f,15),
    {NULL, &wb_submode1, &wb_submode2, &wb_submode3, &wb_submode4, NULL, NULL, NULL},
    3,
@@ -247,15 +247,15 @@ EXPORT const SpeexMode speex_wb_mode = {
 /* Split-band "ultra-wideband" (32 kbps) CELP mode*/
 static const SpeexSBMode sb_uwb_mode = {
    &speex_wb_mode,
-   320,    /*frameSize*/
-   80,     /*subframeSize*/
-   8,     /*lpcSize*/
+   320,     
+   80,      
+   8,      
 #ifdef FIXED_POINT
    29491, 19661, /* gamma1, gamma2 */
 #else
    0.9, 0.6, /* gamma1, gamma2 */
 #endif
-   QCONST16(.0002,15), /*lpc_floor*/
+   QCONST16(.0002,15),  
    QCONST16(0.7f,15),
    {NULL, &wb_submode1, NULL, NULL, NULL, NULL, NULL, NULL},
    1,

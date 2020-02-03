@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 import Alamofire
@@ -18,8 +18,21 @@ extension AFDataResponse {
 @objc public
 class CPNetWork: NSObject {
     
+    /*
+     public enum HTTPMethod: String {
+         case connect = "CONNECT"
+         case delete  = "DELETE"
+         case get     = "GET"
+         case head    = "HEAD"
+         case options = "OPTIONS"
+         case patch   = "PATCH"
+         case post    = "POST"
+         case put     = "PUT"
+         case trace   = "TRACE"
+     }
+     */
     
-
+      
     @objc public
     static func requestUrl(path:String,
                            method: String,
@@ -35,9 +48,9 @@ class CPNetWork: NSObject {
         }
     }
 
-
+      
     @objc public
-    static func requestDataUrl(path:String,
+    static func getDataUrl(path:String,
                            method: String,
                            para:Parameters? = nil,
                            complete: ((_ success:Bool, _ value:Any?) -> Void)? = nil) {
@@ -51,13 +64,13 @@ class CPNetWork: NSObject {
     }
 
 
-
-
-
-
-
-
-
+      
+      
+      
+      
+      
+      
+      
     @objc public
     static func uploadData(data: Data,
                            toUrl: String,
@@ -69,7 +82,7 @@ class CPNetWork: NSObject {
             multipartFormData.append(data, withName: "uploadfile", fileName: "uploadfile", mimeType: "*/*")
         }, to: toUrl).responseJSON { response in
 
-
+              
             guard let cb = complete else {
                 return
             }
@@ -100,7 +113,7 @@ class CPNetWork: NSObject {
             }
         }, to: toUrl).responseJSON { response in
 
-
+              
             guard let cb = complete else {
                 return
             }

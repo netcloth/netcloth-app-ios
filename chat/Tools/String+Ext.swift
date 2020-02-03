@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 import Foundation
 
@@ -26,7 +26,7 @@ extension String {
         return false
     }
     
-
+      
     func getSmallRemark() -> String {
         if self.isOnlyEn() == false {
             return String(self.suffix(2))
@@ -43,16 +43,29 @@ extension String {
         return String(self.prefix(2))
     }
     
+    func getAvatarOneWord() -> String {
+        if self.isOnlyEn() == false {
+            return String(self.suffix(1))
+        }
+        return String(self.prefix(1))
+    }
+    
+    func getPubkeyAbbreviate() -> String {
+        return "\(self.prefix(10))……\(self.suffix(10))"
+    }
+    
+    
+    
     func getNoWhiteEnterString() -> String? {
         return (self as NSString).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
-
-
-
-
-
-
+      
+      
+      
+      
+      
+      
     
     func checkPassthrough() -> (passthrough: Bool ,strength: Int, ruleCount: Int) {
         if !(self.count >= Config.Account.Min_ExportPwd_len) {

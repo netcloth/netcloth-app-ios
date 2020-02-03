@@ -1,4 +1,37 @@
-
+/* Copyright (C) 2005 Analog Devices */
+/**
+   @file ltp_bfin.h
+   @author Jean-Marc Valin
+   @brief Long-Term Prediction functions (Blackfin version)
+*/
+/*
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+   
+   - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+   
+   - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+   
+   - Neither the name of the Xiph.org Foundation nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+   
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #include "bfin.h"
 
@@ -37,19 +70,19 @@ void pitch_xcorr(const spx_word16_t *_x, const spx_word16_t *_y, spx_word32_t *c
    corr += nb_pitch - 1;
    __asm__ __volatile__ (
       "P2 = %0;\n\t"
-      "I0 = P2;\n\t" 
-      "B0 = P2;\n\t" 
-      "R0 = %3;\n\t" 
+      "I0 = P2;\n\t"  
+      "B0 = P2;\n\t"  
+      "R0 = %3;\n\t"  
       "P3 = %3;\n\t"
-      "P3 += -2;\n\t" 
-      "P4 = %4;\n\t" 
-      "R1 = R0 << 1;\n\t" 
+      "P3 += -2;\n\t"  
+      "P4 = %4;\n\t"  
+      "R1 = R0 << 1;\n\t"  
       "L0 = R1;\n\t"
       "P0 = %1;\n\t"
 
       "P1 = %2;\n\t"
       "B1 = P1;\n\t"
-      "L1 = 0;\n\t" 
+      "L1 = 0;\n\t"  
 
       "r0 = [I0++];\n\t"
       "LOOP pitch%= LC0 = P4 >> 1;\n\t"
@@ -148,7 +181,7 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
    energy[0]=inner_prod(sw-start, sw-start, len);
    e0=inner_prod(sw, sw, len);
 
-   
+   /* energy update -------------------------------------*/
 
       __asm__ __volatile__
       (
@@ -176,28 +209,28 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
 
    pitch_xcorr(sw, sw-end, corr, len, end-start+1, stack);
 
-   
+   /* FIXME: Fixed-point and floating-point code should be merged */
    {
       VARDECL(spx_word16_t *corr16);
       VARDECL(spx_word16_t *ener16);
       ALLOC(corr16, end-start+1, spx_word16_t);
       ALLOC(ener16, end-start+1, spx_word16_t);
-      
+       
       normalize16(corr, corr16, 180, end-start+1);
       normalize16(energy, ener16, 180, end-start+1);
 
       if (N == 1) {
-	
+	/* optimised asm to handle N==1 case */
       __asm__ __volatile__
       (
-"        I0 = %1;\n\t"                     
+"        I0 = %1;\n\t"                     /* I0: corr16[]    */
 "        L0 = 0;\n\t"
-"        I1 = %2;\n\t"                     
+"        I1 = %2;\n\t"                     /* I1: energy      */
 "        L1 = 0;\n\t"
-"        R2 = -1;\n\t"                     
-"        R3 = 0;\n\t"                      
-"        P0 = %4;\n\t"                     
-"        P1 = %4;\n\t"                     
+"        R2 = -1;\n\t"                     /* R2: best score  */
+"        R3 = 0;\n\t"                      /* R3: best energy */
+"        P0 = %4;\n\t"                     /* P0: best pitch  */
+"        P1 = %4;\n\t"                     /* P1: counter     */
 "        LSETUP (sl1, sl2) LC1 = %3;\n\t"
 "sl1:      R0.L = W [I0++] || R1.L = W [I1++];\n\t"         
 "          R0 = R0.L * R0.L (IS);\n\t"
@@ -221,14 +254,14 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
 	for (i=start;i<=end;i++)
 	  {
 	    spx_word16_t tmp = MULT16_16_16(corr16[i-start],corr16[i-start]);
-	    
+	    /* Instead of dividing the tmp by the energy, we multiply on the other side */
 	    if (MULT16_16(tmp,best_ener[N-1])>MULT16_16(best_score[N-1],ADD16(1,ener16[i-start])))
 	      {
-		
+		 
 		best_score[N-1]=tmp;
 		best_ener[N-1]=ener16[i-start]+1;
 		pitch[N-1]=i;
-		
+		 
 		for (j=0;j<N-1;j++)
 		  {
 		    if (MULT16_16(tmp,best_ener[j])>MULT16_16(best_score[j],ADD16(1,ener16[i-start])))
@@ -250,7 +283,7 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
       }
    }
 
-   
+   /* Compute open-loop gain */
    if (gain)
    {
        for (j=0;j<N;j++)
@@ -258,7 +291,7 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
           spx_word16_t g;
           i=pitch[j];
           g = DIV32(corr[i-start], 10+SHR32(MULT16_16(spx_sqrt(e0),spx_sqrt(energy[i-start])),6));
-          
+          /* FIXME: g = max(g,corr/energy) */
                    if (g<0)
                    g = 0;
              gain[j]=g;
@@ -285,32 +318,32 @@ static int pitch_gain_search_3tap_vq(
   spx_word16_t       gain_sum;
   int                i;
 
-      
+       
 
       __asm__ __volatile__
       (
 
-"        P0 = %2;\n\t"                     
-"        L1 = 0;\n\t"                      
-"        %0 = 0;\n\t"                      
-"        %1 = 0;\n\t"                      
-"        P1 = 0;\n\t"                      
+"        P0 = %2;\n\t"                     /* P0: ptr to gain_cdbk */
+"        L1 = 0;\n\t"                       
+"        %0 = 0;\n\t"                      /* %0: best_sum         */
+"        %1 = 0;\n\t"                      /* %1: best_cbdk        */
+"        P1 = 0;\n\t"                      /* P1: loop counter     */
 
 "        LSETUP (pgs1, pgs2) LC1 = %4;\n\t"
-"pgs1:     R2  = B [P0++] (X);\n\t"        
-"          R3  = B [P0++] (X);\n\t"        
-"          R4  = B [P0++] (X);\n\t"        
+"pgs1:     R2  = B [P0++] (X);\n\t"        /* R2: g[0]             */
+"          R3  = B [P0++] (X);\n\t"        /* R3: g[1]             */
+"          R4  = B [P0++] (X);\n\t"        /* R4: g[2]             */
 "          R2 += 32;\n\t"
 "          R3 += 32;\n\t"
 "          R4 += 32;\n\t"
-"          R4.H = 64;\n\t"                 
+"          R4.H = 64;\n\t"                 /* R4.H: pitch_control    */
 
 "          R0  = B [P0++] (X);\n\t"              
-"          B0  = R0;\n\t"                  
+"          B0  = R0;\n\t"                  /* BO: gain_sum         */
           
-           
+           /* compute_pitch_error() -------------------------------*/
 
-"          I1 = %3;\n\t"                   
+"          I1 = %3;\n\t"                   /* I1: ptr to C         */
 "          A0 = 0;\n\t"
          
 "          R0.L = W[I1++];\n\t"
@@ -341,6 +374,22 @@ static int pitch_gain_search_3tap_vq(
 "          R1.L = R4.L*R4.L (IS);\n\t"
 "          R0 = (A0 -= R1.L*R0.L) (IS);\n\t"
 
+/*
+    Re-arrange the if-then to code efficiently on the Blackfin:
+
+      if (sum>best_sum && gain_sum<=max_gain)   ------ (1)
+
+      if (sum>best_sum && !(gain_sum>max_gain)) ------ (2)
+
+      if (max_gain<=gain_sum) {                 ------ (3)
+      sum = -VERY_LARGE32;
+      }
+      if (best_sum<=sum)
+
+    The blackin cc instructions are all of the form:
+
+      cc = x < y (or cc = x <= y)
+*/
 "          R1 = B0\n\t"
 "          R2 = %5\n\t"
 "          R3 = %6\n\t"

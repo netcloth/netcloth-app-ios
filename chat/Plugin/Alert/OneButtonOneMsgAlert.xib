@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="UKY-TY-SKb" customClass="OneButtonOneMsgAlert" customModule="NetCloth" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="150"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="NetCloth" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beA-RI-aKd">
+                    <rect key="frame" x="25" y="30" width="250" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.37647058820000001" green="0.38431372549999998" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hoy-Au-eKQ">
+                    <rect key="frame" x="90" y="85" width="120" height="40"/>
+                    <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Hia-wR-3dY"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="YRa-Qx-evu"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                    <inset key="contentEdgeInsets" minX="24" minY="0.0" maxX="24" maxY="0.0"/>
+                    <state key="normal" title="OK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="20"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onOkTap" destination="UKY-TY-SKb" eventType="touchUpInside" id="8Cv-UI-92E"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="beA-RI-aKd" secondAttribute="trailing" constant="25" id="7Ru-Hn-Vcr"/>
+                <constraint firstAttribute="bottom" secondItem="Hoy-Au-eKQ" secondAttribute="bottom" constant="25" id="CVL-oP-Tgi"/>
+                <constraint firstItem="beA-RI-aKd" firstAttribute="leading" secondItem="UKY-TY-SKb" secondAttribute="leading" constant="25" id="TPs-fF-dWB"/>
+                <constraint firstItem="beA-RI-aKd" firstAttribute="top" secondItem="UKY-TY-SKb" secondAttribute="top" constant="30" id="bbA-Vm-wCT"/>
+                <constraint firstItem="Hoy-Au-eKQ" firstAttribute="centerX" secondItem="UKY-TY-SKb" secondAttribute="centerX" id="gwB-p2-XCS"/>
+                <constraint firstItem="Hoy-Au-eKQ" firstAttribute="top" secondItem="beA-RI-aKd" secondAttribute="bottom" constant="22" id="nm0-kG-mVR"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="msgLabel" destination="beA-RI-aKd" id="6uT-Xr-NWl"/>
+                <outlet property="okButton" destination="Hoy-Au-eKQ" id="qbK-7f-NlF"/>
+            </connections>
+            <point key="canvasLocation" x="-192.75362318840581" y="-383.70535714285711"/>
+        </view>
+    </objects>
+</document>

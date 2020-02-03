@@ -1,10 +1,10 @@
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
@@ -13,8 +13,8 @@
 
 + (void)insertCipalHistroy:(NSString *)txhash
                    moniker:(NSString * _Nullable)moniker
-            server_address:(NSString * _Nullable)address
-              chain_status:(int)status 
+            server_address:(NSString * _Nullable)address   
+              chain_status:(int)status    
                   callback:(void(^)(BOOL succss, NSString *msg))result;
 
 + (void)updateChain_status:(int)status

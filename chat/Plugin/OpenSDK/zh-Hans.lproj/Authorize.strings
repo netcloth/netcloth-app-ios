@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "取消"; ObjectID = "5HO-Re-tYn"; */
+"5HO-Re-tYn.normalTitle" = "取消";
+
+/* Class = "UILabel"; text = "账户名称"; ObjectID = "Cva-Y9-9jO"; */
+"Cva-Y9-9jO.text" = "账户名称";
+
+/* Class = "UILabel"; text = "账户地址"; ObjectID = "MnJ-sT-pPq"; */
+"MnJ-sT-pPq.text" = "账户地址";
+
+/* Class = "UILabel"; text = "该应用为第三方应用，请注意自我防护"; ObjectID = "UOz-Ho-vAy"; */
+"UOz-Ho-vAy.text" = "该应用为第三方应用，请注意自我防护";
+
+/* Class = "UIButton"; normalTitle = "同意"; ObjectID = "hX7-7a-FOi"; */
+"hX7-7a-FOi.normalTitle" = "同意";
+
+/* Class = "UILabel"; text = "授权申请"; ObjectID = "obt-UV-KMA"; */
+"obt-UV-KMA.text" = "授权申请";
+
+/* Class = "UILabel"; text = "火币网正在向您申请"; ObjectID = "sO4-VQ-C52"; */
+"sO4-VQ-C52.text" = "";

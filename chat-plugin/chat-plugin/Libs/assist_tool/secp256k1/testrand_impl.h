@@ -1,3 +1,8 @@
+/**********************************************************************
+ * Copyright (c) 2013-2015 Pieter Wuille                              *
+ * Distributed under the MIT software license, see the accompanying   *
+ * file COPYING or http:  
+ **********************************************************************/
 
 #ifndef SECP256K1_TESTRAND_IMPL_H
 #define SECP256K1_TESTRAND_IMPL_H
@@ -40,6 +45,17 @@ static uint32_t secp256k1_rand_bits(int bits) {
 }
 
 static uint32_t secp256k1_rand_int(uint32_t range) {
+    /* We want a uniform integer between 0 and range-1, inclusive.
+     * B is the smallest number such that range <= 2**B.
+     * two mechanisms implemented here:
+     * - generate B bits numbers until one below range is found, and return it
+     * - find the largest multiple M of range that is <= 2**(B+A), generate B+A
+     *   bits numbers until one below M is found, and return it modulo range
+     * The second mechanism consumes A more bits of entropy in every iteration,
+     * but may need fewer iterations due to M being closer to 2**(B+A) then
+     * range is to 2**B. The array below (indexed by B) contains a 0 when the
+     * first mechanism is to be used, and the number A otherwise.
+     */
     static const int addbits[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 0};
     uint32_t trange, mult;
     int bits = 0;
@@ -91,4 +107,4 @@ static void secp256k1_rand256_test(unsigned char *b32) {
     secp256k1_rand_bytes_test(b32, 32);
 }
 
-#endif 
+#endif  

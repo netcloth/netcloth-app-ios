@@ -1,8 +1,8 @@
-
-
-
-
-
+  
+  
+  
+  
+  
 
 #include "ChineseToPinyinResource.h"
 #include "HanyuPinyinOutputFormat.h"
@@ -20,7 +20,7 @@
 
 @implementation PinyinHelper
 
-
+  
 + (void)toHanyuPinyinStringArrayWithChar:(unichar)ch
                                   outputBlock:(OutputArrayBlock)outputBlock
 {
@@ -102,7 +102,7 @@
              if (nil != array) {
                  NSMutableArray *targetPinyinStringArray = [NSMutableArray arrayWithCapacity:array.count];
                  for (int i = 0; i < (int) [array count]; i++) {
-
+                      
                  }
                  outputBlock(targetPinyinStringArray);
              }
@@ -127,7 +127,7 @@
             if (nil != array) {
                 NSMutableArray *targetPinyinStringArray = [NSMutableArray arrayWithCapacity:array.count];
                 for (int i = 0; i < (int) [array count]; i++) {
-
+                      
                 }
                 outputBlock(targetPinyinStringArray);
             }
@@ -144,24 +144,24 @@
                            withNSString:(NSString *)seperater
                             outputBlock:(OutputStringBlock)outputBlock
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSMutableString *resultPinyinStrBuf = [[NSMutableString alloc] init];
         for (int i = 0; i <  str.length; i++) {
@@ -200,7 +200,7 @@
     }];
 }
 
-
+  
 
 + (NSArray *)toHanyuPinyinStringArrayWithChar:(unichar)ch {
     return [PinyinHelper getUnformattedHanyuPinyinStringArrayWithChar:ch];

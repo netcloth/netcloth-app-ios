@@ -210,7 +210,7 @@ void lsp_quant_nb(spx_lsp_t *lsp, spx_lsp_t *qlsp, int order, SpeexBits *bits)
    for (i=0;i<order;i++)
       qlsp[i]=lsp[i]-qlsp[i];
 }
-#endif /* DISABLE_ENCODER */
+#endif  
 
 #ifndef DISABLE_DECODER
 void lsp_unquant_nb(spx_lsp_t *lsp, int order, SpeexBits *bits)
@@ -240,7 +240,7 @@ void lsp_unquant_nb(spx_lsp_t *lsp, int order, SpeexBits *bits)
    for (i=0;i<5;i++)
       lsp[i+5] = ADD32(lsp[i+5], LSP_DIV_1024(cdbk_nb_high2[id*5+i]));
 }
-#endif /* DISABLE_DECODER */
+#endif  
 
 #ifndef DISABLE_ENCODER
 void lsp_quant_lbr(spx_lsp_t *lsp, spx_lsp_t *qlsp, int order, SpeexBits *bits)
@@ -283,7 +283,7 @@ void lsp_quant_lbr(spx_lsp_t *lsp, spx_lsp_t *qlsp, int order, SpeexBits *bits)
    for (i=0;i<order;i++)
       qlsp[i]=lsp[i]-qlsp[i];
 }
-#endif /* DISABLE_ENCODER */
+#endif  
 
 #ifndef DISABLE_DECODER
 void lsp_unquant_lbr(spx_lsp_t *lsp, int order, SpeexBits *bits)
@@ -306,7 +306,7 @@ void lsp_unquant_lbr(spx_lsp_t *lsp, int order, SpeexBits *bits)
       lsp[i+5] += LSP_DIV_512(cdbk_nb_high1[id*5+i]);
 
 }
-#endif /* DISABLE_DECODER */
+#endif  
 
 #ifndef DISABLE_WIDEBAND
 extern const signed char high_lsp_cdbk[];
@@ -359,7 +359,7 @@ void lsp_quant_high(spx_lsp_t *lsp, spx_lsp_t *qlsp, int order, SpeexBits *bits)
    for (i=0;i<order;i++)
       qlsp[i]=lsp[i]-qlsp[i];
 }
-#endif /* DISABLE_ENCODER */
+#endif  
 
 
 #ifndef DISABLE_DECODER
@@ -380,7 +380,7 @@ void lsp_unquant_high(spx_lsp_t *lsp, int order, SpeexBits *bits)
    for (i=0;i<order;i++)
       lsp[i] += LSP_DIV_512(high_lsp_cdbk2[id*order+i]);
 }
-#endif /* DISABLE_DECODER */
+#endif  
 
-#endif /* DISABLE_WIDEBAND */
+#endif  
 
