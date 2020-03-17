@@ -23,27 +23,8 @@ $ pod install
 open chat.xcworkspace 
 
 
-### Version V1.0.4
+## Update logs
 
-#### Features
--Client-to-Client messaging
+[Click here](https://netcloth.zendesk.com/hc/en-us/sections/360007699613-App-Update-logs)
 
--Client-to-Client asymmetrical encryption
-
--Encrypted Identity
-
--C-IPAL settings
-
--Subscriptions
-
--Alias
-
--Text messages
-
--Short voice messages
-
--Sending photo
-
--Emoji
-
--Account&Contacts backup
+[点击这里](https://netcloth.zendesk.com/hc/zh-cn/sections/360007699613-APP%E5%8D%87%E7%BA%A7%E6%97%A5%E5%BF%97)
