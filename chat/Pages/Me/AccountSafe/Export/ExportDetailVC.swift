@@ -1,23 +1,23 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import WMPageController
 
-  
+
 class ExportDetailVC: WMPageController {
 
     deinit {
         print("\(type(of: self))")
     }
     
-    var keyStore: String?   
-    var privateKey: String?   
+    var keyStore: String? 
+    var privateKey: String? 
     
     var index: Int = 0
     
@@ -28,7 +28,7 @@ class ExportDetailVC: WMPageController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
         } else {
-              
+            
         }
         self.configUI()
         if index != 0 {
@@ -55,13 +55,13 @@ class ExportDetailVC: WMPageController {
         self.menuItemWidth = YYScreenSize().width / 2
         self.menuView?.backgroundColor = UIColor(hexString: "#F7F8FA")
         
-        self.titleColorSelected = UIColor(hexString: "#3D7EFF")!
-        self.titleColorNormal = UIColor(hexString: "#909399")!
+        self.titleColorSelected = UIColor(hexString: Color.blue)!
+        self.titleColorNormal = UIColor(hexString: Color.gray_90)!
         
         self.reloadData()
     }
     
-      
+    
     override func numbersOfChildControllers(in pageController: WMPageController) -> Int {
         return 2
     }
@@ -100,7 +100,7 @@ class ExportDetailVC: WMPageController {
 }
 
 
-  
+
 class BackUpKSDetailVC: BaseViewController {
     
     @IBOutlet weak var copyBtn: UIButton?
@@ -123,8 +123,8 @@ class BackUpKSDetailVC: BaseViewController {
             self.keystoreLabel?.text = ks
         }
         
-        self.copyBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
-         self.nextBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.copyBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+         self.nextBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     func configEvent() {
@@ -136,15 +136,28 @@ class BackUpKSDetailVC: BaseViewController {
         }).disposed(by: disbag)
         
         self.nextBtn?.rx.tap.subscribe(onNext: { [weak self] in
-              
+            self?.toVerify()
+        }).disposed(by: disbag)
+    }
+    
+    func toVerify() -> Void {
+        
+        if NCUserCenter.shared?.walletManage.value.inCreatingWallet == true {
+            
+            if let vc = R.loadSB(name: "ActivateVerifyKeystoreVC", iden: "ActivateVerifyKeystoreVC") as? ActivateVerifyKeystoreVC {
+                Router.pushViewController(vc: vc)
+            }
+        }
+        else {
+            
             if let vc = R.loadSB(name: "Export", iden: "ExportKeyStoreVerifyVC") as? ExportKeyStoreVerifyVC {
                 Router.pushViewController(vc: vc)
             }
-        }).disposed(by: disbag)
+        }
     }
 }
 
-  
+
 class BackUpPrivateKeyVC: BaseViewController {
     
     @IBOutlet weak var nextBtn: UIButton?
@@ -166,7 +179,7 @@ class BackUpPrivateKeyVC: BaseViewController {
             self.privateKeyLabel?.text = ks
         }
         
-        self.nextBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.nextBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
         
         #if DEBUG || Adhoc
         let tap = UITapGestureRecognizer(actionBlock: { [weak self] ges in
@@ -183,13 +196,25 @@ class BackUpPrivateKeyVC: BaseViewController {
     func configEvent() {
         
         self.nextBtn?.rx.tap.subscribe(onNext: { [weak self] in
-              
-            if let vc = R.loadSB(name: "Export", iden: "ExportPrivateKeyVerifyVC") as? ExportPrivateKeyVerifyVC {
-                vc.originPrivateKey = self?.privateKeyLabel?.text
-                Router.pushViewController(vc: vc)
-            }
+            self?.toVerify()
             
         }).disposed(by: disbag)
+    }
+    
+    func toVerify() {
+        if NCUserCenter.shared?.walletManage.value.inCreatingWallet == true {
+            if let vc = R.loadSB(name: "ActivateVerifyPrivatekeyVC", iden: "ActivateVerifyPrivatekeyVC") as? ActivateVerifyPrivatekeyVC {
+                vc.originPrivateKey = self.privateKeyLabel?.text
+                Router.pushViewController(vc: vc)
+            }
+        }
+        else {
+            
+            if let vc = R.loadSB(name: "Export", iden: "ExportPrivateKeyVerifyVC") as? ExportPrivateKeyVerifyVC {
+                vc.originPrivateKey = self.privateKeyLabel?.text
+                Router.pushViewController(vc: vc)
+            }
+        }
     }
     
 }

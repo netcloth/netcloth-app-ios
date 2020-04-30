@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "语言"; ObjectID = "3OP-qG-dah"; */
+"3OP-qG-dah.text" = "Language";
+
+/* Class = "UILabel"; text = "消息提醒"; ObjectID = "Gy6-5a-v7A"; */
+"Gy6-5a-v7A.text" = "Notifications";
+
+/* Class = "UINavigationItem"; title = "设置"; ObjectID = "QCR-ws-bsc"; */
+"QCR-ws-bsc.title" = "Settings";
+
+/* Class = "UILabel"; text = "服务器设置（C-IPAL）"; ObjectID = "QxS-p4-OCx"; */
+"QxS-p4-OCx.text" = "Servers Settings";
+
+/* Class = "UILabel"; text = "通用"; ObjectID = "orE-NV-Q6s"; */
+"orE-NV-Q6s.text" = "General";

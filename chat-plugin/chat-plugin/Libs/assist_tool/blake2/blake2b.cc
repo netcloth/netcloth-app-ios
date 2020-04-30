@@ -8,8 +8,8 @@
  * License/Waiver or the Apache Public License 2.0, at your option. The terms of
  * these licenses can be found at:
  *
- * - CC0 1.0 Universal : http:  
- * - Apache 2.0        : http:  
+ * - CC0 1.0 Universal : http:
+ * - Apache 2.0        : http:
  *
  * You should have received a copy of both of these licenses along with this
  * software. If not, they may be obtained at the above URLs.
@@ -76,8 +76,8 @@ static BLAKE2_INLINE void blake2b_increment_counter(blake2b_state *S,
 }
 
 static BLAKE2_INLINE void blake2b_invalidate_state(blake2b_state *S) {
-    clear_internal_memory(S, sizeof(*S));       
-    blake2b_set_lastblock(S);  
+    clear_internal_memory(S, sizeof(*S));      
+    blake2b_set_lastblock(S); 
 }
 
 static BLAKE2_INLINE void blake2b_init0(blake2b_state *S) {
@@ -94,7 +94,7 @@ int blake2b_init_param(blake2b_state *S, const blake2b_param *P) {
     }
 
     blake2b_init0(S);
-     
+    
     for (i = 0; i < 8; ++i) {
         S->h[i] ^= load64(&p[i * sizeof(S->h[i])]);
     }
@@ -102,7 +102,7 @@ int blake2b_init_param(blake2b_state *S, const blake2b_param *P) {
     return 0;
 }
 
- 
+
 extern "C"
 int blake2b_init(blake2b_state *S, size_t outlen) {
     blake2b_param P;
@@ -116,7 +116,7 @@ int blake2b_init(blake2b_state *S, size_t outlen) {
         return -1;
     }
 
-     
+    
     P.digest_length = (uint8_t)outlen;
     P.key_length = 0;
     P.fanout = 1;
@@ -151,7 +151,7 @@ int blake2b_init_key(blake2b_state *S, size_t outlen, const void *key,
         return -1;
     }
 
-     
+    
     P.digest_length = (uint8_t)outlen;
     P.key_length = (uint8_t)keylen;
     P.fanout = 1;
@@ -174,7 +174,7 @@ int blake2b_init_key(blake2b_state *S, size_t outlen, const void *key,
         memset(block, 0, BLAKE2B_BLOCKBYTES);
         memcpy(block, key, keylen);
         blake2b_update(S, block, BLAKE2B_BLOCKBYTES);
-         
+        
         clear_internal_memory(block, BLAKE2B_BLOCKBYTES);
     }
     return 0;
@@ -246,7 +246,7 @@ int blake2b_update(blake2b_state *S, const void *in, size_t inlen) {
         return 0;
     }
 
-     
+    
     if (S == NULL || in == NULL) {
         return -1;
     }
@@ -257,7 +257,7 @@ int blake2b_update(blake2b_state *S, const void *in, size_t inlen) {
     }
 
     if (S->buflen + inlen > BLAKE2B_BLOCKBYTES) {
-         
+        
         size_t left = S->buflen;
         size_t fill = BLAKE2B_BLOCKBYTES - left;
         memcpy(&S->buf[left], pin, fill);
@@ -266,7 +266,7 @@ int blake2b_update(blake2b_state *S, const void *in, size_t inlen) {
         S->buflen = 0;
         inlen -= fill;
         pin += fill;
-         
+        
         while (inlen > BLAKE2B_BLOCKBYTES) {
             blake2b_increment_counter(S, BLAKE2B_BLOCKBYTES);
             blake2b_compress(S, pin);
@@ -284,7 +284,7 @@ int blake2b_final(blake2b_state *S, void *out, size_t outlen) {
     uint8_t buffer[BLAKE2B_OUTBYTES] = {0};
     unsigned int i;
 
-     
+    
     if (S == NULL || out == NULL || outlen < S->outlen) {
         return -1;
     }
@@ -296,10 +296,10 @@ int blake2b_final(blake2b_state *S, void *out, size_t outlen) {
 
     blake2b_increment_counter(S, S->buflen);
     blake2b_set_lastblock(S);
-    memset(&S->buf[S->buflen], 0, BLAKE2B_BLOCKBYTES - S->buflen);  
+    memset(&S->buf[S->buflen], 0, BLAKE2B_BLOCKBYTES - S->buflen); 
     blake2b_compress(S, S->buf);
 
-    for (i = 0; i < 8; ++i) {  
+    for (i = 0; i < 8; ++i) { 
         store64(buffer + sizeof(S->h[i]) * i, S->h[i]);
     }
 
@@ -316,7 +316,7 @@ int blake2b(void *out, size_t outlen, const void *in, size_t inlen,
     blake2b_state S;
     int ret = -1;
 
-     
+    
     if (NULL == in && inlen > 0) {
         goto fail;
     }

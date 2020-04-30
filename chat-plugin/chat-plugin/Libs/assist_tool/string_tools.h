@@ -3,7 +3,7 @@
 
 #include <string>
 #include <sstream>
- 
+
 std::string inline Byte2HexAsc(const std::string& bytes){
     std::string out;
     std::ostringstream o_stream;
@@ -16,7 +16,7 @@ std::string inline Byte2HexAsc(const std::string& bytes){
     return o_stream.str();
 }
 
- 
+
 std::string inline HexAsc2ByteString(const std::string& hex){
     std::string rtn;
     for(size_t i = 0; i < hex.length(); i+=2){
@@ -24,4 +24,4 @@ std::string inline HexAsc2ByteString(const std::string& hex){
     }
     return rtn;
 }
-#endif   
+#endif 

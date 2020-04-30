@@ -1,21 +1,21 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
 @objc protocol EmojKeyBoardViewDelegate: NSObjectProtocol {
-      
+    
     func onInputEmoj(str: String)
     
-      
+    
     func onDeleteInput()
     
-      
+    
     func onSendKeyTap()
 }
 
@@ -47,7 +47,7 @@ class EmojKeyBoardView: UIView, UICollectionViewDataSource, UICollectionViewDele
         return text.components(separatedBy: cs)
     }()
     
-      
+    
     deinit {
         print("dealloc \(type(of: self))")
     }
@@ -106,12 +106,12 @@ class EmojKeyBoardView: UIView, UICollectionViewDataSource, UICollectionViewDele
         if #available(iOS 11.0, *) {
             h += Int(Router.currentViewOfVC?.safeAreaInsets.bottom ?? 0)
         } else {
-              
+            
         }
         return CGSize(width: UIView.noIntrinsicMetric, height: CGFloat(h))
     }
     
-      
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.width)
         self.pageControl.currentPage = page

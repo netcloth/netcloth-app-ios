@@ -1,0 +1,15 @@
+
+/* Class = "UINavigationItem"; title = "分享APP"; ObjectID = "6cd-gV-Rze"; */
+"6cd-gV-Rze.title" = "NCH Wallet Address";
+
+/* Class = "UILabel"; text = "sazjdjsxswe463dsaj637ajaj23sksjdioedewkdazjskd"; ObjectID = "8Hu-er-5D2"; */
+"8Hu-er-5D2.text" = "";
+
+/* Class = "UIButton"; normalTitle = "复制钱包地址"; ObjectID = "AH2-pa-lcB"; */
+"AH2-pa-lcB.normalTitle" = "Copy Wallet Address";
+
+/* Class = "UIButton"; normalTitle = "保存钱包二维码"; ObjectID = "M1z-Cv-zIM"; */
+"M1z-Cv-zIM.normalTitle" = "Save QR Code to Album";
+
+/* Class = "UILabel"; text = "扫描NCH钱包地址二维码向我转账NCH"; ObjectID = "qaz-ON-h7m"; */
+"qaz-ON-h7m.text" = "Scan the QR Code,transfer NCH to me.";

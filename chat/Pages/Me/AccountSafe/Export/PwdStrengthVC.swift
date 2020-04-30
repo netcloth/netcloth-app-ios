@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import IQKeyboardManagerSwift
@@ -33,7 +33,7 @@ class PwdStrengthVC: BaseViewController {
     @IBOutlet weak var strengthLabel: UILabel?
     
     let disbag = DisposeBag()
-    var index: Int = 0   
+    var index: Int = 0 
     
     var loginPwd: String?
     var pageTag: PageTag = .exportKeyStore {
@@ -48,9 +48,9 @@ class PwdStrengthVC: BaseViewController {
     }
     
     
-      
     
-      
+    
+    
     var isShowPwd = false {
         didSet {
             pwdTF.isSecureTextEntry = !self.isShowPwd
@@ -59,7 +59,7 @@ class PwdStrengthVC: BaseViewController {
         }
     }
     
-      
+    
     var ShowRePwd = false {
         didSet {
             repwdTF.isSecureTextEntry = !self.ShowRePwd
@@ -67,7 +67,7 @@ class PwdStrengthVC: BaseViewController {
         }
     }
     
-      
+    
     var strength: Int = 0 {
         didSet {
             var p:Float = 0.25
@@ -96,7 +96,7 @@ class PwdStrengthVC: BaseViewController {
         }
     }
     
-      
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         IQKeyboardManager.shared.enable = true
@@ -111,22 +111,22 @@ class PwdStrengthVC: BaseViewController {
 
         var att1 = NSMutableAttributedString(string: "Export_tip_1".localized(),
                                              attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13),
-                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: "#909399")!])
+                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: Color.gray_90)!])
         
         let att2 = NSMutableAttributedString(string: "Export_tip_2".localized(),
                                              attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13),
-                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: "#3D7EFF")!])
+                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: Color.blue)!])
         
         att1.append(att2)
         
         inputTipsLabel.attributedText = att1
         
-        self.registerBtn.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
+        self.registerBtn.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
     }
     
     func configEvent() {
         
-          
+        
         self.pwdEyeBtn.rx.tap.subscribe(onNext: { [weak self] in
             self?.isShowPwd = !((self?.isShowPwd)!)
         }).disposed(by: disbag)
@@ -136,7 +136,7 @@ class PwdStrengthVC: BaseViewController {
         }).disposed(by: disbag)
         
         
-          
+        
         pwdTF.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             }
@@ -150,7 +150,7 @@ class PwdStrengthVC: BaseViewController {
             }.disposed(by: disbag)
         
         
-          
+        
         self.registerBtn.rx.tap.subscribe(onNext: { [weak self] in
             let r = self?.checkInputAvalid()
             if r?.result == false {
@@ -162,10 +162,10 @@ class PwdStrengthVC: BaseViewController {
         }).disposed(by: disbag)
     }
     
-      
+    
     func toExportDetail(pwd: String?) {
         if let p = pwd, let old = loginPwd {
-              
+            
             CPAccountHelper.exportKeystoreAndPrivateKey(old, exportPassword: p) { [weak self] (r, msg, keystore, prikey) in
                 if r == false {
                     Toast.show(msg: msg)
@@ -181,7 +181,7 @@ class PwdStrengthVC: BaseViewController {
         }
     }
     
-      
+    
     func checkInputAvalid() -> (result:Bool,msg:String) {
         
         guard let pwd = pwdTF.text, Config.Account.checkExportPwd(pwd) else {

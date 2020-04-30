@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -32,7 +32,7 @@ class NVGroupMemberSummary: UIView {
     }
     
     
-      
+    
     func viewHeight() -> CGFloat {
         return collectionViewHeight() + 40
     }
@@ -50,7 +50,7 @@ class NVGroupMemberSummary: UIView {
     
     
     
-      
+    
     func configUI() {
         self.collectionView?.isPrefetchingEnabled = false
         let vLen = YYScreenSize().width
@@ -77,14 +77,14 @@ class NVGroupMemberSummary: UIView {
     
     func configEvent() {
         
-          
+        
         self.moreBtn?.rx.tap.subscribe(onNext: {
             if let vc = R.loadSB(name: "GroupMemberList", iden: "GroupMemberListVC") as? GroupMemberListVC {
                 Router.pushViewController(vc: vc)
             }
         }).disposed(by: disbag)
         
-          
+        
         self.roomService?.groupSummaryMember
             .map({ [weak self] (source) -> [CPGroupMember] in
             var array: [CPGroupMember] = []
@@ -100,7 +100,7 @@ class NVGroupMemberSummary: UIView {
                 reduce.fakePlaceType = 2
                 array.append(reduce)
             }
-              
+            
             self?.dataArray = array
             if let fl =  self?.collectionView?.collectionViewLayout as? HorizontalItemLayout {
                 let vLen = YYScreenSize().width
@@ -134,13 +134,13 @@ class NVGroupMemberSummary: UIView {
                     return
                 }
                 
-                  
+                
                 if let vc = R.loadSB(name: "GroupInviteFriendsVC", iden: "GroupInviteFriendsVC") as? GroupInviteFriendsVC {
                     Router.pushViewController(vc: vc)
                 }
             }
             else if type == 2 {
-                  
+                
                 if let vc = R.loadSB(name: "GroupInviteFriendsVC", iden: "GroupInviteFriendsVC") as? GroupInviteFriendsVC {
                     vc.pageTag = 1
                     Router.pushViewController(vc: vc)

@@ -1,11 +1,11 @@
 
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -75,11 +75,11 @@ class IPALHistoryDetailVC: BaseViewController {
         })
     }
     
-      
+    
 
     func reloadUI() {
         if let n = self.queryHistoryNode {
-            typeL?.text = "Communication Address Claim".localized()
+            typeL?.text = "Communication Server Claim".localized()
             timeL?.text = NSDate(timeIntervalSince1970: n.createTime).string(withFormat: "yyyy-MM-dd HH:mm:ss")
             nodeNameL?.text = n.moniker
             txhashL?.text = n.txhash
@@ -107,7 +107,7 @@ class IPALHistoryDetailVC: BaseViewController {
     }
     
     @IBAction func toQueryInBrowser() {
-        let str = "https:  
+        let str = "https:
         if let url = URL(string: str) {
             UIApplication.shared.openURL(url)
         }

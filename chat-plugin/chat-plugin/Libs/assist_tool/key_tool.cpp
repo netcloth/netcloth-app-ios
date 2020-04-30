@@ -14,7 +14,7 @@ const uint32_t SIGN_SIZE = 64;
 const uint32_t AES_IV_SIZE = AES_BLOCKSIZE;
 const uint32_t AES_KEY_SIZE = AES256_KEYSIZE;
 
-  
+
 std::string CreateCustomRandom(int len)
 {
     std::string rtn((size_t)(len+4), '\0');
@@ -41,7 +41,7 @@ std::string GetPublicKeyByPrivateKey(const std::string private_key){
     }
 
     std::string rtn;
-      
+    
     secp256k1_context *ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY|SECP256K1_CONTEXT_SIGN);
     assert(ctx != nullptr);
     std::string vseed = CreateCustomRandom(32);
@@ -53,7 +53,7 @@ std::string GetPublicKeyByPrivateKey(const std::string private_key){
     rtn.resize(PUB_KEY_SIZE, 0);
     size_t clen = PUB_KEY_SIZE;
     secp256k1_ec_pubkey_serialize(ctx, (uint8_t*)rtn.data(), &clen, &pubkey,  SECP256K1_EC_UNCOMPRESSED);
-      
+    
     if (ctx) {
         secp256k1_context_destroy(ctx);
     }
@@ -65,10 +65,10 @@ bool SigHasLowR(secp256k1_context *secp256k1_context_sign, const secp256k1_ecdsa
     unsigned char compact_sig[64];
     secp256k1_ecdsa_signature_serialize_compact(secp256k1_context_sign, compact_sig, sig);
 
-      
-      
-      
-      
+    
+    
+    
+    
     return compact_sig[0] < 0x80;
 }
 
@@ -78,7 +78,7 @@ void static inline WriteLE32(unsigned char* ptr, uint16_t x)
     memcpy(ptr, (char*)&v, 4);
 }
 std::string GetSignByPrivateKey(const uint8_t* buf, size_t length, const std::string pri_key){
-      
+    
     secp256k1_context *ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY|SECP256K1_CONTEXT_SIGN);
     assert(ctx != nullptr);
     std::string vseed = CreateCustomRandom(32);
@@ -94,7 +94,7 @@ std::string GetSignByPrivateKey(const uint8_t* buf, size_t length, const std::st
     uint32_t counter = 0;
     ret = secp256k1_ecdsa_sign(ctx, &sig, buf, (uint8_t*)pri_key.data(), secp256k1_nonce_function_rfc6979, nullptr);
 
-      
+    
     /*while (ret && !SigHasLowR(ctx, &sig) ) {
         WriteLE32(extra_entropy, ++counter);
         ret = secp256k1_ecdsa_sign(ctx, &sig, buf, (uint8_t*)pri_key.data(), secp256k1_nonce_function_rfc6979, extra_entropy);
@@ -102,7 +102,7 @@ std::string GetSignByPrivateKey(const uint8_t* buf, size_t length, const std::st
     assert(ret);*/
     memcpy((void*)rtn.data(), &sig, SIGN_SIZE);
 
-      
+    
     if (ctx) {
         secp256k1_context_destroy(ctx);
     }
@@ -114,7 +114,7 @@ bool SignIsValidate(const uint8_t* buf, size_t length, const std::string& pub_ke
     assert(length == HASH_SIZE);
     assert(sign.size() == SIGN_SIZE);
 
-      
+    
     secp256k1_context *ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY);
     assert(ctx != nullptr);
     std::string vseed = CreateCustomRandom(32);
@@ -123,19 +123,19 @@ bool SignIsValidate(const uint8_t* buf, size_t length, const std::string& pub_ke
 
     secp256k1_pubkey pubkey;
     secp256k1_ec_pubkey_parse(ctx, &pubkey, (uint8_t*)pub_key.data(), PUB_KEY_SIZE);
-      
+    
     secp256k1_ecdsa_signature sig;
     memcpy(&sig, sign.data(), SIGN_SIZE);
-      
+    
     bool rtn = secp256k1_ecdsa_verify(ctx, &sig, buf, &pubkey)?true:false;
 
 
-      
+    
     if (ctx) {
         secp256k1_context_destroy(ctx);
     }
     return rtn;
-      
+    
 }
 
 std::string CreateAesIVKey()
@@ -146,11 +146,11 @@ std::string CreateAesIVKey()
 bool AesEncode(const std::string& key, const std::string& iv, const std::string& in, std::string &out)
 {
     std::string key_use = key;
-      
+    
     if(iv.size() != AES_BLOCKSIZE){
         return false;
     }
-      
+    
     if(key_use.size() != AES256_KEYSIZE){
         key_use.resize(AES256_KEYSIZE, 0);
     }
@@ -164,11 +164,11 @@ bool AesDecode(const std::string &key, const std::string &iv, const std::string 
 {
     out.resize((in.size()+AES_BLOCKSIZE) - (in.size()+AES_BLOCKSIZE)%AES_BLOCKSIZE, 0);
     std::string key_use = key;
-      
+    
     if(iv.size() != AES_BLOCKSIZE){
         return false;
     }
-      
+    
     if(key_use.size() != AES256_KEYSIZE){
         key_use.resize(AES256_KEYSIZE, 0);
     }
@@ -186,7 +186,7 @@ std::string GetEcdhKey(const std::string &pub_key, const std::string &pri_key)
         return std::string();
     }
 
-      
+    
     secp256k1_context *ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY|SECP256K1_CONTEXT_SIGN);
     assert(ctx != nullptr);
     std::string vseed = CreateCustomRandom(32);
@@ -199,7 +199,7 @@ std::string GetEcdhKey(const std::string &pub_key, const std::string &pri_key)
     secp256k1_ecdh(ctx, (uint8_t*)rtn.data(), &pubkey, (uint8_t*)pri_key.data(),NULL, NULL);
 
 
-      
+    
     if (ctx) {
         secp256k1_context_destroy(ctx);
     }

@@ -1,12 +1,18 @@
 
-/* Class = "UILabel"; text = "https:  
-"EaI-Tk-9X2.text" = "https:  
+/* Class = "UIButton"; normalTitle = "<NetCloth Privacy Policy>"; ObjectID = "5aB-zq-1UP"; */
+"5aB-zq-1UP.normalTitle" = "<NetCloth Privacy Policy>";
+
+/* Class = "UILabel"; text = "https:
+"EaI-Tk-9X2.text" = "https:
 
 /* Class = "UILabel"; text = "NetCloth"; ObjectID = "HJ9-SN-qbR"; */
 "HJ9-SN-qbR.text" = "NetCloth";
 
 /* Class = "UILabel"; text = " "; ObjectID = "QOp-M3-BOp"; */
 "QOp-M3-BOp.text" = " ";
+
+/* Class = "UILabel"; text = "https:
+"Vu1-eg-2yb.text" = "https:
 
 /* Class = "UILabel"; text = "Website"; ObjectID = "Vya-aa-sXM"; */
 "Vya-aa-sXM.text" = "Website";
@@ -17,14 +23,23 @@
 /* Class = "UILabel"; text = "Instruction"; ObjectID = "e3o-yv-oqu"; */
 "e3o-yv-oqu.text" = "Instruction";
 
+/* Class = "UILabel"; text = "Privacy protected encrypted chat app"; ObjectID = "fJh-g8-i04"; */
+"fJh-g8-i04.text" = "Start Your Encrypted Life On NetCloth";
+
+/* Class = "UIButton"; normalTitle = "<NetCloth Terms of Service>"; ObjectID = "gSn-dE-cWm"; */
+"gSn-dE-cWm.normalTitle" = "<NetCloth Terms of Service>";
+
 /* Class = "UILabel"; text = "Help&Feedback"; ObjectID = "gmb-fY-dIO"; */
 "gmb-fY-dIO.text" = "Help&Feedback";
 
-/* Class = "UILabel"; text = "v1.0"; ObjectID = "hNC-4e-MvG"; */
-"hNC-4e-MvG.text" = "v1.0";
+/* Class = "UILabel"; text = "9.9.9"; ObjectID = "hNC-4e-MvG"; */
+"hNC-4e-MvG.text" = "9.9.9";
 
-/* Class = "UILabel"; text = "https:  
-"jYE-Gl-j4H.text" = "https:  
+/* Class = "UILabel"; text = "https:
+"jYE-Gl-j4H.text" = "https:
 
-/* Class = "UILabel"; text = "https:  
-"jgs-gX-agK.text" = "https:  
+/* Class = "UILabel"; text = "https:
+"jgs-gX-agK.text" = "https:
+
+/* Class = "UILabel"; text = "User Center"; ObjectID = "u9e-R5-Rwu"; */
+"u9e-R5-Rwu.text" = "User Center";

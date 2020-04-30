@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -26,7 +26,7 @@ class GroupMemberListVC:BaseViewController, UITableViewDelegate, UITableViewData
     var models: [CPGroupMember] = []
     let disbag = DisposeBag()
     
-      
+    
     deinit {
     }
     
@@ -81,7 +81,7 @@ class GroupMemberListVC:BaseViewController, UITableViewDelegate, UITableViewData
             }).bind(to: self.delMemberControl!.rx.isHidden).disposed(by: disbag)
         
         
-          
+        
         let searchDriver =
             self.inputSearch?.rx.value
                 .asDriver()
@@ -92,20 +92,20 @@ class GroupMemberListVC:BaseViewController, UITableViewDelegate, UITableViewData
                         Observable.empty().asDriver(onErrorJustReturn: []))
                 })
         
-          
+        
         searchDriver?.drive(searchResultTable!.rx.items(cellIdentifier: "cell",cellType: ContactCell.self)) { [weak self] ( row, model, cell) in
             cell.multipleSelectionBackgroundView = UIView()
             cell.reloadData(data: model)
         }.disposed(by: disbag)
         
-          
+        
         Observable.of((self.searchResultTable?.rx.modelSelected(CPGroupMember.self))!,
                       (self.searchResultTable?.rx.modelDeselected(CPGroupMember.self))!).merge()
             .subscribe(onNext: { [weak self](contact) in
                 self?.onResultSelectedSearchModel(contact)
             }).disposed(by: disbag)
         
-          
+        
         searchDriver?.drive(onNext: { [weak self] (result) in
             let target = self?.inputSearch?.text
             if target?.isEmpty == true {
@@ -166,14 +166,14 @@ class GroupMemberListVC:BaseViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-      
+    
     
     
     
 
     
     
-      
+    
     func queryLocalContact(input: String?) -> Observable<[CPGroupMember]> {
         return Observable<[CPGroupMember]>.create { [weak self] (observer) -> Disposable in
             DispatchQueue.global().async {
@@ -201,12 +201,12 @@ class GroupMemberListVC:BaseViewController, UITableViewDelegate, UITableViewData
             return
         }
         
-          
+        
         var att1 = NSMutableAttributedString(string: "Group_Member_Select_Empty_tip".localized())
-        att1.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#909399")!], range: att1.rangeOfAll())
+        att1.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.gray_90)!], range: att1.rangeOfAll())
         
         var att2 = NSMutableAttributedString(string: "\(target!)")
-        att2.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#3D7EFF")!], range: att2.rangeOfAll())
+        att2.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: att2.rangeOfAll())
         
         let range1 = (att1.string as? NSString)?.range(of: "#mark#")
         if let r1 = range1, r1.location != NSNotFound {
@@ -225,7 +225,7 @@ class GroupMemberListVC:BaseViewController, UITableViewDelegate, UITableViewData
 
     }
     
-      
+    
     func toGroupMemberInfo(info: CPGroupMember?) {
         if let ct = info {
             let pubkey = ct.hexPubkey

@@ -71,12 +71,12 @@ extern const spx_word16_t zeros[];
 #define iir_mem16(x, den, y, N, ord, mem, stack) filter_mem16(x, zeros, den, y,  N, ord, mem, stack)
 #define fir_mem16(x, num, y, N, ord, mem, stack) filter_mem16(x, num, zeros, y,  N, ord, mem, stack)
 
-#else  
+#else 
 void iir_mem16(const spx_word16_t *x, const spx_coef_t *den, spx_word16_t *y, int N, int ord, spx_mem_t *mem, char *stack);
 void fir_mem16(const spx_word16_t *x, const spx_coef_t *num, spx_word16_t *y, int N, int ord, spx_mem_t *mem, char *stack);
-#endif   
+#endif  
 
- 
+
 void bw_lpc(spx_word16_t , const spx_coef_t *lpc_in, spx_coef_t *lpc_out, int order);
 void sanitize_values32(spx_word32_t *vec, spx_word32_t min_val, spx_word32_t max_val, int len);
 
@@ -87,14 +87,14 @@ void residue_percep_zero16(const spx_word16_t *xx, const spx_coef_t *ak, const s
 void compute_impulse_response(const spx_coef_t *ak, const spx_coef_t *awk1, const spx_coef_t *awk2, spx_word16_t *y, int N, int ord, char *stack);
 
 void multicomb(
-spx_word16_t *exc,           
-spx_word16_t *new_exc,       
-spx_coef_t *ak,            
-int p,                
+spx_word16_t *exc,          
+spx_word16_t *new_exc,      
+spx_coef_t *ak,           
+int p,               
 int nsf,             /*sub-frame size*/
-int pitch,            
+int pitch,           
 int max_pitch,   /*pitch gain (3-tap)*/
-spx_word16_t  comb_gain,     
+spx_word16_t  comb_gain,    
 char *stack
 );
 

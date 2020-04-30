@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013-2015 Pieter Wuille                              *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 
@@ -124,7 +124,7 @@ static int secp256k1_der_parse_integer(secp256k1_scalar *r, const unsigned char 
         overflow = 1;
     }
     while (rlen > 0 && **sig == 0) {
-         
+        
         rlen--;
         (*sig)++;
     }
@@ -151,7 +151,7 @@ static int secp256k1_ecdsa_sig_parse(secp256k1_scalar *rr, secp256k1_scalar *rs,
     }
     rlen = secp256k1_der_read_len(&sig, sigend);
     if (rlen < 0 || sig + rlen > sigend) {
-         
+        
         return 0;
     }
     if (sig + rlen != sigend) {
@@ -281,7 +281,7 @@ static int secp256k1_ecdsa_sig_sign(const secp256k1_ecmult_gen_context *ctx, sec
     secp256k1_fe_normalize(&r.y);
     secp256k1_fe_get_b32(b, &r.x);
     secp256k1_scalar_set_b32(sigr, b, &overflow);
-     
+    
     VERIFY_CHECK(!secp256k1_scalar_is_zero(sigr));
     VERIFY_CHECK(overflow == 0);
 
@@ -310,4 +310,4 @@ static int secp256k1_ecdsa_sig_sign(const secp256k1_ecmult_gen_context *ctx, sec
     return 1;
 }
 
-#endif  
+#endif 

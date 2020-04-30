@@ -39,7 +39,7 @@
 #include "bfin.h"
 
 /*
-  Note http:  
+  Note http:
   well tell you all the magic resgister constraints used below
   for gcc in-line asm.
 */
@@ -63,7 +63,7 @@ static int lsp_quant(
 "       P2 = %3\n\t"                           /* P2: ptr to cdbk    */
 "       R5 = 0;\n\t"                           /* R5: best cb entry  */
 
-"       R0 = %5;\n\t"                           
+"       R0 = %5;\n\t"                          
 "       R0 <<= 1;\n\t"
 "       L0 = R0;\n\t"                          
 "       I0 = %2;\n\t"                          /* %2: &x[0]          */
@@ -101,7 +101,7 @@ static int lsp_quant(
 #ifdef OVERRIDE_LSP_WEIGHT_QUANT
 
 /*
-  Note http:  
+  Note http:
   well tell you all the magic resgister constraints used below
   for gcc in-line asm.
 */
@@ -126,7 +126,7 @@ static int lsp_weight_quant(
 "       P2 = %4\n\t"                           /* P2: ptr to cdbk    */
 "       R5 = 0;\n\t"                           /* R5: best cb entry  */
 
-"       R0 = %6;\n\t"                           
+"       R0 = %6;\n\t"                          
 "       R0 <<= 1;\n\t"
 "       L0 = R0;\n\t"                          
 "       L1 = R0;\n\t"

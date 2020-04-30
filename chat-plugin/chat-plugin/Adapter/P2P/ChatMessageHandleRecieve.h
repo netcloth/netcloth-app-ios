@@ -1,17 +1,17 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import <CPMessageRecieveHandleProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class NCProtoNetMsg;
+@class NCProtoNetMsg, NCProtoRecallMsg;
 
 @interface ChatMessageHandleRecieve : NSObject <CPMessageRecieveHandleProtocol>
 
@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)clientReplay:(NCProtoNetMsg *)packin;
 
 - (BOOL)storeMessge:(id)message isCacheMsg:(BOOL)isCache;
+
+- (void)deleteQueryRecallMsgArray:(NSArray<NCProtoRecallMsg *> *)rm
+                          endTime:(int64_t)time ;
 
 @end
 

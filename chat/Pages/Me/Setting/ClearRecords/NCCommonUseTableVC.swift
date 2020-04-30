@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -17,18 +17,9 @@ class NCCommonUseTableVC: BaseTableViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            
         }
-        
         super.viewDidLoad()
-        
         self.tableView.adjustFooter()
-        
-        fixConfigUI()
     }
-    
-    func fixConfigUI() {
-        
-        recordL?.text = "Chat History".localized()
-     }
 }

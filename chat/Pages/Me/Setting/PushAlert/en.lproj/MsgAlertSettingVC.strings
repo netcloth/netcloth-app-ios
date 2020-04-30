@@ -1,0 +1,16 @@
+
+/* Class = "UINavigationItem"; title = "消息通知"; ObjectID = "83S-0k-iro"; */
+"83S-0k-iro.title" = "Notifications";
+
+/* Class = "UILabel"; text = "振动"; ObjectID = "KLC-Au-fXQ"; */
+"KLC-Au-fXQ.text" = "Vibration";
+
+/* Class = "UILabel"; text = "铃声"; ObjectID = "lKT-9j-RCS"; */
+"lKT-9j-RCS.text" = "Ring";
+
+/* Class = "UILabel"; text = "免打扰/黑名单消息推送"; ObjectID = "MCt-75-WtS"; */
+"MCt-75-WtS.text" = "Mute/Blacklist Push Notifications";
+
+/* Class = "UILabel"; text = "关闭后，系统将上传免打扰/黑名单列表给服务器，用于拦截免打扰/黑名单的消息推送。"; ObjectID = "lG7-Za-GFd"; */
+"lG7-Za-GFd.text" = "After closing, the system will upload the Mute / Blacklist list to the server for intercepting the Mute / Blacklist push notifications.";
+

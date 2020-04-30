@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import Alamofire
@@ -17,7 +17,7 @@ extension AFDataResponse {
 
 enum NW {
     
-      
+    
     static func requestUrl(path:String,
                            method: HTTPMethod = .get,
                            para:Parameters? = nil,
@@ -31,7 +31,18 @@ enum NW {
         }
     }
     
-      
+    static func getJsonUrl(path:String,
+                           method: HTTPMethod = .get,
+                           para:Parameters? = nil,
+                           complete: @escaping ((_ success:Bool, _ value:Any?) -> Void)) {
+        
+        AF.request(path, method: method, parameters: para).responseJSON { ( res:AFDataResponse<Any>) in
+            let cb = complete
+            cb(res.value != nil && res.isValid(), res.value)
+        }
+    }
+    
+    
     static func getDataUrl(path:String,
                            method: HTTPMethod = .get,
                            para:Parameters? = nil,
@@ -46,14 +57,14 @@ enum NW {
     }
     
     
-      
     
-      
-      
-      
-      
-      
-      
+    
+    
+    
+    
+    
+    
+    
     static func uploadData(data: Data,
                            toUrl: String,
                            complete: ((_ success:Bool, _ value:Any?) -> Void)? = nil,
@@ -75,6 +86,25 @@ enum NW {
             request.uploadProgress { (progress) in
                 uploadProgress!(progress.fractionCompleted)
             }
+        }
+    }
+}
+
+extension NW {
+    
+    static func uploadHttp(body: Data,
+                           toUrl: String,
+                           method: String? = "POST",
+                           headers: HTTPHeaders? = nil,
+                           complete: ((_ success:Bool, _ value:Data?) -> Void)? = nil) {
+        let rv =  method?.uppercased() ?? "POST"
+        let method_a = Alamofire.HTTPMethod(rawValue:rv)
+        
+        AF.upload(body, to: toUrl, method: method_a, headers: headers).responseData { (res) in
+            guard let cb = complete else {
+                return
+            }
+            cb(res.isValid(), res.data)
         }
     }
 }

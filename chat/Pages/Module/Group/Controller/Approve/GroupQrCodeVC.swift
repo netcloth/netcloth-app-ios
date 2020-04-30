@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import Photos
@@ -37,7 +37,7 @@ class GroupQrCodeVC: BaseViewController {
         self.navigationController?.navigationBar.tintColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
     }
     
-      
+    
     
     func configUI() {
         
@@ -69,12 +69,12 @@ class GroupQrCodeVC: BaseViewController {
     
     func configEvent() {
         
-          
+        
         saveButton?.rx.tap.subscribe(onNext: { [weak self] in
             self?.saveImageToLibray()
         }).disposed(by: disbag)
         
-          
+        
         showControl?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.toShowBigView()
         }).disposed(by: disbag)
@@ -87,21 +87,38 @@ class GroupQrCodeVC: BaseViewController {
         Authorize.canOpenPhotoAlbum(autoAccess: true, result: {[weak self] (r) in
             if r == true, self?.qrcodeImageV?.image != nil {
                 let aname = contact.remark
-                guard let image = QrCodeVC.createBigImage(accountName: aname,
-                                                          qrImg: self?.qrcodeImageV?.image,
-                                                          title: "Group_Big_Qr_Name".localized()) else {
-                    return
-                }
                 
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }, completionHandler: { (r, err) in
-                    if r {
-                        DispatchQueue.main.async {
-                            Toast.show(msg: NSLocalizedString("QR Code Saved", comment: ""));
+                _ = QrCodeVC.v2_createShareAppImage(withContact: contact)
+                    .observeOn(MainScheduler.instance)
+                    .subscribe(onNext: { (image) in
+                        if let img = image {
+                            PHPhotoLibrary.shared().performChanges({
+                                PHAssetChangeRequest.creationRequestForAsset(from: img)
+                            }, completionHandler: { (r, err) in
+                                if r {
+                                    DispatchQueue.main.async {
+                                        Toast.show(msg: "QR Code Saved".localized());
+                                    }
+                                }
+                            })
                         }
-                    }
-                })
+                    })
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
             else if r == false {
                 Toast.show(msg: NSLocalizedString("Device_photos", comment: ""))
@@ -114,13 +131,23 @@ class GroupQrCodeVC: BaseViewController {
             return
         }
         let aname = contact.remark
-        guard let img = QrCodeVC.createBigImage(accountName: aname,
-                                                qrImg: self.qrcodeImageV?.image,
-                                                title: "Group_Big_Qr_Name".localized()) else {
-            return
-        }
-        let qr = QRPhotoImgView(image: img)
-        qr.contentMode = .scaleAspectFill
-        Router.showAlert(view: qr)
+        _ = QrCodeVC.v2_createShareAppImage(withContact: contact)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (image) in
+                if let img = image {
+                    let qr = QRPhotoImgView(image: img)
+                    qr.contentMode = .scaleAspectFill
+                    Router.showAlert(view: qr)
+                }
+            })
+        
+
+
+
+
+
+
+
+
     }
 }

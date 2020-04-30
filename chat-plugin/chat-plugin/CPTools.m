@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "CPTools.h"
 
@@ -17,6 +17,9 @@ NSString *kTableName_Claim = @"claim";
 NSString *kTableName_GroupMember = @"groupmember";
 NSString *kTableName_GroupMessage = @"groupmessage";
 NSString *kTableName_GroupNotify = @"groupnotify";
+
+NSString *kTableName_AssetToken = @"assettoken";
+NSString *kTableName_TradeRecord = @"traderecord";
 
 @implementation CPTools
 

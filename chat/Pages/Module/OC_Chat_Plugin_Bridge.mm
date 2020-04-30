@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "OC_Chat_Plugin_Bridge.h"
 
@@ -28,7 +28,7 @@
     return pbkey;
 }
 
-  
+
 + (NSData * _Nullable)signedLoginUserToContentHash:(NSData *)contenthash {
     if (contenthash.length == 0) {
         return nil;
@@ -56,7 +56,7 @@
     return [CPBridge getRandomHash];
 }
 
-  
+
 + (NSData *)createPrivatekey {
     std::string privateKey = generationAccountPrivatekey();
     NSData *oriData = bytes2nsdata(privateKey);
@@ -88,7 +88,7 @@
     return sign;
 }
 
-  
+
 + (NSString * _Nullable)compressedHexStrPubkeyOfHexPubkey:(NSString *)hexpubkey {
     return compressHexpubkey(hexpubkey);
 }
@@ -101,7 +101,7 @@
     return bytes2nsdata(bytes);
 }
 
-  
+
 + (NSString *_Nullable)recoveryHexPubkeyForSign64:(NSString *)hexSign64
                                       contentHash:(NSData *_Nullable)contenthash
                                    judgeHexPubkey:(NSString *)hexpubkey {

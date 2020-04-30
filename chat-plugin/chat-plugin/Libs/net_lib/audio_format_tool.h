@@ -30,4 +30,4 @@ private:
     std::string audio_pcm_;
     std::string audio_encoded_;
 };
-#endif   
+#endif 

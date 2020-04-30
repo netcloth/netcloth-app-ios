@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_TESTRAND_H
@@ -35,4 +35,4 @@ static void secp256k1_rand256_test(unsigned char *b32);
 /** Generate pseudorandom bytes with long sequences of zero and one bits. */
 static void secp256k1_rand_bytes_test(unsigned char *bytes, size_t len);
 
-#endif  
+#endif 

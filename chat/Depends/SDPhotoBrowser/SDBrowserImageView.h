@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <UIKit/UIKit.h>
 #import "SDWaitingView.h"
@@ -17,7 +17,7 @@
 @property (nonatomic, assign, readonly) BOOL isScaled;
 @property (nonatomic, assign) BOOL hasLoadedImage;
 
-- (void)eliminateScale;   
+- (void)eliminateScale; 
 
 - (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder;
 

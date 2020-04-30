@@ -6,7 +6,7 @@
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
  *                                                                  *
  * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2001             *
- * by the XIPHOPHORUS Company http:  
+ * by the XIPHOPHORUS Company http:
  *                                                                  *
  ********************************************************************
 
@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
- 
+
 struct drft_lookup{
   int n;
   float *trigcache;

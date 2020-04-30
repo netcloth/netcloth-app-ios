@@ -7,7 +7,7 @@
 "LoA-rX-ikp.normalTitle" = "Messages";
 
 
-/* Class = "UILabel"; text = "添加到通讯录"; ObjectID = "vo1-WM-uxg"; */
+/* Class = "UILabel"; text = "添加到联系人"; ObjectID = "vo1-WM-uxg"; */
 "vo1-WM-uxg.text" = "Add to Contacts";
 
 

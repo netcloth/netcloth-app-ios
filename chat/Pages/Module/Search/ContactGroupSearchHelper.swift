@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
@@ -16,7 +16,7 @@ class ContactGroupSearchHelper: NSObject {
         target = nil
         if let vc = R.loadSB(name: "SearchVC", iden: "SearchVC") as? SearchVC {
             
-            let resultVc = R.loadSB(name: "ContactGroupSearchVC", iden: "ContactGroupSearchVC") as! ContactGroupSearchVC
+            let resultVc = R.loadSB(name: "ContactGroupSearchVC", iden: "ContactGroupSearchVC") as! ContactSearchResultVC
             
             vc.resultVC = resultVc
             vc.searchTextChange = { (input, call) in

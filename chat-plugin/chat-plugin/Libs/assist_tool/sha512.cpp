@@ -1,23 +1,23 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "sha512.h"
 #include <memory.h>
 
-  
-  
-  
+
+
+
 
 #define ROR64( value, bits ) (((value) >> (bits)) | ((value) << (64 - (bits))))
 
@@ -35,11 +35,11 @@
      (y)[4] = (uint8_t)(((x)>>24)&255); (y)[5] = (uint8_t)(((x)>>16)&255);     \
      (y)[6] = (uint8_t)(((x)>>8)&255); (y)[7] = (uint8_t)((x)&255); }
 
-  
-  
-  
 
-  
+
+
+
+
 static const uint64_t K[80] = {
     0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL, 0xe9b5dba58189dbbcULL,
     0x3956c25bf348b538ULL, 0x59f111f1b605d019ULL, 0x923f82a4af194f9bULL, 0xab1c5ed5da6d8118ULL,
@@ -65,11 +65,11 @@ static const uint64_t K[80] = {
 
 #define BLOCK_SIZE          128
 
-  
-  
-  
 
-  
+
+
+
+
 #define Ch( x, y, z )     (z ^ (x & (y ^ z)))
 #define Maj(x, y, z )     (((x | y) & z) | (x & y))
 #define S( x, n )         ROR64( x, n )
@@ -85,11 +85,11 @@ static const uint64_t K[80] = {
      d += t0;                                          \
      h  = t0 + t1;
 
-  
-  
-  
-  
-  
+
+
+
+
+
 static
 void
     TransformFunction
@@ -104,25 +104,25 @@ void
     uint64_t    t1;
     int         i;
 
-      
+    
     for( i=0; i<8; i++ )
     {
         S[i] = Context->state[i];
     }
 
-      
+    
     for( i=0; i<16; i++ )
     {
         LOAD64H(W[i], Buffer + (8*i));
     }
 
-      
+    
     for( i=16; i<80; i++ )
     {
         W[i] = Gamma1(W[i - 2]) + W[i - 7] + Gamma0(W[i - 15]) + W[i - 16];
     }
 
-      
+    
      for( i=0; i<80; i+=8 )
      {
          Sha512Round(S[0],S[1],S[2],S[3],S[4],S[5],S[6],S[7],i+0);
@@ -135,26 +135,26 @@ void
          Sha512Round(S[1],S[2],S[3],S[4],S[5],S[6],S[7],S[0],i+7);
      }
 
-      
+    
     for( i=0; i<8; i++ )
     {
         Context->state[i] = Context->state[i] + S[i];
     }
 }
 
-  
-  
-  
 
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
 void
     Sha512Initialise
     (
-        Sha512Context*      Context           
+        Sha512Context*      Context         
     )
 {
     Context->curlen = 0;
@@ -169,18 +169,18 @@ void
     Context->state[7] = 0x5be0cd19137e2179ULL;
 }
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 void
     Sha512Update
     (
-        Sha512Context*      Context,          
-        void const*         Buffer,           
-        uint32_t            BufferSize        
+        Sha512Context*      Context,        
+        void const*         Buffer,         
+        uint32_t            BufferSize      
     )
 {
     uint32_t    n;
@@ -216,17 +216,17 @@ void
     }
 }
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 void
     Sha512Finalise
     (
-        Sha512Context*      Context,          
-        SHA512_HASH*        Digest            
+        Sha512Context*      Context,        
+        SHA512_HASH*        Digest          
     )
 {
     int i;
@@ -236,15 +236,15 @@ void
        return;
     }
 
-      
+    
     Context->length += Context->curlen * 8ULL;
 
-      
+    
     Context->buf[Context->curlen++] = (uint8_t)0x80;
 
-      
-      
-      
+    
+    
+    
     if( Context->curlen > 112 )
     {
         while( Context->curlen < 128 )
@@ -255,37 +255,37 @@ void
         Context->curlen = 0;
     }
 
-      
-      
-      
+    
+    
+    
     while( Context->curlen < 120 )
     {
         Context->buf[Context->curlen++] = (uint8_t)0;
     }
 
-      
+    
     STORE64H( Context->length, Context->buf+120 );
     TransformFunction( Context, Context->buf );
 
-      
+    
     for( i=0; i<8; i++ )
     {
         STORE64H( Context->state[i], Digest->bytes+(8*i) );
     }
 }
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 void
     Sha512Calculate
     (
-        void  const*        Buffer,           
-        uint32_t            BufferSize,       
-        SHA512_HASH*        Digest            
+        void  const*        Buffer,         
+        uint32_t            BufferSize,     
+        SHA512_HASH*        Digest          
     )
 {
     Sha512Context context;

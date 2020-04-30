@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_UTIL_H
@@ -21,8 +21,8 @@ typedef struct {
 } secp256k1_callback;
 
 static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * const cb, const char * const text) {
-      
-      
+    
+    
 }
 
 #ifdef DETERMINISTIC
@@ -119,4 +119,4 @@ static SECP256K1_INLINE void *checked_realloc(const secp256k1_callback* cb, void
 SECP256K1_GNUC_EXT typedef unsigned __int128 uint128_t;
 #endif
 
-#endif  
+#endif 

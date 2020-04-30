@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2017 Andrew Poelstra                                 *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef _SECP256K1_SCRATCH_IMPL_H_

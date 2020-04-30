@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "CPDataModel.h"
 #import <WCDB/WCDB.h>
@@ -18,6 +18,52 @@
 #import <chat_plugin/CPContactHelper.h>
 #include "audio_format_tool.h"
 
+@implementation CPTradeRsp
+WCDB_IMPLEMENTATION(CPTradeRsp)
+
+WCDB_SYNTHESIZE(CPTradeRsp, txhash)
+WCDB_SYNTHESIZE(CPTradeRsp, tid)
+
+WCDB_SYNTHESIZE(CPTradeRsp, type)
+
+WCDB_SYNTHESIZE(CPTradeRsp, status);
+
+WCDB_SYNTHESIZE(CPTradeRsp, createTime);
+
+
+WCDB_SYNTHESIZE(CPTradeRsp, amount);
+
+WCDB_SYNTHESIZE(CPTradeRsp, chainId);
+WCDB_SYNTHESIZE(CPTradeRsp, symbol);
+
+
+WCDB_SYNTHESIZE(CPTradeRsp, txfee);
+
+WCDB_SYNTHESIZE(CPTradeRsp, fromAddr);
+WCDB_SYNTHESIZE(CPTradeRsp, toAddr);
+
+WCDB_SYNTHESIZE(CPTradeRsp, memo); 
+
+WCDB_PRIMARY_AUTO_INCREMENT(CPTradeRsp, tid)
+WCDB_MULTI_UNIQUE(CPTradeRsp, "MultiUniqueConstraint", chainId)
+WCDB_MULTI_UNIQUE(CPTradeRsp, "MultiUniqueConstraint", symbol)
+WCDB_MULTI_UNIQUE(CPTradeRsp, "MultiUniqueConstraint", txhash)
+
+@end
+
+@implementation CPAssetToken
+WCDB_IMPLEMENTATION(CPAssetToken)
+
+WCDB_SYNTHESIZE(CPAssetToken, chainID)
+WCDB_SYNTHESIZE(CPAssetToken, symbol)
+WCDB_SYNTHESIZE(CPAssetToken, balance)
+
+WCDB_MULTI_UNIQUE(CPAssetToken, "MultiUniqueConstraint", chainID)
+WCDB_MULTI_UNIQUE(CPAssetToken, "MultiUniqueConstraint", symbol)
+
+@end
+
+
 @implementation CPChainClaim
 WCDB_IMPLEMENTATION(CPChainClaim)
 
@@ -28,6 +74,8 @@ WCDB_SYNTHESIZE(CPChainClaim, operator_address)
 WCDB_SYNTHESIZE(CPChainClaim, createTime)
 WCDB_SYNTHESIZE(CPChainClaim, updateTime)
 WCDB_SYNTHESIZE_DEFAULT(CPChainClaim, chain_status, 0)
+WCDB_SYNTHESIZE(CPChainClaim, endpoint)
+
 
 WCDB_PRIMARY(CPChainClaim, txhash)
 
@@ -56,7 +104,7 @@ WCDB_PRIMARY_AUTO_INCREMENT(User, userId)
 WCDB_IMPLEMENTATION(CPContact)
 WCDB_SYNTHESIZE(CPContact, publicKey)
 WCDB_SYNTHESIZE(CPContact, remark)
-WCDB_SYNTHESIZE(CPContact, sessionId)    
+WCDB_SYNTHESIZE(CPContact, sessionId)  
 WCDB_SYNTHESIZE_DEFAULT(CPContact, sessionType,0)
 
 WCDB_SYNTHESIZE(CPContact, createTime)
@@ -76,6 +124,9 @@ WCDB_SYNTHESIZE_COLUMN(CPContact, notice_encrypt_content, "gtEncCon")
 WCDB_SYNTHESIZE_COLUMN(CPContact, notice_modified_time, "gtModTim")
 WCDB_SYNTHESIZE_COLUMN(CPContact, notice_publisher, "gtPubler")
 WCDB_SYNTHESIZE_DEFAULT(CPContact, inviteType, 0)
+
+WCDB_SYNTHESIZE(CPContact, avatar)
+WCDB_SYNTHESIZE(CPContact, server_addr)
 
 WCDB_PRIMARY_AUTO_INCREMENT(CPContact, sessionId)
 WCDB_UNIQUE(CPContact, publicKey)
@@ -126,7 +177,7 @@ WCDB_UNIQUE(CPContact, publicKey)
 
 @end
 
-  
+
 @implementation CPSession
 
 WCDB_IMPLEMENTATION(CPSession)
@@ -173,20 +224,23 @@ WCDB_SYNTHESIZE(CPMessage, createTime)
 WCDB_SYNTHESIZE(CPMessage, updateTime)
 WCDB_SYNTHESIZE(CPMessage, version)
 
-WCDB_SYNTHESIZE_DEFAULT(CPMessage, toServerState, 1)   
-WCDB_SYNTHESIZE(CPMessage, signHash)    
-WCDB_SYNTHESIZE(CPMessage, fileHash)   
+WCDB_SYNTHESIZE_DEFAULT(CPMessage, toServerState, 1) 
+WCDB_SYNTHESIZE(CPMessage, signHash)  
+WCDB_SYNTHESIZE(CPMessage, fileHash) 
 
-  
+
 WCDB_SYNTHESIZE(CPMessage, audioTimes)
 WCDB_SYNTHESIZE(CPMessage, pixelWidth)
 WCDB_SYNTHESIZE(CPMessage, pixelHeight)
-  
+
 WCDB_SYNTHESIZE(CPMessage, encodePrivateKey)
 WCDB_SYNTHESIZE(CPMessage, groupName)
 WCDB_SYNTHESIZE_DEFAULT(CPMessage, server_msg_id ,0)
 WCDB_SYNTHESIZE_DEFAULT(CPMessage, isDelete ,0)
 WCDB_SYNTHESIZE_COLUMN(CPMessage, group_pub_key, "gPubK")
+
+WCDB_SYNTHESIZE_DEFAULT(CPMessage, useway, MessageUseWayDefault)
+
 
 WCDB_PRIMARY_AUTO_INCREMENT(CPMessage, msgId)
 WCDB_MULTI_UNIQUE(CPMessage, "MultiUniqueConstraint", senderPubKey)
@@ -237,7 +291,7 @@ WCDB_MULTI_UNIQUE(CPMessage, "MultiUniqueConstraint", server_msg_id)
 }
 
 - (id)abstractDecodeLocal {
-      
+    
     if (self.msgType == MessageTypeGroupUpdateNotice) {
         return  [self p_decodeNotice];
     }
@@ -247,7 +301,7 @@ WCDB_MULTI_UNIQUE(CPMessage, "MultiUniqueConstraint", server_msg_id)
     return nil;
 }
 
-  
+
 - (NSString *)p_decodeNotice {
     if ([NSString cp_isEmpty:_msgDecode] == false ||
         [_msgDecode isEqualToString: @""]) {
@@ -278,7 +332,7 @@ WCDB_MULTI_UNIQUE(CPMessage, "MultiUniqueConstraint", server_msg_id)
     return @"";
 }
 
-  
+
 
 - (id)p_decodeGroupText {
     if (![NSString cp_isEmpty:_msgDecode] || [_msgDecode  isEqual: @""]) {
@@ -373,7 +427,7 @@ WCDB_MULTI_UNIQUE(CPMessage, "MultiUniqueConstraint", server_msg_id)
     return _imageDecode;
 }
 
-  
+
 
 - (id)p_decodeText {
     if (![NSString cp_isEmpty:_msgDecode] || [_msgDecode  isEqual: @""]) {
@@ -470,7 +524,7 @@ WCDB_MULTI_UNIQUE(CPGroupMember, "MultiUniqueConstraint", sessionId)
 @end
 
 
-  
+
 @implementation CPGroupNotify {
     NSString *_decodeReson;
 }
@@ -515,28 +569,4 @@ WCDB_PRIMARY_AUTO_INCREMENT(CPGroupNotify, noticeId)
     return _decodeReson;
 }
 
-
-@end
-
-  
-@implementation CPGroupNotifySession
-@end
-
-@implementation CPGroupNotifyPreview
-
-- (NSInteger)needApproveCount {
-    return _readCount + _unreadCount;
-}
-
-@end
-
-
-
-
-@implementation CPGroupInfoResp
-
-@end
-
-
-@implementation CPUnreadResponse
 @end

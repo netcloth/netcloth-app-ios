@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -92,7 +92,7 @@ class AuthorizeVC: UIViewController {
         }
     }
     
-      
+    
     fileprivate func animateShow() {
         self.view?.layoutIfNeeded()
         UIView.animate(withDuration: 0.25, animations: {

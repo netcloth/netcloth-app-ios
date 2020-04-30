@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -17,7 +17,7 @@ class ContactObserverListVC: BaseViewController, UITableViewDelegate, UITableVie
     var indexArray: [String] = []
     var models: [String: [CPContact]] = [:]
     
-      
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,15 +34,14 @@ class ContactObserverListVC: BaseViewController, UITableViewDelegate, UITableVie
         CPContactHelper.getAllContacts { [weak self]  (contacts) in
             
             let filter =  contacts.filter { (ct) -> Bool in
-                if ct.publicKey == support_account_pubkey {
-                    ct.remark = "NetCloth Support".localized()
+                if let _ = ct.publicKey.isCurNodeAssist() {
                     return true
                 }
                 return false
             }
             
             let contacts: [CPContact]? = filter
-              
+            
             self?.models.removeAll()
             if let array = contacts {
                 for contact in array {
@@ -66,7 +65,7 @@ class ContactObserverListVC: BaseViewController, UITableViewDelegate, UITableVie
                 }
             }
             
-              
+            
             let titles = self?.models.keys.sorted(by: { l, r in
                 let lIsEn = l.isEnglish()
                 let rIsEn = r.isEnglish()
@@ -128,7 +127,7 @@ extension ContactObserverListVC {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let key = indexArray[indexPath.section]
         let model = self.models[key]?[indexPath.row]
-          
+        
         if let ct = model {
             if let vc = R.loadSB(name: "ChatRoom", iden: "ChatRoomVC") as? ChatRoomVC {
                 vc.sessionId = Int(ct.sessionId)
@@ -165,15 +164,15 @@ extension ContactObserverListVC {
     }
 }
 
-  
+
 extension ContactObserverListVC {
     
-      
+    
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.indexArray
     }
     
-      
+    
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index
     }

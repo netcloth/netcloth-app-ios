@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -44,11 +44,12 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zpi-B1-VH1">
-                                                    <rect key="frame" x="25" y="23.5" width="30" height="23"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="Zpi-B1-VH1" secondAttribute="height" multiplier="35:27" id="2dV-r1-uKd"/>
-                                                        <constraint firstAttribute="width" constant="30" id="u3Z-hh-ciN"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="20" y="15" width="40" height="40"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="20"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BAe-9e-aOF">
                                                     <rect key="frame" x="72" y="35" width="327" height="0.0"/>
@@ -66,6 +67,8 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="Zpi-B1-VH1" firstAttribute="height" secondItem="IQg-1e-X34" secondAttribute="height" id="1C1-JF-YOQ"/>
+                                                <constraint firstItem="Zpi-B1-VH1" firstAttribute="width" secondItem="IQg-1e-X34" secondAttribute="width" id="1mI-Gd-YFa"/>
                                                 <constraint firstItem="IQg-1e-X34" firstAttribute="centerY" secondItem="n5U-wA-xG1" secondAttribute="centerY" id="3g6-bp-Yjs"/>
                                                 <constraint firstItem="BAe-9e-aOF" firstAttribute="centerY" secondItem="n5U-wA-xG1" secondAttribute="centerY" id="BPx-W8-uVe"/>
                                                 <constraint firstItem="IQg-1e-X34" firstAttribute="leading" secondItem="n5U-wA-xG1" secondAttribute="leading" constant="20" id="Gz0-Fl-jEu"/>

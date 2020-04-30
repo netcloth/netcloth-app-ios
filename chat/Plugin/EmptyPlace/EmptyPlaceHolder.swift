@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
@@ -18,9 +18,17 @@ enum EmptyStatus {
 
 protocol Emptyable {
     func showEmpty(status: EmptyStatus) -> Void
+    func emptyView() -> EmptyHolderView?
 }
 
 extension Emptyable where Self: UIView {
+    
+    func emptyView() -> EmptyHolderView? {
+        if let v = getOnShowView()?.viewWithTag(vTag) as? EmptyHolderView {
+            return v
+        }
+        return nil
+    }
     
     func showEmpty(status: EmptyStatus) -> Void {
         var ev: EmptyHolderView?
@@ -53,6 +61,7 @@ extension UIView: Emptyable {}
 class EmptyHolderView: UIView {
     @IBOutlet var tipsLabel: UILabel!
     @IBOutlet var tipsImgV: UIImageView!
+    @IBOutlet var tapBtn: UIButton?
     
     func showStatus(_ status: EmptyStatus) {
         switch status {

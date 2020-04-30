@@ -29,7 +29,7 @@ std::string CreatePrivateKey();
  */
 std::string GetPublicKeyByPrivateKey(const std::string private_key_org);
 
- 
+
 std::string GetSignByPrivateKey(const uint8_t* buf, size_t length, const std::string pri_key);
 
 /**
@@ -77,4 +77,4 @@ bool AesEncode(const std::string& key, const std::string& iv, const std::string&
 bool AesDecode(const std::string& key, const std::string& iv, const std::string& in, std::string& out);
 
 uint64_t GetHash(const std::string& str);
-#endif   
+#endif 

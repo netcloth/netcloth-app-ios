@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -21,12 +21,12 @@ class GroupApproveDetailVC: BaseViewController {
     
     var latestNotice: CPGroupNotify?
     var groupContact: CPContact?
-  
+
     
     let disbag = DisposeBag()
     
     
-      
+    
     deinit {
         let noticeId = self.latestNotice?.noticeId ?? 0
         var notice = self.latestNotice
@@ -50,6 +50,11 @@ class GroupApproveDetailVC: BaseViewController {
         }
         remarkL?.text = joinMsg.nickName
         smallL?.text = joinMsg.nickName.getSmallRemark()
+        
+        let color = notice.senderPublicKey.randomColor()
+        smallL?.backgroundColor = UIColor(hexString: color)
+        
+        
         refreshInviter()
         refreshReason()
         refreshStatus()
@@ -97,8 +102,17 @@ class GroupApproveDetailVC: BaseViewController {
     
     fileprivate func refreshInviter() {
         
+        
         if self.latestNotice?.decodeJoinRequest?.source == 1 {
             self.inviterBy?.text = "Group_Request_From_QR".localized()
+            self.inviterBy?.textColor = UIColor(hexString: "#606266")
+        }
+        else if self.latestNotice?.decodeJoinRequest?.source == 2 {
+            self.inviterBy?.text = "Group_Request_From_Recommend".localized()
+            self.inviterBy?.textColor = UIColor(hexString: "#606266")
+        }
+        else if self.latestNotice?.decodeJoinRequest?.source == 3 {
+            self.inviterBy?.text = "Group_request_from_miniLink".localized()
             self.inviterBy?.textColor = UIColor(hexString: "#606266")
         }
         else if let inviter = self.latestNotice?.inviterNickName {
@@ -106,7 +120,7 @@ class GroupApproveDetailVC: BaseViewController {
             att1.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#606266")!], range: att1.rangeOfAll())
             
             var att2 = NSMutableAttributedString(string: "\(inviter)")
-            att2.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: "#3D7EFF")!], range: att2.rangeOfAll())
+            att2.addAttributes([NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: att2.rangeOfAll())
             
             let range1 = (att1.string as? NSString)?.range(of: "#mark#")
             if let r1 = range1, r1.location != NSNotFound {
@@ -144,7 +158,7 @@ class GroupApproveDetailVC: BaseViewController {
     }
     
     
-      
+    
     fileprivate func filfulled() {
         guard let group = self.groupContact,
             let notice = self.latestNotice,

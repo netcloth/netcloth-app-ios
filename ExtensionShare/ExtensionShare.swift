@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -12,7 +12,7 @@ class ExtensionShare: NSObject {
     static private let chat_group_id = "group.app.chat.netcloth"
     static private let userdefault = UserDefaults(suiteName: chat_group_id)
     
-      
+    
     static var noDisturb: ExtensionShare {
         get {
             return ExtensionShare(storekey: "notDisturbList")
@@ -25,7 +25,7 @@ class ExtensionShare: NSObject {
         }
     }
     
-      
+    
 
     fileprivate var commonKey: String
     init(storekey:String) {
@@ -42,7 +42,7 @@ class ExtensionShare: NSObject {
     }
 }
 
-  
+
 extension ExtensionShare {
     func setUnreadCount(_ count: Int) {
         self.setObject(count, forKey: commonKey)
@@ -58,7 +58,7 @@ extension ExtensionShare {
 }
 
 
-  
+
 extension ExtensionShare {
     
     func addToDisturb(pubkey: String) {

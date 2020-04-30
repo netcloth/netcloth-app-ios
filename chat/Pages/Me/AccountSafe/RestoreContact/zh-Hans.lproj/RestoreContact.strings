@@ -1,9 +1,9 @@
 
-/* Class = "UILabel"; text = "您的通讯录将用您的非对称密钥进行解密恢复，服务器无法解密通讯录信息。"; ObjectID = "Cef-me-y9Y"; */
-"Cef-me-y9Y.text" = "您的通讯录将用您的非对称密钥进行解密恢复，服务器无法解密通讯录信息。";
+/* Class = "UILabel"; text = "您的联系人将用您的非对称密钥进行解密恢复，服务器无法解密联系人信息。"; ObjectID = "Cef-me-y9Y"; */
+"Cef-me-y9Y.text" = "您的联系人将用您的非对称密钥进行解密恢复，服务器无法解密联系人信息。";
 
-/* Class = "UINavigationItem"; title = "恢复通讯录"; ObjectID = "Ift-Ag-VcD"; */
-"Ift-Ag-VcD.title" = "恢复通讯录";
+/* Class = "UINavigationItem"; title = "恢复联系人"; ObjectID = "Ift-Ag-VcD"; */
+"Ift-Ag-VcD.title" = "恢复联系人";
 
 /* Class = "UIButton"; normalTitle = "确认恢复"; ObjectID = "IvD-c5-dAZ"; */
 "IvD-c5-dAZ.normalTitle" = "确认恢复";
@@ -17,20 +17,20 @@
 /* Class = "UILabel"; text = " "; ObjectID = "SNr-4X-CeN"; */
 "SNr-4X-CeN.text" = " ";
 
-/* Class = "UILabel"; text = "恢复的最新通讯录将自动对比合并现有通讯录，不会删除现有的联系人。"; ObjectID = "XXE-iJ-8vm"; */
-"XXE-iJ-8vm.text" = "恢复的最新通讯录将自动对比合并现有通讯录，不会删除现有的联系人。";
+/* Class = "UILabel"; text = "恢复的最新联系人将自动对比合并现有联系人，不会删除现有的联系人。"; ObjectID = "XXE-iJ-8vm"; */
+"XXE-iJ-8vm.text" = "恢复的最新联系人将自动对比合并现有联系人，不会删除现有的联系人。";
 
 /* Class = "UILabel"; text = " "; ObjectID = "Ydp-x5-kCQ"; */
 "Ydp-x5-kCQ.text" = " ";
 
-/* Class = "UINavigationItem"; title = "恢复通讯录"; ObjectID = "uQE-Ut-xez"; */
-"uQE-Ut-xez.title" = "恢复通讯录";
+/* Class = "UINavigationItem"; title = "恢复联系人"; ObjectID = "uQE-Ut-xez"; */
+"uQE-Ut-xez.title" = "恢复联系人";
 
 /* Class = "UILabel"; text = "名单"; ObjectID = "uRh-F9-kDq"; */
 "uRh-F9-kDq.text" = "名单";
 
-/* Class = "UILabel"; text = "您将从云端服务器中恢复最新备份的加密通讯录。"; ObjectID = "vuv-rP-ZIh"; */
-"vuv-rP-ZIh.text" = "您将从云端服务器中恢复最新备份的加密通讯录。";
+/* Class = "UILabel"; text = "您将从云端服务器中恢复最新加密备份的NetCloth联系人。"; ObjectID = "vuv-rP-ZIh"; */
+"vuv-rP-ZIh.text" = "您将从云端服务器中恢复最新加密备份的NetCloth联系人。";
 
-/* Class = "UIButton"; normalTitle = "恢复通讯录"; ObjectID = "xas-7b-d9g"; */
-"xas-7b-d9g.normalTitle" = "恢复通讯录";
+/* Class = "UIButton"; normalTitle = "恢复联系人"; ObjectID = "xas-7b-d9g"; */
+"xas-7b-d9g.normalTitle" = "恢复联系人";

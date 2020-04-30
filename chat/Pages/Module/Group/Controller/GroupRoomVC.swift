@@ -1,23 +1,25 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import IQKeyboardManagerSwift
 
 
-  
+
 class GroupRoomVC:BaseViewController,
     UITableViewDelegate, UITableViewDataSource,
     ChatDelegate,
     KeyboardManagerDelegate,
     ChatCommonCellDelegate,
-    SDPhotoBrowserDelegate
+    SDPhotoBrowserDelegate,
+    KeyboardReturn
 {
+    
     let groupRoomService = GroupRoomService()
     var chatContact: CPContact? {
         didSet {
@@ -48,7 +50,7 @@ class GroupRoomVC:BaseViewController,
         }
     }
     
-      
+    
     @IBOutlet weak var toolbarBottomToSafe: NSLayoutConstraint!
     
     let refreshControl = UIRefreshControl()
@@ -61,26 +63,29 @@ class GroupRoomVC:BaseViewController,
     @IBOutlet weak var unreadLocationV: UIView?
     @IBOutlet weak var unreadCountTipsLabel: UILabel?
     
+    @IBOutlet weak var atContainerV: UIView?
+    @IBOutlet weak var atTipL: UILabel?
+    
     var rightBarItem: UIBarButtonItem?
     
-      
-      
+    
+    
     var messageArray: [CPMessage] = []
     var synManager: GroupMsgSynchronize?
     
     var last_big_msg_id : Int64 = 0
     
-      
+    
     private var lastMsgId: Int64 = 1
     
     let disbag = DisposeBag()
     
     var msgPatchQueue : DispatchQueue = OS_dispatch_queue_serial(label: "com.groupchat.room.msg", qos: .default)
     
-      
-    var lastOpenTime: Double = Date().timeIntervalSince1970
     
-      
+    var lastOpenTime: Double = Date().timeIntervalSince1970
+    @IBOutlet weak var roomHelper: ChatRoomHelper?
+    
     
     deinit {
         if RoomStatus.toPublicKey == self.toPublicKey {
@@ -106,7 +111,7 @@ class GroupRoomVC:BaseViewController,
         self.navigationController?.navigationBar.titleTextAttributes =
             [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)]
         
-          
+        
         IQKeyboardManager.shared.enable = false
         IQKeyboardManager.shared.disabledToolbarClasses.append(type(of: self))
         
@@ -123,6 +128,8 @@ class GroupRoomVC:BaseViewController,
         
         self.roomService?.requestGroupInfo()
         
+        self.roomHelper?.vc_viewDidLoad()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -135,8 +142,7 @@ class GroupRoomVC:BaseViewController,
         self.setSessionToRead()
         RoomStatus.inChatRoom = false
         
-        self.toolBar.textField.resignFirstResponder()
-        self.view.endEditing(true)
+        self.endInputResponder()
     }
         
     func configUI() {
@@ -146,7 +152,7 @@ class GroupRoomVC:BaseViewController,
         self.navigationItem.rightBarButtonItem = right
         
         tableView.refreshControl = refreshControl
-          
+        
         tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
@@ -164,6 +170,10 @@ class GroupRoomVC:BaseViewController,
         tableView.addGestureRecognizer(longgesture)
         
         self.unreadLocationV?.setShadow(color: UIColor(hexString: "#606266")!, offset: CGSize(width: 0, height: 1), radius: 3, opacity: 0.2)
+        
+        
+        self.view.backgroundColor = UIColor(hexString: Color.room_bg)
+        self.tableView.backgroundColor = UIColor(hexString: Color.room_bg)
     }
     
     func configEvent() {
@@ -174,17 +184,20 @@ class GroupRoomVC:BaseViewController,
             if self?.toPublicKey == nil {
                 return
             }
-            if let t = event.element as? String {
-                self?.sendMsg(text: t)
-            }
-            else if let d = event.element as? Data {
+            switch event.element {
+            case let d as Data:
                 self?.sendAudio(data: d)
-            }
-            else if let dic = event.element as? NSDictionary {
+            case let dic as NSDictionary:
                 if let imgdata = dic["image"] as? Data {
                     self?.sendImage(data: imgdata)
                 }
+            case let (text, isAtAll, members) as (String, Bool, [String]):
+                self?.sendMsg(text: text, atAll: isAtAll, members: members)
+                
+            default:
+                print("something")
             }
+           
         }.disposed(by: disbag)
     
         self.roomService?.chatContact?.observable.subscribe(onNext: { [weak self] (e) in
@@ -213,7 +226,18 @@ class GroupRoomVC:BaseViewController,
         self.setSessionToRead()
         NotificationCenter.post(name: NoticeNameKey.chatRoomUnreadStatusChange)
     }
-      
+    
+    override func themeNavColor() {
+        let color = UIColor(hexString: Color.app_nav_theme)!
+        let bar = UIColor.white
+        themeStyle(color: color, barItemColor: bar)
+    }
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    
     
     func calculateCells() {
         let suppert = ["OtherUnknown","SelfUnknown",
@@ -285,20 +309,44 @@ class GroupRoomVC:BaseViewController,
         synManager?.resetStart(openMsgId: tmpLastMsgId)
     }
     
+    fileprivate var firstReadServerId:Int64 = 0
+    fileprivate var firstAtRelateMsg: CPMessage? = nil
     func findLastOpenMsgId() -> Int64 {
         var tmpLastMsgId: Int64 = 0
-        let tmpArray = self.messageArray.reversed()   
+        let tmpArray = self.messageArray.reversed() 
         for item in tmpArray {
             if item.isDelete != 2 && item.read == true {
                 tmpLastMsgId = item.server_msg_id
                 break
             }
         }
-        return tmpLastMsgId
+        return max(tmpLastMsgId,firstReadServerId)
     }
     
+    @IBAction func onActionToAtMsgId() {
+        self.unreadCount = at2UnreadDiff
+        
+        self.showAtTip = false
+        self.showCountTip = true
+        
+        var toRow = 0
+        for (index , item) in self.messageArray.enumerated() {
+            if item.server_msg_id == self.firstAtRelateMsg?.server_msg_id {
+                toRow = index
+                break
+            }
+        }
+        DispatchQueue.main.async {
+            if self.messageArray.count > toRow, toRow >= 0 {
+                let indexpath = IndexPath(row: toRow, section: 0)
+                self.tableView.scrollToRow(at: indexpath, at: .top, animated: true)
+            }
+        }
+    }
+    
+    
     @IBAction func onActionToLastOpenMsgId() {
-        self.unreadLocationV?.isHidden = true
+        self.showCountTip = false
         
         var toRow = 0
         for (index , item) in self.messageArray.enumerated() {
@@ -308,7 +356,10 @@ class GroupRoomVC:BaseViewController,
             }
         }
         DispatchQueue.main.async {
-            self.tableView.scrollToRow(at: IndexPath(row: toRow, section: 0), at: .top, animated: true)
+            if self.messageArray.count > toRow, toRow >= 0 {
+                let indexpath = IndexPath(row: toRow, section: 0)
+                self.tableView.scrollToRow(at: indexpath, at: .top, animated: true)
+            }
         }
     }
     
@@ -316,23 +367,35 @@ class GroupRoomVC:BaseViewController,
         CPSessionHelper.setAllReadOfSession(sessionId ?? 0, with: SessionType.group, complete: nil)
     }
     
-      
+    
     @objc func loadHistroy() {
-        if  let msg = messageArray.first {
+        if  let msg = findFirstMsgId() {
             fetchDataMsg(createtime: msg.createTime, server_msg_id: msg.server_msg_id)
         } else {
             refreshControl.endRefreshing()
         }
     }
     
+    fileprivate func findFirstMsgId() -> CPMessage? {
+        for item in messageArray {
+            if item.server_msg_id != 0
+                && item.createTime > 1000
+                && item.isDelete != 10 {
+                print("find first msgid \(item.server_msg_id)")
+                return item
+            }
+        }
+        return nil
+    }
+    
     func fetchDataMsg(createtime: Double ,server_msg_id: CLongLong) {
-          
+        
         CPGroupManagerHelper.v2GetMessages(inSession: sessionId ?? 0, beforeCreateTime: createtime, beforeServerId: server_msg_id, size: 17) {
-            [weak self] (ok, msg, array: [CPMessage]?) in
-            
+            [weak self] (ok, msg, array: [CPMessage]?, firstSid, firstMsg , atRelateMsg) in
+            print("firstsid \(firstSid), atsid \(atRelateMsg?.server_msg_id)")
             self?.msgPatchQueue.async {
                 
-                  
+                
                 if let toarray = array {
                     for to in toarray {
                         to.msgDecodeContent()
@@ -343,12 +406,29 @@ class GroupRoomVC:BaseViewController,
                     self?.dismissLoading()
                     self?.refreshControl.endRefreshing()
                     
+                    
+                    var array = array
+                    if server_msg_id == -1 || createtime == -1 {
+                        if let atmsg = atRelateMsg {
+                            array?.insert(atmsg, at: 0)
+                            self?.firstAtRelateMsg = atRelateMsg
+                            self?.at2UnreadDiff = atmsg.server_msg_id - firstSid - 1
+                        }
+                        
+                        self?.firstReadMsg = firstMsg
+                    }
+                    
                     self?._onHandleMsgsData(array ?? [], complete: {
-                          
+                        
                         if server_msg_id == -1 || createtime == -1 {
+                            self?.firstReadServerId = firstSid
                             self?._refreshToBottom()
                             
-                              
+                            if let atmsg = atRelateMsg {
+                                self?.showAtTip = true
+                            }
+                            
+                            
                             if self?.synManager == nil {
                                 self?.setupSynVm()
                             }
@@ -364,22 +444,42 @@ class GroupRoomVC:BaseViewController,
         }
     }
     
+    
+    var firstReadMsg: CPMessage?
+    var at2UnreadDiff: Int64 = 0
+    var unreadCount: Int64 = 0
+    var showAtTip: Bool = false {
+        didSet {
+            atRelateCallBack()
+        }
+    }
+    var showCountTip: Bool = false {
+        didSet {
+            atRelateCallBack()
+        }
+    }
+    
     func setupSynVm() {
         var tmpLastMsgId = self.findLastOpenMsgId() ?? 0
         self.synManager = GroupMsgSynchronize(room: self, openMsgId: tmpLastMsgId)
         self.synManager?.unreadCountCallBack = { [weak self] count in
+            self?.unreadCount = count
             self?.unreadCountCallBack(count)
+            self?.showCountTip = true
         }
     }
     
-    func unreadCountCallBack(_ count: Int64) -> Void  {
+    
+    func unreadCountCallBack(_ count: Int64, addFake: Bool = true) -> Void  {
         print("syn group message unreadCount \(count)")
         if count > 0 {
             self.unreadLocationV?.isHidden = false
             var tip = "Group_syn_msg_count".localized()
             tip = tip.replacingOccurrences(of: "#mark#", with: "\(count)")
             self.unreadCountTipsLabel?.text = tip
-            addFakeLocationTip()
+            if addFake {
+                addFakeLocationTip()
+            }
         }
         else {
             self.unreadLocationV?.isHidden = true
@@ -387,7 +487,7 @@ class GroupRoomVC:BaseViewController,
     }
     
     func addFakeLocationTip() {
-          
+        
         let locationTip = "Group_unread_location_tip".localized()
         var createTime: Double = 0
         
@@ -396,10 +496,12 @@ class GroupRoomVC:BaseViewController,
         fakeMsg.toPubkey = self.toPublicKey ?? ""
         fakeMsg.msgData = locationTip.data(using: String.Encoding.utf8)
         
+        
         let msgid = self.synManager?.const_open_msg_id ?? 0
         fakeMsg.server_msg_id = msgid
+        fakeMsg.isDelete = 10
         
-        let tmpArray = self.messageArray.reversed()   
+        let tmpArray = self.messageArray.reversed() 
         for item in tmpArray {
             if item.server_msg_id == msgid {
                 createTime = item.createTime
@@ -408,17 +510,57 @@ class GroupRoomVC:BaseViewController,
             }
         }
         
-        fakeMsg.createTime = createTime + 0.001
+        if createTime == 0 {
+            fakeMsg.createTime = (self.firstReadMsg?.createTime ?? 0) + 0.001
+        }
+        else {
+            fakeMsg.createTime = createTime + 0.001
+        }
+        
+        
         
         msgPatchQueue.async {
             self._insertMsg(fakeMsg, atLast: true)
             DispatchQueue.main.async {
-                self.reloadTableView()
+                self._refreshToBottom()
+            }
+        }
+    }
+
+    func atRelateCallBack() {
+        DispatchQueue.main.async {
+            if self.showAtTip {
+                let inVisible = { () -> Bool in
+                    for indexPath in self.tableView.indexPathsForVisibleRows ?? [] {
+                        if let model = self.messageArray[safe: indexPath.row],
+                            model.server_msg_id == self.firstAtRelateMsg?.server_msg_id {
+                            return true
+                        }
+                    }
+                    return false
+                }()
+                self.atTipL?.text = "@room_tip".localized()
+                if inVisible == false {
+                    self.unreadLocationV?.isHidden = true
+                    self.atContainerV?.isHidden = false
+                }
+                else {
+                    self.showAtTip = false
+                }
+            }
+            else if self.showCountTip {
+                self.unreadLocationV?.isHidden = false
+                self.atContainerV?.isHidden = true
+                self.unreadCountCallBack(self.unreadCount, addFake: false)
+            }
+            else {
+                self.atContainerV?.isHidden = true
+                self.unreadLocationV?.isHidden = true
             }
         }
     }
     
-      
+    
     @objc func _refreshVisibleCells() {
         self.msgPatchQueue.async {
             self.reloadTableView()
@@ -434,7 +576,7 @@ class GroupRoomVC:BaseViewController,
         }
     }
     
-      
+    
     func _refreshToTop() {
         let tmpId = lastMsgId
         self.reloadTableView()
@@ -447,7 +589,10 @@ class GroupRoomVC:BaseViewController,
         }
         DispatchQueue.main.async {
             self.tableView.isHidden = true
-            self.tableView.scrollToRow(at: IndexPath(row: toRow, section: 0), at: .middle, animated: false)
+            if self.messageArray.count > toRow, toRow >= 0 {
+                let indexpath = IndexPath(row: toRow, section: 0)
+                self.tableView.scrollToRow(at: indexpath, at: .middle, animated: false)
+            }
             self.tableView.isHidden = false
         }
     }
@@ -462,22 +607,25 @@ class GroupRoomVC:BaseViewController,
         }
     }
     
-      
+    
     func onHandleRemarkChange(contact: CPContact) {
         msgPatchQueue.async { [weak self] in
-              
+            
         }
     }
     
     func onHandleDeleteAllChatRecored() {
-        msgPatchQueue.async(flags: .barrier) {
-            self.messageArray = []
-            self.reloadTableView()
+        self.reloadTableView()
+        DispatchQueue.main.async {
+            self.msgPatchQueue.async(flags: .barrier) {
+                self.messageArray = []
+                self.reloadTableView()
+            }
         }
     }
     
     
-      
+    
     private var menuOpItem: CPMessage?
     private var menuController: UIMenuController?
     private var notInMenu: Bool = true
@@ -518,7 +666,7 @@ class GroupRoomVC:BaseViewController,
             return
         }
         if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-              
+            
             alert.titleLabel?.text = NSLocalizedString("Session_W_Title", comment: "")
             alert.msgLabel?.text = NSLocalizedString("Session_W_Msg", comment: "")
             alert.cancelButton?.setTitle(NSLocalizedString("Back", comment: ""), for: .normal)
@@ -581,13 +729,13 @@ class GroupRoomVC:BaseViewController,
             guard let indexPath = self.tableView.indexPathForRow(at: location) else { return }
             guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
             
-              
+            
             showMenuAtCell(cell,at: indexPath)
         }
     }
     
-      
-      
+    
+    
     func onCacheMsgRecieve(_ caches: [CPMessage]!) {
         _onHandleMsgsData(caches) { [weak self] in
             self?._refreshToTop()
@@ -614,17 +762,17 @@ class GroupRoomVC:BaseViewController,
         }
     }
         
-      
+    
     func onReceiveMsg(_ msg: CPMessage) {
         self._onHandleMsgsData([msg], isOnline: true) { [weak self] in
-              
+            
             if self?.checkEnableToBottom() == true {
                 self?._refreshToBottom(animate: true)
             }
         }
     }
     
-      
+    
     
     func onCurrentRoomInfoChange() {
         CPContactHelper.getOneContact(byPubkey: self.toPublicKey) { [weak self] (r, msg, contact) in
@@ -655,7 +803,7 @@ class GroupRoomVC:BaseViewController,
     func onReceiveGroupChatMsgs(_ msgs: [CPMessage]) {
         let isCache = (msgs.last?.createTime ?? 0) < self.lastOpenTime
         self._onHandleMsgsData(msgs, isOnline: true) { [weak self] in
-              
+            
             if isCache {
                 self?._refreshToTop()
             }
@@ -668,7 +816,7 @@ class GroupRoomVC:BaseViewController,
     }
     
     
-      
+    
     func _onHandleMsgsData(_ data: [CPMessage],
                            isOnline: Bool = false,
                            complete: (() -> Void)?) {
@@ -680,7 +828,7 @@ class GroupRoomVC:BaseViewController,
                 }
                 return
             }
-              
+            
             var accept = [CPMessage]()
             for tmp in data {
                 if self?.shouldReceiveMsg(tmp) == true {
@@ -688,7 +836,7 @@ class GroupRoomVC:BaseViewController,
                 }
             }
             
-              
+            
             accept = self?._deleteRepeatInDataArray(wantInArray: accept) ?? []
             
             guard accept.count > 0 else {
@@ -698,13 +846,13 @@ class GroupRoomVC:BaseViewController,
                 return
             }
             
-              
+            
             let members = self?.roomService?.groupAllMember ?? []
 
             accept.forEach { (msg) in
                 msg.msgDecodeContent()
                 
-                  
+                
                 var find = false
                 for item in members {
                     if item.hexPubkey == msg.senderPubKey {
@@ -718,10 +866,10 @@ class GroupRoomVC:BaseViewController,
                 }
             }
             
-              
+            
             self?._orderMsgs(inArray: &accept)
             
-              
+            
             var last:CPMessage? = nil;
             for tmp in accept {
                 if last == nil {
@@ -743,14 +891,14 @@ class GroupRoomVC:BaseViewController,
                 last = tmp;
             }
             
-              
+            
             if isOnline {
                 self?._insertMsgs(accept, atLast: false)
             } else {
                 self?._insertMsgs(accept, atLast: true)
             }
             
-              
+            
             DispatchQueue.main.async {
                 complete?()
             }
@@ -778,6 +926,12 @@ class GroupRoomVC:BaseViewController,
                 toInsertA.append(toIn)
             }
         }
+        
+        
+        toInsertA = toInsertA.filterDuplicates({ (msg) -> String in
+            return  "\(msg.signHash)\(msg.server_msg_id)"
+        })
+        
         return toInsertA
     }
     
@@ -804,22 +958,22 @@ class GroupRoomVC:BaseViewController,
             return
         }
         
-          
+        
         if atLast {
             messageArray.append(contentsOf: msg)
         } else {
             messageArray.insert(contentsOf: msg, at: 0)
         }
         
-          
+        
         _orderMsgs(inArray: &messageArray)
     }
     
     
-      
+    
     func onTapAvatar(pubkey: String) {
         
-        if pubkey == support_account_pubkey {
+        if let _ = pubkey.isAssistHelper() {
             return
         }
         if let vc = R.loadSB(name: "GroupMemberCard", iden: "GroupMemberCardVC") as? GroupMemberCardVC {
@@ -830,7 +984,7 @@ class GroupRoomVC:BaseViewController,
     }
     func onRetrySendMsg(_ msgId: CLongLong) {
         if let alert = R.loadNib(name: "RetrySendAlert") as? RetrySendAlert {
-              
+            
             alert.titleLabel?.text = "Resend the message？".localized()
             alert.cancelButton?.setTitle("Back".localized(), for: .normal)
             alert.okButton?.setTitle("Confirm".localized(), for: .normal)
@@ -843,7 +997,7 @@ class GroupRoomVC:BaseViewController,
     
     var toShowImage: UIImage?
     func onShowBigPhoto(_ img: UIImage, containerView: UIView) {
-        self.view.endEditing(true)
+        self.endInputResponder()
         toShowImage = img
         let pb = SDPhotoBrowser()
         pb.imageCount = 1
@@ -860,10 +1014,31 @@ class GroupRoomVC:BaseViewController,
         return toShowImage ?? UIImage()
     }
     
-      
+    func onScanQrCodeInfo(_ result: String?) {
+        guard let r = result else {
+            return
+        }
+        let result = InnerHelper.v3_decodeScanInput(str: r)
+        if InnerHelper.handleDecodeContact(vc: nil, result: result) {
+        }
+        else if InnerHelper.handleDecodeRecieveCoin(vc: nil, result: result) {
+        }
+        else {
+            Toast.show(msg: "System error".localized())
+        }
+    }
     
-    func sendMsg(text: String) {
-        CPGroupChatHelper.sendText(text, toGroup: toPublicKey!)
+    func onLongPressAvatar(pubkey: String, senderName: String) {
+        let text = InputAtStartChar.appending(senderName).appending(InputAtEndChar)
+        let item = InputAtItem()
+        item.name = senderName
+        item.hexPubkey = pubkey
+        self.toolBar.atCache.add(atItem: item)
+        self.toolBar.insertText(text: text)
+    }
+    
+    func sendMsg(text: String, atAll: Bool, members:[String]) {
+        CPGroupChatHelper.sendText(text, toGroup: toPublicKey!, at_all: atAll, at_members: members)
     }
     
     func sendAudio(data: Data) {
@@ -874,7 +1049,15 @@ class GroupRoomVC:BaseViewController,
         CPGroupChatHelper.sendImageData(data, toGroup: toPublicKey!)
     }
     
-      
+    var autoDismiss: Bool = true
+    fileprivate func endInputResponder() {
+        if autoDismiss {
+            self.view.endEditing(true)
+            self.toolBar.textField.resignFirstResponder()
+        }
+    }
+    
+    
     func onKeyboardFrame(_ toframe: CGRect, dura: Double, aniCurve: Int) {
         
         if toframe.origin.y >= YYScreenSize().height {
@@ -907,7 +1090,7 @@ class GroupRoomVC:BaseViewController,
         if #available(iOS 11.0, *) {
             diff = kbH - self.view.safeAreaInsets.bottom
         } else {
-              
+            
         }
         
         self.view.layoutIfNeeded()
@@ -922,7 +1105,7 @@ class GroupRoomVC:BaseViewController,
 
 extension GroupRoomVC {
     
-      
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         startSynOfflineMsg()
     }
@@ -937,19 +1120,19 @@ extension GroupRoomVC {
         checkCanReloadMore()
     }
     
-      
+    
     func checkCanReloadMore() {
         if checkEnableToBottom() {
             _refreshVisibleCells()
         }
     }
     
-      
+    
     func startSynOfflineMsg() {
         synManager?.startSys()
     }
     
-      
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messageArray.count
     }
@@ -969,7 +1152,7 @@ extension GroupRoomVC {
                 }
             }
         }
-        return CGFloat.leastNonzeroMagnitude   
+        return CGFloat.leastNonzeroMagnitude 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -988,9 +1171,9 @@ extension GroupRoomVC {
         if let model = messageArray[safe: indexPath.row] {
             lastMsgId = model.msgId
             
-  
-  
-  
+
+
+
         }
     }
     
@@ -1032,7 +1215,27 @@ extension GroupRoomVC {
             }
             return prefix + suffix
         }
-          
+        
         return "CellID";
     }
 }
+
+
+extension Array {
+    
+    
+    func filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
+        var result = [Element]()
+        for value in self {
+            let key = filter(value)
+            if !result.map({filter($0)}).contains(key) {
+                result.append(value)
+            }
+            else {
+                print("dele key \(key)")
+            }
+        }
+        return result
+    }
+}
+

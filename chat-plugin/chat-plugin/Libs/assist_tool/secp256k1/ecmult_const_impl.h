@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2015 Pieter Wuille, Andrew Poelstra                  *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_ECMULT_CONST_IMPL_H
@@ -53,7 +53,7 @@ static int secp256k1_wnaf_const(int *wnaf, secp256k1_scalar s, int w, int size) 
     int skew = 0;
     int word = 0;
 
-     
+    
     int u_last;
     int u;
 
@@ -91,7 +91,7 @@ static int secp256k1_wnaf_const(int *wnaf, secp256k1_scalar s, int w, int size) 
     global_sign *= not_neg_one * 2 - 1;
     skew = 1 << bit;
 
-     
+    
     u_last = secp256k1_scalar_shr_int(&s, w);
     while (word * w < size) {
         int sign;
@@ -186,7 +186,7 @@ static void secp256k1_ecmult_const(secp256k1_gej *r, const secp256k1_ge *a, cons
         secp256k1_gej_add_ge(r, r, &tmpa);
     }
 #endif
-     
+    
     for (i = WNAF_SIZE_BITS(rsize, WINDOW_A - 1) - 1; i >= 0; i--) {
         int n;
         int j;
@@ -211,7 +211,7 @@ static void secp256k1_ecmult_const(secp256k1_gej *r, const secp256k1_ge *a, cons
     secp256k1_fe_mul(&r->z, &r->z, &Z);
 
     {
-         
+        
         secp256k1_ge correction = *a;
         secp256k1_ge_storage correction_1_stor;
 #ifdef USE_ENDOMORPHISM
@@ -238,7 +238,7 @@ static void secp256k1_ecmult_const(secp256k1_gej *r, const secp256k1_ge *a, cons
         }
 #endif
 
-         
+        
         secp256k1_ge_from_storage(&correction, &correction_1_stor);
         secp256k1_ge_neg(&correction, &correction);
         secp256k1_gej_add_ge(r, r, &correction);
@@ -254,4 +254,4 @@ static void secp256k1_ecmult_const(secp256k1_gej *r, const secp256k1_ge *a, cons
     }
 }
 
-#endif  
+#endif 

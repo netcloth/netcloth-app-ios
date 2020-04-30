@@ -46,27 +46,27 @@
 #define SB_SUBMODE_BITS 3
 
 /* Used internally, NOT TO BE USED in applications */
- 
+
 #define SPEEX_GET_PI_GAIN 100
- 
+
 #define SPEEX_GET_EXC     101
- 
+
 #define SPEEX_GET_INNOV   102
- 
+
 #define SPEEX_GET_DTX_STATUS   103
- 
+
 #define SPEEX_SET_INNOVATION_SAVE   104
- 
+
 #define SPEEX_SET_WIDEBAND   105
 
- 
+
 #define SPEEX_GET_STACK   106
 
 
- 
+
 typedef void (*lsp_quant_func)(spx_lsp_t *, spx_lsp_t *, int, SpeexBits *);
 
- 
+
 typedef void (*lsp_unquant_func)(spx_lsp_t *, int, SpeexBits *);
 
 
@@ -80,11 +80,11 @@ typedef void (*ltp_unquant_func)(spx_word16_t *, spx_word32_t *, int, int, spx_w
                                  spx_word16_t *, SpeexBits*, char*, int, int, spx_word16_t, int);
 
 
- 
+
 typedef void (*innovation_quant_func)(spx_word16_t *, spx_coef_t *, spx_coef_t *, spx_coef_t *, const void *, int, int, 
                                       spx_sig_t *, spx_word16_t *, SpeexBits *, char *, int, int);
 
- 
+
 typedef void (*innovation_unquant_func)(spx_sig_t *, const void *, int, SpeexBits*, char *, spx_int32_t *);
 
 /** Description of a Speex sub-mode (wither narrowband or wideband */
@@ -93,7 +93,7 @@ typedef struct SpeexSubmode {
    int     forced_pitch_gain;  /**< Use the same (forced) pitch gain for all sub-frames */
    int     have_subframe_gain; /**< Number of bits to use as sub-frame innovation gain */
    int     double_codebook;    /**< Apply innovation quantization twice for higher quality (and higher bit-rate)*/
-    
+   
    lsp_quant_func    lsp_quant; /**< LSP quantization function */
    lsp_unquant_func  lsp_unquant; /**< LSP unquantization function */
 
@@ -102,7 +102,7 @@ typedef struct SpeexSubmode {
    ltp_unquant_func  ltp_unquant; /**< Long-term predictor (pitch) un-quantizer */
    const void       *ltp_params; /**< Pitch parameters (options) */
 
-    
+   
    innovation_quant_func innovation_quant; /**< Innovation quantization */
    innovation_unquant_func innovation_unquant; /**< Innovation un-quantization */
    const void             *innovation_params; /**< Innovation quantization parameters*/

@@ -1,8 +1,8 @@
-  
-  
-  
 
-  
+
+
+
+
 #import "SGQRCode.h"
 #import "WCQRCodeVC.h"
 #import <Bugly/Bugly.h>
@@ -15,12 +15,19 @@
 #import "InterfaceResp.h"
 #import "TestObj.h"
 #import "YCXMenu.h"
+#import "OCInnerHelper.h"
+#import "GTableDelegateContainer.h"
 
-  
+
+#import <UMCommon/UMCommon.h>
+#import <UMAnalytics/MobClick.h>
+#import <UMVisual/UMVisual.h>
+
+
 #import "SRAudioRecorderManager.h"
 #import "SRRecordingAudioPlayerManager.h"
 #import "SRAudioRecordButton.h"
 #import "SRAudioRecordToastManager.h"
 
-  
+
 #import "swift_cli/swift_cli-swift.h"

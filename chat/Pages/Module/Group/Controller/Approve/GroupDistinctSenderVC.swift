@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -18,7 +18,7 @@ class GroupDistinctSenderVC: BaseViewController, UITableViewDelegate, UITableVie
     
     fileprivate let disbag = DisposeBag()
     
-      
+    
     fileprivate var dataArray: [CPGroupNotify]? {
         didSet {
             var count = 0
@@ -82,7 +82,7 @@ class GroupDistinctSenderVC: BaseViewController, UITableViewDelegate, UITableVie
         }).disposed(by: disbag)
     }
     
-      
+    
     fileprivate var allPassBag = DisposeBag()
     fileprivate  func onPassAll() {
         guard let array = self.dataArray else {
@@ -154,7 +154,7 @@ class GroupDistinctSenderVC: BaseViewController, UITableViewDelegate, UITableVie
     
     
     
-      
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArray?.count ?? 0
     }

@@ -128,23 +128,23 @@ typedef struct SBDecState {
 } SBDecState;
 
 
- 
+
 void *sb_encoder_init(const SpeexMode *m);
 
 /**De-allocates encoder state resources*/
 void sb_encoder_destroy(void *state);
 
- 
+
 int sb_encode(void *state, void *in, SpeexBits *bits);
 
 
- 
+
 void *sb_decoder_init(const SpeexMode *m);
 
 /**De-allocates decoder state resources*/
 void sb_decoder_destroy(void *state);
 
- 
+
 int sb_decode(void *state, SpeexBits *bits, void *out);
 
 int sb_encoder_ctl(void *state, int request, void *ptr);

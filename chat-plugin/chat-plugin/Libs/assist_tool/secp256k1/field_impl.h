@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_FIELD_IMPL_H
@@ -130,7 +130,7 @@ static int secp256k1_fe_sqrt(secp256k1_fe *r, const secp256k1_fe *a) {
     secp256k1_fe_sqr(&t1, &t1);
     secp256k1_fe_sqr(r, &t1);
 
-     
+    
 
     secp256k1_fe_sqr(&t1, r);
     return secp256k1_fe_equal(&t1, a);
@@ -315,4 +315,4 @@ static int secp256k1_fe_is_quad_var(const secp256k1_fe *a) {
 #endif
 }
 
-#endif  
+#endif 

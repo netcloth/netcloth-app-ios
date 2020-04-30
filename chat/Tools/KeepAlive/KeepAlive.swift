@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import CoreLocation
@@ -26,7 +26,7 @@ class KeepAlive: NSObject {
             }
         }
         
-           
+         
         func audioPlayerEndInterruption(_ player: AVAudioPlayer, withOptions flags: Int) {
             if player.isPlaying == false {
                 try? AVAudioSession.sharedInstance().setActive(true)
@@ -40,10 +40,10 @@ class KeepAlive: NSObject {
             guard let userinfo = notification.userInfo else {return}
             guard let interruptionType: UInt = userinfo[AVAudioSessionInterruptionTypeKey] as! UInt?  else {return}
             if interruptionType == AVAudioSession.InterruptionType.began.rawValue {
-                  
+                
                 print("\(type(of:self)): 中断开始 userinfo:\(userinfo)")
             } else if interruptionType == AVAudioSession.InterruptionType.ended.rawValue {
-                  
+                
                 print("\(type(of:self)): 中断结束 userinfo:\(userinfo)")
                 if player?.isPlaying == false {
                     try? AVAudioSession.sharedInstance().setActive(true)
@@ -55,15 +55,15 @@ class KeepAlive: NSObject {
         
     }
     
-      
+    
 
-      
+    
     class func startLocation(){
         startTimer()
         setUpLocation()
     }
     
-      
+    
     class func startSilenceAudio() {
         startTimer()
         setupPlayer()
@@ -79,7 +79,7 @@ class KeepAlive: NSObject {
     }
     
     
-      
+    
     private static func setupPlayer () {
         
         do {

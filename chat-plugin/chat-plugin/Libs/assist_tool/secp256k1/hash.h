@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2014 Pieter Wuille                                   *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_HASH_H
@@ -12,7 +12,7 @@
 
 typedef struct {
     uint32_t s[8];
-    uint32_t buf[16];  
+    uint32_t buf[16]; 
     size_t bytes;
 } secp256k1_sha256;
 
@@ -38,4 +38,4 @@ static void secp256k1_rfc6979_hmac_sha256_initialize(secp256k1_rfc6979_hmac_sha2
 static void secp256k1_rfc6979_hmac_sha256_generate(secp256k1_rfc6979_hmac_sha256 *rng, unsigned char *out, size_t outlen);
 static void secp256k1_rfc6979_hmac_sha256_finalize(secp256k1_rfc6979_hmac_sha256 *rng);
 
-#endif  
+#endif 

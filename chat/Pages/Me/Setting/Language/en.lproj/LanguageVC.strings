@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "简体中文"; ObjectID = "9eO-4g-YXb"; */
+"9eO-4g-YXb.text" = "简体中文";
+
+/* Class = "UINavigationItem"; title = "语言"; ObjectID = "LHO-Ry-PO4"; */
+"LHO-Ry-PO4.title" = "Language";
+
+/* Class = "UILabel"; text = "English"; ObjectID = "XMJ-Jb-xDu"; */
+"XMJ-Jb-xDu.text" = "English";
+
+/* Class = "UILabel"; text = "系统判定"; ObjectID = "pi5-Yc-Ivl"; */
+"pi5-Yc-Ivl.text" = "Auto";

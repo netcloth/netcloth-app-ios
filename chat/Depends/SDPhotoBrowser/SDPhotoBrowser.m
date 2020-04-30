@@ -1,29 +1,34 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "SDPhotoBrowser.h"
-  
+
 #import "SDBrowserImageView.h"
 
  
-  
 
-  
-  
-  
-  
-  
+
+
+
+
+
+
 
 #import "SDPhotoBrowserConfig.h"
 #import <Photos/Photos.h>
 #import <swift_cli/swift_cli.h>
+#import "SGQRCodeObtain.h"
 
-  
+
+
+@interface SDPhotoBrowser ()
+@property(nonatomic, copy) NSString *qrCodeResult;
+@end
 
 @implementation SDPhotoBrowser 
 {
@@ -33,6 +38,7 @@
     UIButton *_saveButton;
     UIActivityIndicatorView *_indicatorView;
     BOOL _willDisappear;
+    UIButton *_scanQrBtn;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -40,15 +46,29 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = SDPhotoBrowserBackgrounColor;
+        [self configUI];
     }
     return self;
 }
 
+- (void)configUI {
+    
+    UIButton * saveButton1 = [[UIButton alloc] init];
+    NSString * title = NSLocalizedString(@"Scan", nil);
+    [saveButton1 setTitle:title forState:UIControlStateNormal];
+    [saveButton1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    saveButton1.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.90f];
+    saveButton1.layer.cornerRadius = 5;
+    saveButton1.clipsToBounds = YES;
+    [saveButton1 addTarget:self action:@selector(scanQrCode) forControlEvents:UIControlEventTouchUpInside];
+    _scanQrBtn = saveButton1;
+    saveButton1.hidden = true;
+    [self addSubview:saveButton1];
+}
 
 - (void)didMoveToSuperview
 {
     [self setupScrollView];
-    
     [self setupToolbars];
 }
 
@@ -59,7 +79,7 @@
 
 - (void)setupToolbars
 {
-      
+    
     UILabel *indexLabel = [[UILabel alloc] init];
     indexLabel.bounds = CGRectMake(0, 0, 80, 30);
     indexLabel.textAlignment = NSTextAlignmentCenter;
@@ -72,9 +92,9 @@
         indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)self.imageCount];
     }
     _indexLabel = indexLabel;
-  
+
     
-      
+    
     UIButton *saveButton = [[UIButton alloc] init];
     NSString *title = NSLocalizedString(@"Save", nil);
     [saveButton setTitle:title forState:UIControlStateNormal];
@@ -85,115 +105,10 @@
     [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
     _saveButton = saveButton;
     [self addSubview:saveButton];
+    
+    [self bringSubviewToFront:_scanQrBtn];
 }
 
-  
-- (void)setupScrollView
-{
-    _scrollView = [[UIScrollView alloc] init];
-    _scrollView.delegate = self;
-    _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.pagingEnabled = YES;
-    [self addSubview:_scrollView];
-    
-    for (int i = 0; i < self.imageCount; i++) {
-        SDBrowserImageView *imageView = [[SDBrowserImageView alloc] init];
-        imageView.tag = i;
-
-          
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoClick:)];
-        
-          
-        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDoubleTaped:)];
-        doubleTap.numberOfTapsRequired = 2;
-        
-        [singleTap requireGestureRecognizerToFail:doubleTap];
-        
-        [imageView addGestureRecognizer:singleTap];
-        [imageView addGestureRecognizer:doubleTap];
-        [_scrollView addSubview:imageView];
-    }
-    
-    [self setupImageOfImageViewForIndex:self.currentImageIndex];
-    
-}
-
-  
-- (void)setupImageOfImageViewForIndex:(NSInteger)index
-{
-    SDBrowserImageView *imageView = _scrollView.subviews[index];
-    self.currentImageIndex = index;
-    if (imageView.hasLoadedImage) return;
-    if ([self highQualityImageURLForIndex:index]) {
-        [imageView setImageWithURL:[self highQualityImageURLForIndex:index] placeholderImage:[self placeholderImageForIndex:index]];
-    } else {
-        imageView.image = [self placeholderImageForIndex:index];
-    }
-    imageView.hasLoadedImage = YES;
-}
-
-- (void)photoClick:(UITapGestureRecognizer *)recognizer
-{
-    _scrollView.hidden = YES;
-    _willDisappear = YES;
-    
-    SDBrowserImageView *currentImageView = (SDBrowserImageView *)recognizer.view;
-    NSInteger currentIndex = currentImageView.tag;
-    
-    UIView *sourceView = nil;
-    if ([self.sourceImagesContainerView isKindOfClass:UICollectionView.class]) {
-        UICollectionView *view = (UICollectionView *)self.sourceImagesContainerView;
-        NSIndexPath *path = [NSIndexPath indexPathForItem:currentIndex inSection:0];
-        sourceView = [view cellForItemAtIndexPath:path];
-    }else {
-        sourceView = self.sourceImgView;
-    }
-    
-    
-    
-    CGRect targetTemp = [self.sourceImagesContainerView convertRect:sourceView.frame toView:self];
-    
-    UIImageView *tempView = [[UIImageView alloc] init];
-    tempView.contentMode = sourceView.contentMode;
-    tempView.clipsToBounds = YES;
-    tempView.image = currentImageView.image;
-    CGFloat h = (self.bounds.size.width / currentImageView.image.size.width) * currentImageView.image.size.height;
-    
-    if (!currentImageView.image) {   
-        h = self.bounds.size.height;
-    }
-    
-    tempView.bounds = CGRectMake(0, 0, self.bounds.size.width, h);
-    tempView.center = self.center;
-    
-    [self addSubview:tempView];
-
-    _saveButton.hidden = YES;
-    
-    [UIView animateWithDuration:SDPhotoBrowserHideImageAnimationDuration animations:^{
-        tempView.frame = targetTemp;
-        self.backgroundColor = [UIColor clearColor];
-        _indexLabel.alpha = 0.1;
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-    }];
-}
-
-- (void)imageViewDoubleTaped:(UITapGestureRecognizer *)recognizer
-{
-    SDBrowserImageView *imageView = (SDBrowserImageView *)recognizer.view;
-    CGFloat scale;
-    if (imageView.isScaled) {
-        scale = 1.0;
-    } else {
-        scale = 2.0;
-    }
-    
-    SDBrowserImageView *view = (SDBrowserImageView *)recognizer.view;
-
-    [view doubleTapToZommWithScale:scale];
-}
 
 - (void)layoutSubviews
 {
@@ -226,6 +141,146 @@
     
     _indexLabel.center = CGPointMake(self.bounds.size.width * 0.5, 35);
     _saveButton.frame = CGRectMake(30, self.bounds.size.height - 70, 50, 25);
+    _scanQrBtn.frame = CGRectMake(_saveButton.right + 10, self.bounds.size.height - 70, 75, 25);
+}
+
+
+- (void)scanQrCode {
+    if ([self.delegate respondsToSelector:@selector(onScanQrCodeInfo:)]) {
+        
+        int index = (_scrollView.contentOffset.x + _scrollView.bounds.size.width * 0.5) / _scrollView.bounds.size.width;
+        SDBrowserImageView *imageView = _scrollView.subviews[index];
+        [self photoClick:imageView.gestureRecognizers.firstObject complete:^{
+            [self.delegate onScanQrCodeInfo:self.qrCodeResult];
+        }];
+    }
+}
+
+
+- (void)setupScrollView
+{
+    _scrollView = [[UIScrollView alloc] init];
+    _scrollView.delegate = self;
+    _scrollView.showsHorizontalScrollIndicator = NO;
+    _scrollView.showsVerticalScrollIndicator = NO;
+    _scrollView.pagingEnabled = YES;
+    [self addSubview:_scrollView];
+    
+    for (int i = 0; i < self.imageCount; i++) {
+        SDBrowserImageView *imageView = [[SDBrowserImageView alloc] init];
+        imageView.tag = i;
+
+        
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoClick:)];
+        
+        
+        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDoubleTaped:)];
+        doubleTap.numberOfTapsRequired = 2;
+        
+        [singleTap requireGestureRecognizerToFail:doubleTap];
+        
+        [imageView addGestureRecognizer:singleTap];
+        [imageView addGestureRecognizer:doubleTap];
+        [_scrollView addSubview:imageView];
+    }
+    
+    [self setupImageOfImageViewForIndex:self.currentImageIndex];
+    
+}
+
+
+- (void)setupImageOfImageViewForIndex:(NSInteger)index
+{
+    SDBrowserImageView *imageView = _scrollView.subviews[index];
+    self.currentImageIndex = index;
+    if (imageView.hasLoadedImage) return;
+    if ([self highQualityImageURLForIndex:index]) {
+        [imageView setImageWithURL:[self highQualityImageURLForIndex:index] placeholderImage:[self placeholderImageForIndex:index]];
+    } else {
+        imageView.image = [self placeholderImageForIndex:index];
+    }
+    imageView.hasLoadedImage = YES;
+    
+    self->_scanQrBtn.hidden = true;
+    self.qrCodeResult = nil;
+    @weakify(self);
+    [SGQRCodeObtain checkImage:imageView.image haveQrCodeInfo:^(BOOL have, NSString * _Nullable result) {
+        @strongify(self);
+        if (result.length > 0) {
+            self->_scanQrBtn.hidden = false;
+            self.qrCodeResult = result;
+        }
+    }];
+}
+
+- (void)photoClick:(UITapGestureRecognizer *)recognizer
+{
+    [self photoClick:recognizer complete:nil];
+}
+
+- (void)photoClick:(UITapGestureRecognizer *)recognizer
+          complete:(dispatch_block_t)finish
+{
+    _scrollView.hidden = YES;
+    _willDisappear = YES;
+    
+    SDBrowserImageView *currentImageView = (SDBrowserImageView *)recognizer.view;
+    NSInteger currentIndex = currentImageView.tag;
+    
+    UIView *sourceView = nil;
+    if ([self.sourceImagesContainerView isKindOfClass:UICollectionView.class]) {
+        UICollectionView *view = (UICollectionView *)self.sourceImagesContainerView;
+        NSIndexPath *path = [NSIndexPath indexPathForItem:currentIndex inSection:0];
+        sourceView = [view cellForItemAtIndexPath:path];
+    }else {
+        sourceView = self.sourceImgView;
+    }
+    
+    CGRect targetTemp = [self.sourceImagesContainerView convertRect:sourceView.frame toView:self];
+    
+    UIImageView *tempView = [[UIImageView alloc] init];
+    tempView.contentMode = sourceView.contentMode;
+    tempView.clipsToBounds = YES;
+    tempView.image = currentImageView.image;
+    CGFloat h = (self.bounds.size.width / currentImageView.image.size.width) * currentImageView.image.size.height;
+    
+    if (!currentImageView.image) { 
+        h = self.bounds.size.height;
+    }
+    
+    tempView.bounds = CGRectMake(0, 0, self.bounds.size.width, h);
+    tempView.center = self.center;
+    
+    [self addSubview:tempView];
+
+    _saveButton.hidden = YES;
+    _scanQrBtn.hidden = YES;
+    
+    [UIView animateWithDuration:SDPhotoBrowserHideImageAnimationDuration animations:^{
+        tempView.frame = targetTemp;
+        self.backgroundColor = [UIColor clearColor];
+        _indexLabel.alpha = 0.1;
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+        if (finish) {
+            finish();
+        }
+    }];
+}
+
+- (void)imageViewDoubleTaped:(UITapGestureRecognizer *)recognizer
+{
+    SDBrowserImageView *imageView = (SDBrowserImageView *)recognizer.view;
+    CGFloat scale;
+    if (imageView.isScaled) {
+        scale = 1.0;
+    } else {
+        scale = 2.0;
+    }
+    
+    SDBrowserImageView *view = (SDBrowserImageView *)recognizer.view;
+
+    [view doubleTapToZommWithScale:scale];
 }
 
 - (void)show
@@ -304,7 +359,7 @@
 {
     int index = (scrollView.contentOffset.x + _scrollView.bounds.size.width * 0.5) / _scrollView.bounds.size.width;
     
-      
+    
     CGFloat margin = 150;
     CGFloat x = scrollView.contentOffset.x;
     if ((x - index * self.bounds.size.width) > margin || (x - index * self.bounds.size.width) < - margin) {
@@ -326,7 +381,7 @@
 }
 
 
-  
+
 - (void)saveImage
 {
     int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;

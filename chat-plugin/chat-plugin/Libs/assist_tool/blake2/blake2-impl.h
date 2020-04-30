@@ -8,8 +8,8 @@
  * License/Waiver or the Apache Public License 2.0, at your option. The terms of
  * these licenses can be found at:
  *
- * - CC0 1.0 Universal : http:  
- * - Apache 2.0        : http:  
+ * - CC0 1.0 Universal : http:
+ * - Apache 2.0        : http:
  *
  * You should have received a copy of both of these licenses along with this
  * software. If not, they may be obtained at the above URLs.

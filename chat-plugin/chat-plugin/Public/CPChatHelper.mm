@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "CPChatHelper.h"
 #import "CPDataModel+secpri.h"
@@ -71,7 +71,7 @@
     }];
 }
 
-  
+
 + (void)sendDeleteMsgAction:(NCProtoDeleteAction)action
                        hash:(int64_t)hash
             relateHexPubkey:(NSString * _Nullable)hexPubkey
@@ -153,8 +153,8 @@
 
 + (void)getMessagesInSession:(NSInteger)sessionId
                   createTime:(double)createTime
-                   fromMsgId:(long long)msgId   
-                        size:(NSInteger)size   
+                   fromMsgId:(long long)msgId 
+                        size:(NSInteger)size 
                     complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete
 {
     
@@ -163,7 +163,7 @@
         
         NSArray<CPMessage *> *array;
         
-          
+        
         WCTSelect *select = [CPInnerState.shared.loginUserDataBase prepareSelectObjectsOnResults:CPMessage.AllProperties
                                                                                        fromTable:kTableName_Message];
         

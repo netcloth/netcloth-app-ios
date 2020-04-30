@@ -1,35 +1,35 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "LRSPlayer.h"
 @import AudioToolbox;
 
-static const int kNumberBuffers = 3;                               
-  
+static const int kNumberBuffers = 3;                             
+
 
 struct AQPlayerState {
-    AudioStreamBasicDescription   mDataFormat;                      
-    AudioQueueRef                 mQueue;                           
-    AudioQueueBufferRef           mBuffers[kNumberBuffers];         
-    UInt32                        bufferByteSize;                   
-    SInt64                        mCurrentPacket;                   
-    UInt32                        mNumPacketsToRead;                
-    AudioStreamPacketDescription  *mPacketDescs;                    
+    AudioStreamBasicDescription   mDataFormat;                    
+    AudioQueueRef                 mQueue;                         
+    AudioQueueBufferRef           mBuffers[kNumberBuffers];       
+    UInt32                        bufferByteSize;                 
+    SInt64                        mCurrentPacket;                 
+    UInt32                        mNumPacketsToRead;              
+    AudioStreamPacketDescription  *mPacketDescs;                  
 };
 
 @interface LRSPlayer()
 
 @property (nonatomic, strong) NSData *pcmData;
 
-@property (nonatomic, assign) NSInteger pcmLength;   
-@property (nonatomic, assign) NSInteger readIndex;   
+@property (nonatomic, assign) NSInteger pcmLength; 
+@property (nonatomic, assign) NSInteger readIndex; 
 
-@property (nonatomic, assign) NSInteger buffSize;   
+@property (nonatomic, assign) NSInteger buffSize; 
 
 @property (nonatomic, assign) BOOL isPaused;
 @property (nonatomic, assign) BOOL isPlaying;
@@ -43,7 +43,7 @@ struct AQPlayerState {
 @end
 
 
-  
+
 static void HandleOutputBuffer (
                                 void                *aqData,
                                 AudioQueueRef       inAQ,
@@ -95,15 +95,15 @@ static void HandleOutputBuffer (
             return self;
         }
         self.readIndex = 0;
-        int bufferSize = 2 * playerState.mDataFormat.mBytesPerFrame * frequency;   
+        int bufferSize = 2 * playerState.mDataFormat.mBytesPerFrame * frequency; 
         self.buffSize = bufferSize;
         for (int i = 0; i < kNumberBuffers; i += 1) {
             AudioQueueAllocateBuffer(playerState.mQueue, bufferSize,&playerState.mBuffers[i]);
         }
         
-          
+        
         int emlen = bufferSize/10;
-        void *emptyDatas = malloc(emlen);   
+        void *emptyDatas = malloc(emlen); 
         memset(emptyDatas, 0, emlen);
         emptyData = [NSData dataWithBytes:emptyDatas length:emlen];
         free(emptyDatas);
@@ -124,7 +124,7 @@ static void HandleOutputBuffer (
 - (BOOL)play{
     
     if (self.buffSize == 0) {
-          
+        
         [self stop];
         return NO;
     }
@@ -134,7 +134,7 @@ static void HandleOutputBuffer (
     _emptyUseCount = 0;
     
     if (self.isPaused == NO) {
-          
+        
         for (int i = 0; i < kNumberBuffers; i += 1) {
             HandleOutputBuffer((__bridge void *)self,playerState.mQueue,playerState.mBuffers[i]);
         }
@@ -188,7 +188,7 @@ static void HandleOutputBuffer (
 }
 
 
-  
+
 - (void)needPCMDataForQueue:(AudioQueueRef)queueRef
                      buffer:(AudioQueueBufferRef)buffer
 {
@@ -204,7 +204,7 @@ static void HandleOutputBuffer (
             read_len = self.pcmLength - self.readIndex + 1;
         }
         else {
-              
+            
             [self enQueueBufferData:emptyData inBuffer:buffer];
             _emptyUseCount++;
             if (_emptyUseCount > kNumberBuffers) {

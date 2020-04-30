@@ -74,7 +74,7 @@ void sanitize_values32(spx_word32_t *vec, spx_word32_t min_val, spx_word32_t max
             vec[i] = min_val;
          else if (vec[i] > max_val)
             vec[i] = max_val;
-         else  
+         else 
             vec[i] = 0;
       }
    }
@@ -152,9 +152,9 @@ void signal_div(const spx_word16_t *x, spx_word16_t *y, spx_word32_t scale, int 
       }
    }
 }
-#endif  
+#endif 
 
-#else  
+#else 
 
 void signal_mul(const spx_sig_t *x, spx_sig_t *y, spx_word32_t scale, int len)
 {
@@ -171,7 +171,7 @@ void signal_div(const spx_sig_t *x, spx_sig_t *y, spx_word32_t scale, int len)
    for (i=0;i<len;i++)
       y[i] = scale_1*x[i];
 }
-#endif  
+#endif 
 
 #endif /* !FIXED_POINT */
 
@@ -322,7 +322,7 @@ spx_word16_t compute_rms16(const spx_word16_t *x, int len)
 
 #ifdef MERGE_FILTERS
 const spx_word16_t zeros[10] = {0,0,0,0,0,0,0,0,0,0};
-#endif   
+#endif  
 
 #if !defined(OVERRIDE_FILTER_MEM16) && !defined(DISABLE_ENCODER)
 void filter_mem16(const spx_word16_t *x, const spx_coef_t *num, const spx_coef_t *den, spx_word16_t *y, int N, int ord, spx_mem_t *mem, char *stack)
@@ -409,7 +409,7 @@ void residue_percep_zero16(const spx_word16_t *xx, const spx_coef_t *ak, const s
       mem[i]=0;
    fir_mem16(y, awk2, y, N, ord, mem, stack);
 }
-#endif  
+#endif 
 
 #if !defined(OVERRIDE_COMPUTE_IMPULSE_RESPONSE) && !defined(DISABLE_ENCODER)
 void compute_impulse_response(const spx_coef_t *ak, const spx_coef_t *awk1, const spx_coef_t *awk2, spx_word16_t *y, int N, int ord, char *stack)
@@ -526,7 +526,7 @@ void qmf_synth(const spx_word16_t *x1, const spx_word16_t *x2, const spx_word16_
          x21 = xx2[N2-1+j-i];
 
 #ifdef FIXED_POINT
-          
+         
          y0 = MAC16_16(MAC16_16(y0, a0, x11), NEG16(a0), x21);
          y1 = MAC16_16(MAC16_16(y1, a1, x11), a1, x21);
          y2 = MAC16_16(MAC16_16(y2, a0, x10), NEG16(a0), x20);
@@ -543,7 +543,7 @@ void qmf_synth(const spx_word16_t *x1, const spx_word16_t *x2, const spx_word16_
          x20 = xx2[N2+j-i];
 
 #ifdef FIXED_POINT
-          
+         
          y0 = MAC16_16(MAC16_16(y0, a0, x10), NEG16(a0), x20);
          y1 = MAC16_16(MAC16_16(y1, a1, x10), a1, x20);
          y2 = MAC16_16(MAC16_16(y2, a0, x11), NEG16(a0), x21);
@@ -574,7 +574,7 @@ void qmf_synth(const spx_word16_t *x1, const spx_word16_t *x2, const spx_word16_
    for (i = 0; i < M2; i++)
       mem2[2*i+1] = xx2[i];
 }
-#endif  
+#endif 
 
 
 #ifndef DISABLE_DECODER
@@ -602,9 +602,9 @@ const float shift_filt[3][7] = {{-0.011915f, 0.046995f, -0.152373f, 0.614108f, 0
 #endif
 
 static int interp_pitch(
-spx_word16_t *exc,           
-spx_word16_t *interp,           
-int pitch,                
+spx_word16_t *exc,          
+spx_word16_t *interp,          
+int pitch,               
 int len
 )
 {
@@ -665,14 +665,14 @@ int len
 }
 
 void multicomb(
-spx_word16_t *exc,           
-spx_word16_t *new_exc,       
-spx_coef_t *ak,            
-int p,                
+spx_word16_t *exc,          
+spx_word16_t *new_exc,      
+spx_coef_t *ak,           
+int p,               
 int nsf,             /*sub-frame size*/
-int pitch,            
+int pitch,           
 int max_pitch,
-spx_word16_t  comb_gain,     
+spx_word16_t  comb_gain,    
 char *stack
 )
 {
@@ -692,7 +692,7 @@ char *stack
 #ifdef FIXED_POINT
    int scaledown=0;
 #endif
-#if 0  
+#if 0 
    int nol_pitch[6];
    spx_word16_t nol_pitch_coef[6];
    spx_word16_t ol_pitch_coef;
@@ -700,7 +700,7 @@ char *stack
                          nol_pitch, nol_pitch_coef, 6, stack);
    corr_pitch=nol_pitch[0];
    ol_pitch_coef = nol_pitch_coef[0];
-    
+   
    for (i=1;i<6;i++)
    {
 #ifdef FIXED_POINT
@@ -833,4 +833,4 @@ char *stack
 #endif
 }
 
-#endif  
+#endif 

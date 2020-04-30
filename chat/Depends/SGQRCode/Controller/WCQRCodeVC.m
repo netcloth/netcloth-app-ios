@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "WCQRCodeVC.h"
 #import "SGQRCode.h"
@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      
+    
     self.view.backgroundColor = [UIColor blackColor];
     obtain = [SGQRCodeObtain QRCodeObtain];
     
@@ -38,20 +38,20 @@
     [self setupNavigationBar];
     [self.view addSubview:self.scanView];
     [self.view addSubview:self.promptLabel];
-      
+    
     [self.view addSubview:self.bottomView];
     
     if (@available(iOS 11.0, *)) {
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     } else {
-          
+        
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
-      
+    
     [obtain startRunningWithBefore:nil completion:nil];
 }
 
@@ -71,7 +71,7 @@
     return UIStatusBarStyleDefault;
 }
 
-  
+
 - (void)openCallBack:(NSString *)pbkey {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.callBack) {
@@ -81,7 +81,7 @@
 }
 
 
-  
+
 
 
 - (void)setupQRCodeScan {
@@ -99,16 +99,16 @@
             [weakSelf openCallBack:result];
         }
     }];
-      
-  
-  
-  
-  
-  
-  
-  
-  
-  
+    
+
+
+
+
+
+
+
+
+
 }
 
 - (void)setupNavigationBar {
@@ -185,7 +185,7 @@
 #pragma mark - - - 闪光灯按钮
 - (UIButton *)flashlightBtn {
     if (!_flashlightBtn) {
-          
+        
         _flashlightBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
         CGFloat flashlightBtnW = 30;
         CGFloat flashlightBtnH = 30;

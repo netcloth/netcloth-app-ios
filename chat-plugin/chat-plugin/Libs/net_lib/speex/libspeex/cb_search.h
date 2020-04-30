@@ -49,13 +49,13 @@ typedef struct split_cb_params {
 
 
 void split_cb_search_shape_sign(
-spx_word16_t target[],              
-spx_coef_t ak[],                 
-spx_coef_t awk1[],               
-spx_coef_t awk2[],               
+spx_word16_t target[],             
+spx_coef_t ak[],                
+spx_coef_t awk1[],              
+spx_coef_t awk2[],              
 const void *par,                /* Codebook/search parameters */
-int   p,                         
-int   nsf,                       
+int   p,                        
+int   nsf,                      
 spx_sig_t *exc,
 spx_word16_t *r,
 SpeexBits *bits,
@@ -67,7 +67,7 @@ int   update_target
 void split_cb_shape_sign_unquant(
 spx_sig_t *exc,
 const void *par,                /* non-overlapping codebook */
-int   nsf,                       
+int   nsf,                      
 SpeexBits *bits,
 char *stack,
 spx_int32_t *seed
@@ -75,13 +75,13 @@ spx_int32_t *seed
 
 
 void noise_codebook_quant(
-spx_word16_t target[],              
-spx_coef_t ak[],                 
-spx_coef_t awk1[],               
-spx_coef_t awk2[],               
+spx_word16_t target[],             
+spx_coef_t ak[],                
+spx_coef_t awk1[],              
+spx_coef_t awk2[],              
 const void *par,                /* Codebook/search parameters */
-int   p,                         
-int   nsf,                       
+int   p,                        
+int   nsf,                      
 spx_sig_t *exc,
 spx_word16_t *r,
 SpeexBits *bits,
@@ -94,7 +94,7 @@ int   update_target
 void noise_codebook_unquant(
 spx_sig_t *exc,
 const void *par,                /* non-overlapping codebook */
-int   nsf,                       
+int   nsf,                      
 SpeexBits *bits,
 char *stack,
 spx_int32_t *seed

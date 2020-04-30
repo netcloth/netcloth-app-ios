@@ -24,3 +24,6 @@
 
 /* Class = "UILabel"; text = "Account and Security"; ObjectID = "vFV-Kj-vn4"; */
 "Wma-r2-plV.text" = "账户与安全";
+
+/* Class = "UILabel"; text = "My Wallet"; ObjectID = "SxW-En-VDV"; */
+"SxW-En-VDV.text" = "我的钱包";

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import swift_cli
@@ -22,11 +22,6 @@ class GrandTabBarVC: UITabBarController {
         hideBlackLine()
         configUI()
         configEvent()
-        
-          
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10) { [weak self] in
-            self?.configThirdPart()
-        }
     }
     
     lazy var backupTip: BackupTipView? = {
@@ -40,7 +35,8 @@ class GrandTabBarVC: UITabBarController {
     }
     
     func handleTipShow() {
-          
+        return
+        
         let c = BackupTipViewHelper.checkCanShow()
         self.backupTip?.showStatus(showAccount: c.showAccount, showContact: c.showContact)
         guard let b = self.backupTip else {
@@ -60,7 +56,7 @@ class GrandTabBarVC: UITabBarController {
                 
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-tabbarH)
             } else {
-                  
+                
                 maker.bottom.equalTo(self.view.snp.bottom).offset(-tabbarH)
             }
         }
@@ -72,13 +68,13 @@ class GrandTabBarVC: UITabBarController {
         if #available(iOS 11.0, *) {
             self.tabBar.top = self.view.height - ch - self.view.safeAreaInsets.bottom
         } else {
-              
+            
             self.tabBar.top = self.view.height - ch
         }
-          
+        
         for item in (self.tabBar.items ?? []) {
-            item.setStyle(textColor: UIColor(hexString: "#BFC2CC"),
-                          selectedColor: UIColor(hexString: "#3D7EFF"))
+            item.setStyle(textColor: UIColor(hexString: Color.gray),
+                          selectedColor: UIColor(hexString: Color.black))
         }
     }
     
@@ -87,15 +83,15 @@ class GrandTabBarVC: UITabBarController {
     }
     
     func configUI() {
-        self.view.backgroundColor = UIColor(hexString: Config.Color.app_bg_color)
+        self.view.backgroundColor = UIColor(hexString: Color.app_bg_color)
         self.tabBar.setShadow(color: UIColor.lightGray, offset: CGSize(width: 0,height: -5), radius: 5, opacity: 0.1)
     }
     
-    func configThirdPart() {
-        try? Bugly.start(withAppId: Config.Bugly_APP_ID)
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.selectedViewController?.preferredStatusBarStyle ?? .default
     }
     
-      
+    
     func switchToTab(index: Int) {
         self.selectedIndex = index
     }
@@ -122,7 +118,7 @@ extension GrandTabBarVC {
                 for item in (self?.tabBar.items ?? []) {
                     if item.tag == 1 {
                         item.badgeValue = "\(count)"
-                        item.badgeColor = UIColor(hexString: "#FF4141")
+                        item.badgeColor = UIColor(hexString: Color.red)
                     }
                 }
             }

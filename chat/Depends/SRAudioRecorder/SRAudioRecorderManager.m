@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "SRAudioRecorderManager.h"
 #import "SRAudioRecordToastManager.h"
@@ -54,9 +54,9 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     if (!_audioRecorder) {
         NSMutableDictionary *setting = [NSMutableDictionary dictionary];
         setting[AVFormatIDKey] = @(kAudioFormatLinearPCM);
-        setting[AVSampleRateKey] = @(11025);   
-        setting[AVNumberOfChannelsKey] = @(1);   
-        setting[AVLinearPCMBitDepthKey] = @(16);   
+        setting[AVSampleRateKey] = @(11025); 
+        setting[AVNumberOfChannelsKey] = @(1); 
+        setting[AVLinearPCMBitDepthKey] = @(16); 
         setting[AVEncoderAudioQualityKey] = [NSNumber numberWithInt:AVAudioQualityHigh];
        
         NSError *error = nil;
@@ -141,7 +141,7 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     else {
         [self.audioRecorder updateMeters];
         float averagePower = [self.audioRecorder averagePowerForChannel:0];
-        float level = (1.0 / 60.0) * (averagePower + 60.0);   
+        float level = (1.0 / 60.0) * (averagePower + 60.0); 
         [[SRAudioRecordToastManager sharedManager] updateAudioPower:level];
     }
 }
@@ -156,7 +156,7 @@ NSString * const SRAudioRecorderManagerDidFinishRecordingNotification = @"SRAudi
     return NO;
 }
 
-  
+
 - (void)getAudioAuthorized:(void(^)(BOOL grand))back {
     AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
     if (status == AVAuthorizationStatusNotDetermined) {

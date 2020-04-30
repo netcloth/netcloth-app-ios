@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -29,6 +29,7 @@ import UIKit
     
     @IBOutlet weak var msgBgImgView: UIImageView?
     @IBOutlet weak var msgContentL: UILabel?
+    @IBOutlet weak var msgContentTextView: MsgChatTextView?
     
     @IBOutlet weak var createTimeL: UILabel?
     @IBOutlet weak var avatarTop: NSLayoutConstraint?
@@ -39,7 +40,7 @@ import UIKit
         }
     }
     
-      
+    
     @IBOutlet weak var avatarBtn: UIButton?
     
     @IBOutlet weak var smallAvatarImageV: UIImageView?
@@ -48,6 +49,11 @@ import UIKit
     override func awakeFromNib() {
         super.awakeFromNib()
         self.avatarBtn?.addTarget(self, action: #selector(onTapAvatar), for: .touchUpInside)
+        self.smallAvatarImageV?.layer.borderWidth = 1.0
+        self.smallAvatarImageV?.layer.borderColor = UIColor(hexString: Color.gray_d8)!.cgColor
+        self.smallAvatarImageV?.contentMode = .scaleAspectFill
+        
+        msgBgImgView?.layer.cornerRadius = 20
     }
     @objc func onTapAvatar() {
         if let d = dataMsg {
@@ -56,19 +62,7 @@ import UIKit
     }
     
     override func onTapCell() {
-        guard let content = self.msgContentL?.text else {
-            return
-        }
-        var reg = "[a-zA-z]+:  
-        let range =  content.range(of: reg, options: String.CompareOptions.regularExpression)
-        if range != nil {
-            let suburl = String(content[range!])
-            if suburl.lowercased().hasPrefix("http") {
-                let browser = GrandBrowserVC()
-                browser.loadUrl(string: suburl)
-                Router.pushViewController(vc: browser)
-            }
-        }
+        
     }
     
     
@@ -84,23 +78,31 @@ import UIKit
         }
     }
     
-      
+    
 
     
     func updateSelf(msg: CPMessage) {
+        let linkColor = UIColor.white
+        self.msgContentTextView?.linkColor = linkColor
+        self.msgContentTextView?.linkTextAttributes = [.foregroundColor: linkColor]
+        self.msgContentTextView?.tintColor = linkColor
         
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-        var img = UIImage(named: "蓝色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+
+
+
+        msgBgImgView?.backgroundColor = UIColor(hexString: Color.blue)
         
         msgContentL?.text = msg.msgDecodeContent() as? String
+        msgContentTextView?.text = msg.msgDecodeContent() as? String
         
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
+        let color = CPAccountHelper.loginUser()?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
@@ -117,31 +119,43 @@ import UIKit
     
     func updateOthers(msg: CPMessage) {
         
+        self.msgContentTextView?.linkColor = UIColor(hexString: Color.blue)!
+        self.msgContentTextView?.linkTextAttributes = [.foregroundColor: UIColor(hexString: Color.blue)!]
+        self.msgContentTextView?.tintColor = UIColor(hexString: Color.blue)
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-        var img = UIImage(named: "灰色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+
+
+
+        msgBgImgView?.backgroundColor = UIColor.white
         
         msgContentL?.text = msg.msgDecodeContent() as? String
+        msgContentTextView?.text = msg.msgDecodeContent() as? String
         
         smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
+        let color = msg.senderPubKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
 
-        if msg.senderPubKey == support_account_pubkey {
+        if let a =  msg.senderPubKey.isAssistHelper(),
+            a.avatar.isEmpty == false {
             smallRemarkL?.text = nil
             smallAvatarImageV?.isHidden = false
-            smallAvatarImageV?.image = UIImage(named: "subscript_icon")
+            smallAvatarImageV?.nc_typeImage(url: a.avatar)
+            smallRemarkL?.isHidden = true
         } else {
             smallAvatarImageV?.isHidden = true
+            smallRemarkL?.isHidden = false
         }
     }
     
-      
+    
     override func msgContentView() -> UIView? {
-        return self.msgContentL
+        return self.msgContentTextView
     }
+
 }

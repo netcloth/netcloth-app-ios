@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013-2015 Pieter Wuille                              *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_TESTRAND_IMPL_H
@@ -107,4 +107,4 @@ static void secp256k1_rand256_test(unsigned char *b32) {
     secp256k1_rand_bytes_test(b32, 32);
 }
 
-#endif  
+#endif 

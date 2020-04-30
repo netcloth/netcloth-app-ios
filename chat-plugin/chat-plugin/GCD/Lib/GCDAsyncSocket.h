@@ -1,12 +1,12 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import <Security/Security.h>
@@ -14,7 +14,7 @@
 #import <dispatch/dispatch.h>
 #import <Availability.h>
 
-#include <sys/socket.h>   
+#include <sys/socket.h> 
 
 @class GCDAsyncReadPacket;
 @class GCDAsyncWritePacket;
@@ -50,20 +50,20 @@ extern NSString *const GCDAsyncSocketSSLDiffieHellmanParameters;
 
 
 typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
-	GCDAsyncSocketNoError = 0,             
-	GCDAsyncSocketBadConfigError,          
-	GCDAsyncSocketBadParamError,           
-	GCDAsyncSocketConnectTimeoutError,     
-	GCDAsyncSocketReadTimeoutError,        
-	GCDAsyncSocketWriteTimeoutError,       
-	GCDAsyncSocketReadMaxedOutError,       
-	GCDAsyncSocketClosedError,             
-	GCDAsyncSocketOtherError,              
+	GCDAsyncSocketNoError = 0,           
+	GCDAsyncSocketBadConfigError,        
+	GCDAsyncSocketBadParamError,         
+	GCDAsyncSocketConnectTimeoutError,   
+	GCDAsyncSocketReadTimeoutError,      
+	GCDAsyncSocketWriteTimeoutError,     
+	GCDAsyncSocketReadMaxedOutError,     
+	GCDAsyncSocketClosedError,           
+	GCDAsyncSocketOtherError,            
 };
 
-  
+
 #pragma mark -
-  
+
 
 
 @interface GCDAsyncSocket : NSObject
@@ -89,7 +89,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 - (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq;
 - (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq socketQueue:(nullable dispatch_queue_t)sq;
 
- 
+
 + (nullable instancetype)socketFromConnectedSocketFD:(int)socketFD socketQueue:(nullable dispatch_queue_t)sq error:(NSError**)error;
 
 + (nullable instancetype)socketFromConnectedSocketFD:(int)socketFD delegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq error:(NSError**)error;
@@ -135,7 +135,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 @property (atomic, assign, readwrite, getter=isIPv4PreferredOverIPv6) BOOL IPv4PreferredOverIPv6;
 
 /** 
- * When connecting to both IPv4 and IPv6 using Happy Eyeballs (RFC 6555) https:  
+ * When connecting to both IPv4 and IPv6 using Happy Eyeballs (RFC 6555) https:
  * this is the delay between connecting to the preferred protocol and the fallback protocol.
  *
  * Defaults to 300ms.
@@ -407,18 +407,18 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 
 #pragma mark Reading
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Reads the first available bytes that become available on the socket.
@@ -692,7 +692,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  *
  *     For more information on trust evaluation see:
  *     Apple's Technical Note TN2232 - HTTPS Server Trust Evaluation
- *     https:  
+ *     https:
  *     
  *     If unspecified, the default value is NO.
  *
@@ -1047,16 +1047,16 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 /**
  * A few common line separators, for use with the readDataToData:... methods.
 **/
-+ (NSData *)CRLFData;     
-+ (NSData *)CRData;       
-+ (NSData *)LFData;       
-+ (NSData *)ZeroData;     
++ (NSData *)CRLFData;   
++ (NSData *)CRData;     
++ (NSData *)LFData;     
++ (NSData *)ZeroData;   
 
 @end
 
-  
+
 #pragma mark -
-  
+
 
 @protocol GCDAsyncSocketDelegate <NSObject>
 @optional
@@ -1179,12 +1179,12 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * but the sock parameter will be nil. (It must necessarily be nil since it is no longer available.)
  * This is a generally rare, but is possible if one writes code like this:
  * 
- * asyncSocket = nil;   
+ * asyncSocket = nil; 
  * 
  * In this case it may preferrable to nil the delegate beforehand, like this:
  * 
- * asyncSocket.delegate = nil;   
- * asyncSocket = nil;   
+ * asyncSocket.delegate = nil; 
+ * asyncSocket = nil; 
  * 
  * Of course, this depends on how your state machine is configured.
 **/

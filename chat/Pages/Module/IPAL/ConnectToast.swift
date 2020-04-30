@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
@@ -26,7 +26,7 @@ class ConnectToast: AlertView, NCAlertInterface {
     @IBOutlet weak var bottomTip: UILabel?
     
     @IBOutlet weak var allOkOrFailStack: UIStackView?
-    @IBOutlet weak var allOkOrFailBtn: UIButton?      
+    @IBOutlet weak var allOkOrFailBtn: UIButton?    
     
     @IBOutlet weak var retryStack: UIStackView?
     @IBOutlet weak var retryBtn: UIButton?
@@ -47,7 +47,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         case F_3_1 = "step3_fail"
     }
     
-      
+    
     var curStep: Step = .C_1 {
         didSet {
             switch self.curStep {
@@ -78,16 +78,16 @@ class ConnectToast: AlertView, NCAlertInterface {
         }
     }
     
-      
+    
     typealias ClickCallBack =  () -> Void
-    var onBackTap: ClickCallBack?    
-    var onEnterpriseTap: ClickCallBack?    
+    var onBackTap: ClickCallBack?  
+    var onEnterpriseTap: ClickCallBack?  
     
-    var onRetryTap: ClickCallBack?    
-    var onSwitchCIpalTap: ClickCallBack?    
+    var onRetryTap: ClickCallBack?  
+    var onSwitchCIpalTap: ClickCallBack?  
     
     
-      
+    
     deinit {
         print("dealloc \(type(of: self))")
     }
@@ -97,7 +97,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         configEvent()
     }
     
-      
+    
     func configEvent() {
         self.allOkOrFailBtn?.addTarget(self, action: #selector(userTapAllOkOrFail), for: .touchUpInside)
         self.retryBtn?.addTarget(self, action: #selector(userTapRetry), for: .touchUpInside)
@@ -122,12 +122,12 @@ class ConnectToast: AlertView, NCAlertInterface {
     }
     
     
-      
+    
     private func deal1() {
         titleLabel?.text = "ipal_connect_ing".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: true, hub: step1Hub)
-        config(label: step2L, labcolor: "#BFC2CC", imgV: step2Img, ishid: true, hub: step2Hub)
-        config(label: step3L, labcolor: "#BFC2CC", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: true, hub: step1Hub)
+        config(label: step2L, labcolor: Color.gray_bf, imgV: step2Img, ishid: true, hub: step2Hub)
+        config(label: step3L, labcolor: Color.gray_bf, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = true
         allOkOrFailStack?.isHidden = true
@@ -139,11 +139,11 @@ class ConnectToast: AlertView, NCAlertInterface {
     private func suc1_1() {
         titleLabel?.text = "ipal_connect_ing".localized()
         
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",
                hub: step1Hub)
         
-        config(label: step2L, labcolor: "#BFC2CC", imgV: step2Img, ishid: true, hub: step2Hub)
-        config(label: step3L, labcolor: "#BFC2CC", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step2L, labcolor: Color.gray_bf, imgV: step2Img, ishid: true, hub: step2Hub)
+        config(label: step3L, labcolor: Color.gray_bf, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = true
         allOkOrFailStack?.isHidden = true
@@ -154,10 +154,10 @@ class ConnectToast: AlertView, NCAlertInterface {
     
     private func fal1_1() {
         titleLabel?.text = "ipal_connect_fail".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_fail",
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_fail",
                hub: step1Hub)
-        config(label: step2L, labcolor: "#BFC2CC", imgV: step2Img, ishid: true, hub: step2Hub)
-        config(label: step3L, labcolor: "#BFC2CC", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step2L, labcolor: Color.gray_bf, imgV: step2Img, ishid: true, hub: step2Hub)
+        config(label: step3L, labcolor: Color.gray_bf, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = false
         allOkOrFailStack?.isHidden = false
@@ -170,12 +170,12 @@ class ConnectToast: AlertView, NCAlertInterface {
         
     }
     
-      
+    
     private func deal2() {
         titleLabel?.text = "ipal_connect_ing".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
-        config(label: step2L, labcolor: "#303133", imgV: step2Img, ishid: true, hub: step2Hub)
-        config(label: step3L, labcolor: "#BFC2CC", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
+        config(label: step2L, labcolor: Color.black, imgV: step2Img, ishid: true, hub: step2Hub)
+        config(label: step3L, labcolor: Color.gray_bf, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = true
         allOkOrFailStack?.isHidden = true
@@ -186,9 +186,9 @@ class ConnectToast: AlertView, NCAlertInterface {
     
     private func suc2_1() {
         titleLabel?.text = "ipal_connect_ing".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
-        config(label: step2L, labcolor: "#303133", imgV: step2Img, ishid: false,imgName:"ipal_request_result_success", hub: step2Hub)
-        config(label: step3L, labcolor: "#BFC2CC", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
+        config(label: step2L, labcolor: Color.black, imgV: step2Img, ishid: false,imgName:"ipal_request_result_success", hub: step2Hub)
+        config(label: step3L, labcolor: Color.gray_bf, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = true
         allOkOrFailStack?.isHidden = true
@@ -199,11 +199,11 @@ class ConnectToast: AlertView, NCAlertInterface {
     
     private func fal2_1() {
         titleLabel?.text = "ipal_connect_fail".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
         
-        config(label: step2L, labcolor: "#303133", imgV: step2Img, ishid: false,imgName:"ipal_request_result_fail", hub: step2Hub)
+        config(label: step2L, labcolor: Color.black, imgV: step2Img, ishid: false,imgName:"ipal_request_result_fail", hub: step2Hub)
         
-        config(label: step3L, labcolor: "#BFC2CC", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step3L, labcolor: Color.gray_bf, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = false
         allOkOrFailStack?.isHidden = true
@@ -214,12 +214,12 @@ class ConnectToast: AlertView, NCAlertInterface {
         bottomTip?.text = "ipal_step2_fail_tip".localized()
     }
     
-      
+    
     private func deal3() {
         titleLabel?.text = "ipal_connect_ing".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
-        config(label: step2L, labcolor: "#303133", imgV: step2Img, ishid: false, imgName:"ipal_request_result_success", hub: step2Hub)
-        config(label: step3L, labcolor: "#303133", imgV: step3Img, ishid: true, hub: step3Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
+        config(label: step2L, labcolor: Color.black, imgV: step2Img, ishid: false, imgName:"ipal_request_result_success", hub: step2Hub)
+        config(label: step3L, labcolor: Color.black, imgV: step3Img, ishid: true, hub: step3Hub)
         
         bottomTipContainer?.isHidden = true
         allOkOrFailStack?.isHidden = true
@@ -229,9 +229,9 @@ class ConnectToast: AlertView, NCAlertInterface {
     }
     private func suc3_1() {
         titleLabel?.text = "ipal_connect_ing".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
-        config(label: step2L, labcolor: "#303133", imgV: step2Img, ishid: false,imgName:"ipal_request_result_success", hub: step2Hub)
-        config(label: step3L, labcolor: "#303133", imgV: step3Img, ishid: false,imgName:"ipal_request_result_success", hub: step3Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
+        config(label: step2L, labcolor: Color.black, imgV: step2Img, ishid: false,imgName:"ipal_request_result_success", hub: step2Hub)
+        config(label: step3L, labcolor: Color.black, imgV: step3Img, ishid: false,imgName:"ipal_request_result_success", hub: step3Hub)
         
         bottomTipContainer?.isHidden = true
         allOkOrFailStack?.isHidden = false
@@ -240,13 +240,26 @@ class ConnectToast: AlertView, NCAlertInterface {
         configAnmateHub(animate1: false, animate2: false, animate3: false)
         
         allOkOrFailBtn?.setTitle("Enjoy".localized(), for: .normal)
+        
+        
+        if self.window != nil {
+            
+            allOkOrFailStack?.isHidden = true
+            self.startAutoDissmiss()
+        }
     }
+    
+    fileprivate func startAutoDissmiss() {
+        Router.dismissVC()
+    }
+    
+    
     
     private func fal3_1() {
         titleLabel?.text = "ipal_connect_fail".localized()
-        config(label: step1L, labcolor: "#303133", imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
-        config(label: step2L, labcolor: "#303133", imgV: step2Img, ishid: false,imgName:"ipal_request_result_success", hub: step2Hub)
-        config(label: step3L, labcolor: "#303133", imgV: step3Img, ishid: false,imgName:"ipal_request_result_fail", hub: step3Hub)
+        config(label: step1L, labcolor: Color.black, imgV: step1Img, ishid: false, imgName:"ipal_request_result_success",  hub: step1Hub)
+        config(label: step2L, labcolor: Color.black, imgV: step2Img, ishid: false,imgName:"ipal_request_result_success", hub: step2Hub)
+        config(label: step3L, labcolor: Color.black, imgV: step3Img, ishid: false,imgName:"ipal_request_result_fail", hub: step3Hub)
         
         bottomTipContainer?.isHidden = false
         allOkOrFailStack?.isHidden = true
@@ -257,7 +270,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         bottomTip?.text = "ipal_step2_fail_tip".localized()
     }
     
-      
+    
     private func config(label: UILabel?, labcolor: String,
                         imgV: UIImageView?, ishid: Bool, imgName: String? = nil,
                         hub: UIActivityIndicatorView?) {
@@ -275,7 +288,7 @@ class ConnectToast: AlertView, NCAlertInterface {
         animate3 ? step3Hub?.startAnimating() : step3Hub?.stopAnimating()
     }
     
-      
+    
     
     func ncSize() -> CGSize {
         return CGSize(width: 280, height: 197)

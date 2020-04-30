@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -19,9 +19,9 @@ class GroupSetNoticeVC: BaseViewController {
     var editBtn: UIBarButtonItem?
     
     var sureBtn: UIBarButtonItem?
-    var doneButton: UIButton?   
+    var doneButton: UIButton? 
     
-    @IBOutlet weak var headContainer: UIView?   
+    @IBOutlet weak var headContainer: UIView? 
     @IBOutlet weak var smallRemarkL: UILabel?
     @IBOutlet weak var remarkL: UILabel?
     @IBOutlet weak var timeL: UILabel?
@@ -29,7 +29,7 @@ class GroupSetNoticeVC: BaseViewController {
     @IBOutlet weak var inputTF: AutoHeightTextView?
     @IBOutlet weak var maskView: UIView?
     
-      
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -47,17 +47,17 @@ class GroupSetNoticeVC: BaseViewController {
         
         let cancel = "Cancel".localized()
         cancelBtn = UIBarButtonItem(title: cancel, style: UIBarButtonItem.Style.plain, target: nil, action: nil)
-        cancelBtn?.tintColor = UIColor(hexString: "#303133")
+        cancelBtn?.tintColor = UIColor(hexString: Color.black)
         
         editBtn = UIBarButtonItem(title: "Edit".localized(), style: .plain, target: nil, action: nil)
-        editBtn?.tintColor = UIColor(hexString: "#3D7EFF")
+        editBtn?.tintColor = UIColor(hexString: Color.blue)
         
-          
+        
         let btn = UIButton(type: .custom)
         btn.setTitle("Done".localized(), for: .normal)
         btn.setTitleColor(UIColor.white, for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        btn.backgroundColor = UIColor(hexString: "#3D7EFF")
+        btn.backgroundColor = UIColor(hexString: Color.blue)
         btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         btn.layer.cornerRadius = 4
         btn.size.height = 32
@@ -90,7 +90,7 @@ class GroupSetNoticeVC: BaseViewController {
             }
         }.disposed(by: disbag)
         
-          
+        
         inputTF?.rx.text.skip(1).subscribe { [weak self] (event: Event<String?>) in
             self?.inputTF?.limitLength(by: nil, maxLength: Config.Group.Max_Notice_Len)
             self?.doneButton?.alpha = 1
@@ -112,7 +112,7 @@ class GroupSetNoticeVC: BaseViewController {
         
     }
     
-      
+    
     
     func handleHeadChange() {
         let contact = self.roomService?.chatContact?.value
@@ -129,6 +129,8 @@ class GroupSetNoticeVC: BaseViewController {
         
         CPGroupManagerHelper.getOneGroupMember(publisher, inSession: Int(sessionId)) {(r, msg, member) in
             self.smallRemarkL?.text = member.nickName.getSmallRemark()
+            let color = member.hexPubkey.randomColor()
+            self.smallRemarkL?.backgroundColor = UIColor(hexString: color)
             self.remarkL?.text = member.nickName
         }
     }
@@ -158,7 +160,7 @@ class GroupSetNoticeVC: BaseViewController {
         self.inputTF?.placeHolder?.isHidden = true
     }
     
-      
+    
     func onTapDone() {
         let r = self.checkInputAvalid()
         if r.result == false {
@@ -209,10 +211,10 @@ class GroupSetNoticeVC: BaseViewController {
         return Observable.create { (observer) -> Disposable in
             
             if let alert = R.loadNib(name: "MayEmptyAlertView") as? MayEmptyAlertView {
-                  
+                
                 alert.titleLabel?.isHidden = true
                 alert.msgLabel?.text = "Group_Notice_Change_Title".localized()
-                alert.msgLabel?.textColor = UIColor(hexString: "#303133")
+                alert.msgLabel?.textColor = UIColor(hexString: Color.black)
                 
                 alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
                 alert.okButton?.setTitle("Post".localized(), for: .normal)

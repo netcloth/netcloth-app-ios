@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "SocketConnect.h"
 #import "GCDAsyncSocket.h"
@@ -16,14 +16,14 @@
 #define kTagHeartBeat  1001
 #define kTagRegisterReq  1002
 
-const NSInteger OnePackMaxLen = 1024 * 1024 *100;   
+const NSInteger OnePackMaxLen = 1024 * 1024 *100; 
 
 @interface SocketConnect () <GCDAsyncSocketDelegate>
 {
     GCDAsyncSocket *_socket;
     NSString *_host;
     uint16_t _port;
-    int8_t _timeout;   
+    int8_t _timeout; 
     
     dispatch_queue_t  _serialWriteQueue;
     dispatch_queue_t  _serialReadQueue;
@@ -75,7 +75,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
     }
     return self;
 }
-  
+
 
 -(void)connect
 {
@@ -103,20 +103,20 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
 - (void)disconnect
 {
     [self stoptimeoutTimer];
-      
+    
     dispatch_barrier_async(_serialReadQueue, ^{
         [self->_socket synchronouslySetDelegate:nil];
         [self->_socket synchronouslySetDelegateQueue:nil];
-        [self->_socket disconnect];   
+        [self->_socket disconnect]; 
         self->_pbBuffer = NSMutableData.data;
     });
 }
 
-  
+
 
 - (void)sendMsg:(NCProtoNetMsg *)message {
     dispatch_async(_serialWriteQueue, ^{
-  
+
         NSAssert(!(message.name == nil || [message.name isEqualToString:@""] || message.name == NULL), @"message name must set");
         NSData *data = [MessageObjects encodeNetMsg:message];
         if ([message.name isEqualToString:kMsg_Heartbeat]) {
@@ -141,7 +141,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
 }
 
 
-  
+
 - (void)starttimeoutTimer {
     [self stoptimeoutTimer];
     self.timeoutTimer = [NSTimer timerWithTimeInterval:kHeartTimeoutInterval target:self selector:@selector(onTimeout) userInfo:nil repeats:NO];
@@ -166,7 +166,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
 }
 
 
-  
+
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
     NSLog(@"coremsg-didConnectToHost %@",host);
     LogFormat(@"connect-didConnectToHost %@  %hu", host, port);
@@ -194,23 +194,23 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
     dispatch_async(_serialReadQueue, ^{
         @strongify(self);
         [self.pbBuffer appendData:data];
-          
+        
         int8_t count = 0;
         while (1) {
             if (count > 5) {
                 NSLog(@"coremsg-loop-max");
-                return;   
+                return; 
             }
             int bufferLen = self.pbBuffer.length;
             if (bufferLen < kHeaderLen) {
-  
+
                 return;
             }
             NSData *header = [self.pbBuffer subdataWithRange:NSMakeRange(0, kHeaderLen)];
             __uint32_t nl_headlen = *((__uint32_t *)header.bytes);
             int32_t host_headlen = ntohl(nl_headlen);
             if (host_headlen < kLeastSize || host_headlen >= OnePackMaxLen) {
-                  
+                
                 NSLog(@"socket len err");
                 LogFormat(@"socket len err");
                 [self disconnect];
@@ -225,7 +225,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
             int total = host_headlen + kHeaderLen;
             bufferLen = self.pbBuffer.length;
             if (bufferLen < total) {
-  
+
                 return;
             }
             NSRange packRange = NSMakeRange(0, total);
@@ -233,7 +233,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
             
             bufferLen = self.pbBuffer.length;
             if (bufferLen < total) {
-  
+
                 return;
             }
             [self.pbBuffer replaceBytesInRange:packRange withBytes:NULL length:0];
@@ -246,7 +246,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
                         [self.delegate onSocketReadPack:netmsg];
                     }
                 });
-  
+
                 [CPChatLog recordRecieveMsg:netmsg];
             }
             else {
@@ -257,7 +257,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
         }
     });
     [self->_socket readDataWithTimeout:-1 tag:0];
-  
+
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {

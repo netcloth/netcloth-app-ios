@@ -1,8 +1,8 @@
-  
-  
-  
-  
-  
+
+
+
+
+
 
 #ifndef _PinyinHelper_H_
 #define _PinyinHelper_H_
@@ -50,7 +50,7 @@ typedef void(^OutputArrayBlock)(NSArray *array) ;
                     withHanyuPinyinOutputFormat:(HanyuPinyinOutputFormat *)outputFormat
                                     outputBlock:(OutputStringBlock)outputBlock;
 
- 
+
 
 + (NSArray *)toHanyuPinyinStringArrayWithChar:(unichar)ch;
 + (NSArray *)toHanyuPinyinStringArrayWithChar:(unichar)ch
@@ -74,4 +74,4 @@ typedef void(^OutputArrayBlock)(NSArray *array) ;
 
 @end
 
-#endif   
+#endif 

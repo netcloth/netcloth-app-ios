@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import FCFileManager
@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-          
+        
         Bundle.swizzleImp()
         let cul = Bundle.currentLanguage()
         if cul.isManual {
@@ -46,37 +46,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Router.rootWindow = window
-          
+        
         PPNotificationCenter.shared.registerNotice()
         
-          
+        
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
         } else {
-              
+            
         }
         
-          
+        
+        ThirdPartTool.setup()
+        
+        
         #if DEBUG
-        
-  
-  
-  
-  
-  
-  
-        
-       
-        
-  
-  
-  
-  
-  
-  
-  
-  
-        
+        TestSwiftObj.testTransfer()
         #endif
         
         return true
@@ -102,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PPNotificationCenter.shared.resetZeroBadge()
     }
 
-      
+    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("deviceToken error \(error)")
     }

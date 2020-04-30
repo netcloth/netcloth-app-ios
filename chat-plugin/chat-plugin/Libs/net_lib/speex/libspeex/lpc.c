@@ -71,7 +71,7 @@
 /* Invented by N. Levinson in 1947, modified by J. Durbin in 1959.
  */
 
- 
+
 spx_word32_t _spx_lpc(
 spx_coef_t       *lpc, /* out: [0...p-1] LPC coefficients      */
 const spx_word16_t *ac,  /* in:  [0...p] autocorrelation values  */
@@ -93,7 +93,7 @@ int          p
 #else
       r = rr/(error+.003*ac[0]);
 #endif
-       
+      
       lpc[i] = r;
       for (j = 0; j < (i+1)>>1; j++)
       {
@@ -195,4 +195,4 @@ int          n
 #endif
 
 
-#endif  
+#endif 

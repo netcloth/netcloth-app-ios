@@ -1,8 +1,8 @@
-  
-  
 
-  
-  
+
+
+
+
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
  #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
@@ -16,8 +16,9 @@
 #import <stdatomic.h>
 
 #import "GroupMsg.pbobjc.h"
+#import "CommonTypes.pbobjc.h"
 #import "NetMsg.pbobjc.h"
-  
+
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -26,16 +27,16 @@
 
 @implementation NCProtoGroupMsgRoot
 
-  
-  
+
+
 
 @end
 
 #pragma mark - NCProtoGroupMsgRoot_FileDescriptor
 
 static GPBFileDescriptor *NCProtoGroupMsgRoot_FileDescriptor(void) {
-    
-    
+  
+  
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
@@ -100,8 +101,8 @@ typedef struct NCProtoGroupCreate__storage_ {
   NSMutableArray *toInviteeMsgsArray;
 } NCProtoGroupCreate__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -153,7 +154,7 @@ typedef struct NCProtoGroupCreate__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -176,8 +177,8 @@ typedef struct NCProtoGroupInvite__storage_ {
   NSData *groupPubKey;
 } NCProtoGroupInvite__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -220,7 +221,7 @@ typedef struct NCProtoGroupInvite__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -245,8 +246,8 @@ typedef struct NCProtoGroupJoin__storage_ {
   NSData *inviterPubKey;
 } NCProtoGroupJoin__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -298,7 +299,7 @@ typedef struct NCProtoGroupJoin__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -317,8 +318,8 @@ typedef struct NCProtoGroupKickReq__storage_ {
   NSMutableArray *kickPubKeysArray;
 } NCProtoGroupKickReq__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -343,7 +344,7 @@ typedef struct NCProtoGroupKickReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -364,8 +365,8 @@ typedef struct NCProtoGroupKickResult__storage_ {
   NSData *kickPubKey;
 } NCProtoGroupKickResult__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -399,7 +400,7 @@ typedef struct NCProtoGroupKickResult__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -420,8 +421,8 @@ typedef struct NCProtoGroupKickRsp__storage_ {
   NSMutableArray *kickResultArray;
 } NCProtoGroupKickRsp__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -455,7 +456,7 @@ typedef struct NCProtoGroupKickRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -474,8 +475,8 @@ typedef struct NCProtoGroupKick__storage_ {
   NSMutableArray *kickedPubKeysArray;
 } NCProtoGroupKick__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -500,7 +501,7 @@ typedef struct NCProtoGroupKick__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -517,8 +518,8 @@ typedef struct NCProtoGroupQuit__storage_ {
   uint32_t _has_storage_[1];
 } NCProtoGroupQuit__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -532,7 +533,7 @@ typedef struct NCProtoGroupQuit__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -549,8 +550,8 @@ typedef struct NCProtoGroupDismiss__storage_ {
   uint32_t _has_storage_[1];
 } NCProtoGroupDismiss__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -564,7 +565,7 @@ typedef struct NCProtoGroupDismiss__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -583,8 +584,8 @@ typedef struct NCProtoGroupUpdateName__storage_ {
   NSString *name;
 } NCProtoGroupUpdateName__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -609,7 +610,7 @@ typedef struct NCProtoGroupUpdateName__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -628,8 +629,8 @@ typedef struct NCProtoGroupUpdateNotice__storage_ {
   NSString *notice;
 } NCProtoGroupUpdateNotice__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -654,7 +655,7 @@ typedef struct NCProtoGroupUpdateNotice__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -673,8 +674,8 @@ typedef struct NCProtoGroupUpdateNickName__storage_ {
   NSString *nickName;
 } NCProtoGroupUpdateNickName__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -699,7 +700,52 @@ typedef struct NCProtoGroupUpdateNickName__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - NCProtoGroupTransferOwner
+
+@implementation NCProtoGroupTransferOwner
+
+@dynamic newOwnerPubKey;
+
+typedef struct NCProtoGroupTransferOwner__storage_ {
+  uint32_t _has_storage_[1];
+  NSData *newOwnerPubKey;
+} NCProtoGroupTransferOwner__storage_;
+
+
+
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "newOwnerPubKey",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoGroupTransferOwner_FieldNumber_NewOwnerPubKey,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(NCProtoGroupTransferOwner__storage_, newOwnerPubKey),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBytes,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[NCProtoGroupTransferOwner class]
+                                     rootClass:[NCProtoGroupMsgRoot class]
+                                          file:NCProtoGroupMsgRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(NCProtoGroupTransferOwner__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -721,8 +767,8 @@ typedef struct NCProtoGroupText__storage_ {
   NSMutableArray *atMembersArray;
 } NCProtoGroupText__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -741,7 +787,7 @@ typedef struct NCProtoGroupText__storage_ {
         .dataTypeSpecific.className = NULL,
         .number = NCProtoGroupText_FieldNumber_AtAll,
         .hasIndex = 1,
-        .offset = 2,    
+        .offset = 2,  
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
@@ -765,7 +811,7 @@ typedef struct NCProtoGroupText__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -786,8 +832,8 @@ typedef struct NCProtoGroupAudio__storage_ {
   NSData *content;
 } NCProtoGroupAudio__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -821,7 +867,7 @@ typedef struct NCProtoGroupAudio__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -844,8 +890,8 @@ typedef struct NCProtoGroupImage__storage_ {
   NSString *id_p;
 } NCProtoGroupImage__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -888,7 +934,7 @@ typedef struct NCProtoGroupImage__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -909,8 +955,8 @@ typedef struct NCProtoGroupVideo__storage_ {
   NSString *id_p;
 } NCProtoGroupVideo__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -944,7 +990,7 @@ typedef struct NCProtoGroupVideo__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -967,8 +1013,8 @@ typedef struct NCProtoGroupFile__storage_ {
   NSString *name;
 } NCProtoGroupFile__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1011,7 +1057,90 @@ typedef struct NCProtoGroupFile__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - NCProtoGroupNews
+
+@implementation NCProtoGroupNews
+
+@dynamic title;
+@dynamic description_p;
+@dynamic URL;
+@dynamic picURL;
+
+typedef struct NCProtoGroupNews__storage_ {
+  uint32_t _has_storage_[1];
+  NSData *title;
+  NSData *description_p;
+  NSData *URL;
+  NSData *picURL;
+} NCProtoGroupNews__storage_;
+
+
+
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "title",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoGroupNews_FieldNumber_Title,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(NCProtoGroupNews__storage_, title),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBytes,
+      },
+      {
+        .name = "description_p",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoGroupNews_FieldNumber_Description_p,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(NCProtoGroupNews__storage_, description_p),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBytes,
+      },
+      {
+        .name = "URL",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoGroupNews_FieldNumber_URL,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(NCProtoGroupNews__storage_, URL),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBytes,
+      },
+      {
+        .name = "picURL",
+        .dataTypeSpecific.className = NULL,
+        .number = NCProtoGroupNews_FieldNumber_PicURL,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(NCProtoGroupNews__storage_, picURL),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBytes,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[NCProtoGroupNews class]
+                                     rootClass:[NCProtoGroupMsgRoot class]
+                                          file:NCProtoGroupMsgRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(NCProtoGroupNews__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\002\003!!!\000\004\003\241!!\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1036,8 +1165,8 @@ typedef struct NCProtoGroupMember__storage_ {
   int64_t joinTime;
 } NCProtoGroupMember__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1089,7 +1218,7 @@ typedef struct NCProtoGroupMember__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1118,8 +1247,8 @@ typedef struct NCProtoGroupGetMemberReq__storage_ {
   uint32_t _has_storage_[1];
 } NCProtoGroupGetMemberReq__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1133,7 +1262,7 @@ typedef struct NCProtoGroupGetMemberReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1156,8 +1285,8 @@ typedef struct NCProtoGroupGetMemberRsp__storage_ {
   int64_t modifiedTime;
 } NCProtoGroupGetMemberRsp__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1200,7 +1329,7 @@ typedef struct NCProtoGroupGetMemberRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1223,8 +1352,8 @@ typedef struct NCProtoGroupGetMsgReq__storage_ {
   int64_t endId;
 } NCProtoGroupGetMsgReq__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1267,7 +1396,7 @@ typedef struct NCProtoGroupGetMsgReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1294,8 +1423,8 @@ typedef struct NCProtoGroupGetMsgRsp__storage_ {
   int64_t endId;
 } NCProtoGroupGetMsgRsp__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1356,7 +1485,7 @@ typedef struct NCProtoGroupGetMsgRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1377,8 +1506,8 @@ typedef struct NCProtoGroupUnreadReq__storage_ {
   int64_t lastMsgId;
 } NCProtoGroupUnreadReq__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1412,7 +1541,7 @@ typedef struct NCProtoGroupUnreadReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1437,8 +1566,8 @@ typedef struct NCProtoGroupUnreadRsp__storage_ {
   NCProtoNetMsg *lastMsg;
 } NCProtoGroupUnreadRsp__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1490,7 +1619,7 @@ typedef struct NCProtoGroupUnreadRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1509,8 +1638,8 @@ typedef struct NCProtoGroupGetUnreadReq__storage_ {
   NSMutableArray *reqItemsArray;
 } NCProtoGroupGetUnreadReq__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1535,7 +1664,7 @@ typedef struct NCProtoGroupGetUnreadReq__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1556,8 +1685,8 @@ typedef struct NCProtoGroupGetUnreadRsp__storage_ {
   NSMutableArray *rspItemsArray;
 } NCProtoGroupGetUnreadRsp__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1591,7 +1720,7 @@ typedef struct NCProtoGroupGetUnreadRsp__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1610,8 +1739,8 @@ typedef struct NCProtoGroupUpdateInviteType__storage_ {
   int32_t inviteType;
 } NCProtoGroupUpdateInviteType__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1636,7 +1765,7 @@ typedef struct NCProtoGroupUpdateInviteType__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1655,8 +1784,8 @@ typedef struct NCProtoGroupJoinApproveNotify__storage_ {
   NCProtoNetMsg *joinMsg;
 } NCProtoGroupJoinApproveNotify__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1681,7 +1810,7 @@ typedef struct NCProtoGroupJoinApproveNotify__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1704,8 +1833,8 @@ typedef struct NCProtoGroupJoinApproved__storage_ {
   NSString *groupName;
 } NCProtoGroupJoinApproved__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -1748,7 +1877,7 @@ typedef struct NCProtoGroupJoinApproved__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -1756,7 +1885,64 @@ typedef struct NCProtoGroupJoinApproved__storage_ {
 
 @end
 
+#pragma mark - NCProtoGroupMemberMute
+
+@implementation NCProtoGroupMemberMute
+
+@dynamic action;
+
+typedef struct NCProtoGroupMemberMute__storage_ {
+  uint32_t _has_storage_[1];
+  NCProtoActionType action;
+} NCProtoGroupMemberMute__storage_;
+
+
+
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "action",
+        .dataTypeSpecific.enumDescFunc = NCProtoActionType_EnumDescriptor,
+        .number = NCProtoGroupMemberMute_FieldNumber_Action,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(NCProtoGroupMemberMute__storage_, action),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[NCProtoGroupMemberMute class]
+                                     rootClass:[NCProtoGroupMsgRoot class]
+                                          file:NCProtoGroupMsgRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(NCProtoGroupMemberMute__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+int32_t NCProtoGroupMemberMute_Action_RawValue(NCProtoGroupMemberMute *message) {
+  GPBDescriptor *descriptor = [NCProtoGroupMemberMute descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:NCProtoGroupMemberMute_FieldNumber_Action];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetNCProtoGroupMemberMute_Action_RawValue(NCProtoGroupMemberMute *message, int32_t value) {
+  GPBDescriptor *descriptor = [NCProtoGroupMemberMute descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:NCProtoGroupMemberMute_FieldNumber_Action];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
+
 
 #pragma clang diagnostic pop
 
-  
+

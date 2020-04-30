@@ -46,3 +46,13 @@
 
 /* Class = "UINavigationItem"; title = "Import Account"; ObjectID = "zib-cR-ePd"; */
 "zib-cR-ePd.title" = "Import Account";
+
+
+/* Class = "UILabel"; text = "您已经阅读并同意以下协议"; ObjectID = "d3K-eW-kd2"; */
+"d3K-eW-kd2.text" = "You have read and agreed to the following agreement:";
+
+/* Class = "UIButton"; normalTitle = "《NetCloth隐私政策》"; ObjectID = "2uL-K6-nct"; */
+"2uL-K6-nct.normalTitle" = "<NetCloth Privacy Policy>";
+
+/* Class = "UIButton"; normalTitle = "《NetCloth软件许可及服务协议》"; ObjectID = "CS4-K5-wyM"; */
+"CS4-K5-wyM.normalTitle" = "<NetCloth Terms of Service>";

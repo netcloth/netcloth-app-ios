@@ -1,18 +1,19 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import PromiseKit
 
-  
+
 class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource, ChatDelegate {
     
     @IBOutlet weak var searchBtn: UIButton?
+    @IBOutlet weak var searchControl: UIControl?
     
     @IBOutlet weak var tableView: UITableView!
     var sessionQueue : DispatchQueue = OS_dispatch_queue_serial(label: "com.chat.session", qos: .default)
@@ -20,14 +21,14 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
     @IBOutlet weak var msgLabel: UILabel?
     
     
-      
+    
     @IBOutlet weak var hubTips: UILabel?
     
-      
+    
     @IBOutlet weak var offTipContainer: UIView?
     @IBOutlet weak var offlineTipLabel: UILabel?
     
-      
+    
     var sessionsArray : [CPSession]?
     
     var allUnreadCount: Int = 0 {
@@ -39,7 +40,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
             } else {
                 self.msgLabel?.text = "Messages".localized() + "(\(count))"
                 self.tabBarItem.badgeValue = "\(count)"
-                self.tabBarItem.badgeColor = UIColor(hexString: "#FF4141")
+                self.tabBarItem.badgeColor = UIColor(hexString: Color.red)
             }
             setDesktopIconBadge(number: count)
         }
@@ -55,7 +56,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
     var notifyPreview: CPGroupNotifyPreview?
     
     let disbag = DisposeBag()
-      
+    
     
     deinit {
         CPChatHelper.removeInterface(self)
@@ -68,14 +69,16 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         configEvent()
         CPChatHelper.addInterface(self)
         showLoading()
+        Config.Older_Had_Tip = true
     }
     
     var _viewDidAppear = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        reloadTable()
-        handleConnectChange()
+       
+        _handleConnectChange(getRecommend: false)
         reloadGroupNotify()
+        onRecommendedReload()
         
         if _viewDidAppear == false {
             IPALManager.shared.onStep1_QueryInfo()
@@ -89,17 +92,21 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         
         self.tabBarItem.setStyle(imgName: "消息-未选中",
                                  selectedName: "消息-选中",
-                                 textColor: UIColor(hexString: "#BFC2CC"),
-                                 selectedColor: UIColor(hexString: "#3D7EFF"))
+                                 textColor: UIColor(hexString: Color.gray),
+                                 selectedColor: UIColor(hexString: Color.black))
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.tableFooterView = UIView()        
+        self.tableView.tableFooterView = UIView()
+        
+        
+        offlineTipLabel?.textColor = UIColor(hexString: Color.red)
     }
     
     func configEvent() {
-        self.searchBtn?.rx.tap.subscribe(onNext: { [weak self] in
-            self?.onTapSearch()
+        
+        searchControl?.rx.controlEvent(.touchUpInside).subscribe(onNext: { [weak self] in
+            ContactGroupSearchHelper.onTapSearch()
         }).disposed(by: disbag)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleConnectChange), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -111,14 +118,15 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         self._reloadTableView(onlyCount: true)
     }
     
-      
-    func onTapSearch() {
-        ContactGroupSearchHelper.onTapSearch()
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     
-      
     @objc func handleConnectChange() {
+        _handleConnectChange()
+    }
+    fileprivate func _handleConnectChange(getRecommend:Bool = true) {
         let isClaimOk = IPALManager.shared.store.currentCIpal?.isClaimOk == 1
         let isClaimFail = IPALManager.shared.store.currentCIpal?.isClaimOk == 2
         let isSeedError = IPALManager.shared.store.isSeedError == true
@@ -126,6 +134,21 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         if CPAccountHelper.isConnected() && isClaimOk {
             self.hubTips?.isHidden = true
             self.offTipContainer?.isHidden = true
+            if getRecommend {
+                
+                if !(GlobalStatusStore.shared.recommendedGroup?.isEmpty == false) {
+                    GlobalStatusStore.shared.onRequestRecommendedGroup {
+                                       self.reloadTable()
+                                   }
+                }
+                
+                
+                if GlobalStatusStore.shared.curAssist == nil {
+                    GlobalStatusStore.shared.requestServerAssist {
+                        self.reloadTable()
+                    }
+                }
+            }
         }
         else {
             self.hubTips?.isHidden = false
@@ -155,14 +178,15 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
             MeVC.onLogout()
         }
         else {
-            if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                Router.pushViewController(vc: vc, animate: true, checkSameClass: true)
+            if let vc = R.loadSB(name: "IPALList", iden: "IPAListVC") as? IPAListVC {
+                vc.fromSource = .C_IPAL
+                Router.pushViewController(vc: vc)
             }
         }
     }
     
     
-      
+    
     func onReceiveMsg(_ msg: CPMessage) {
         
         self.reloadTable()
@@ -170,7 +194,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         if msg.senderPubKey == CPAccountHelper.loginUser()?.publicKey {
         } else if msg.doNotDisturb == true {
         } else {
-              
+            
             MessageNotifyManager.playMessageComing(msg: msg)
         }
     }
@@ -182,15 +206,15 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         self.reloadTable()
     }
     
-      
+    
     func onReceiveGroupChatMsgs(_ msgs: [CPMessage]) {
         self.reloadTable()
     }
     
-      
+    
     func onUnreadRsp(_ response: [CPUnreadResponse]!) {
         self.sessionQueue.async {
-              
+            
             if let havedarr = self.sessionsArray, let toinarr = response {
                 for toin in toinarr {
                     for have in havedarr {
@@ -229,12 +253,12 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
             if let logon = try? NCProtoLogonNotify.parse(from: notify.data_p) {
                 let device = logon.deviceType
                 var str: String = ""
-                if device == NCProtoDeviceType.ios {
+                if device == NCProtoDeviceType.deviceTypeIos {
                     str = "iOS".localized()
-                } else if device == NCProtoDeviceType.android {
+                } else if device == NCProtoDeviceType.deviceTypeAndroid {
                     str = "Android".localized()
                 }
-                else if device == NCProtoDeviceType.pc {
+                else if device == NCProtoDeviceType.deviceTypePc {
                     str = "PC".localized()
                 }
                 tips = tips.replacingOccurrences(of: "#device#", with: str)
@@ -243,7 +267,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
             
             
             alert.msgLabel?.text = tips
-            alert.msgLabel?.textColor = UIColor(hexString: "#303133")
+            alert.msgLabel?.textColor = UIColor(hexString: Color.black)
             alert.msgLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
             
             alert.okButton?.setTitle("clear_alert_btn_text".localized(), for: .normal)
@@ -254,7 +278,8 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     
-      
+    
+    
     func reloadTable() {
         if checkCanReload() == false {
             return
@@ -262,14 +287,23 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         _reloadTableView(onlyCount: false)
     }
     
+    fileprivate func onRecommendedReload() {
+        GlobalStatusStore.shared.recommendedGroupSession = nil
+        GlobalStatusStore.shared.getRecommendedSession().done { (result) in
+            GlobalStatusStore.shared.recommendedGroupSession = result
+        }.catch { (error) in
+        }.finally {
+            self.reloadTable()
+        }
+    }
     
-      
-      
+    
+    
     fileprivate func _reloadTableView(onlyCount: Bool) {
         CPSessionHelper.getAllRecentSessionComplete { [weak self] (ok:Bool, msg, array:[CPSession]?) in
             self?.sessionQueue.async {
                 if onlyCount == false {
-                      
+                    
                     if let havedarr = self?.sessionsArray, let toinarr = array {
                         for have in havedarr {
                             for toin in toinarr {
@@ -285,11 +319,21 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
                 }
                 
                 
-                  
+                
                 var strangeArray = array?.filter({ (session) -> Bool in
                     if session.relateContact.status == .strange {
                         return true
                     }
+                    
+                    if session.relateContact.status == .assistHelper {
+                        if let _ = session.relateContact.publicKey.isCurNodeAssist() {
+                            
+                        } else {
+                            return true
+                        }
+                    }
+                    
+                    
                     return false
                 })
                 let strangeFirst = strangeArray?[safe: 0]
@@ -307,7 +351,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
                 }
                 
                 
-                  
+                
                 var count = 0
                 if let toinarr = finaArray {
                     for toin in toinarr {
@@ -317,7 +361,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                 }
                 
-                  
+                
                 var strangerCount = 0
                 if strangeArray?.isEmpty == false {
                     if let sa = strangeArray {
@@ -330,7 +374,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
                     count += (strangerCount)
                 }
                 
-                  
+                
                 if fakeStranger != nil {
                     fakeStranger!.updateTime = strangeFirst?.updateTime ?? 0
                     fakeStranger!.unreadCount = strangerCount
@@ -341,13 +385,29 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
                 }
                 
                 
-                  
+                
                 if let notify = self?.notifyPreview, notify.needApproveCount > 0 {
                     count += notify.unreadCount
                     let fakeNotify = FakeNotifySession()
                     fakeNotify.unreadCount = notify.unreadCount
                     fakeNotify.updateTime = notify.lastNotice?.createTime ?? 0
                     finaArray?.insert(fakeNotify, at: 0)
+                }
+                
+                
+                if let rs = GlobalStatusStore.shared.recommendedGroupSession,
+                    let rg = GlobalStatusStore.shared.recommendedGroup
+                {
+                    let unreadCount = rs.groupUnreadCount
+                    count += unreadCount
+                    let fakeSession = FakeRecommendedSession()
+                    fakeSession.unreadCount = unreadCount
+                    
+                    let ctime = rg.first?.create_time.utcTimeIntervalSince1970() ?? 0
+                    fakeSession.updateTime = ctime
+                    fakeSession.topMark = rs.topMark
+                    fakeSession.sessionId = rs.sessionId
+                    finaArray?.insert(fakeSession, at: 0)
                 }
                 
                 let sortDescriptors = [
@@ -363,15 +423,24 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
                     DispatchQueue.main.async {
                         self?.dismissLoading()
                         self?.allUnreadCount = count
-                        self?.tableView.showEmpty(status: ((array?.isEmpty ?? false) ? EmptyStatus.Empty : EmptyStatus.Normal))
+                        self?.tableView.showEmpty(status: ((finaArray?.isEmpty ?? false) ? EmptyStatus.Empty : EmptyStatus.Normal))
                         self?.tableView.reloadData()
+                        self?.tableView.emptyView()?.tapBtn?.removeAllBlocks(for: .touchUpInside)
+                        self?.tableView.emptyView()?.tapBtn?.addBlock(for: .touchUpInside, block: { (btn) in
+                            self?.toMyQrcode()
+                        })
                     }
                 }
             }
         }
     }
     
-      
+    @objc fileprivate func toMyQrcode() {
+        let vc = R.loadSB(name: "QrCode", iden: "QrCodeVC")
+        Router.pushViewController(vc: vc)
+    }
+    
+    
     func reloadGroupNotify() {
         if checkCanReload() == false {
             return
@@ -382,6 +451,7 @@ class SessionVC: BaseViewController, UITableViewDelegate, UITableViewDataSource,
         }
         
     }
+    
 }
 
 extension SessionVC {
@@ -397,9 +467,10 @@ extension SessionVC {
         var cellId = "SessionCell"
         if data is FakeStrangerSession {
             cellId = "PatchSessionCell"
-        }
-        if data is FakeNotifySession {
+        } else if data is FakeNotifySession {
             cellId = "FakeNotifyCell"
+        } else if data is FakeRecommendedSession {
+            cellId = "FakeRecommendCell"
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
@@ -418,6 +489,9 @@ extension SessionVC {
         else if session is FakeNotifySession {
             toNotifyPreviewVC()
         }
+        else if session is FakeRecommendedSession {
+            toGroupRecommendation()
+        }
         else {
             if session.sessionType == .P2P {
                 toP2PChat(bySession: session)
@@ -428,6 +502,8 @@ extension SessionVC {
         }
     }
     
+    
+    
     fileprivate func toNotifyPreviewVC() {
         if let vc = R.loadSB(name: "GroupNotifySessionVC", iden: "GroupNotifySessionVC") as? GroupNotifySessionVC {
             Router.pushViewController(vc: vc)
@@ -435,7 +511,7 @@ extension SessionVC {
     }
     
     func toStrangerVC() {
-          
+        
         if let vc = R.loadSB(name: "StrangerMessages", iden: "StrangerSessionListVC") as? StrangerSessionListVC {
             Router.pushViewController(vc: vc)
         }
@@ -466,10 +542,17 @@ extension SessionVC {
         }
     }
     
+    func toGroupRecommendation() {
+        if let vc = R.loadSB(name: "RecommendedGroupListVC", iden: "RecommendedGroupListVC") as? RecommendedGroupListVC {
+            vc.recommendGroups = GlobalStatusStore.shared.recommendedGroup 
+            Router.pushViewController(vc: vc)
+        }
+    }
+    
 }
 
 
-  
+
 extension SessionVC {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -485,37 +568,51 @@ extension SessionVC {
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-          
+        guard let session = self.sessionsArray?[indexPath.row] else {
+            return nil
+        }
+        
         var topDes = "Sticky on top".localized()
-        if let session = self.sessionsArray?[indexPath.row] {
-            if session.topMark == 1 {
-                topDes = "Remove From Top".localized()
-            }
+        if session.topMark == 1 {
+            topDes = "Remove From Top".localized()
         }
         let topOrUn = UITableViewRowAction(style: UITableViewRowAction.Style.normal, title: topDes) { [weak self] (action, indexpath) in
             self?.topOrUn(row: indexPath.row)
         }
         
-          
-        let delete = UITableViewRowAction(style: UITableViewRowAction.Style.destructive, title: "Delete".localized()) { [weak self] (action, indexpath) in
-            self?.deleteRow(row: indexPath.row)
-        }
         
-        return [delete,topOrUn]
+        if session is FakeRecommendedSession {
+            return [topOrUn]
+        }
+        else {
+            let delete = UITableViewRowAction(style: UITableViewRowAction.Style.destructive, title: "Delete".localized()) { [weak self] (action, indexpath) in
+                self?.deleteRow(row: indexPath.row)
+            }
+            return [delete,topOrUn]
+        }
     }
     
     func topOrUn(row: Int) {
         if let session = self.sessionsArray?[safe: row] {
+            
+            let reload = {
+                if session is FakeRecommendedSession {
+                    self.onRecommendedReload()
+                } else {
+                    self.reloadTable()
+                }
+            }
+            
             if session.topMark == 1 {
-                  
+                
                 CPSessionHelper.unTop(ofSession: Int(session.sessionId)) { [weak self] (r, msg) in
-                    self?.reloadTable()
+                    reload()
                 }
             }
             else {
-                  
+                
                 CPSessionHelper.markTop(ofSession: Int(session.sessionId)) { [weak self] (r, msg) in
-                    self?.reloadTable()
+                    reload()
                 }
             }
         }
@@ -525,9 +622,9 @@ extension SessionVC {
     func deleteRow(row: Int) {
         if let session = self.sessionsArray?[safe: row] {
             
-              
+            
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-                  
+                
                 alert.titleLabel?.text = NSLocalizedString("Session_W_Title", comment: "")
                 alert.msgLabel?.text = NSLocalizedString("Session_W_Msg", comment: "")
                 alert.cancelButton?.setTitle(NSLocalizedString("Back", comment: ""), for: .normal)
@@ -542,12 +639,4 @@ extension SessionVC {
             }
         }
     }
-}
-
-
-  
-class FakeStrangerSession: CPSession {
-}
-
-class FakeNotifySession: CPSession {
 }

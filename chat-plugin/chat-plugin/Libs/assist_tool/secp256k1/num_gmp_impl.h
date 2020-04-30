@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_NUM_REPR_IMPL_H
@@ -202,7 +202,7 @@ static int secp256k1_num_eq(const secp256k1_num *a, const secp256k1_num *b) {
 }
 
 static void secp256k1_num_subadd(secp256k1_num *r, const secp256k1_num *a, const secp256k1_num *b, int bneg) {
-    if (!(b->neg ^ bneg ^ a->neg)) {  
+    if (!(b->neg ^ bneg ^ a->neg)) { 
         r->neg = a->neg;
         if (a->limbs >= b->limbs) {
             secp256k1_num_add_abs(r, a, b);
@@ -285,4 +285,4 @@ static void secp256k1_num_negate(secp256k1_num *r) {
     r->neg ^= 1;
 }
 
-#endif  
+#endif 

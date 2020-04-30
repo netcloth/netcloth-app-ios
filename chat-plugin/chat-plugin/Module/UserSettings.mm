@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "UserSettings.h"
 #import "CPInnerState.h"
@@ -39,14 +39,14 @@ static YYCache *_UserCache;
     return
     [@(CPInnerState.shared.loginUser.userId).stringValue stringByAppendingString:key];
 }
-  
+
  + (void)deleteKey:(NSString *)key ofUser:(NSInteger)uid
 {
     NSString *key1 = [@(uid).stringValue stringByAppendingString:key];
     [_UserCache removeObjectForKey:key1];
 }
 
-  
+
 + (NSString *)sourceKey:(NSString *)key ofUser:(NSInteger)uid {
     return [@(uid).stringValue stringByAppendingString:key];
 }

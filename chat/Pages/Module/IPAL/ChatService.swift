@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import PromiseKit
@@ -18,9 +18,9 @@ class ChatService: NSObject {
      }
      */
     
-      
+    
     static func requestLoadBalancing(endPoint: String) -> Promise<[String]> {
-          
+        
         let _promise = Promise<[String]> { (resolver) in
             let path = endPoint + "/v1/service/gateway?pub_key=" + (CPAccountHelper.loginUser()?.publicKey ?? "")
             NW.requestUrl(path: path, method: .get, para: nil) { (r, res) in

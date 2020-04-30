@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_ECMULT_GEN_H
@@ -40,4 +40,4 @@ static void secp256k1_ecmult_gen(const secp256k1_ecmult_gen_context* ctx, secp25
 
 static void secp256k1_ecmult_gen_blind(secp256k1_ecmult_gen_context *ctx, const unsigned char *seed32);
 
-#endif  
+#endif 

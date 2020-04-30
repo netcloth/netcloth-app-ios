@@ -35,5 +35,5 @@
 /* Class = "UIButton"; normalTitle = "确定修改"; ObjectID = "nJ5-GI-xd7"; */
 "nJ5-GI-xd7.normalTitle" = "确定修改";
 
-/* Class = "UILabel"; text = "添加到通讯录"; ObjectID = "vo1-WM-uxg"; */
-"vo1-WM-uxg.text" = "添加到通讯录";
+/* Class = "UILabel"; text = "添加到联系人"; ObjectID = "vo1-WM-uxg"; */
+"vo1-WM-uxg.text" = "添加到联系人";

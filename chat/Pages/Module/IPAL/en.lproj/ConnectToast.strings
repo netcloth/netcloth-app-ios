@@ -17,8 +17,8 @@
 /* Class = "UILabel"; text = "正在连接区块链节点"; ObjectID = "o71-Qp-dwr"; */
 "o71-Qp-dwr.text" = "Connecting to blockchain node";
 
-/* Class = "UILabel"; text = "正在连接通信地址"; ObjectID = "wNn-7n-A3t"; */
-"wNn-7n-A3t.text" = "Connecting to Comm.Add.";
+/* Class = "UILabel"; text = "正在连接通信服务器"; ObjectID = "wNn-7n-A3t"; */
+"wNn-7n-A3t.text" = "Connecting to Comm.Ser.";
 
 /* Class = "UIButton"; normalTitle = "开始体验"; ObjectID = "xU4-X9-zAQ"; */
 "xU4-X9-zAQ.normalTitle" = "Enjoy";

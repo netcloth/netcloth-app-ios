@@ -1,12 +1,12 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import <dispatch/dispatch.h>
@@ -21,17 +21,17 @@ extern NSString *const GCDAsyncUdpSocketQueueName;
 extern NSString *const GCDAsyncUdpSocketThreadName;
 
 typedef NS_ERROR_ENUM(GCDAsyncUdpSocketErrorDomain, GCDAsyncUdpSocketError) {
-	GCDAsyncUdpSocketNoError = 0,            
-	GCDAsyncUdpSocketBadConfigError,         
-	GCDAsyncUdpSocketBadParamError,          
-	GCDAsyncUdpSocketSendTimeoutError,       
-	GCDAsyncUdpSocketClosedError,            
-	GCDAsyncUdpSocketOtherError,             
+	GCDAsyncUdpSocketNoError = 0,          
+	GCDAsyncUdpSocketBadConfigError,       
+	GCDAsyncUdpSocketBadParamError,        
+	GCDAsyncUdpSocketSendTimeoutError,     
+	GCDAsyncUdpSocketClosedError,          
+	GCDAsyncUdpSocketOtherError,           
 };
 
-  
+
 #pragma mark -
-  
+
 
 @class GCDAsyncUdpSocket;
 
@@ -999,7 +999,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  * 
  * NOTE : Apple doesn't currently support backgrounding UDP sockets. (Only TCP for now).
 **/
-  
+
 
 #endif
 

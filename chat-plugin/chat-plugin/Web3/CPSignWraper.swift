@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import web3swift
@@ -35,8 +35,8 @@ class CPSignWraper: NSObject {
         return result.serializedSignature
     }
     
-      
-      
+    
+    
     @objc public
     static func recoverUnzipPublicKey(hash: Data, signature_64: Data, judgePubkey_unzip: Data ) -> Data? {
         assert(signature_64.count == 64, "must be 64")

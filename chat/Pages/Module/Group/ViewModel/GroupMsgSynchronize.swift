@@ -1,47 +1,47 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
-  
+
 class GroupMsgSynchronize : NSObject {
     
     typealias Rsp = (errorCode: Int, ser_rsp_begin_id: Int64, ser_rsp_end_id: Int64)
     
-      
+    
     var timer: Timer?
     
-      
+    
     var kDiff: Int64 = 5
     
-      
+    
     var top_msg_id: Int64 = 0
     
-      
+    
     var anchor_open_msg_Id: Int64
     
-      
+    
     var const_open_msg_id: Int64 = 0
     
-      
+    
     var middle_msg_id: Int64 = 0
     
-      
+    
     var anchor_middle_msg_id: Int64 = 0
     
-      
+    
     var bottom_msg_id: Int64 = 0
     
-      
+    
     var anchor_bottom_msg_id: Int64 =  0
     
-      
-      
+    
+    
     var inFetching: Bool = true
     
     var unreadCountCallBack: ((Int64) -> Void)?
@@ -62,15 +62,15 @@ class GroupMsgSynchronize : NSObject {
     }
     
     
-      
+    
     func resetStart(openMsgId: Int64) {
         anchor_open_msg_Id = openMsgId
         configInit()
     }
     
-      
-      
-      
+    
+    
+    
     func startSys() {
         
         if inFetching {
@@ -102,7 +102,7 @@ class GroupMsgSynchronize : NSObject {
         startTimer()
     }
     
-      
+    
     fileprivate func configInit(callUnreadCount: Bool = false) {
         disbag = DisposeBag()
         inFetching = true
@@ -130,7 +130,7 @@ class GroupMsgSynchronize : NSObject {
         self.top_msg_id = self.anchor_open_msg_Id
     }
     
-      
+    
     fileprivate func fetchingLastBigMsgId(callUnreadCount: Bool = false) -> Observable<Int64?> {
         return Observable.create { [weak self] (observer) -> Disposable in
             guard let prikey = self?.roomVC.roomService?.chatContact?.value.decodePrivateKey() else {
@@ -148,8 +148,9 @@ class GroupMsgSynchronize : NSObject {
                 if callUnreadCount {
                     let bodyRemainC = UInt(body?.remainCount ?? 0)
                     let arrayC = body?.msgsArray_Count ?? 0
-                      
-                    let remainC = max((bodyRemainC + arrayC - 1) , 0)
+                    
+                    let rc = Int(bodyRemainC + arrayC) - 1
+                    let remainC = max(rc, 0)
                     self?.unreadCountCallBack?(Int64(remainC))
                 }
             }
@@ -157,8 +158,8 @@ class GroupMsgSynchronize : NSObject {
         }
     }
     
-      
-      
+    
+    
     fileprivate func v2_syn(beginId:Int64, endId:Int64) -> Observable<Rsp?> {
         
         return Observable.create { [weak self] (observer) -> Disposable in
@@ -178,7 +179,7 @@ class GroupMsgSynchronize : NSObject {
 
             CPGroupManagerHelper.v2_queryMessages(inSession: Int(sessionId), beginId: beginId, endId: endId , count: Int(count)) { (needSyn, realCount, rBid, rEid) in
                 if needSyn == false {
-                      
+                    
                     print("syn group message local not need  bid \(rBid) eid \(rEid)")
                     observer.onNext((0, rBid == 1 ? 0 : rBid , rEid))
                     observer.onCompleted()
@@ -199,7 +200,7 @@ class GroupMsgSynchronize : NSObject {
     }
     
     
-      
+    
     private func startTimer() {
         stopTimer()
         timer = Timer.init(timeInterval: 15, block: { [weak self] (t) in

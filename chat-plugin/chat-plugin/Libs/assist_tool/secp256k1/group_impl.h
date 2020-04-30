@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_GROUP_IMPL_H
@@ -175,7 +175,7 @@ static void secp256k1_ge_globalz_set_table_gej(size_t len, secp256k1_ge *r, secp
         /* The z of the final point gives us the "global Z" for the table. */
         r[i].x = a[i].x;
         r[i].y = a[i].y;
-         
+        
         secp256k1_fe_normalize_weak(&r[i].y);
         *globalz = a[i].z;
         r[i].infinity = 0;
@@ -307,7 +307,7 @@ static void secp256k1_gej_double_var(secp256k1_gej *r, const secp256k1_gej *a, s
     /* Operations: 3 mul, 4 sqr, 0 normalize, 12 mul_int/add/negate.
      *
      * Note that there is an implementation described at
-     *     https:  
+     *     https:
      * which trades a multiply for a square, but in practice this is actually slower,
      * mainly because it requires more normalizations.
      */
@@ -702,4 +702,4 @@ static int secp256k1_gej_has_quad_y_var(const secp256k1_gej *a) {
     return secp256k1_fe_is_quad_var(&yz);
 }
 
-#endif  
+#endif 

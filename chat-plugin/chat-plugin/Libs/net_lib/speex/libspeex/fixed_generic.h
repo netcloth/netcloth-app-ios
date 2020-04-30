@@ -64,7 +64,7 @@
 #define SUB32(a,b) ((spx_word32_t)(a)-(spx_word32_t)(b))
 
 
- 
+
 #define MULT16_16_16(a,b)     ((((spx_word16_t)(a))*((spx_word16_t)(b))))
 
 /* (spx_word32_t)(spx_word16_t) gives TI compiler a hint that it's 16x16->32 multiply */

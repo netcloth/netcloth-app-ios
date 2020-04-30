@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2014 Pieter Wuille                                   *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_SCALAR_REPR_IMPL_H
@@ -267,12 +267,12 @@ static int secp256k1_scalar_cond_negate(secp256k1_scalar *r, int flag) {
     uint32_t tl, th; \
     { \
         uint64_t t = (uint64_t)a * b; \
-        th = t >> 32;           \
+        th = t >> 32;          \
         tl = t; \
     } \
-    c0 += tl;                   \
-    th += (c0 < tl) ? 1 : 0;    \
-    c1 += th;                   \
+    c0 += tl;                  \
+    th += (c0 < tl) ? 1 : 0;   \
+    c1 += th;                  \
     c2 += (c1 < th) ? 1 : 0;  /* never overflows by contract (verified in the next line) */ \
     VERIFY_CHECK((c1 >= th) || (c2 != 0)); \
 }
@@ -282,11 +282,11 @@ static int secp256k1_scalar_cond_negate(secp256k1_scalar *r, int flag) {
     uint32_t tl, th; \
     { \
         uint64_t t = (uint64_t)a * b; \
-        th = t >> 32;           \
+        th = t >> 32;          \
         tl = t; \
     } \
-    c0 += tl;                   \
-    th += (c0 < tl) ? 1 : 0;    \
+    c0 += tl;                  \
+    th += (c0 < tl) ? 1 : 0;   \
     c1 += th;                 /* never overflows by contract (verified in the next line) */ \
     VERIFY_CHECK(c1 >= th); \
 }
@@ -296,19 +296,19 @@ static int secp256k1_scalar_cond_negate(secp256k1_scalar *r, int flag) {
     uint32_t tl, th, th2, tl2; \
     { \
         uint64_t t = (uint64_t)a * b; \
-        th = t >> 32;                 \
+        th = t >> 32;                \
         tl = t; \
     } \
     th2 = th + th;                  /* at most 0xFFFFFFFE (in case th was 0x7FFFFFFF) */ \
     c2 += (th2 < th) ? 1 : 0;       /* never overflows by contract (verified the next line) */ \
     VERIFY_CHECK((th2 >= th) || (c2 != 0)); \
     tl2 = tl + tl;                  /* at most 0xFFFFFFFE (in case the lowest 63 bits of tl were 0x7FFFFFFF) */ \
-    th2 += (tl2 < tl) ? 1 : 0;        \
-    c0 += tl2;                        \
-    th2 += (c0 < tl2) ? 1 : 0;        \
+    th2 += (tl2 < tl) ? 1 : 0;       \
+    c0 += tl2;                       \
+    th2 += (c0 < tl2) ? 1 : 0;       \
     c2 += (c0 < tl2) & (th2 == 0);  /* never overflows by contract (verified the next line) */ \
     VERIFY_CHECK((c0 >= tl2) || (th2 != 0) || (c2 != 0)); \
-    c1 += th2;                        \
+    c1 += th2;                       \
     c2 += (c1 < th2) ? 1 : 0;       /* never overflows by contract (verified the next line) */ \
     VERIFY_CHECK((c1 >= th2) || (c2 != 0)); \
 }
@@ -316,15 +316,15 @@ static int secp256k1_scalar_cond_negate(secp256k1_scalar *r, int flag) {
 /** Add a to the number defined by (c0,c1,c2). c2 must never overflow. */
 #define sumadd(a) { \
     unsigned int over; \
-    c0 += (a);                    \
+    c0 += (a);                   \
     over = (c0 < (a)) ? 1 : 0; \
-    c1 += over;                   \
-    c2 += (c1 < over) ? 1 : 0;    \
+    c1 += over;                  \
+    c2 += (c1 < over) ? 1 : 0;   \
 }
 
 /** Add a to the number defined by (c0,c1). c1 must never overflow, c2 must be zero. */
 #define sumadd_fast(a) { \
-    c0 += (a);                   \
+    c0 += (a);                  \
     c1 += (c0 < (a)) ? 1 : 0;  /* never overflows by contract (verified the next line) */ \
     VERIFY_CHECK((c1 != 0) | (c0 >= (a))); \
     VERIFY_CHECK(c2 == 0); \
@@ -718,4 +718,4 @@ SECP256K1_INLINE static void secp256k1_scalar_mul_shift_var(secp256k1_scalar *r,
     secp256k1_scalar_cadd_bit(r, 0, (l[(shift - 1) >> 5] >> ((shift - 1) & 0x1f)) & 1);
 }
 
-#endif  
+#endif 

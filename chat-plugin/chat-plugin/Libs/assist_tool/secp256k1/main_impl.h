@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2015 Andrew Poelstra                                 *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_MODULE_ECDH_MAIN_H
@@ -47,7 +47,7 @@ int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *output, const se
         secp256k1_ecmult_const(&res, &pt, &s, 256);
         secp256k1_ge_set_gej(&pt, &res);
 
-         
+        
         secp256k1_fe_normalize(&pt.x);
         secp256k1_fe_normalize(&pt.y);
         secp256k1_fe_get_b32(x, &pt.x);
@@ -60,4 +60,4 @@ int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *output, const se
     return ret;
 }
 
-#endif  
+#endif 

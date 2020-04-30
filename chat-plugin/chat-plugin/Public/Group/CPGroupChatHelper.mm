@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "CPGroupChatHelper.h"
 #import "CPDataModel+secpri.h"
@@ -25,7 +25,7 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
 
 @implementation CPGroupChatHelper
 
-  
+
 + (void)sendCreateGroupNotify:(NSString *)groupName
                          type:(int)groupType
                 ownerNickName:(NSString *)owner_nick_name
@@ -68,7 +68,7 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
         std::string mySignPrikey = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password);
         std::string toStrpubkey = HexAsc2ByteString([inviteePubkey UTF8String]);
         
-          
+        
         CPMessage *msg = [[CPMessage alloc] init];
         msg.senderPubKey = CPAccountHelper.loginUser.publicKey;
         msg.toPubkey = inviteePubkey;
@@ -82,7 +82,7 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
         msg.msgData = [fake dataUsingEncoding:NSUTF8StringEncoding];
         msg.groupName = groupName;
         
-          
+        
         std::string encode = [CPBridge aesEncodeData:nsdata2bytes(groupPrivateKey) byPrivateKey:mySignPrikey];
         NSData *datap = bytes2nsdata(encode);
         msg.encodePrivateKey = datap;
@@ -135,11 +135,11 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
         [CPInnerState.shared _pbmsgSend:nt];
     }];
 }
-  
+
 + (void)sendGroupJoin:(NSString *)nickName
-                 desc:(NSString * _Nullable)desc   
-               source:(int)source   
-        inviterPubkey:(NSString * _Nullable )inviter_pub_key  
+                 desc:(NSString * _Nullable)desc 
+               source:(int)source 
+        inviterPubkey:(NSString * _Nullable )inviter_pub_key
           groupPubkey:(NSString *)hexPubkey
              complete:(MsgResponseBack)back {
     [CPInnerState.shared asynWriteTask:^{
@@ -217,7 +217,7 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
         [CPInnerState.shared _pbmsgSend:nt];
     }];
 }
-  
+
 + (void)sendGroupUpdateInviteType:(CPGroupInviteType)type
                   groupPrivateKey:(NSData *)groupPrivateKey
                          complete:(MsgResponseBack)back {
@@ -259,7 +259,7 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
 
 
 
-  
+
 
 + (void)sendGroupGetMsgReq:(int64_t)beginId
                        end:(int64_t)endId
@@ -288,14 +288,18 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
         std::string fromstrpubkey = getPublicKeyFromUser(CPInnerState.shared.loginUser);
         std::string mySignPrikey = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password);
         
-        NSArray<CPContact *> *array = [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPContact.class fromTable:kTableName_Contact where:CPContact.sessionType == SessionTypeGroup && CPContact.groupProgress >= GroupCreateProgressCreateOK];
+        NSArray<CPContact *> *array = [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPContact.class
+                                                                                     fromTable:kTableName_Contact
+                                                                                         where:CPContact.sessionType == SessionTypeGroup && CPContact.groupProgress >= GroupCreateProgressCreateOK];
         
         NSMutableArray *rav = NSMutableArray.array;
         for (CPContact *contact in array) {
            NSNumber *maxV = [CPInnerState.shared.loginUserDataBase
                              getOneValueOnResult:CPMessage.server_msg_id.max()
                              fromTable:kTableName_GroupMessage
-                             where:CPMessage.sessionId == contact.sessionId && CPMessage.isDelete != 2];
+                             where:CPMessage.sessionId == contact.sessionId
+                             && CPMessage.isDelete != 2
+                             && CPMessage.read == true];
             
             std::string pubkey = GetPublicKeyByPrivateKey(nsdata2bytes(contact.decodePrivateKey));
             NCProtoGroupUnreadReq *req =  CreateGroupUnreadReq(maxV.longLongValue, pubkey);
@@ -309,7 +313,7 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
     
 }
 
-  
+
 + (void)sendGroupDismissInGroupPrivateKey:(NSData *)groupPrivateKey
                                  complete:(MsgResponseBack)back {
     [CPInnerState.shared asynWriteTask:^{
@@ -364,14 +368,16 @@ NSMutableDictionary * const SpecWaitResponse = NSMutableDictionary.dictionary;
 }
 
 
-  
+
 
 
 + (void)sendText:(NSString *)msg
          toGroup:(NSString *)pubkey
+          at_all:(BOOL)atAll
+      at_members:(NSArray <NSString *> *)members
 {
     NSAssert(CPInnerState.shared.chatToPubkey != nil, @"must use setRoomToPubkey 2");
-    [CPGroupSendMsgHelper sendMsg:msg toUser:pubkey];
+    [CPGroupSendMsgHelper sendMsg:msg toUser:pubkey at_all:atAll at_members:members];
 }
 
 + (void)sendAudioData:(NSData *)data

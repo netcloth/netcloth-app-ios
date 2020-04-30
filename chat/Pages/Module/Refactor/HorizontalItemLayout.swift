@@ -1,26 +1,26 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
-  
-  
+
+
 public final class HorizontalItemLayout: UICollectionViewFlowLayout {
-      
+    
     private lazy var allAttrs = [UICollectionViewLayoutAttributes]()
     
-    public var viewSize: CGSize?   
+    public var viewSize: CGSize? 
     
     var rows = 3
     var columns = 6
     
 
-      
+    
     override public var collectionViewContentSize: CGSize {
         
         guard let vs = viewSize else {
@@ -32,7 +32,7 @@ public final class HorizontalItemLayout: UICollectionViewFlowLayout {
     }
 
 
-      
+    
     override init() {
         super.init()
         scrollDirection = .horizontal
@@ -43,15 +43,15 @@ public final class HorizontalItemLayout: UICollectionViewFlowLayout {
         scrollDirection = .horizontal
     }
 
-      
+    
     override public func prepare() {
         super.prepare()
         guard let collectionView = collectionView, let vs = viewSize else { return }
         
         var item_size = self.itemSize
         var section_inset = self.sectionInset
-        var columnSpace = self.minimumLineSpacing   
-        var rowSpace = self.minimumInteritemSpacing   
+        var columnSpace = self.minimumLineSpacing 
+        var rowSpace = self.minimumInteritemSpacing 
         
         var x_i:CGFloat = 0, y_i: CGFloat = 0, page_i: Int = 0
         var onePageCount = rows * columns

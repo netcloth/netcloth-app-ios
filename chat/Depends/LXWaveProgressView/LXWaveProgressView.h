@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <UIKit/UIKit.h>
 
@@ -19,7 +19,7 @@
  */
 @property (nonatomic,assign)CGFloat speed;
 
- 
+
 @property (nonatomic,strong)UIColor * firstWaveColor;
 @property (nonatomic,strong)UIColor * secondWaveColor;
 
@@ -28,7 +28,7 @@
  */
 @property (nonatomic,assign)CGFloat waveHeight;
 
- 
+
 @property (nonatomic,strong)UILabel * progressLabel;
 
 /**

@@ -44,7 +44,7 @@
 #define NULL 0
 #endif
 
- 
+
 static inline spx_int32_t le_int(spx_int32_t i)
 {
 #if !defined(__LITTLE_ENDIAN__) && ( defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__) )

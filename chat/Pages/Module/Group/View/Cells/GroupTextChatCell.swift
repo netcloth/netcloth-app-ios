@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -39,38 +39,36 @@ import UIKit
         }
     }
     
-      
+    
     @IBOutlet weak var avatarBtn: UIButton?
     
     @IBOutlet weak var smallAvatarImageV: UIImageView?
+    @IBOutlet weak var msgContentTextView: MsgChatTextView?
     
     var dataMsg: CPMessage?
     override func awakeFromNib() {
         super.awakeFromNib()
         self.avatarBtn?.addTarget(self, action: #selector(onTapAvatar), for: .touchUpInside)
+        
+        if let avBtn = self.avatarBtn {
+            let lpr = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressAvatar(_:)))
+            lpr.minimumPressDuration = 1.0
+            avBtn.addGestureRecognizer(lpr)
+        }
     }
+    
     @objc func onTapAvatar() {
         if let d = dataMsg {
             delegate?.onTapAvatar?(pubkey: d.senderPubKey)
         }
     }
     
-    override func onTapCell() {
-        guard let content = self.msgContentL?.text else {
-            return
-        }
-        var reg = "[a-zA-z]+:  
-        let range =  content.range(of: reg, options: String.CompareOptions.regularExpression)
-        if range != nil {
-            let suburl = String(content[range!])
-            if suburl.lowercased().hasPrefix("http") {
-                let browser = GrandBrowserVC()
-                browser.loadUrl(string: suburl)
-                Router.pushViewController(vc: browser)
-            }
+    @objc func onLongPressAvatar(_ gst: UILongPressGestureRecognizer) {
+        if let d = dataMsg,
+            gst.state == .began {
+            delegate?.onLongPressAvatar?(pubkey: d.senderPubKey, senderName: d.senderRemark)
         }
     }
-    
     
     override func reloadData(data: Any) {
         guard let msg = data as? CPMessage else {
@@ -82,31 +80,50 @@ import UIKit
         } else {
             updateOthers(msg: msg)
         }
+        
+        
+        self.LgroupNick?.isHidden = false
+        self.LgroupMasterIden?.isHidden = true
+        if let masterPubkey = self.viewController?.roomService?.groupMasterPubkey,
+            msg.senderPubKey == masterPubkey {
+            self.LgroupMasterIden?.isHidden = false
+        }
     }
     
-      
+    
 
     
     func updateSelf(msg: CPMessage) {
+        let linkColor = UIColor.white
+        self.msgContentTextView?.linkColor = linkColor
+        self.msgContentTextView?.linkTextAttributes = [.foregroundColor: linkColor]
+        self.msgContentTextView?.tintColor = linkColor
         
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-        var img = UIImage(named: "蓝色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+
+
+
+        msgBgImgView?.backgroundColor = UIColor(hexString: Color.blue)
         
+        
+        var contentStr = ""
         if msg.msgType == MessageType.groupUpdateNotice {
             let notice = msg.msgDecodeContent() as? String
             let content = "New_group_notice".localized() + (notice ?? "")
-            msgContentL?.text = content
+            contentStr = content
         } else {
-            msgContentL?.text = msg.msgDecodeContent() as? String
+            contentStr = msg.msgDecodeContent() as? String ?? ""
         }
+        msgContentL?.text = contentStr
+        msgContentTextView?.text = contentStr
         
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
+        let color = CPAccountHelper.loginUser()?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
@@ -123,39 +140,43 @@ import UIKit
     
     func updateOthers(msg: CPMessage) {
         
+        self.msgContentTextView?.linkColor = UIColor(hexString: Color.blue)!
+        self.msgContentTextView?.linkTextAttributes = [.foregroundColor: UIColor(hexString: Color.blue)!]
+        self.msgContentTextView?.tintColor = UIColor(hexString: Color.blue)
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-        var img = UIImage(named: "灰色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+
+
+
+        msgBgImgView?.backgroundColor = UIColor.white
         
-        
+        var contentStr = ""
         if msg.msgType == MessageType.groupUpdateNotice {
             let notice = msg.msgDecodeContent() as? String
             let content = "New_group_notice".localized() + (notice ?? "")
-            msgContentL?.text = content
+            contentStr = content
         } else {
-            msgContentL?.text = msg.msgDecodeContent() as? String
+            contentStr = msg.msgDecodeContent() as? String ?? ""
         }
+        msgContentL?.text = contentStr
+        msgContentTextView?.text = contentStr
         
         var sendRemark = msg.senderRemark
         smallRemarkL?.text = sendRemark.getSmallRemark()
         LgroupNick?.text = sendRemark
-
-        if msg.senderPubKey == support_account_pubkey {
-            smallRemarkL?.text = nil
-            smallAvatarImageV?.isHidden = false
-            smallAvatarImageV?.image = UIImage(named: "subscript_icon")
-        } else {
-            smallAvatarImageV?.isHidden = true
-        }
+        
+        let color = msg.senderPubKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
+        
+        smallAvatarImageV?.isHidden = true
     }
     
-      
+    
     override func msgContentView() -> UIView? {
-        return self.msgContentL
+        return self.msgContentTextView
     }
 }

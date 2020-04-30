@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "GroupChatMessageHandleRecieve.h"
 #import "key_tool.h"
@@ -28,7 +28,7 @@
 #import "CPInnerState.h"
 
 @interface GroupChatMessageHandleRecieve ()
-@property (nonatomic, assign) BOOL mockHack;   
+@property (nonatomic, assign) BOOL mockHack; 
 @end
 
 @implementation GroupChatMessageHandleRecieve
@@ -57,11 +57,11 @@
 }
 
 
-  
-  
-  
-  
-  
+
+
+
+
+
 - (CPMessage * )_dealRecieveNetMsg:(NCProtoNetMsg *)msg
                            isCache:(BOOL)isCache
                    storeEncodeData:(id)data
@@ -90,12 +90,12 @@
     
     std::string toPubKey = nsdata2bytes(msg.head.toPubKey);
     
-      
+    
     CPMessage *cpmsg = CPMessage.alloc.init;
     cpmsg.senderPubKey = senderpubkey;
     cpmsg.toPubkey = hexStringFromBytes(toPubKey);
     
-      
+    
     if ([data isKindOfClass:NSData.class]) {
         cpmsg.msgData = dataHexFromBytes(nsdata2bytes(data));
     }
@@ -121,17 +121,17 @@
         cpmsg.createTime = server_time;
     }
     
-      
-    BOOL isInRoom = [cpmsg.toPubkey isEqualToString:CPInnerState.shared.chatToPubkey];  
+    
+    BOOL isInRoom = [cpmsg.toPubkey isEqualToString:CPInnerState.shared.chatToPubkey];
     BOOL isSelfSend = [cpmsg.senderPubKey isEqualToString:CPInnerState.shared.loginUser.publicKey];
     if (isInRoom || isSelfSend) {
         cpmsg.read = YES;
     }
     
-      
+    
     NSString *messagename = msg.name;
     
-      
+    
     if ([messagename isEqualToString:NCProtoGroupJoin.descriptor.fullName]) {
         cpmsg.msgType = MessageTypeGroupJoin;
     }
@@ -154,7 +154,7 @@
     
     
     
-      
+    
     else if ([messagename isEqualToString:NCProtoAudio.descriptor.fullName] ||
         [messagename isEqualToString:NCProtoGroupAudio.descriptor.fullName]) {
         cpmsg.msgType = MessageTypeAudio;
@@ -164,9 +164,24 @@
             cpmsg.msgData = dataHexFromBytes(nsdata2bytes(audio.content));
         }
     }
-    else if ([messagename isEqualToString:NCProtoText.descriptor.fullName] ||
-             [messagename isEqualToString:NCProtoGroupText.descriptor.fullName]) {
+    else if ([messagename isEqualToString:NCProtoText.descriptor.fullName]) {
         cpmsg.msgType = MessageTypeText;
+    }
+    else if ([messagename isEqualToString:NCProtoGroupText.descriptor.fullName]) {
+        cpmsg.msgType = MessageTypeText;
+        NCProtoGroupText *body = [NCProtoGroupText parseFromData:msg.data_p error:nil];
+        if (body.atAll) {
+            cpmsg.useway = MessageUseWayAtAll;
+        }
+        else  {
+            NSString *hexPubkey = CPInnerState.shared.loginUser.publicKey;
+            NSData *mePubkey = [NSData dataWithHexString:hexPubkey];
+            for (NSData *d in body.atMembersArray) {
+                if ([d isEqualToData:mePubkey]) {
+                    cpmsg.useway = MessageUseWayAtMe;
+                }
+            }
+        }
     }
     else if ([messagename isEqualToString:NCProtoImage.descriptor.fullName] ||
              [messagename isEqualToString:NCProtoGroupImage.descriptor.fullName]) {
@@ -181,12 +196,12 @@
         cpmsg.msgType = MessageTypeUnknown;
     }
     
-      
+    
     if (beforeStore) {
         beforeStore(cpmsg);
     }
     
-      
+    
     BOOL update = [self storeMessge:cpmsg isCacheMsg:isCache];
     return update ? cpmsg : nil;
 }
@@ -199,20 +214,20 @@
  */
 - (BOOL)storeMessge:(CPMessage *)message isCacheMsg:(BOOL)isCache
 {
-      
+    
     int sessionId = 0;
     long long messageId = 0;
     SessionType sessionType = SessionTypeGroup;
     double createTime = [NSDate.date timeIntervalSince1970];
     
-      
+    
     NSString *contactPubkey = message.toPubkey;
     
-      
+    
     CPContact *findGroup = [self selectContactByPubkey:contactPubkey];
     message.isGroupChat = true;
     
-      
+    
     if (findGroup == nil) {
         NSLog(@"MSG - findGroup - err");
         return NO;
@@ -228,16 +243,16 @@
         message.doNotDisturb = true;
     }
     
-      
-      
-      
+    
+    
+    
     message.sessionId = sessionId;
     if (message.createTime <= 10) {
         message.createTime = createTime;
     }
     message.isAutoIncrement = YES;
     
-      
+    
     CPMessage *findMsg = [self selectMsgBySendPubkey:message.senderPubKey
                                             toPubkey:message.toPubkey
                                             signHash:message.signHash
@@ -246,25 +261,25 @@
         long long msgid = findMsg.msgId;
         message.msgId = msgid;
         NSLog(@"MSG - find - exist msg");
-        return NO;   
+        return NO; 
     }
     
     NSAssert(message.createTime > 0, @"Message create Time Must Set 2");
-      
+    
     BOOL update = [self.loginUserDataBase insertObject:message into:kTableName_GroupMessage];
     if (update == NO) {
-        NSLog(@"MSG - error >> insert message db");
+        NSLog(@"MSG - error >> insert groupmessage db");
         return NO;
     }
     messageId = message.lastInsertedRowID;
     message.msgId = messageId;
     
-      
+    
     CPSession *haved = [self selectSessionBySessionId:sessionId];
     if (haved) {
-          
+        
         if (isCache == false && message.isDelete != 1) {
-              
+            
             if (message.read == false) {
                 CPSession *session = [self.loginUserDataBase getOneObjectOnResults:{CPSession.groupUnreadCount} fromTable:kTableName_Session where:CPSession.sessionId == sessionId];
                 
@@ -288,14 +303,14 @@
     
     
     if (update == NO) {
-          
+        
         NSLog(@"MSG >> error >> insert session db");
     }
     return YES;
 }
 
-  
-  
+
+
 - (void)actionForGroupReceipt:(NCProtoNetMsg *)pack {
     NCProtoServerReceipt *body = [NCProtoServerReceipt parseFromData:pack.data_p error:nil];
     if (!body) {
@@ -304,11 +319,11 @@
     std::string fromPubkey = nsdata2bytes(pack.head.fromPubKey);
     std::string toPubKey = nsdata2bytes(pack.head.toPubKey);
     
-      
+    
     uint64_t sign_hash = GetHash(nsdata2bytes(pack.head.signature));
     long long sign_hash_t = (long long)sign_hash;
     
-      
+    
     NSString *key = [@(sign_hash) stringValue];
     MsgResponseBack back = AllWaitResponse[key];
     if (back != nil) {
@@ -364,7 +379,7 @@
 
 
 
-  
+
 - (void)actionForGroupText:(NCProtoNetMsg *)pack {
     [self _actionForGroupText:pack isCache:false];
 }
@@ -380,7 +395,7 @@
         [self addStack:insertOk];
     }
     if (isCache == false) {
-          
+        
         [self clientReplay:pack];
     }
 }
@@ -397,7 +412,7 @@
         [self addStack:insertOk];
     }
     if (isCache == false) {
-          
+        
         [self clientReplay:pack];
     }
 }
@@ -414,12 +429,12 @@
         [self addStack:insertOk];
     }
     if (isCache == false) {
-          
+        
         [self clientReplay:pack];
     }
 }
 
-  
+
 - (void)actionForGroupGetUnreadRsp:(NCProtoNetMsg *)pack {
     NSError *error;
     NCProtoGroupGetUnreadRsp *body = [NCProtoGroupGetUnreadRsp parseFromData:pack.data_p error:&error];
@@ -436,7 +451,7 @@
             
             [responseArray addObject:unRead];
             
-              
+            
             self.mockHack = true;
             [self doLogicForMsg:rsp.lastMsg isCache:false];
             self.mockHack = false;
@@ -447,8 +462,8 @@
     }
 }
 
-  
-  
+
+
 
 - (void)actionForGroupUpdateName:(NCProtoNetMsg *)pack {
     [self _actionForGroupUpdateName:pack isCache:false];
@@ -469,7 +484,7 @@
         return;
     }
     
-      
+    
     std::string fromPubkey = nsdata2bytes(pack.head.fromPubKey);
     NSString *hexpubkey = hexStringFromBytes(fromPubkey);
     
@@ -489,7 +504,7 @@
         [self addStack:insertOk];
     }
     
-      
+    
     if (isCache == false) {
         
         [CPGroupManagerHelper updateGroupName:name byGroupPubkey:pubkey callback:nil];
@@ -502,7 +517,7 @@
     }
 }
 
-  
+
 
 - (void)actionForGroupUpdateNotice:(NCProtoNetMsg *)pack {
     [self _actionForGroupUpdateNotice:pack isCache:false];
@@ -526,7 +541,7 @@
     std::string fromPubkey = nsdata2bytes(pack.head.fromPubKey);
     NSString *hexpubkey = hexStringFromBytes(fromPubkey);
     
-      
+    
     NSData *data = [notice dataUsingEncoding:NSUTF8StringEncoding];
     CPMessage *insertOk = [self _v2DealRecieveNetMsg:pack isCache:isCache storeEncodeData:nil orOriginData:data];
     if (insertOk) {
@@ -540,7 +555,7 @@
                                       publisher:hexpubkey
                                   byGroupPubkey:pubkey
                                        callback:nil];
-          
+        
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
@@ -549,7 +564,7 @@
     }
 }
 
-  
+
 - (void)actionForGroupUpdateNickName:(NCProtoNetMsg *)pack {
     [self _actionForGroupUpdateNickName:pack isCache:false];
 }
@@ -571,22 +586,22 @@
     std::string fromPubKey = nsdata2bytes(pack.head.fromPubKey);
     NSString *memberPubkey = hexStringFromBytes(fromPubKey);
     
-      
+    
     CPMessage *insertOk = [self _v2DealRecieveNetMsg:pack isCache:isCache storeEncodeData:nil orOriginData:NSData.data];
     
     if (isCache == false) {
-          
+        
         [CPGroupManagerHelper updateMemberNickName:nickname memberHexPubkey:memberPubkey byGroupPubkey:pubkey callback:nil];
         [self clientReplay:pack];
         
-          
+        
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
     }
 }
 
-  
+
 - (void)actionForGroupJoin:(NCProtoNetMsg *)pack {
     [self _actionForGroupJoin:pack isCache:false];
 }
@@ -621,20 +636,20 @@
         insertOk = [self _v2DealRecieveNetMsg:pack isCache:isCache storeEncodeData:nil orOriginData:data];
     }
     
-      
+    
     if (insertOk) {
         [self addStack:insertOk];
     }
     
     if (isCache == false) {
-          
+        
         CPGroupMember *gm = [self groupMemberFactory:find.sessionId hexpubkey:fromHexpub nickName:nickname role:GroupRoleMember joinTime:pack.head.msgTime];
         [CPGroupManagerHelper insertOrReplaceOneGroupMember:gm callback:nil];
         
-          
+        
         [self clientReplay:pack];
         
-          
+        
         std::string toPubKey = nsdata2bytes(pack.head.toPubKey);
         NSString *pubkey = hexStringFromBytes(toPubKey);
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
@@ -643,7 +658,7 @@
     }
 }
 
-  
+
 - (void)actionForGroupDismiss:(NCProtoNetMsg *)pack {
     NCProtoGroupDismiss *body = [NCProtoGroupDismiss parseFromData:pack.data_p error:nil];
     if (!body) {
@@ -653,22 +668,22 @@
     NSString *pubkey = hexStringFromBytes(toPubKey);
     
     [CPGroupManagerHelper updateGroupProgress:GroupCreateProgressDissolve orIpalHash:nil byPubkey:pubkey callback:^(BOOL succss, NSString * _Nonnull msg) {
-          
+        
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
     }];
 }
 
-  
-  
+
+
 - (void)actionForGroupKickRsp:(NCProtoNetMsg *)pack {
     NCProtoGroupKickRsp *body = [NCProtoGroupKickRsp parseFromData:pack.data_p error:nil];
     if (!body) {
         return;
     }
     
-      
+    
     uint64_t sign_hash = GetHash(nsdata2bytes(pack.head.signature));
     long long sign_hash_t = (long long)sign_hash;
     NSString *key = [@(sign_hash) stringValue];
@@ -692,7 +707,7 @@
         return;
     }
     
-      
+    
     NSMutableArray *array = NSMutableArray.array;
     for(NCProtoGroupKickResult *kick in body.kickResultArray) {
         if (kick.result == ChatErrorCodeOK) {
@@ -701,7 +716,7 @@
         }
     }
     
-      
+    
     NSString *hexpubkey = array.firstObject;
     if ([NSString cp_isEmpty:hexpubkey] == false) {
         CPGroupMember *findMember =  [CPInnerState.shared.loginUserDataBase getOneObjectOnResults:{CPGroupMember.nickName}
@@ -723,17 +738,17 @@
         }
     }
     
-      
+    
     [CPGroupManagerHelper deleteGroupMembers:array inSession:group.sessionId callback:nil];
     
-      
+    
     if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
         [self callCurrentRoomInfoChange];
     }
 }
 
 
-  
+
 - (void)actionForGroupKick:(NCProtoNetMsg *)pack {
     [self _actionForGroupKick:pack isCache:false];
 }
@@ -744,7 +759,7 @@
         return;
     }
     
-      
+    
     std::string toPubKey = nsdata2bytes(pack.head.toPubKey);
     NSString *pubkey = hexStringFromBytes(toPubKey);
     
@@ -754,18 +769,18 @@
         return;
     }
     
-      
+    
     NSMutableArray *array = NSMutableArray.array;
     for(NSData *kickPub in body.kickedPubKeysArray) {
         NSString *hexPubkey =  hexStringFromBytes(nsdata2bytes(kickPub));
         [array addObject:hexPubkey];
     }
     
-      
+    
     CPMessage *insert;
     NSString *mepubkey = CPAccountHelper.loginUser.publicKey;
     if ([array containsObject:mepubkey]) {
-          
+        
         if (isCache == false) {
             [CPGroupManagerHelper updateGroupProgress:GroupCreateProgressKicked orIpalHash:nil byPubkey:pubkey callback:nil];
         }
@@ -782,14 +797,14 @@
     
     if (isCache == false) {
         [CPGroupManagerHelper deleteGroupMembers:array inSession:group.sessionId callback:nil];
-          
+        
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
     }
 }
 
-  
+
 - (void)actionForGroupQuit:(NCProtoNetMsg *)pack {
     [self _actionForGroupQuit:pack isCache:false];
 }
@@ -799,14 +814,14 @@
         return;
     }
     
-      
+    
     std::string toPubKey = nsdata2bytes(pack.head.toPubKey);
     NSString *pubkey = hexStringFromBytes(toPubKey);
     CPContact *group = [self findCacheContactByGroupPubkey:pubkey];
     if (!group) {
         return;
     }
-      
+    
     [self _v2DealRecieveNetMsg:pack isCache:isCache storeEncodeData:nil orOriginData:NSData.data];
     
     if (isCache == false) {
@@ -815,14 +830,14 @@
         
         [CPGroupManagerHelper deleteOneGroupMember:fromPubHex inSession:group.sessionId callback:nil];
         
-          
+        
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
     }
 }
 
-  
+
 - (void)actionForGroupUpdateInviteType:(NCProtoNetMsg *)pack {
     [self _actionForGroupUpdateInviteType:pack isCache:false];
 }
@@ -832,7 +847,7 @@
     if (!body) {
         return;
     }
-      
+    
     std::string toPubKey = nsdata2bytes(pack.head.toPubKey);
     NSString *pubkey = hexStringFromBytes(toPubKey);
     CPContact *group = [self findCacheContactByGroupPubkey:pubkey];
@@ -840,13 +855,13 @@
         return;
     }
     
-      
+    
     [self _v2DealRecieveNetMsg:pack isCache:isCache storeEncodeData:nil orOriginData:NSData.data];
     
     if (isCache == false) {
         [CPGroupManagerHelper updateGroupInviteType:body.inviteType byGroupPubkey:pubkey callback:nil];
         
-          
+        
         if ([pubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
@@ -854,19 +869,19 @@
 }
 
 
-  
+
 - (void)actionForGroupGetMsgRsp:(NCProtoNetMsg *)pack {
     NCProtoGroupGetMsgRsp *body = [NCProtoGroupGetMsgRsp parseFromData:pack.data_p error:nil];
     if (!body) {
         return;
     }
     
-      
+    
     for (NCProtoNetMsg *msg in body.msgsArray) {
         [self doLogicForMsg:msg isCache:true];
     }
     
-      
+    
     uint64_t sign_hash = GetHash(nsdata2bytes(pack.head.signature));
     NSString *key = [@(sign_hash) stringValue];
     SynMsgComplete back = (SynMsgComplete)SpecWaitResponse[key];
@@ -897,7 +912,7 @@
         [self _actionForGroupImage:msg isCache:isCache];
     }
     
-      
+    
     else if ([msgName isEqualToString:NCProtoGroupUpdateName.descriptor.fullName]) {
         [self _actionForGroupUpdateName:msg isCache:isCache];
     }
@@ -922,7 +937,7 @@
 }
 
 
-  
+
 - (void)actionForGroupGetMemberRsp:(NCProtoNetMsg *)pack {
     
     NCProtoGroupGetMemberRsp *body = [NCProtoGroupGetMemberRsp parseFromData:pack.data_p error:nil];
@@ -932,14 +947,14 @@
     if (result != 0) {
         
         if (result == ChatErrorCodeMemberNotExist) {
-              
+            
             [CPGroupManagerHelper updateGroupProgress:GroupCreateProgressKicked orIpalHash:nil byPubkey:groupPubkey callback:nil];
         }
         else if (result == ChatErrorCodeGroupNotExist) {
-              
+            
             [CPGroupManagerHelper updateGroupProgress:GroupCreateProgressDissolve orIpalHash:nil byPubkey:groupPubkey callback:nil];
         }
-          
+        
         if ([groupPubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
             [self callCurrentRoomInfoChange];
         }
@@ -971,7 +986,7 @@
     void (^sucExe)() = ^{
         [CPGroupManagerHelper updateGroupModifyTime:modified_time byPubkey:groupPubkey callback:nil];
         
-          
+        
         uint64_t sign_hash = GetHash(nsdata2bytes(pack.head.signature));
         NSString *key = [@(sign_hash) stringValue];
         MsgResponseBack back = SpecWaitResponse[key];
@@ -1002,12 +1017,12 @@
         }];
     }
     
-      
+    
     if ([groupPubkey isEqualToString:CPInnerState.shared.chatToPubkey]) {
         [self callCurrentRoomInfoChange];
     }
     
-      
+    
     [self clientReplay:pack];
 }
 
@@ -1017,7 +1032,7 @@
 
 
 
-  
+
 - (void)callCurrentRoomInfoChange {
     [CPInnerState.shared msgAsynCallCurrentRoomInfoChange];
 }
@@ -1051,7 +1066,7 @@
     return find;
 }
 
-  
+
 - (void)startTimer {
     [self stopTimer];
     @weakify(self);
@@ -1071,7 +1086,7 @@
     [self dispatchStack];
 }
 
-  
+
 - (void)addStack:(CPMessage *)msg {
     msg.isGroupChat = true;
     dispatch_async_on_main_queue(^{
@@ -1088,7 +1103,7 @@
 - (void)dispatchStack {
     dispatch_async_on_main_queue(^{
         if (self->_msgStack.count <= 0) {
-              
+            
             self->_emptyCount += 1;
             if (self->_emptyCount > 5 * 10) {
                 [self stopTimer];
@@ -1097,7 +1112,7 @@
             return;
         }
         
-        NSArray *pop = [self->_msgStack copy];   
+        NSArray *pop = [self->_msgStack copy]; 
         [CPInnerState.shared msgAsynCallReceiveGroupChatMsgs:pop];
         [self->_msgStack removeAllObjects];
     });
@@ -1105,7 +1120,7 @@
 
 
 
-  
+
 - (CPGroupMember *)groupMemberFactory:(int)sessionId
                             hexpubkey:(NSString *)pubkey
                              nickName:(NSString *)name
@@ -1140,28 +1155,7 @@
 
 - (CPContact * _Nullable)create_InsertContactByPubkey:(NSString *)contactPubKey createTime:(double)ctime
 {
-    CPContact *contact = [CPContact new];
-    
-    NSString *pubkey_ = contactPubKey;
-    contact.publicKey = pubkey_;
-    contact.remark = [pubkey_ substringToIndex:12];
-    
-    contact.sessionType = SessionTypeGroup;
-    contact.createTime = ctime;
-    
-    if ([contactPubKey isEqualToString:support_account_pubkey]) {
-    } else {
-          
-    }
-    
-    contact.isAutoIncrement = YES;
-    BOOL update = [self.loginUserDataBase insertObject:contact into:kTableName_Contact];
-    if (update == NO) {
-        NSLog(@">> error >> insert contact db");
-        return nil;
-    }
-    contact.sessionId = contact.lastInsertedRowID;
-    return contact;
+    return nil;
 }
 
 - (CPMessage * _Nullable)selectMsgBySendPubkey:(NSString *)sendPubkey
@@ -1208,7 +1202,7 @@
 }
 
 
-  
+
 - (User *)loginUser {
     return CPInnerState.shared.loginUser;
 }

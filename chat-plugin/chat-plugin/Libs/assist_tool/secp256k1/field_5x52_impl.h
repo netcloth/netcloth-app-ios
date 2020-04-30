@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_FIELD_REPR_IMPL_H
@@ -53,7 +53,7 @@ static void secp256k1_fe_verify(const secp256k1_fe *a) {
 static void secp256k1_fe_normalize(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-     
+    
     uint64_t m;
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
@@ -96,7 +96,7 @@ static void secp256k1_fe_normalize(secp256k1_fe *r) {
 static void secp256k1_fe_normalize_weak(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-     
+    
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
     /* The first pass ensures the magnitude is 1, ... */
@@ -120,7 +120,7 @@ static void secp256k1_fe_normalize_weak(secp256k1_fe *r) {
 static void secp256k1_fe_normalize_var(secp256k1_fe *r) {
     uint64_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4];
 
-     
+    
     uint64_t m;
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
@@ -167,7 +167,7 @@ static int secp256k1_fe_normalizes_to_zero(secp256k1_fe *r) {
     /* z0 tracks a possible raw value of 0, z1 tracks a possible raw value of P */
     uint64_t z0, z1;
 
-     
+    
     uint64_t x = t4 >> 48; t4 &= 0x0FFFFFFFFFFFFULL;
 
     /* The first pass ensures the magnitude is 1, ... */
@@ -192,7 +192,7 @@ static int secp256k1_fe_normalizes_to_zero_var(secp256k1_fe *r) {
     t0 = r->n[0];
     t4 = r->n[4];
 
-     
+    
     x = t4 >> 48;
 
     /* The first pass ensures the magnitude is 1, ... */
@@ -202,7 +202,7 @@ static int secp256k1_fe_normalizes_to_zero_var(secp256k1_fe *r) {
     z0 = t0 & 0xFFFFFFFFFFFFFULL;
     z1 = z0 ^ 0x1000003D0ULL;
 
-     
+    
     if ((z0 != 0ULL) & (z1 != 0xFFFFFFFFFFFFFULL)) {
         return 0;
     }
@@ -493,4 +493,4 @@ static SECP256K1_INLINE void secp256k1_fe_from_storage(secp256k1_fe *r, const se
 #endif
 }
 
-#endif  
+#endif 

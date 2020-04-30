@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "YCXMenu.h"
 #import <UIKit/UIKit.h>
@@ -15,9 +15,9 @@ NSString * const YCXMenuDidAppearNotification = @"YCXMenuDidAppearNotification";
 NSString * const YCXMenuWillDisappearNotification = @"YCXMenuWillDisappearNotification";
 NSString * const YCXMenuDidDisappearNotification = @"YCXMenuDidDisappearNotification";
 
-#define kArrowSize      10.0f     
-#define kCornerRadius   6.0f      
-#define kTintColor  [UIColor colorWithRed:0.267 green:0.303 blue:0.335 alpha:1]    
+#define kArrowSize      10.0f   
+#define kCornerRadius   6.0f    
+#define kTintColor  [UIColor colorWithRed:0.267 green:0.303 blue:0.335 alpha:1]  
 #define kSelectedColor [UIColor colorWithRed:0.059 green:0.353 blue:0.839 alpha:1.0f]
 #define kTitleFont  [UIFont systemFontOfSize:16.0]
 
@@ -31,26 +31,26 @@ NSString * const YCXMenuDidDisappearNotification = @"YCXMenuDidDisappearNotifica
 const CGFloat kMenuItemMarginY = 12.f;
 
 
-  
+
 static UIColor  *gTintColor;
-  
+
 static CGFloat  gArrowSize = kArrowSize;
-  
+
 CGFloat         gCornerRadius = kCornerRadius;
-  
+
 static UIFont   *gTitleFont;
-  
+
 static YCXMenuBackgrounColorEffect   gBackgroundColorEffect = YCXMenuBackgrounColorEffectSolid;
-  
+
 static BOOL     gHasShadow = NO;
-  
+
 static UIColor  *gSelectedColor;
-  
+
 static UIColor  *gSeparatorColor;
-  
+
 static CGFloat  gMenuItemMarginY = kMenuItemMarginY;
 
-  
+
 
 typedef enum {
 
@@ -65,7 +65,7 @@ typedef enum {
 
 @interface YCXMenuView : UIView
 
- 
+
 - (void)dismissMenu:(BOOL)animated;
 
 @end
@@ -79,10 +79,10 @@ typedef enum {
 
 + (instancetype)sharedMenu;
 
-  
+
 @property(nonatomic, assign) BOOL isShow;
 
-  
+
 + (void)reset;
 
 @end
@@ -375,7 +375,7 @@ typedef enum {
     for (YCXMenuItem *menuItem in _menuItems) {
 
         const CGSize titleSize = [menuItem.title sizeWithAttributes:@{NSFontAttributeName:menuItem.titleFont?menuItem.titleFont:titleFont}];
-          
+        
         const CGSize imageSize = menuItem.image.size;
 
         const CGFloat itemHeight = MAX(titleSize.height, imageSize.height) + [YCXMenu menuItemMarginY] * 2;
@@ -528,7 +528,7 @@ typedef enum {
 
     return point;
 }
- 
+
 + (UIImage *)selectedImage:(CGSize)size {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -592,8 +592,8 @@ typedef enum {
 
 - (void)drawRect:(CGRect)rect {
     [self drawBackground:self.bounds inContext:UIGraphicsGetCurrentContext()];
-      
-      
+    
+    
     [YCXMenu reset];
 }
 
@@ -619,11 +619,11 @@ typedef enum {
     CGFloat Y0 = frame.origin.y;
     CGFloat Y1 = frame.origin.y + frame.size.height;
 
-      
+    
 
     UIBezierPath *arrowPath = [UIBezierPath bezierPath];
 
-      
+    
     const CGFloat kEmbedFix = 3.f;
 
     if (_arrowDirection == YCXMenuViewArrowDirectionUp) {
@@ -697,7 +697,7 @@ typedef enum {
 
     [arrowPath fill];
 
-      
+    
     const CGRect bodyFrame = {X0, Y0, X1 - X0, Y1 - Y0};
 
     UIBezierPath *borderPath = [UIBezierPath bezierPathWithRoundedRect:bodyFrame
@@ -742,7 +742,7 @@ typedef enum {
 
 
 #pragma mark - YCXMenu
-  
+
 static YCXMenu                      *gMenu;
 
 @implementation YCXMenu {
@@ -816,7 +816,7 @@ static YCXMenu                      *gMenu;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationWillChange:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     }
 
-      
+    
     _menuView = [[YCXMenuView alloc] init];
     [_menuView showMenuInView:view fromRect:rect menuItems:menuItems selected:selectedItem];
     self.isShow = YES;
@@ -914,7 +914,7 @@ static YCXMenu                      *gMenu;
 }
 
 
-  
+
 + (CGFloat)menuItemMarginY {
     return gMenuItemMarginY > 0?gMenuItemMarginY:kMenuItemMarginY;
 }

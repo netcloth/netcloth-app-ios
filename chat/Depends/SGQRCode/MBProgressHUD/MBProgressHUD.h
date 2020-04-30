@@ -1,30 +1,30 @@
-  
-  
-  
-  
-  
 
-  
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -37,35 +37,35 @@
 extern CGFloat const MBProgressMaxOffset;
 
 typedef NS_ENUM(NSInteger, MBProgressHUDMode) {
-      
+    
     MBProgressHUDModeIndeterminate,
-      
+    
     MBProgressHUDModeDeterminate,
-      
+    
     MBProgressHUDModeDeterminateHorizontalBar,
-      
+    
     MBProgressHUDModeAnnularDeterminate,
-      
+    
     MBProgressHUDModeCustomView,
-      
+    
     MBProgressHUDModeText
 };
 
 typedef NS_ENUM(NSInteger, MBProgressHUDAnimation) {
-      
+    
     MBProgressHUDAnimationFade,
-      
+    
     MBProgressHUDAnimationZoom,
-      
+    
     MBProgressHUDAnimationZoomOut,
-      
+    
     MBProgressHUDAnimationZoomIn
 };
 
 typedef NS_ENUM(NSInteger, MBProgressHUDBackgroundStyle) {
-      
+    
     MBProgressHUDBackgroundStyleSolidColor,
-      
+    
     MBProgressHUDBackgroundStyleBlur
 };
 
@@ -102,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)showHUDAddedTo:(UIView *)view animated:(BOOL)animated;
 
-  
+
 
 /**
  * Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is showHUDAddedTo:animated:.
@@ -207,7 +207,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (assign, nonatomic) BOOL removeFromSuperViewOnHide;
 
-  
+
 
 /** 
  * MBProgressHUD operation mode. The default is MBProgressHUDModeIndeterminate.
@@ -256,21 +256,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (assign, nonatomic, getter=areDefaultMotionEffectsEnabled) BOOL defaultMotionEffectsEnabled UI_APPEARANCE_SELECTOR;
 
-  
+
 
 /**
  * The progress of the progress indicator, from 0.0 to 1.0. Defaults to 0.0.
  */
 @property (assign, nonatomic) float progress;
 
-  
+
 
 /**
  * The NSProgress object feeding the progress information to the progress indicator.
  */
 @property (strong, nonatomic, nullable) NSProgress *progressObject;
 
-  
+
 
 /**
  * The view containing the labels and indicator (or customView).

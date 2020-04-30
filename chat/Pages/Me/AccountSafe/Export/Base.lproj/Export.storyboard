@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_0" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,14 +11,14 @@
         <!--备份账户-->
         <scene sceneID="LS8-xI-wWX">
             <objects>
-                <viewController storyboardIdentifier="BackupContainerVC" id="YRz-KW-Re3" customClass="BackupContainerVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BackupContainerVC" id="YRz-KW-Re3" customClass="BackupContainerVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J2j-DL-WUg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xPh-6R-CVl">
                                 <rect key="frame" x="30" y="498" width="260" height="44"/>
-                                <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="abU-HG-9p4"/>
                                 </constraints>
@@ -53,13 +51,13 @@
         <!--Key Store DesVC-->
         <scene sceneID="mXj-eD-zLg">
             <objects>
-                <viewController storyboardIdentifier="KeyStoreDesVC" id="hDT-AF-JFo" customClass="KeyStoreDesVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="KeyStoreDesVC" id="hDT-AF-JFo" customClass="KeyStoreDesVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cqd-CX-DqV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tmy-YF-kQu">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Soz-0a-7Kh" userLabel="container">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="404"/>
@@ -185,13 +183,13 @@
         <!--Private Key DesVC-->
         <scene sceneID="MdE-or-sNs">
             <objects>
-                <viewController storyboardIdentifier="PrivateKeyDesVC" id="MQ4-Xg-hg9" customClass="PrivateKeyDesVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PrivateKeyDesVC" id="MQ4-Xg-hg9" customClass="PrivateKeyDesVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2T2-Nl-jqi">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0pa-WC-h6h">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DrA-RE-5xI" userLabel="container">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="308"/>
@@ -297,13 +295,13 @@
         <!--备份账户-->
         <scene sceneID="ssz-bX-Xxy">
             <objects>
-                <viewController storyboardIdentifier="PwdStrengthVC" id="YQ9-b0-4XV" customClass="PwdStrengthVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PwdStrengthVC" id="YQ9-b0-4XV" customClass="PwdStrengthVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hsx-xm-N4N">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jnj-Aj-ET2">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iEa-a3-8vY" userLabel="Container">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="460"/>
@@ -311,7 +309,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SQb-2m-9Ni" userLabel="tc">
                                                 <rect key="frame" x="0.0" y="10" width="296" height="64"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_tip" translatesAutoresizingMaskIntoConstraints="NO" id="08V-lN-QMZ">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="session_connect_offline" translatesAutoresizingMaskIntoConstraints="NO" id="08V-lN-QMZ">
                                                         <rect key="frame" x="15" y="23" width="18" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="18" id="MpW-C4-a3Q"/>
@@ -321,7 +319,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您的账户密码安全性较低，为了您的账户安全，请重新设置密码。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3GS-2i-ati" userLabel="tipsL">
                                                         <rect key="frame" x="48" y="16.5" width="228" height="31.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" red="0.23921568627450979" green="0.49411764705882355" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="1" green="0.25490196079999999" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -369,7 +367,6 @@
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vm1-6N-XZH">
                                                                 <rect key="frame" x="0.0" y="0.0" width="256" height="44"/>
                                                                 <color key="backgroundColor" red="0.98431372549019602" green="0.9882352941176471" blue="0.9882352941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
@@ -423,7 +420,6 @@
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bi3-61-8GU">
                                                                 <rect key="frame" x="0.0" y="0.0" width="256" height="44"/>
                                                                 <color key="backgroundColor" red="0.98431372549999996" green="0.98823529409999999" blue="0.98823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
@@ -455,7 +451,7 @@
                                                     </button>
                                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zH-pm-tgB">
                                                         <rect key="frame" x="20" y="302" width="256" height="44"/>
-                                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="iGC-x0-oP1"/>
                                                         </constraints>
@@ -557,13 +553,13 @@
         <!--验证备份-->
         <scene sceneID="k0b-H6-G6C">
             <objects>
-                <viewController storyboardIdentifier="ExportKeyStoreVerifyVC" id="W9j-Zv-j9u" customClass="ExportKeyStoreVerifyVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ExportKeyStoreVerifyVC" id="W9j-Zv-j9u" customClass="ExportKeyStoreVerifyVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UT4-ha-Lel">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zty-Ke-bBx">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="54e-a7-609" userLabel="Container">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="446.5"/>
@@ -571,7 +567,7 @@
                                             <view contentMode="scaleToFill" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="uSv-ej-13f" userLabel="infoC">
                                                 <rect key="frame" x="0.0" y="10" width="296" height="92.5"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_tip" translatesAutoresizingMaskIntoConstraints="NO" id="ZF1-mP-uMu">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="session_connect_offline" translatesAutoresizingMaskIntoConstraints="NO" id="ZF1-mP-uMu">
                                                         <rect key="frame" x="15" y="37.5" width="18" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="18" id="S4s-K2-qNN"/>
@@ -581,7 +577,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="如果本地账户丢失，可导入Keystore 并用账户密码确认，即可再次恢复账户。请确认Keystore文件已在安全、离线的地方保存妥当。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zDG-ez-Zdh" userLabel="tipsL">
                                                         <rect key="frame" x="48" y="15" width="228" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="1" green="0.25490196079999999" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -657,7 +653,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="请输入之前设定的账户登录密码" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yZk-61-usK">
                                                         <rect key="frame" x="95.5" y="154.5" width="180.5" height="14"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" red="0.95686274509803915" green="0.21568627450980393" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="1" green="0.25490196079999999" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nXr-HH-wh2" userLabel="re_pwd_container">
@@ -666,7 +662,6 @@
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s6H-Ra-vzw">
                                                                 <rect key="frame" x="0.0" y="0.0" width="256" height="44"/>
                                                                 <color key="backgroundColor" red="0.98431372549999996" green="0.98823529409999999" blue="0.98823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <nil key="textColor"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
@@ -682,7 +677,7 @@
                                                     </view>
                                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nFO-iT-YOb">
                                                         <rect key="frame" x="20" y="260" width="256" height="44"/>
-                                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="AIT-uO-Mta"/>
                                                         </constraints>
@@ -769,13 +764,13 @@
         <!--验证备份-->
         <scene sceneID="hpG-ns-cAZ">
             <objects>
-                <viewController storyboardIdentifier="ExportPrivateKeyVerifyVC" id="cfh-ip-7P2" customClass="ExportPrivateKeyVerifyVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ExportPrivateKeyVerifyVC" id="cfh-ip-7P2" customClass="ExportPrivateKeyVerifyVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SVS-ug-LUu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zn9-tA-Zw3">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tgb-NY-5N3" userLabel="Container">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="335.5"/>
@@ -783,7 +778,7 @@
                                             <view contentMode="scaleToFill" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="SW7-eb-pE5" userLabel="infoC">
                                                 <rect key="frame" x="0.0" y="10" width="296" height="92.5"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blue_tip" translatesAutoresizingMaskIntoConstraints="NO" id="5RR-f5-Efk">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="session_connect_offline" translatesAutoresizingMaskIntoConstraints="NO" id="5RR-f5-Efk">
                                                         <rect key="frame" x="15" y="37.5" width="18" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="18" id="LAM-Xi-VJY"/>
@@ -793,7 +788,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="如果本地账户丢失，或者需要更换设备，可通过导入私钥恢复账户。请确认私钥已在安全、离线的地方保存。请勿通过任何联网应用传输私钥。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="voU-15-GMR" userLabel="tipsL">
                                                         <rect key="frame" x="48" y="15" width="228" height="62.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="1" green="0.25490196079999999" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -859,7 +854,7 @@
                                                     </view>
                                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I5f-nl-fAP">
                                                         <rect key="frame" x="20" y="149" width="256" height="44"/>
-                                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="0O4-cV-9p4"/>
                                                         </constraints>
@@ -931,12 +926,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mOL-Dx-Fz0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2928" y="-1114"/>
+            <point key="canvasLocation" x="-2928.75" y="-1114.4366197183099"/>
         </scene>
         <!--ExportDetailVC-->
         <scene sceneID="ADd-cg-qQO">
             <objects>
-                <viewController storyboardIdentifier="ExportDetailVC" id="TBp-1G-AzJ" userLabel="ExportDetailVC" customClass="ExportDetailVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ExportDetailVC" id="TBp-1G-AzJ" userLabel="ExportDetailVC" customClass="ExportDetailVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JPM-RG-jB2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -952,13 +947,13 @@
         <!--Back UpKS DetailVC-->
         <scene sceneID="Ejy-vZ-gCl">
             <objects>
-                <viewController storyboardIdentifier="BackUpKSDetailVC" id="Aex-VL-956" customClass="BackUpKSDetailVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BackUpKSDetailVC" id="Aex-VL-956" customClass="BackUpKSDetailVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="owp-oC-Lao">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rC4-sC-8Ui">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="Jdc-Kh-jE4" userLabel="BigContainer">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="570.5"/>
@@ -1115,13 +1110,13 @@
                                         <subviews>
                                             <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XTC-2R-JXF">
                                                 <rect key="frame" x="0.0" y="0.0" width="142" height="44"/>
-                                                <color key="backgroundColor" red="0.23921568627450979" green="0.49411764705882355" blue="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="ddS-1K-xHX"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <state key="normal" title="复制Keystore">
-                                                    <color key="titleColor" red="0.23921568627450979" green="0.49411764705882355" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="titleColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -1140,7 +1135,7 @@
                                     </view>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ox9-td-bng">
                                         <rect key="frame" x="154" y="0.0" width="142" height="44"/>
-                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="iwR-Ou-KoT"/>
                                         </constraints>
@@ -1182,13 +1177,13 @@
         <!--Back Up Private KeyVC-->
         <scene sceneID="eiJ-pg-Rp1">
             <objects>
-                <viewController storyboardIdentifier="BackUpPrivateKeyVC" id="97i-Jd-R5G" customClass="BackUpPrivateKeyVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BackUpPrivateKeyVC" id="97i-Jd-R5G" customClass="BackUpPrivateKeyVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OPw-cN-SlM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNQ-Ni-5Au">
-                                <rect key="frame" x="12" y="20" width="296" height="548"/>
+                                <rect key="frame" x="12" y="0.0" width="296" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ajs-aw-tld" userLabel="BigContainer">
                                         <rect key="frame" x="0.0" y="0.0" width="296" height="568"/>
@@ -1322,7 +1317,7 @@
                                 <subviews>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vy6-vm-1jJ">
                                         <rect key="frame" x="0.0" y="0.0" width="260" height="44"/>
-                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="jWA-wA-4bb"/>
                                         </constraints>
@@ -1362,7 +1357,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="blue_tip" width="18" height="18"/>
         <image name="close" width="14" height="7"/>
+        <image name="session_connect_offline" width="18" height="18"/>
     </resources>
 </document>

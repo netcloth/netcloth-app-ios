@@ -5,8 +5,8 @@
 /* Class = "UILabel"; text = "时间"; ObjectID = "5lf-gk-EpG"; */
 "5lf-gk-EpG.text" = "时间";
 
-/* Class = "UILabel"; text = "正在申明通信地址，请稍后查看结果"; ObjectID = "6Tr-oj-p9d"; */
-"6Tr-oj-p9d.text" = "正在申明通信地址，请稍后查看结果";
+/* Class = "UILabel"; text = "正在申明通信服务器，请稍后查看结果"; ObjectID = "6Tr-oj-p9d"; */
+"6Tr-oj-p9d.text" = "正在申明通信服务器，请稍后查看结果";
 
 /* Class = "UILabel"; text = "申明服务节点IP"; ObjectID = "BX6-2f-aZk"; */
 "BX6-2f-aZk.text" = "申明服务节点";
@@ -29,8 +29,8 @@
 /* Class = "UILabel"; text = "无"; ObjectID = "aVM-t6-7od"; */
 "aVM-t6-7od.text" = "无";
 
-/* Class = "UILabel"; text = "通信地址申明"; ObjectID = "cOY-l7-89H"; */
-"cOY-l7-89H.text" = "通信地址申明";
+/* Class = "UILabel"; text = "通信服务器申明"; ObjectID = "cOY-l7-89H"; */
+"cOY-l7-89H.text" = "通信服务器申明";
 
 /* Class = "UILabel"; text = "TXID"; ObjectID = "cvR-X8-iIm"; */
 "cvR-X8-iIm.text" = "TXID";

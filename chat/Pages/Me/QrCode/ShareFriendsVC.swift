@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import Photos
@@ -24,12 +24,24 @@ class ShareFriendsVC: BaseViewController {
     let disbag = DisposeBag()
     
     var qrCodeRenderOk: (() ->Void)?
+    var contactToBeShare: CPContact?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.edgesForExtendedLayout = UIRectEdge.top
         configUI()
         configEvent()
+    }
+    
+    fileprivate func shareToSystem() {
+        _ = createShareAppImage().observeOn(MainScheduler.instance).subscribe(onNext: { (image) in
+            if let img = image {
+                
+                let activateVc = UIActivityViewController(activityItems: [img], applicationActivities: nil)
+                Router.present(vc: activateVc)
+            }
+        })
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,18 +55,27 @@ class ShareFriendsVC: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.titleTextAttributes =
-        [NSAttributedString.Key.foregroundColor: UIColor(hexString: "#303133")]
+        [NSAttributedString.Key.foregroundColor: UIColor(hexString: Color.black)]
     }
     
-      
+    
     func configUI() {
         
-        let name = CPAccountHelper.loginUser()?.accountName ?? ""
-        if let _key = CPAccountHelper.loginUser()?.publicKey {
-            let json = InnerHelper.v2_toContactString(pubkey: _key, alias: name) ?? _key
+        if contactToBeShare == nil {
+            contactToBeShare = CPAccountHelper.loginUser()?.asContact()
+        }
+        
+        let name = contactToBeShare?.remark ?? ""
+        if let _key = contactToBeShare?.publicKey,
+            let ct = contactToBeShare {
+            let json = InnerHelper.v2_toString(contact: ct) ?? _key
             QrCodeVC.generateQRCode(data: json) { (img) in
                 self.qrcodeImageV?.image = img
                 self.qrCodeRenderOk?()
+                if self.qrCodeRenderOk == nil &&
+                    self.view.isHidden == false {
+                    self.shareToSystem()
+                }
             }
         }
         
@@ -62,26 +83,30 @@ class ShareFriendsVC: BaseViewController {
         
         smallL?.text = name.getSmallRemark()
         remarkL?.text = name
+        
+        let color = contactToBeShare?.publicKey.randomColor() ?? RelateDefaultColor
+        smallL?.backgroundColor = UIColor(hexString: color)
     }
     
     func configEvent() {
         
-          
+        
         saveButton?.rx.tap.subscribe(onNext: { [weak self] in
-            self?.saveImageToLibray()
+            self?.shareToSystem()
         }).disposed(by: disbag)
         
-          
+        
         showControl?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.toShowBigView()
         }).disposed(by: disbag)
     }
     
+    
     func saveImageToLibray() {
         Authorize.canOpenPhotoAlbum(autoAccess: true, result: {[weak self] (r) in
             if r == true, self?.qrcodeImageV?.image != nil {
                 
-                self?.createShareAppImage().observeOn(MainScheduler.instance).subscribe(onNext: { (image) in
+                _ = self?.createShareAppImage().observeOn(MainScheduler.instance).subscribe(onNext: { (image) in
                     if let img = image {
                         PHPhotoLibrary.shared().performChanges({
                             PHAssetChangeRequest.creationRequestForAsset(from: img)
@@ -94,9 +119,6 @@ class ShareFriendsVC: BaseViewController {
                         })
                     }
                 })
-                
-                
-                
             }
             else if r == false {
                 Toast.show(msg: NSLocalizedString("Device_photos", comment: ""))
@@ -114,34 +136,40 @@ class ShareFriendsVC: BaseViewController {
         })
     }
     
-    
     func createShareAppImage() -> Observable<UIImage?> {
+        return  ShareFriendsVC.createShareAppImage(withContact: self.contactToBeShare)
+    }
+    
+    
+    static func createShareAppImage(withContact: CPContact?) -> Observable<UIImage?> {
         
-        return Observable.create { [weak self] (observer) -> Disposable in
+        return Observable.create {  (observer) -> Disposable in
             
-            if CPAccountHelper.isLogin() == false {
+            if withContact == nil {
                 observer.onCompleted()
             }
             else {
                 if let vc = R.loadSB(name: "ShareFriendsVC", iden: "ShareMeQrCodeSave") as? ShareFriendsVC {
                     
-                    self?.view.addSubview(vc.view)
-                    vc.view.isHidden = true
-                    
-                    vc.qrCodeRenderOk = {
-                        vc.contentV?.isOpaque = false
-                        if let image = vc.contentV?.snapshotImage(afterScreenUpdates: true) {
+                    vc.qrCodeRenderOk = { [weak vc] in
+                        vc?.contentV?.isOpaque = false
+                        if let image = vc?.contentV?.snapshotImage(afterScreenUpdates: true) {
                             observer.onNext(image)
                             observer.onCompleted()
                         }
                         else {
                             observer.onCompleted()
                         }
+                        vc?.view.removeFromSuperview()
                     }
                     
-                    vc.view.frame = self?.view.bounds ?? CGRect.zero
-                    vc.view.layoutIfNeeded()
+                    vc.contactToBeShare = withContact
+                    Router.rootWindow?.addSubview(vc.view)
+                    vc.view.isHidden = true
+                     
                     
+                    vc.view.frame = Router.rootWindow?.bounds ?? CGRect.zero
+                    vc.view.layoutIfNeeded()
                 }
                 else {
                     observer.onCompleted()

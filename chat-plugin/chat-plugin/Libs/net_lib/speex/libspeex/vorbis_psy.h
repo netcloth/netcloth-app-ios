@@ -35,7 +35,7 @@
 #ifdef VORBIS_PSYCHO
 
 #include "smallft.h"
-#define P_BANDS 17       
+#define P_BANDS 17      
 #define NOISE_COMPAND_LEVELS 40
 
 

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import Photos
@@ -34,7 +34,7 @@ class QrCodeVC: BaseViewController {
         self.navigationController?.navigationBar.tintColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
     }
     
-      
+    
     
     func configUI() {
         
@@ -58,12 +58,12 @@ class QrCodeVC: BaseViewController {
     
     func configEvent() {
         
-          
+        
         saveButton?.rx.tap.subscribe(onNext: { [weak self] in
             self?.saveImageToLibray()
         }).disposed(by: disbag)
         
-          
+        
         showControl?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.toShowBigView()
         }).disposed(by: disbag)
@@ -72,43 +72,47 @@ class QrCodeVC: BaseViewController {
     func saveImageToLibray() {
         Authorize.canOpenPhotoAlbum(autoAccess: true, result: {[weak self] (r) in
             if r == true, self?.qrcodeImageV?.image != nil {
-                
-                let aname = CPAccountHelper.loginUser()?.accountName ?? ""
-                guard let image = QrCodeVC.createBigImage(accountName: aname, qrImg: self?.qrcodeImageV?.image) else {
-                    return
-                }
-                
-                
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }, completionHandler: { (r, err) in
-                    if r {
-                        DispatchQueue.main.async {
-                            Toast.show(msg: NSLocalizedString("QR Code Saved", comment: ""));
+                let contact = CPAccountHelper.loginUser()?.asContact()
+                _ = QrCodeVC.v2_createShareAppImage(withContact: contact)
+                    .observeOn(MainScheduler.instance)
+                    .subscribe(onNext: { (image) in
+                        if let img = image {
+                            PHPhotoLibrary.shared().performChanges({
+                                PHAssetChangeRequest.creationRequestForAsset(from: img)
+                            }, completionHandler: { (r, err) in
+                                if r {
+                                    DispatchQueue.main.async {
+                                        Toast.show(msg: "QR Code Saved".localized());
+                                    }
+                                }
+                            })
                         }
-                    }
-                })
+                    })
             }
             else if r == false {
-                Toast.show(msg: NSLocalizedString("Device_photos", comment: ""))
+                Toast.show(msg: "Device_photos".localized())
             }
         })
     }
     
     func toShowBigView() {
-        let aname = CPAccountHelper.loginUser()?.accountName ?? ""
-        guard let img = QrCodeVC.createBigImage(accountName: aname, qrImg: self.qrcodeImageV?.image) else {
-            return
-        }
-        
-        let qr = QRPhotoImgView(image: img)
-        qr.contentMode = .scaleAspectFill
-        Router.showAlert(view: qr)
+        let contact = CPAccountHelper.loginUser()?.asContact()
+        _ = QrCodeVC.v2_createShareAppImage(withContact: contact)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (image) in
+                if let img = image {
+                    let qr = QRPhotoImgView(image: img)
+                    qr.contentMode = .scaleAspectFill
+                    Router.showAlert(view: qr)
+                }
+            })
     }
     
-      
-      
-    static func createBigImage(accountName:String, qrImg: UIImage?, title: String? = nil) -> UIImage? {
+    
+    
+    static func createBigImage(accountName:String,
+                               qrImg: UIImage?,
+                               title: String? = nil) -> UIImage? {
         guard
             let bigV: QrBigPhotoView = R.loadNib(name: "QrBigPhotoView") as? QrBigPhotoView,
             let realQrImg = qrImg else {
@@ -133,10 +137,15 @@ class QrCodeVC: BaseViewController {
         if let image = bigV.snapshotImage(afterScreenUpdates: true) {
            return image.byRoundCornerRadius(10)
         }
+
         return nil
     }
     
-      
+    static func v2_createShareAppImage(withContact: CPContact?) -> Observable<UIImage?> {
+        return ShareFriendsVC.createShareAppImage(withContact: withContact)
+    }
+    
+    
     static func generateQRCode(data: String,
                                logo: String = "share_logo",
                                size:Float = 750,
@@ -145,35 +154,30 @@ class QrCodeVC: BaseViewController {
         
         DispatchQueue.global().async {
             
-            let sharelogo = UIImage(named: logo)
-            let qrImg: UIImage? = SGQRCodeObtain.generateQRCode(withData: data,
-                                                  size: CGFloat(size),
-                                                  logoImage: sharelogo,
-                                                  ratio: CGFloat(ratio),
-                                                  logoImageCornerRadius: 0,
-                                                  logoImageBorderWidth: 0,
-                                                  logoImageBorderColor: nil);
+            var qrImg: UIImage?
+            if logo.isEmpty {
+                 qrImg = SGQRCodeObtain.generateQRCode(withData: data, size: CGFloat(size))
+            }
+            else {
+                let sharelogo = UIImage(named: logo)
+                qrImg = SGQRCodeObtain.generateQRCode(withData: data,
+                                                      size: CGFloat(size),
+                                                      logoImage: sharelogo,
+                                                      ratio: CGFloat(ratio),
+                                                      logoImageCornerRadius: 0,
+                                                      logoImageBorderWidth: 0,
+                                                      logoImageBorderColor: nil)
+            }
             
             DispatchQueue.main.async {
                 complete?(qrImg)
             }
         }
     }
-    
-      
-    static func coverImage(_ img: UIImage) -> UIImage? {
-        guard let ci = img.ciImage else { return img }
-        
-        let cicontext = CIContext.init()
-        guard let cgimg = cicontext.createCGImage(ci, from: (ci.extent)) else { return nil }
-        
-        return UIImage(cgImage: cgimg)
-    }
-
 }
 
 
-  
+
 class QRPhotoImgView: UIImageView, NCAlertInterface {
     
     func ncSize() -> CGSize {

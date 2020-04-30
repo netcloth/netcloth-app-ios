@@ -6,7 +6,74 @@
   Copyright © 2019 netcloth. All rights reserved.
 */
 
-  
+
+"All" = "全部";
+"trade_send" = "转出";
+"trade_received" = "转入";
+"trade_failed" = "失败";
+"trand_Send" = "转账";
+"Balance" = "余额";
+"Please input valid amount" = "请输入有效金额";
+"Please input valid address" = "请输入有效地址";
+"Address" = "地址";
+
+"waiting for packaging" = "等待打包";
+"success" = "已成功";
+"fail" = "失败";
+"confirming" = "确认中";
+"Confirming" = "确认中";
+
+
+"Wallet" = "钱包";
+"Test Token" = "测试币";
+"NCH_TEST_TIP" = "目前NCH为测试币，主网上线后会清零，请注意。";
+"Wallet_TIP" = "钱包暂未支持转账，请不要充值任何资产";
+"Change Wallet Name" = "修改钱包名";
+"No more than 20 characters" = "不超过20个字";
+"My Wallet" = "我的钱包";
+"Assets" = "资产";
+
+"NetCloth Terms of Service" = "NetCloth服务协议";
+"Use_Service_Protocol" = "《NetCloth软件许可及服务协议》";
+"Use_Private_Protocol" = "《隐私政策》";
+"Agree" = "同意";
+"Disagree" = "不同意";
+"Use_To_Tip" = "欢迎来到NetCloth。为了打造一个值得信赖的社区，更好地为您提供服务，保护您的权益，在您使用NetCloth服务之前，我们邀请您阅读我们的《NetCloth软件许可及服务协议》以及《隐私政策》。\n\n点击同意即表示您已仔细阅读、充分理解并接受其全部条款，并授权我们按照协议及政策收集、使用、处理和披露您的个人信息。";
+
+"Wellet_First_Tip" = "账户尚未激活钱包，是否用此账户激活新钱包？";
+
+
+"Activate_fail_tip" = "激活失败";
+"Activate_fail_keystore" = "请再次确认Keystore与密码是否正确，或者通过私钥导入账户激活钱包。";
+"Try Again" = "再次尝试";
+"Activate_fail_prikey" = "请再次确认私钥是否正确。";
+
+
+"Activate_succ_tip" = "您已成功备份您的账户 \n 并激活了钱包！";
+"OK_Yeah" = "好的";
+
+
+
+"Creating group chat, please wait…" = "正在创建群聊，请稍后…";
+"Group_request_from_miniLink" = "通过群链接入群";
+"Activate the Proxy" = "是否开启代理？";
+
+
+"Application Server" = "应用服务器";
+"Claimed Application Server" = "已申明应用服务器";
+"Communication Server" = "通信服务器";
+"Claimed Communication Server" = "已申明通信服务器";
+"Tips_Msg_Switch_AIPAL" = "您当前选择的应用服务器与上一次连接的应用服务器不一致，确认连接后，小应用页面所显示的应用将发生变化。";
+"aipal_support" = "此应用平台由：#mark#运营";
+
+"@all" = "全体成员";
+"@Msg_notice" = "[有人@我]";
+"@room_tip" = "@我的消息";
+
+"Founder" = "群主";
+
+
+
 "login_wrong_pwd" = "密码错误，请重新输入";
 "login_invalid_data" = "密码至少6位";
 "Please check your network" = "请检查网络连接";
@@ -17,7 +84,7 @@
 "confirm_delete" = "确认删除";
 "Delete the Account" = "删除该账户";
 
-  
+
 "Register_invalid_account" = "账户名称至少1位";
 "Register_invalid_pwd" = "密码至少6位";
 "Register_repeat_pwd" = "密码不一致";
@@ -26,7 +93,7 @@
 "Register_W_msg" = "NetCloth无法找回密码，请牢记您的账户密码。";
 "Register_Ok" = "确认注册";
 
-  
+
 "Private Key" = "私钥";
 "Export_invalid_pwd" = "密码至少8位";
 "Insufficient password strength" = "密码强度不足";
@@ -50,7 +117,7 @@
 
 "Export_Alert_Prikey" = "请确保四周无人及无摄像头！请勿截图或使用拍照的方式保存私钥";
 
-  
+
 "import_valid_title" = "导入成功";
 "import_valid_message" = "欢迎回到NetCloth";
 "import_valid_btn" = "确认";
@@ -62,7 +129,7 @@
 
 "Account is existed" = "该账户已存在";
 
-  
+
 "change_valid_title" = "修改成功";
 "change_valid_message" = "欢迎回到NetCloth";
 "change_valid_btn" = "确认";
@@ -74,7 +141,7 @@
 
 
 
-  
+
 "WalletManager.Error.invalidPassword" = "密码不正确";
 "WalletManager.Error.invalidPrivateKey" = "私钥不正确";
 "WalletManager.Error.invalidKeystore" = "Keystore不正确";
@@ -89,7 +156,7 @@
 "WalletManager.Error.invalidData" = "请输入有效数据验证";
 
 
-  
+
 "Session_W_Title" = "确认删除消息";
 "Session_W_Msg" = "消息删除后将无法恢复";
 "Sticky on top" = "置顶";
@@ -97,7 +164,7 @@
 "Resend the message？" = "是否重新发送？";
 
 
-  
+
 "Contact_Alias" = "备注名";
 "Contact_Delete" = "删除";
 "Contact_W_Title" = "确认删除联系人";
@@ -113,7 +180,7 @@
 "NetCloth Support" = "NetCloth小助手";
 "Support_Content" = "欢迎使用NetCloth。如您在使用过程中遇到问题，或是您有新的产品建议，欢迎给我留言哦。";
 
-  
+
 "Contact_invalid_address" = "账户地址错误";
 "Contact_invalid_remark" = "备注名至少1位";
 "Contact_have_added" = "该账号已是你的好友";
@@ -122,7 +189,7 @@
 "Update Successfully" = "更新成功";
 "No account available yet" = "暂无可用账号";
 
-  
+
 "Copy Share" = "已复制到粘贴板，可以发送分享";
 "Log Out" = "退出登录";
 "QR Code Saved" = "保存成功";
@@ -130,30 +197,30 @@
 "connect_ing" = "连接中";
 "connect_fail" = "离线";
 
-  
+
 "Enter Password" = "请输入账号密码";
 "Language" = "语言";
 "Notifications" = "消息提醒";
 "Change Password" = "修改密码";
-"Contacts Backup" = "备份通讯录";
-"Restore Contacts" = "恢复通讯录";
+"Contacts Backup" = "备份联系人";
+"Restore Contacts" = "恢复联系人";
 "Contact data is empty" = "联系人数据为空";
 "Contact_info" = "联系人 #white# 名，黑名单 #black# 名，群私钥 #group# 个";
-"C-IPAL Settings" = "客户端服务设置（C-IPAL）";
+"C-IPAL Settings" = "服务器设置（C-IPAL）";
 
 
 
-"Contact_backup_tip" = "正在加密备份通讯录···";
-"Contact_backup_result_success" = "备份通讯录成功！";
+"Contact_backup_tip" = "正在加密备份联系人···";
+"Contact_backup_result_success" = "备份联系人成功！";
 "Contact_backup_result_fail" = "备份失败，请检查网络链接是否正常";
 "Wrong data format" = "数据格式错误";
 
 "Contact_restore_tip" = "正在恢复···请耐心等待";
-"Contact_restore_result_success" = "恢复通讯录成功！";
+"Contact_restore_result_success" = "恢复联系人成功！";
 "Contact_restore_result_fail" = "恢复失败，请检查网络链接是否正常";
 
 
-  
+
 "Audio" = "语音";
 "Text" = "文字";
 "Picture" = "图片";
@@ -164,7 +231,7 @@
 "Hold to Talk" = "按住 说话";
 "Release to Send" = "松开 结束";
 "Message too short" = "录音时间太短了";
-  
+
 "Just now" = "刚刚";
 "Yesterday" = "昨天";
 "Sunday" = "周日";
@@ -176,23 +243,23 @@
 "Saturday" = "周六";
 
 
-  
+
 "Device_camera" = "请去-> [设置 - 隐私 - 相机] 打开访问开关";
 "Device_photos" = "请去-> [设置 - 隐私 - 相册] 打开访问开关";
 "Device_microphone" = "请去-> [设置 - 隐私 - 麦克风] 打开访问开关";
 
 
-  
+
 "center_new_msg_in" = "你收到一条消息";
 
-  
+
 "Scan" = "扫一扫";
 "Album" = "相册";
 "Align QR Code within frame to scan" = "将二维码/条码放入框内, 即可自动扫描";
 "My QR Code" = "我的二维码";
 "QR Code" = "二维码";
 
-  
+
 "Cancel" = "取消";
 "Back" = "返回";
 "OK" = "确定";
@@ -202,7 +269,7 @@
 "Copy" = "复制";
 "Send" = "发送";
 
-  
+
 "Messages" = "消息";
 "ipal_connect_ing" = "正在连接";
 "ipal_connect_fail" = "连接失败";
@@ -218,10 +285,10 @@
 "Tips_Msg" = "使用NetCloth发送消息，需要选择一个服务节点作为您的通讯地址";
 "Tips_Ok" = "好的";
 
-"Tips_Msg_Switch" = "您当前选择的通信地址与上一次成功连接的通信地址不一致，确认连接后，无法同步上一次连接通信地址时的聊天记录。";
+"Tips_Msg_Switch" = "您当前选择的通信服务器与上一次成功连接的通信服务器不一致，确认连接后，无法同步上一次连接通信服务器时的聊天记录。";
 
 
-"Communication Address" = "通信地址";
+
 "Latency" = "延迟";
 "medium" = "中";
 "low" = "低";
@@ -239,12 +306,12 @@
 
 "Copy Success" = "复制成功";
 
-"Communication Address Claim" = "通信地址申明";
+"Communication Server Claim" = "通信服务器申明";
 "None" = "无";
 
 "cipal_notify_fail" = "C-IPAL 申明请求发送失败，请稍后重试";
 
-  
+
 "clear_alert_title" = "退出登录后将删除用户的所有聊天记录及对话框，无法恢复。";
 "clear_alert_btn_text" = "好的，我知道了";
 
@@ -262,7 +329,7 @@
 "stranger_tip_1" = "对方不是您的好友，#mark#聊天更便捷更顺。";
 "stranger_tip_2" = "添加好友";
 
-  
+
 "Group Chat" = "群聊";
 "New Group Chat" = "创建群聊";
 "Add Contacts" = "添加联系人";
@@ -309,7 +376,7 @@
 "Remove Members" = "删除成员";
 "Add Group Members" = "邀请入群";
 
-  
+
 "New_group_notice" = "【新群公告】";
 "Group_Invit_Msg_Title" = "邀请你加入群聊";
 "Group_Invit_Msg_Content" = "\"#sendername#\"邀请你加入群聊“#groupname#”";
@@ -326,14 +393,14 @@
 
 "Group_Kick_tip" = "你已被移除群聊，仅可查看以往聊天记录。";
 
-  
+
 "chat_group_kicked" = "你已经不在群里";
 "chat_group_dismissed" = "群已经解散";
 
-  
-"acc_con_all_tip" = "您的账户与通讯录尚未备份，请及时备份以防账户与联系人信息丢失。";
-"acc_only_tip" = "您的账户尚未备份，请及时备份以防账户信息丢失。";
-"con_only_tip" = "您的通讯录尚未备份更新，请及时备份以防联系人信息丢失。";
+
+"acc_con_all_tip" = "您的NetCloth账户与联系人尚未备份，请及时备份以防账户与联系人信息丢失。";
+"acc_only_tip" = "您的NetCloth账户尚未备份，请及时备份以防账户信息丢失。";
+"con_only_tip" = "您的NetCloth联系人尚未备份更新，请及时备份以防联系人信息丢失。";
 
 
 "Backup Later" = "暂不备份";
@@ -354,6 +421,7 @@
 "Notify_detail_inviter" = "通过#mark#邀请入群";
 "Only_Group_Admin_Invite_tip" = "本群仅允许管理员邀请好友进群";
 "Group_Request_From_QR" =  "通过二维码扫描入群";
+"Group_Request_From_Recommend" =  "通过群推荐入群";
 
 
 "Logon_Notice" = "你的NetCloth账号于#mark#在#device#设备上登录。";
@@ -364,10 +432,13 @@
 "Group_Big_Qr_Name" = "群聊：";
 "Group_Approve_request_Ok" = "申请已发送，等待管理员同意";
 
-  
+
 "Oversized" = "尺寸过大";
 "Network_error_tip" = "网络连接不成功";
 "Seed_error_tip" = "区块链节点连接失败，请退出登录重新连接";
 "Group_syn_msg_count" = "#mark#条新消息";
 "Group_unread_location_tip" = "⎯⎯⎯⎯⎯⎯ 以下为新消息 ⎯⎯⎯⎯⎯⎯";
 "Auth_name_tip" = "#mark#正在向您申请";
+
+
+"Group recommendation" = "群推荐";

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -40,22 +40,22 @@ class GroupImageChatCell: ChatCommonCell {
     }
     
     
-      
+    
     var imageBtn: UIButton?
     
-      
+    
     @IBOutlet weak var avatarBtn: UIButton?
     
     var dataMsg: CPMessage?
     
-      
+    
 
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.avatarBtn?.addTarget(self, action: #selector(onTapAvatar), for: .touchUpInside)
         
-          
+        
         imageBtn = UIButton()
         self.contentView.addSubview(imageBtn!)
         imageBtn?.snp.makeConstraints({ (maker) in
@@ -66,6 +66,12 @@ class GroupImageChatCell: ChatCommonCell {
         self.stateIndicatorContainer?.isOpaque = false
         self.stateIndicatorContainer?.backgroundColor = UIColor(rgb: 0x303133, alpha: 0.3)
         self.stateIndicatorContainer?.tintColor = UIColor.clear
+        
+        if let avBtn = self.avatarBtn {
+            let lpr = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressAvatar(_:)))
+            lpr.minimumPressDuration = 1.0
+            avBtn.addGestureRecognizer(lpr)
+        }
     }
     
     deinit {
@@ -78,13 +84,20 @@ class GroupImageChatCell: ChatCommonCell {
         }
     }
     
+    @objc func onLongPressAvatar(_ gst: UILongPressGestureRecognizer) {
+        if let d = dataMsg,
+            gst.state == .began {
+            delegate?.onLongPressAvatar?(pubkey: d.senderPubKey, senderName: d.senderRemark)
+        }
+    }
+    
     @objc func onShowImage() {
         if let image = pictureImage?.image {
             delegate?.onShowBigPhoto?(image, containerView: self)
         }
     }
     
-      
+    
     override func reloadData(data: Any) {
         guard let msg = data as? CPMessage else {
             return
@@ -96,7 +109,7 @@ class GroupImageChatCell: ChatCommonCell {
             updateOthers(msg: msg)
         }
         
-          
+        
         var width = 140.0
         var height = 140.0
         if let pw = dataMsg?.pixelWidth , let ph = dataMsg?.pixelHeight, pw > 0, ph > 0 {
@@ -117,6 +130,14 @@ class GroupImageChatCell: ChatCommonCell {
         
         self.imageWidth?.constant = CGFloat(width)
         self.imageHeight?.constant = CGFloat(height)
+        
+        
+        self.LgroupNick?.isHidden = false
+        self.LgroupMasterIden?.isHidden = true
+        if let masterPubkey = self.viewController?.roomService?.groupMasterPubkey,
+            msg.senderPubKey == masterPubkey {
+            self.LgroupMasterIden?.isHidden = false
+        }
     }
     
     
@@ -134,16 +155,16 @@ class GroupImageChatCell: ChatCommonCell {
     
     
     func updateSelf(msg: CPMessage) {
-          
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-          
-        var img = UIImage(named: "蓝色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+        
+
+
+
         
         
         let expect = NSDate().timeIntervalSince1970 - 180
@@ -175,31 +196,33 @@ class GroupImageChatCell: ChatCommonCell {
             }
         }
         
-          
+        
         pictureImage?.image = UIImage(named: "pic_place")
         pictureImage?.nc_setImageHash(msg)
         
-          
-        smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
         
+        smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
+        let color = CPAccountHelper.loginUser()?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
+
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
     }
     
     func updateOthers(msg: CPMessage) {
         
-          
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-          
-        var img = UIImage(named: "灰色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
         
-          
+
+
+
+        
+        
         self.showLoading()
         let needRefresh:Bool = msg.pixelWidth == 0
         msg.normalCompleteHandle = { [weak self,weak msg] (result) in
@@ -224,25 +247,21 @@ class GroupImageChatCell: ChatCommonCell {
             }
         }
         
-          
+        
         pictureImage?.image = UIImage(named: "pic_place")
         pictureImage?.nc_setImageHash(msg)
         
-          
+        
         var sendRemark = msg.senderRemark
         smallRemarkL?.text = sendRemark.getSmallRemark()
         LgroupNick?.text = sendRemark
+        smallAvatarImageV?.isHidden = true
         
-        if msg.senderPubKey == support_account_pubkey {
-            smallRemarkL?.text = nil
-            smallAvatarImageV?.isHidden = false
-            smallAvatarImageV?.image = UIImage(named: "subscript_icon")
-        } else {
-            smallAvatarImageV?.isHidden = true
-        }
+        let color = msg.senderPubKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
     }
     
-      
+    
     override func msgContentView() -> UIView? {
         return self.pictureImage
     }
@@ -250,6 +269,6 @@ class GroupImageChatCell: ChatCommonCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.dataMsg?.msgData = nil
-  
+
     }
 }

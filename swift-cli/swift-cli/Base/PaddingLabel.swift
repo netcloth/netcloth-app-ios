@@ -1,16 +1,16 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
 open class PaddingLabel: UILabel {
     
-      
+    
     @IBInspectable public var lineSpace:CGFloat = 0 {
         didSet {
             let text = self.text ?? ""
@@ -24,11 +24,11 @@ open class PaddingLabel: UILabel {
 
             self.attributedText = attrString;
 
-  
+
         }
     }
     
-      
+    
     public var edgeInsets: UIEdgeInsets? {
         didSet {
             self.setNeedsDisplay()

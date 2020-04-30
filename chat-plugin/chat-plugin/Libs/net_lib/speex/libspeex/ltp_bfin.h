@@ -70,19 +70,19 @@ void pitch_xcorr(const spx_word16_t *_x, const spx_word16_t *_y, spx_word32_t *c
    corr += nb_pitch - 1;
    __asm__ __volatile__ (
       "P2 = %0;\n\t"
-      "I0 = P2;\n\t"  
-      "B0 = P2;\n\t"  
-      "R0 = %3;\n\t"  
+      "I0 = P2;\n\t" 
+      "B0 = P2;\n\t" 
+      "R0 = %3;\n\t" 
       "P3 = %3;\n\t"
-      "P3 += -2;\n\t"  
-      "P4 = %4;\n\t"  
-      "R1 = R0 << 1;\n\t"  
+      "P3 += -2;\n\t" 
+      "P4 = %4;\n\t" 
+      "R1 = R0 << 1;\n\t" 
       "L0 = R1;\n\t"
       "P0 = %1;\n\t"
 
       "P1 = %2;\n\t"
       "B1 = P1;\n\t"
-      "L1 = 0;\n\t"  
+      "L1 = 0;\n\t" 
 
       "r0 = [I0++];\n\t"
       "LOOP pitch%= LC0 = P4 >> 1;\n\t"
@@ -215,7 +215,7 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
       VARDECL(spx_word16_t *ener16);
       ALLOC(corr16, end-start+1, spx_word16_t);
       ALLOC(ener16, end-start+1, spx_word16_t);
-       
+      
       normalize16(corr, corr16, 180, end-start+1);
       normalize16(energy, ener16, 180, end-start+1);
 
@@ -257,11 +257,11 @@ void open_loop_nbest_pitch(spx_word16_t *sw, int start, int end, int len, int *p
 	    /* Instead of dividing the tmp by the energy, we multiply on the other side */
 	    if (MULT16_16(tmp,best_ener[N-1])>MULT16_16(best_score[N-1],ADD16(1,ener16[i-start])))
 	      {
-		 
+		
 		best_score[N-1]=tmp;
 		best_ener[N-1]=ener16[i-start]+1;
 		pitch[N-1]=i;
-		 
+		
 		for (j=0;j<N-1;j++)
 		  {
 		    if (MULT16_16(tmp,best_ener[j])>MULT16_16(best_score[j],ADD16(1,ener16[i-start])))
@@ -318,13 +318,13 @@ static int pitch_gain_search_3tap_vq(
   spx_word16_t       gain_sum;
   int                i;
 
-       
+      
 
       __asm__ __volatile__
       (
 
 "        P0 = %2;\n\t"                     /* P0: ptr to gain_cdbk */
-"        L1 = 0;\n\t"                       
+"        L1 = 0;\n\t"                      
 "        %0 = 0;\n\t"                      /* %0: best_sum         */
 "        %1 = 0;\n\t"                      /* %1: best_cbdk        */
 "        P1 = 0;\n\t"                      /* P1: loop counter     */

@@ -6,7 +6,7 @@
 "kEi-kh-6EF.title" = "Stranger Messages";
 
 /* Class = "UIButton"; normalTitle = "删除"; ObjectID = "sa6-Os-7Lx"; */
-"sa6-Os-7Lx.normalTitle" = "Edit";
+"sa6-Os-7Lx.normalTitle" = "Delete";
 
 /* Class = "UIButton"; normalTitle = "全选"; ObjectID = "wNx-FD-0d1"; */
 "wNx-FD-0d1.normalTitle" = "All";

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 import PromiseKit
@@ -28,20 +28,12 @@ class AccountSafeVC:  BaseTableViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            
         }
         super.viewDidLoad()
         self.tableView.adjustFooter()
-        fixConfigUI()
         configUI()
         configEvent()
-    }
-    
-    func fixConfigUI() {
-        pwdLabel?.text = "Change Password".localized()
-        backupLabel?.text = "Account Backup".localized()
-        contactBackUp?.text = "Contacts Backup".localized()
-        contactRestore?.text = "Restore Contacts".localized()
     }
     
     func configUI() {
@@ -60,13 +52,13 @@ class AccountSafeVC:  BaseTableViewController {
             if #available(iOS 11.0, *) {
                 maker.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-26)
             } else {
-                  
+                
                 maker.bottom.equalTo(self.view).offset(-26)
             }
         }
         let color = UIColor(hexString: "#F4375E")
         btn.setShadow(color: color!, offset: CGSize(width: 0, height: 10), radius: 20, opacity: 0.2)
-          
+        
     }
     
     
@@ -83,11 +75,11 @@ class AccountSafeVC:  BaseTableViewController {
         LoginVC.firstDel(user).then {(res) -> Promise<String>  in
             return LoginVC.reDel(user)
         }.done { (data) in
-              
+            
             MeVC._logout(false)
             CPAccountHelper.deleteUser(Int(user.userId)) { [weak self] (r, msg) in
                 if r {
-                      
+                    
                     UserDefaults.standard.set(nil, forKey: Config.Account.Last_Login_Name)
                     MeVC._postNotify()
                 } else {
@@ -99,7 +91,7 @@ class AccountSafeVC:  BaseTableViewController {
         }
     }
     
-      
+    
     func toChangePwd() {
         guard let alert = R.loadNib(name: "ChagePwdTipsAlert") as? ChagePwdTipsAlert  else {
             Toast.show(msg: "System error".localized())
@@ -152,7 +144,7 @@ extension AccountSafeVC {
     }
     
     override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        let color = UIColor(hexString: "#F5F7FA")
+        let color = UIColor(hexString: Color.gray_f5)
         if let hv = view as? UITableViewHeaderFooterView {
             hv.contentView.backgroundColor = color
         } else {

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import PromiseKit
@@ -19,7 +19,7 @@ class IPALManager: NSObject {
     var toast: ConnectToast?
     var canShow: Bool = true
     
-      
+    
     var store: IpalStatus = IpalStatus()
     
     
@@ -29,12 +29,12 @@ class IPALManager: NSObject {
         self.toast = nil
     }
     
-      
+    
     deinit {
         print("dealloc \(type(of: self))")
     }
     
-      
+    
     func onStep1_QueryInfo() {        
         if self.canShow == false {
             return
@@ -48,47 +48,72 @@ class IPALManager: NSObject {
             }
         }
         .catch { error in
-            print("ipal " + error.localizedDescription)
-            self.showToast(step: .F_1_1)
-            self.store.isSeedError = true
-            NotificationCenter.default.post(name: NSNotification.Name.serviceConnectStatusChange, object: nil)
-            self.toast?.onBackTap = { [weak self] in
-                self?.hideToast(nextCan: true, completion: nil)
-            }
+            self.handleSeedError(error: error)
         }
     }
     
     func onRequestAllIpalNode(hidToast:Bool, address: String?) {
-          
-        if hidToast {
-            self.hideToast(nextCan: true) {
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.15, execute: {
-                    self.showSweetAlert()
-                })
+        
+        if address == nil {
+            ChainService.requestAllChatServer().done { (list:[IPALNode]) in
+                var chatEnters: [IPALNode] = []
+                chatEnters = InnerHelper.filterCIPALs(list: list)
+                
+                for item in chatEnters {
+                    
+                    if item.operator_address == Config.officialNodeAddress {
+                        self.onStep2_BindNode(item, ignoreOnce: true)
+                        return
+                    }
+                }
+                
+                
+                self.hideToast(nextCan: true) {
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.15, execute: {
+                        self.showSweetAlert()
+                    })
+                }
             }
+            .catch { (error) in
+                self.handleSeedError(error: error)
+            }
+            
         }
         else {
             self.onStep3_decodeService(address: address!)
         }
     }
     
-      
-    func onStep2_BindNode(_ node: IPALNode) {
+    fileprivate func handleSeedError(error: Error) {
+        print("ipal " + error.localizedDescription)
+        self.showToast(step: .F_1_1)
+        self.store.isSeedError = true
+        NotificationCenter.default.post(name: NSNotification.Name.serviceConnectStatusChange, object: nil)
+        self.toast?.onBackTap = { [weak self] in
+            self?.hideToast(nextCan: true, completion: nil)
+        }
+    }
+    
+    
+    func onStep2_BindNode(_ node: IPALNode, ignoreOnce: Bool = false) {
         self.showToast(step: .C_2)
         ChainService.requestBindCIpal(node: node).done({ (txHash) in
             node.isClaimOk = 0
             self.store.currentCIpal = node
-              
+            
             CPAssetHelper.insertCipalHistroy(txHash,
                                              moniker: node.moniker,
                                              server_address: node.operator_address,
                                              chain_status: 0,
                                              callback: { (r, msg) in
                                                 
-                                                if let vc = R.loadSB(name: "IPALResult", iden: "ClaimResponseVC") as? ClaimResponseVC {
-                                                    vc.txHash = txHash
-                                                    Router.pushViewController(vc: vc)
+                                                if ignoreOnce == false {
+                                                    if let vc = R.loadSB(name: "IPALResult", iden: "ClaimResponseVC") as? ClaimResponseVC {
+                                                        vc.txHash = txHash
+                                                        Router.pushViewController(vc: vc)
+                                                    }
                                                 }
+                                                
                                                 let endpoint = node.cIpalEnd()?.endpoint
                                                 assert(endpoint != nil)
                                                 self.onStep2_AWaitQueryInfo(txHash: txHash)
@@ -101,9 +126,7 @@ class IPALManager: NSObject {
             }
             self.toast?.onSwitchCIpalTap = { [weak self] in
                 self?.hideToast(nextCan: true, completion: {
-                    if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                        Router.pushViewController(vc: vc, animate: true, checkSameClass: true)
-                    }
+                    self?.toCIpalList()
                 });
             }
         }
@@ -146,7 +169,7 @@ class IPALManager: NSObject {
         
         let curRand = Rand_id
         
-          
+        
         let errorBlock = {
             self.showToast(step: .F_2_1)
             self.toast?.onRetryTap = { [weak self] in
@@ -154,9 +177,7 @@ class IPALManager: NSObject {
             }
             self.toast?.onSwitchCIpalTap = { [weak self] in
                 self?.hideToast(nextCan: true, completion: {
-                    if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                        Router.pushViewController(vc: vc, animate: true, checkSameClass: true)
-                    }
+                    self?.toCIpalList()
                 });
             }
             self.store.currentCIpal?.isClaimOk = 2
@@ -164,15 +185,15 @@ class IPALManager: NSObject {
         }
         
         self.onQueryBlockStatusInfo(txHash: txHash, requestCount: 0) { (result) in
-              
+            
             if curRand != self.Rand_id {
                 return
             }
             
-              
+            
             ChainService.requestLastRegisterInfo().done { (address) in
                 if address == nil {
-                      
+                    
                     errorBlock()
                 } else {
                     CPAccountHelper.disconnect()
@@ -185,9 +206,9 @@ class IPALManager: NSObject {
         }
     }
     
-      
-      
-      
+    
+    
+    
     func onStep3_decodeService(address: String) {
         self.showToast(step: .C_2)
         ChainService.queryServerNodeByAddress(server_address: address).done { (node) in
@@ -196,6 +217,7 @@ class IPALManager: NSObject {
             let endpoint = (node.cIpalEnd()?.endpoint)!
             self.onStep3_ConnectChatService(endPoint: endpoint)
             CPAccountHelper.setNetworkEnterPoint(self.store.currentCIpal?.cIpalEnd()?.endpoint ?? "")
+            GlobalStatusStore.shared.onResetIpalNode()
         }.catch { (err) in
             self.showToast(step: .F_2_1)
             self.toast?.onRetryTap = { [weak self] in
@@ -203,15 +225,13 @@ class IPALManager: NSObject {
             }
             self.toast?.onSwitchCIpalTap = { [weak self] in
                 self?.hideToast(nextCan: true, completion: {
-                    if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                        Router.pushViewController(vc: vc, animate: true, checkSameClass: true)
-                    }
+                    self?.toCIpalList()
                 });
             }
         }
     }
     
-      
+    
     func onStep3_ConnectChatService(endPoint: String) {
         self.showToast(step: .C_3)
         ChatService.requestLoadBalancing(endPoint: endPoint).done { (node) in
@@ -223,15 +243,13 @@ class IPALManager: NSObject {
             }
             self.toast?.onSwitchCIpalTap = { [weak self] in
                 self?.hideToast(nextCan: true, completion: {
-                    if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                        Router.pushViewController(vc: vc, animate: true, checkSameClass: true)
-                    }
+                    self?.toCIpalList()
                 });
             }
         }
     }
     
-      
+    
     func onConnectChatAllPoints(point: [String]) {
         self.showToast(step: .C_3)
         ChatService.connectChatServer(allEndPoints: point).done { (result) in
@@ -248,9 +266,7 @@ class IPALManager: NSObject {
             }
             self.toast?.onSwitchCIpalTap = { [weak self] in
                 self?.hideToast(nextCan: true, completion: {
-                    if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                        Router.pushViewController(vc: vc, animate: true, checkSameClass: true)
-                    }
+                    self?.toCIpalList()
                 });
             }
         }
@@ -258,7 +274,7 @@ class IPALManager: NSObject {
     
     
     
-      
+    
     func showToast(step: ConnectToast.Step) {
         if self.toast == nil {
             self.toast = R.loadNib(name: "ConnectToast") as? ConnectToast
@@ -293,15 +309,19 @@ class IPALManager: NSObject {
         Router.rootVC?.present(vc, animated: true, completion: nil)
         
         alert.okBlock = { [weak self] in
-            
-            if let vc = R.loadSB(name: "IPAL", iden: "IPALIndexVC") as? IPALIndexVC {
-                Router.pushViewController(vc: vc)
-            }
+            self?.toCIpalList()
+        }
+    }
+    
+    fileprivate func toCIpalList() {
+        if let vc = R.loadSB(name: "IPALList", iden: "IPAListVC") as? IPAListVC {
+            vc.fromSource = .C_IPAL
+            Router.pushViewController(vc: vc, checkSameClass: true)
         }
     }
     
     
-      
+    
     func  v2_getIPALStatusInfo(txHash: String,
                                requestCount: Int,
                                autoUpdateDB: Bool = false,

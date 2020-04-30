@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
@@ -16,40 +16,40 @@ NS_ASSUME_NONNULL_BEGIN
 extern std::string generationAccountPrivatekey();
 extern std::string pubkeyFromPrivateKey(std::string privateKey);
 
-  
+
 extern std::string getPublicKeyFromUser(User *user);
 extern std::string decodePrivateKey;
 extern std::string getDecodePrivateKeyForUser(User *user, NSString *password);
 
 
-  
+
 extern NSString * _Nullable addressForLoginUser(void);
 extern NSString * _Nullable compressedHexPubkeyOfLoginUser(void);
 extern NSData * _Nullable GetOriginSignHash(NSData *contenthash, NSData *pri_key);
 
 extern NSString * _Nullable addressForUserPrikey(NSData *privateKey);
 
-  
+
 extern NSString * _Nullable compressedHexPubkeyOfUserPrikey(NSData *privateKey);
 
-  
+
 extern NSString * _Nullable compressHexpubkey(NSString *hexpubkey);
 extern NSString * _Nullable unCompressHexpubkey(NSString *hexCompressPubkey);
 
 
-  
+
 extern id decodeMsgByte(CPMessage *cpmsg) DEPRECATED_MSG_ATTRIBUTE("not use v1");
 
-  
+
 extern NSString *hexStringFromBytes(std::string bytes);
 extern std::string bytesFromHexString(NSString * str);
 
-  
+
 extern NSData *dataHexFromBytes(std::string bytes);
 extern std::string bytesHexFromData(NSData *data);
 
-  
-  
+
+
 extern NSData *bytes2nsdata(std::string bytes);
 extern std::string nsdata2bytes(NSData *data);
 
@@ -82,7 +82,7 @@ extern const char *nsstring2cstr(NSString *string);
              byPrivateKey:(std::string)privateKey;
 
 
-  
+
 + (NSString *_Nullable)recoveryHexPubkeyForSign64:(NSString *)hexSign64
                                     contentHash:(NSData *_Nullable)contenthash
                                    judgeHexPubkey:(NSString *)hexpubkey;

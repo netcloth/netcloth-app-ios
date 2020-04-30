@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
@@ -43,8 +43,7 @@ class SystemCell: UITableViewCell {
             objc_setAssociatedObject(self, &key_Defaulter, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
     }
-    
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -54,7 +53,7 @@ class SystemCell: UITableViewCell {
     
         let subviews = self.allSubViews
         for item in subviews {
-              
+            
             if  "\(type(of: item))".contains("CellSeparatorView") {
                 item.isHidden = false
                 item.alpha = self.showLastSeparator ? 1.0 : 0.0

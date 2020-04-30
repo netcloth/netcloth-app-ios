@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
 
-  
+
 class SystemMsgCell: ChatCommonCell {
     
     deinit {
@@ -46,7 +46,7 @@ class SystemMsgCell: ChatCommonCell {
         msgContentL?.text = msg.msgDecodeContent() as? String
     }
     
-      
+    
     override func msgContentView() -> UIView? {
         return nil
     }

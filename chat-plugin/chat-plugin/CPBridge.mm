@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "CPBridge.h"
 #import "CPDataModel+secpri.h"
@@ -18,7 +18,7 @@
 
 std::string decodePrivateKey;
 
-  
+
 std::string generationAccountPrivatekey() {
     std::string prikey;
     for (int i = 0; i < 1024; i++) {
@@ -62,7 +62,7 @@ std::string getDecodePrivateKeyForUser(User *user, NSString *password) {
     return deprikey;
 }
 
-  
+
 
 NSString *addressForLoginUser(void) {
     
@@ -112,7 +112,7 @@ NSString * _Nullable compressedHexPubkeyOfUserPrikey(NSData *privateKey) {
     return hexPubkeyCompressed;
 }
 
-  
+
 NSString * _Nullable compressHexpubkey(NSString *hexpubkey) {
     
     if (([hexpubkey hasPrefix:@"02"] || [hexpubkey hasPrefix:@"03"]) &&
@@ -150,7 +150,7 @@ NSString * _Nullable unCompressHexpubkey(NSString *hexCompressPubkey) {
 }
 
 
-  
+
 NSString *hexStringFromBytes(std::string bytes)
 {
     std::string str = Byte2HexAsc(bytes);
@@ -160,7 +160,7 @@ NSString *hexStringFromBytes(std::string bytes)
 std::string bytesFromHexString(NSString * str)
 {
     char *p = (char *)[str UTF8String];
-    std::string ss(p,str.length);   
+    std::string ss(p,str.length); 
     return  HexAsc2ByteString(ss);
 }
 
@@ -173,12 +173,12 @@ NSData *dataHexFromBytes(std::string bytes)
 std::string bytesHexFromData(NSData *data)
 {
     char*p =  (char *)data.bytes;
-    std::string ss(p,data.length);  
+    std::string ss(p,data.length);
     std::string byte =  HexAsc2ByteString(ss);
     return byte;
 }
-  
-  
+
+
 NSData *bytes2nsdata(std::string bytes)
 {
     NSData *data = [NSData dataWithBytes:bytes.c_str() length:bytes.length()];
@@ -208,11 +208,11 @@ const char *nsstring2cstr(NSString *string) {
     return p;
 }
 
-  
-  
+
+
 id decodeMsgByte(CPMessage *cpmsg)
 {
-      
+    
     if (cpmsg.msgData.length < 16) {
         return nil;
     }
@@ -228,7 +228,7 @@ id decodeMsgByte(CPMessage *cpmsg)
     std::string iv = msg_org.substr(0,16);
     std::string msg_tmp = msg_org.substr(16,bytes.length() - 16);
     
-      
+    
     std::string frompbkey;
     if ([cpmsg.senderPubKey isEqualToString:CPInnerState.shared.loginUser.publicKey]) {
         frompbkey = bytesFromHexString(cpmsg.toPubkey);
@@ -242,7 +242,7 @@ id decodeMsgByte(CPMessage *cpmsg)
     std::string msg_decoded;
     @try  {
         std::string out;
-          
+        
         std::string content = msg_tmp;
         BOOL decR = AesDecode(ecc_shared_key, iv, content, out);
         NSLog(@"解密结果：%@",decR ? @"成功":@"失败");
@@ -298,7 +298,7 @@ prikey:(std::string)str_pri_key
 toPubkey:(std::string)str_pub_key {
     
     
-      
+    
     if (encodeBytes.length() < 16) {
         return "";
     }
@@ -308,7 +308,7 @@ toPubkey:(std::string)str_pub_key {
     std::string iv = msg_org.substr(0,16);
     std::string msg_tmp = msg_org.substr(16,bytes.length() - 16);
     
-      
+    
     std::string frompbkey = str_pub_key;
     std::string meprikey = str_pri_key;
     std::string ecc_shared_key = GetEcdhKey(frompbkey, meprikey);
@@ -316,7 +316,7 @@ toPubkey:(std::string)str_pub_key {
     std::string msg_decoded;
     @try  {
         std::string out;
-          
+        
         std::string content = msg_tmp;
         BOOL decR = AesDecode(ecc_shared_key, iv, content, out);
         NSLog(@"解密结果：%@",decR ? @"成功":@"失败");
@@ -332,22 +332,22 @@ toPubkey:(std::string)str_pub_key {
 prikey:(std::string)str_pri_key
 toPubkey:(std::string)str_pub_key
 {
-      
+    
     std::string iv = CreateAesIVKey();
-      
+    
     std::string shared_key = GetEcdhKey(str_pub_key, str_pri_key);
-      
+    
     std::string msg_encoded;
     @try  {
         std::string out;
-          
+        
         std::string content = sourceBytes;
         AesEncode(shared_key, iv, content, out);
         msg_encoded = out;
     }
     @finally {
     }
-      
+    
     std::string for_send = iv + msg_encoded;
     
     return for_send;
@@ -368,11 +368,11 @@ toPubkey:(std::string)str_pub_key
     
     std::string shared_key = nsdata2bytes(data_256);
     
-      
+    
     std::string msg_encoded;
     @try  {
         std::string out;
-          
+        
         std::string content = sourceBytes;
         AesEncode(shared_key, iv, content, out);
         msg_encoded = out;
@@ -385,7 +385,7 @@ toPubkey:(std::string)str_pub_key
 }
 
 
-  
+
 + (NSData *)aesDecodeData:(std::string)encodeData  byPrivateKey:(std::string)privateKey {
     if (encodeData.length() < 16) {
         return nil;

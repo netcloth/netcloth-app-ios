@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "SRAudioRecordButton.h"
 #import "SRAudioRecorderManager.h"
@@ -67,13 +67,13 @@
     NSLog(@"dealloc %@",self.className);
 }
 
-  
+
 - (void)touchDown {
     if (self.recordButtonTouchDownBlock) {
         self.recordButtonTouchDownBlock(self);
     }
     
-      
+    
     [[SRAudioRecorderManager sharedManager] startRecording:^(BOOL grand) {
         if (grand && self.isTracking) {
             [self setButtonStateRecording];
@@ -91,7 +91,7 @@
     [[SRAudioRecorderManager sharedManager] stopRecording];
 }
 
-  
+
 - (void)touchUpInside {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;
@@ -108,7 +108,7 @@
     [[SRAudioRecorderManager sharedManager] stopRecording];
 }
 
-  
+
 - (void)touchUpOutside {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;
@@ -133,7 +133,7 @@
     }
 }
 
-  
+
 - (void)touchDragEnter {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;
@@ -149,7 +149,7 @@
     }
 }
 
-  
+
 - (void)touchDragExit {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;

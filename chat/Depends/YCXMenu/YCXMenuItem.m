@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "YCXMenuItem.h"
 
@@ -51,7 +51,7 @@
 
 #pragma mark - Private Methods
 
-  
+
 - (id)init:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag userInfo:(NSDictionary *)userInfo target:(id)target action:(SEL) action {
     NSParameterAssert(title.length || image);
     self = [super init];

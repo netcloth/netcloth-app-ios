@@ -1,18 +1,18 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "SGQRCodeScanView.h"
 
- 
+
 #define scanBorderW 0.7 * self.frame.size.width
- 
+
 #define scanBorderX 0.5 * (1 - 0.7) * self.frame.size.width
- 
+
 #define scanBorderY 0.5 * (self.frame.size.height - scanBorderW)
 
 @interface SGQRCodeScanView ()
@@ -61,26 +61,26 @@
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
-      
+    
     CGFloat borderW = scanBorderW;
     CGFloat borderH = borderW;
     CGFloat borderX = scanBorderX;
     CGFloat borderY = scanBorderY;
     CGFloat borderLineW = 0.2;
 
-      
+    
     [[[UIColor blackColor] colorWithAlphaComponent:self.backgroundAlpha] setFill];
     UIRectFill(rect);
-      
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetBlendMode(context, kCGBlendModeDestinationOut);
-      
+    
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(borderX + 0.5 * borderLineW, borderY + 0.5 *borderLineW, borderW - borderLineW, borderH - borderLineW)];
     [bezierPath fill];
-      
+    
     CGContextSetBlendMode(context, kCGBlendModeNormal);
     
-      
+    
     UIBezierPath *borderPath = [UIBezierPath bezierPathWithRect:CGRectMake(borderX, borderY, borderW, borderH)];
     borderPath.lineCapStyle = kCGLineCapButt;
     borderPath.lineWidth = borderLineW;
@@ -89,7 +89,7 @@
     
     
     CGFloat cornerLenght = 20;
-      
+    
     UIBezierPath *leftTopPath = [UIBezierPath bezierPath];
     leftTopPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -112,7 +112,7 @@
 
     [leftTopPath stroke];
     
-      
+    
     UIBezierPath *leftBottomPath = [UIBezierPath bezierPath];
     leftBottomPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -133,7 +133,7 @@
 
     [leftBottomPath stroke];
     
-      
+    
     UIBezierPath *rightTopPath = [UIBezierPath bezierPath];
     rightTopPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -154,7 +154,7 @@
 
     [rightTopPath stroke];
     
-      
+    
     UIBezierPath *rightBottomPath = [UIBezierPath bezierPath];
     rightBottomPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -277,10 +277,10 @@
     if (!_scanningline) {
         _scanningline = [[UIImageView alloc] init];
         
-          
+        
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"SGQRCode" withExtension:@"bundle"];
         if (!url) {
-              
+            
             url = [[NSBundle bundleForClass:[self class]] URLForResource:@"SGQRCode" withExtension:@"bundle"];
         }
         NSBundle *bundle = [NSBundle bundleWithURL:url];

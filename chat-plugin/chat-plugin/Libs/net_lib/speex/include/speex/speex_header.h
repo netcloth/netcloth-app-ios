@@ -49,10 +49,10 @@ extern "C" {
 
 struct SpeexMode;
 
- 
+
 #define SPEEX_HEADER_STRING_LENGTH 8
 
- 
+
 #define SPEEX_HEADER_VERSION_LENGTH 20
 
 /** Speex header info for file-based formats */
@@ -74,13 +74,13 @@ typedef struct SpeexHeader {
    spx_int32_t reserved2;              /**< Reserved for future use, must be zero */
 } SpeexHeader;
 
- 
+
 void speex_init_header(SpeexHeader *header, int rate, int nb_channels, const struct SpeexMode *m);
 
 /** Creates the header packet from the header itself (mostly involves endianness conversion) */
 char *speex_header_to_packet(SpeexHeader *header, int *size);
 
- 
+
 SpeexHeader *speex_packet_to_header(char *packet, int size);
 
 /** Frees the memory allocated by either speex_header_to_packet() or speex_packet_to_header() */

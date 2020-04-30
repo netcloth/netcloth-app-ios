@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import AVFoundation
@@ -78,8 +78,12 @@ open class Authorize : Access {
 }
 
 
-open class Device {
+open class AppBundle {
     static public func getAppVersion() -> String {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    }
+    
+    static public func getAppBundleId() -> String {
+        return Bundle.main.infoDictionary?["CFBundleIdentifier"] as! String
     }
 }

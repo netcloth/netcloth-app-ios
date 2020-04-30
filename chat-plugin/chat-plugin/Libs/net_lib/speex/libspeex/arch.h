@@ -43,7 +43,7 @@
 #define SPEEX_VERSION "speex-1.2.0"   /**< Speex version string. */
 #endif
 
- 
+
 #ifdef FIXED_POINT
 
 #ifdef FLOATING_POINT
@@ -214,7 +214,7 @@ typedef float spx_word32_t;
 
 #if defined (CONFIG_TI_C54X) || defined (CONFIG_TI_C55X)
 
- 
+
 #define BYTES_PER_CHAR 2 
 #define BITS_PER_CHAR 16
 #define LOG2_BITS_PER_CHAR 4

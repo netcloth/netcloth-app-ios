@@ -66,7 +66,7 @@ SpeexStereoState *speex_stereo_state_init(void);
 /** Reset/re-initialise an already allocated stereo state */
 void speex_stereo_state_reset(SpeexStereoState *stereo);
 
- 
+
 void speex_stereo_state_destroy(SpeexStereoState *stereo);
 
 /** Transforms a stereo frame into a mono frame and stores intensity stereo info in 'bits' */
@@ -75,13 +75,13 @@ void speex_encode_stereo(float *data, int frame_size, SpeexBits *bits);
 /** Transforms a stereo frame into a mono frame and stores intensity stereo info in 'bits' */
 void speex_encode_stereo_int(spx_int16_t *data, int frame_size, SpeexBits *bits);
 
- 
+
 void speex_decode_stereo(float *data, int frame_size, SpeexStereoState *stereo);
 
- 
+
 void speex_decode_stereo_int(spx_int16_t *data, int frame_size, SpeexStereoState *stereo);
 
- 
+
 int speex_std_stereo_request_handler(SpeexBits *bits, void *state, void *data);
 
 #ifdef __cplusplus

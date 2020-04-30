@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import ObjectiveC
@@ -16,7 +16,7 @@ var key_large = "key_large"
 @objc public protocol  BarControl  {
     var isHideNavBar: Bool {get set}
     
-       
+     
     @available(iOS 11.0, *)
     var isShowLargeTitleMode: Bool {get set}
     
@@ -25,6 +25,7 @@ var key_large = "key_large"
     
     func whiteStyle()
     func clearStyle()
+    func themeStyle(color: UIColor, barItemColor: UIColor)
 }
 
 @objc public protocol VCInitData {
@@ -56,6 +57,9 @@ extension UIViewController : BarControl, VCInitData {
     public func clearStyle() {
         self.navigationController?.clearStyle()
     }
+    public func themeStyle(color: UIColor,barItemColor: UIColor) {
+        self.navigationController?.themeStyle(color: color, barItemColor: barItemColor)
+    }
     
     public var isHideNavBar: Bool {
         get {
@@ -66,6 +70,9 @@ extension UIViewController : BarControl, VCInitData {
         }
         set {
             objc_setAssociatedObject(self, &key_hidebar, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            self.children.forEach { (controller) in
+                controller.isHideNavBar = newValue
+            }
         }
     }
     
@@ -88,16 +95,16 @@ extension UIViewController : BarControl, VCInitData {
         btn.setImage(UIImage(named: "返回1")?.resizableImage(withCapInsets: UIEdgeInsets(top: 1, left: 13, bottom: 1, right: 1), resizingMode: .stretch), for: .normal)
         btn.bounds = CGRect(x: 0, y: 0, width: 44, height: 44)
         btn.contentHorizontalAlignment = .left
-          
+        
         btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: -7, bottom: 0, right: 0)
         btn.addTarget(self, action: #selector(backAction), for: .touchUpInside)
         
         let item = UIBarButtonItem(customView: btn)
         self.navigationItem.leftBarButtonItem = item
-          
-          
-          
-          
+        
+        
+        
+        
     }
     
     @objc public func backAction() {
@@ -105,7 +112,7 @@ extension UIViewController : BarControl, VCInitData {
     }
 }
 
-  
+
 open class BaseViewController: UIViewController {
     
     deinit {
@@ -117,7 +124,7 @@ open class BaseViewController: UIViewController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = self.isShowLargeTitleMode ? .always : .never
         } else {
-              
+            
         }
     }
     
@@ -125,10 +132,14 @@ open class BaseViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(self.isHideNavBar, animated: animated)
         self.navigationController?.hideBlackLine()
+        themeNavColor()
+    }
+    
+    
+    open func themeNavColor() {
         whiteStyle()
     }
     
-   
 }
 
 open class BaseTableViewController : UITableViewController {
@@ -141,7 +152,7 @@ open class BaseTableViewController : UITableViewController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = self.isShowLargeTitleMode ? .automatic : .never
         } else {
-              
+            
         }
     }
     
@@ -155,27 +166,24 @@ open class BaseTableViewController : UITableViewController {
 
 
 
-  
+
 extension  UINavigationController {
     
     public func hideBlackLine() {
-  
+        
         self.navigationBar.shadowImage = UIImage()
     }
     public func showBlackLine () {
-  
+        
         self.navigationBar.shadowImage = nil
     }
     
     public override func whiteStyle() {
         
         var navbg = self.navigationBar.backgroundImage(for: .default)
-        if navbg?.size.height == 0
-            || navbg == nil {
-            navbg = UIImage.imageWithColor(color: UIColor.white)?.resizableImage(withCapInsets: UIEdgeInsets(top: 0.1, left: 0.1, bottom: 0.1, right: 0.1), resizingMode: UIImage.ResizingMode.stretch)
-            
-            self.navigationBar.setBackgroundImage(navbg, for: .default)
-        }
+        navbg = UIImage.imageWithColor(color: UIColor.white)?.resizableImage(withCapInsets: UIEdgeInsets(top: 0.1, left: 0.1, bottom: 0.1, right: 0.1), resizingMode: UIImage.ResizingMode.stretch)
+        
+        self.navigationBar.setBackgroundImage(navbg, for: .default)
         
         if #available(iOS 11.0, *) {
             for view in self.navigationBar.subviews {
@@ -188,8 +196,33 @@ extension  UINavigationController {
         }
         
         navigationBar.isTranslucent = true
-  
-        self.navigationBar.tintColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1)
+        
+        let color = UIColor(red: 4/255.0, green: 16/255.0, blue: 54/255.0, alpha: 1)
+        self.navigationBar.tintColor = color
+        self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: color]
+    }
+    
+    public override func themeStyle(color: UIColor,barItemColor: UIColor) {
+        var navbg = self.navigationBar.backgroundImage(for: .default)
+        navbg = UIImage.imageWithColor(color: color)?.resizableImage(withCapInsets: UIEdgeInsets(top: 0.1, left: 0.1, bottom: 0.1, right: 0.1), resizingMode: UIImage.ResizingMode.stretch)
+        self.navigationBar.setBackgroundImage(navbg, for: .default)
+        
+        if #available(iOS 11.0, *) {
+            for view in self.navigationBar.subviews {
+                view.alpha = 1
+            }
+        } else {
+            if let sv = self.navigationBar.subviews.first {
+                sv.alpha = 1
+            }
+        }
+        
+        navigationBar.isTranslucent = true
+        
+        
+        self.navigationBar.tintColor = barItemColor
+        
+        self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: barItemColor]
     }
     
     public override func clearStyle() {
@@ -226,7 +259,7 @@ extension UIImage {
     static func imageWithColor(color: UIColor) -> UIImage? {
         return self.imageWithColor(color: color, size: CGSize(width: 1, height: 1))
     }
-
+    
     static func imageWithColor(color: UIColor, size: CGSize) -> UIImage? {
         if  size.width <= 0 || size.height <= 0 {
             return nil
@@ -250,7 +283,7 @@ extension UITabBarItem {
                          textColor:UIColor? = nil,
                          selectedColor:UIColor? = nil,
                          isOrigin:Bool = true
-        ) {
+    ) {
         
         var img: UIImage?, sImg :UIImage?, tc: UIColor?, stc: UIColor?
         if let iname = imgName {
@@ -275,7 +308,7 @@ extension UITabBarItem {
             stc = tct
         }
         
-          
+        
         if img != nil {
             self.image = img
         }
@@ -300,9 +333,8 @@ extension UITabBarItem {
 
 extension UIViewController {
     
-      
     open func setCustomTitle(_ title: String,
-                             color: UIColor = UIColor(red: 48/255.0, green: 49/255.0, blue: 51/255.0, alpha: 1),
+                             color: UIColor = UIColor.white,
                              font: UIFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)) -> UILabel
     {
         let label = UILabel()

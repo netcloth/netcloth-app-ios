@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -13,7 +13,7 @@ class GroupAudioChatCell: ChatCommonCell {
     
     @IBOutlet weak var sendStateIndicator: UIActivityIndicatorView?
     
-    @IBOutlet weak var sendErrorBtn: UIButton?   
+    @IBOutlet weak var sendErrorBtn: UIButton? 
     @IBAction func onRetrySendAction() {
         if let d = dataMsg {
             delegate?.onRetrySendMsg?(d.msgId)
@@ -27,8 +27,8 @@ class GroupAudioChatCell: ChatCommonCell {
     @IBOutlet weak var audioIcon: UIImageView?
     
     @IBOutlet weak var bgImgVWidth: NSLayoutConstraint?
-    @IBOutlet weak var readTipsImg: UIImageView?   
-    @IBOutlet weak var sendStateImgV: UIImageView?   
+    @IBOutlet weak var readTipsImg: UIImageView? 
+    @IBOutlet weak var sendStateImgV: UIImageView? 
     
     private var cpMsg: CPMessage?
     
@@ -41,31 +41,44 @@ class GroupAudioChatCell: ChatCommonCell {
         }
     }
     
-      
+    
     @IBOutlet weak var avatarBtn: UIButton?
     var dataMsg: CPMessage?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.avatarBtn?.addTarget(self, action: #selector(onTapAvatar), for: .touchUpInside)
+        
+        if let avBtn = self.avatarBtn {
+            let lpr = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressAvatar(_:)))
+            lpr.minimumPressDuration = 1.0
+            avBtn.addGestureRecognizer(lpr)
+        }
     }
     @objc func onTapAvatar() {
         if let d = dataMsg {
-            delegate?.onTapAvatar?(pubkey: d.toPubkey)
+            delegate?.onTapAvatar?(pubkey: d.senderPubKey)
         }
     }
     
-      
+    @objc func onLongPressAvatar(_ gst: UILongPressGestureRecognizer) {
+        if let d = dataMsg,
+            gst.state == .began {
+            delegate?.onLongPressAvatar?(pubkey: d.senderPubKey, senderName: d.senderRemark)
+        }
+    }
+    
+    
     override func msgContentView() -> UIView? {
         return self.msgContentL
     }
     
-      
+    
     override func onTapCell() {
         if let m = cpMsg {
             
             if m.isAudioPlaying == true {
-                  
+                
                 m.isAudioPlaying = false
                 SRRecordingAudioPlayerManager.shared()?.stop()
                 
@@ -87,7 +100,7 @@ class GroupAudioChatCell: ChatCommonCell {
                     }
                 })
                 
-                CPChatHelper.setReadOfMessage(m.msgId, complete: nil)
+                CPGroupManagerHelper.setReadOfMessage(m.msgId, complete: nil)
                 m.audioRead = true
                 refreshAudioTips()
             }
@@ -106,35 +119,48 @@ class GroupAudioChatCell: ChatCommonCell {
             updateOthers(msg: msg)
         }
         
-          
+        
         if msg.isAudioPlaying == true {
             self.startAudioAnimate()
             SRRecordingAudioPlayerManager.shared()?.call = { [weak self] (res, message) in
+                msg.isAudioPlaying = false
                 if self?.cpMsg == msg {
                     self?.stopAudioAnimate()
                 }
             }
         }
+        else {
+            self.stopAudioAnimate()
+        }
+        
+        
+        self.LgroupNick?.isHidden = false
+        self.LgroupMasterIden?.isHidden = true
+        if let masterPubkey = self.viewController?.roomService?.groupMasterPubkey,
+            msg.senderPubKey == masterPubkey {
+            self.LgroupMasterIden?.isHidden = false
+        }
     }
     
-      
+    
     func updateSelf(msg: CPMessage) {
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
         
-          
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-          
-        var img = UIImage(named: "蓝色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
         
-          
+
+
+
+        msgBgImgView?.backgroundColor = UIColor(hexString: Color.blue)
+        
+        
         var images:[UIImage] = []
         images.append(UIImage(named: "蓝色-1点")!)
         images.append(UIImage(named: "蓝色-2点")!)
@@ -142,14 +168,16 @@ class GroupAudioChatCell: ChatCommonCell {
         self.audioIcon?.animationImages = images
         self.audioIcon?.animationDuration = 2
         self.audioIcon?.image = UIImage(named: "蓝色-3点")
-          
-        smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
         
-          
+        smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
+        let color = CPAccountHelper.loginUser()?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
+        
+        
         self.msgContentL?.text = "\(min(msg.audioTimes,60))\""
         self.bgImgVWidth?.constant = getWidthOfTime(msg.audioTimes)
         
-          
+        
         refreshAudioTips()
         
         let expect = NSDate().timeIntervalSince1970 - 180
@@ -168,9 +196,10 @@ class GroupAudioChatCell: ChatCommonCell {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-        var img = UIImage(named: "灰色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+
+
+
+        msgBgImgView?.backgroundColor = UIColor.white
         
         var images:[UIImage] = []
         images.append(UIImage(named: "灰色-1点")!)
@@ -182,6 +211,8 @@ class GroupAudioChatCell: ChatCommonCell {
         
         var sendRemark = msg.senderRemark
         smallRemarkL?.text = sendRemark.getSmallRemark()
+        let color = msg.senderPubKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         LgroupNick?.text = sendRemark
         
         self.msgContentL?.text = "\(min(msg.audioTimes,60))\""
@@ -189,7 +220,7 @@ class GroupAudioChatCell: ChatCommonCell {
         
         refreshAudioTips()
         
-        if msg.senderPubKey == support_account_pubkey {
+        if let assist = msg.senderPubKey.isAssistHelper() {
             smallRemarkL?.text = nil
             smallAvatarImageV?.isHidden = false
             smallAvatarImageV?.image = UIImage(named: "subscript_icon")
@@ -198,7 +229,7 @@ class GroupAudioChatCell: ChatCommonCell {
         }
     }
     
-      
+    
     
     func refreshAudioTips() {
         self.readTipsImg?.image = UIImage(named: "红点")

@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
 
-  
+
 class GroupInviteDetailVC: BaseViewController {
     
     @IBOutlet weak var smallRemark: UILabel?
@@ -17,8 +17,10 @@ class GroupInviteDetailVC: BaseViewController {
     @IBOutlet weak var memberCountL: UILabel?
     @IBOutlet weak var joinBtn: UIButton?
     
-    var msg: CPMessage?    
-    var qr_groupPublickKey: String?   
+    var msg: CPMessage?  
+    var qr_groupPublickKey: String? 
+    var recommended_groupPublickKey: String? 
+    var miniLinkGroupId: String? 
     
     let disbag = DisposeBag()
     
@@ -26,18 +28,23 @@ class GroupInviteDetailVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configUI()
         configEvent()
         requestInfo()
     }
     
-      
+    fileprivate func configUI() {
+        self.joinBtn?.backgroundColor = UIColor(hexString: Color.blue)
+    }
+    
+    
     func configEvent() {
         self.joinBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.onJoinTap()
         }).disposed(by: disbag)
     }
     
-      
+    
     func onJoinTap() {
         guard let response = self.groupInfo else {
             return
@@ -65,7 +72,11 @@ class GroupInviteDetailVC: BaseViewController {
         }
         let source = getJoinSource()
         if source == 1 {
-              
+            
+            toSubmitVc()
+        }
+        else if source == 2 {
+            
             toSubmitVc()
         }
         else {
@@ -85,7 +96,7 @@ class GroupInviteDetailVC: BaseViewController {
         }
     }
     
-      
+    
     func sendRealJoin() {
         guard let response = self.groupInfo,
             let groupPrikey = getGroupPrivatekey(),
@@ -110,10 +121,10 @@ class GroupInviteDetailVC: BaseViewController {
             let json = JSON(res)
             let code = json["code"].int
             if (code == ChatErrorCode.OK.rawValue || code == ChatErrorCode.memberDuplicate.rawValue) {
-                  
+                
                 let notice = self?.groupInfo?.notice["content"] as? String ?? ""
                 CPGroupManagerHelper.joinGroup(byGroupName: name, groupPrivateKey: groupPrikey, groupNotice: notice, callback: { (r, msg, contact) in
-                      
+                    
                     if let ct = contact , r == true {
                         Router.dismissVC(animate: false, completion: {
                             if let vc = R.loadSB(name: "GroupRoom", iden: "GroupRoomVC") as? GroupRoomVC {
@@ -125,10 +136,10 @@ class GroupInviteDetailVC: BaseViewController {
                 })
             }
             else if (code == ChatErrorCode.memberExceed.rawValue) {
-                  
+                
                 self?.showFailJoinAlert()
             } else {
-                  
+                
                 Toast.show(msg: "System error".localized())
             }
         }
@@ -168,6 +179,12 @@ class GroupInviteDetailVC: BaseViewController {
         if qr_groupPublickKey?.isEmpty == false {
             return 1
         }
+        if recommended_groupPublickKey?.isEmpty == false {
+            return 2
+        }
+        if miniLinkGroupId?.isEmpty == false {
+            return 3
+        }
         return 0
     }
     func getGroupPrivatekey() -> Data? {
@@ -178,7 +195,7 @@ class GroupInviteDetailVC: BaseViewController {
         return prikey
     }
     
-      
+    
     func toSubmitVc() {
         guard let response = self.groupInfo else {
                 return
@@ -217,7 +234,7 @@ class GroupInviteDetailVC: BaseViewController {
         }
     }
     
-      
+    
     func requestInfo() {
         self.showLoading()
         DispatchQueue.global().async {
@@ -235,8 +252,14 @@ class GroupInviteDetailVC: BaseViewController {
                 let qrHexpubkey = self.qr_groupPublickKey
                 pubkey = qrHexpubkey ?? ""
             }
+            if pubkey.count != 130 {
+                pubkey = self.recommended_groupPublickKey ?? ""
+            }
+            if pubkey.count != 130 {
+                pubkey = self.miniLinkGroupId ?? ""
+            }
             
-              
+            
             if pubkey.count != 130 {
                 DispatchQueue.main.async {
                     self.dismissLoading()
@@ -257,6 +280,9 @@ class GroupInviteDetailVC: BaseViewController {
     
     func loadGroupDetailInfo() {
         smallRemark?.text = groupInfo?.name.getSmallRemark()
+        let color = groupInfo?.group_id.randomColor() ?? RelateDefaultColor
+        smallRemark?.backgroundColor = UIColor(hexString: color)
+        
         remarkL?.text = groupInfo?.name
         
         if let count =  groupInfo?.member_count  {

@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_GROUP_H
@@ -14,7 +14,7 @@
 typedef struct {
     secp256k1_fe x;
     secp256k1_fe y;
-    int infinity;  
+    int infinity; 
 } secp256k1_ge;
 
 #define SECP256K1_GE_CONST(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) {SECP256K1_FE_CONST((a),(b),(c),(d),(e),(f),(g),(h)), SECP256K1_FE_CONST((i),(j),(k),(l),(m),(n),(o),(p)), 0}
@@ -25,7 +25,7 @@ typedef struct {
     secp256k1_fe x; /* actual X: x/z^2 */
     secp256k1_fe y; /* actual Y: y/z^3 */
     secp256k1_fe z;
-    int infinity;  
+    int infinity; 
 } secp256k1_gej;
 
 #define SECP256K1_GEJ_CONST(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) {SECP256K1_FE_CONST((a),(b),(c),(d),(e),(f),(g),(h)), SECP256K1_FE_CONST((i),(j),(k),(l),(m),(n),(o),(p)), SECP256K1_FE_CONST(0, 0, 0, 0, 0, 0, 0, 1), 0}
@@ -40,7 +40,7 @@ typedef struct {
 
 #define SECP256K1_GE_STORAGE_CONST_GET(t) SECP256K1_FE_STORAGE_CONST_GET(t.x), SECP256K1_FE_STORAGE_CONST_GET(t.y)
 
- 
+
 static void secp256k1_ge_set_xy(secp256k1_ge *r, const secp256k1_fe *x, const secp256k1_fe *y);
 
 /** Set a group element (affine) equal to the point with the given X coordinate
@@ -61,10 +61,10 @@ static int secp256k1_ge_is_valid_var(const secp256k1_ge *a);
 
 static void secp256k1_ge_neg(secp256k1_ge *r, const secp256k1_ge *a);
 
- 
+
 static void secp256k1_ge_set_gej(secp256k1_ge *r, secp256k1_gej *a);
 
- 
+
 static void secp256k1_ge_set_all_gej_var(secp256k1_ge *r, const secp256k1_gej *a, size_t len);
 
 /** Bring a batch inputs given in jacobian coordinates (with known z-ratios) to
@@ -139,4 +139,4 @@ static void secp256k1_ge_storage_cmov(secp256k1_ge_storage *r, const secp256k1_g
 /** Rescale a jacobian point by b which must be non-zero. Constant-time. */
 static void secp256k1_gej_rescale(secp256k1_gej *r, const secp256k1_fe *b);
 
-#endif  
+#endif 

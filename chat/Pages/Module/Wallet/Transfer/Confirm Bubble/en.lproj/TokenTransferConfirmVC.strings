@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "NCH"; ObjectID = "36G-gE-B0A"; */
+"36G-gE-B0A.text" = "NCH";
+
+/* Class = "UILabel"; text = "收款地址"; ObjectID = "HGJ-dz-31Z"; */
+"HGJ-dz-31Z.text" = "To";
+
+/* Class = "UILabel"; text = "付款地址"; ObjectID = "QA1-od-aOl"; */
+"QA1-od-aOl.text" = "From";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "Vls-Xe-vIv"; */
+"Vls-Xe-vIv.text" = "";
+
+/* Class = "UILabel"; text = "0xlfkfebe35936lfllektjgvwllksefkwetwktwtlwktwj8"; ObjectID = "bLQ-WM-igd"; */
+"bLQ-WM-igd.text" = "";
+
+/* Class = "UILabel"; text = "矿工费"; ObjectID = "csE-qR-iZJ"; */
+"csE-qR-iZJ.text" = "Miner Fee";
+
+/* Class = "UILabel"; text = "0xlfkfebe35936lfllektjgvwllksefkwetwktwtlwktwj8"; ObjectID = "ejf-L5-WzV"; */
+"ejf-L5-WzV.text" = "";
+
+/* Class = "UILabel"; text = "0.0002NCH"; ObjectID = "lbr-8G-g8I"; */
+"lbr-8G-g8I.text" = "0.0002NCH";
+
+/* Class = "UIButton"; normalTitle = "确认转账"; ObjectID = "qnC-DT-ULx"; */
+"qnC-DT-ULx.normalTitle" = "Confirm";

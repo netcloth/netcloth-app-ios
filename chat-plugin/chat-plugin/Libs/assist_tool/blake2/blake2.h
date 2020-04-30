@@ -8,8 +8,8 @@
  * License/Waiver or the Apache Public License 2.0, at your option. The terms of
  * these licenses can be found at:
  *
- * - CC0 1.0 Universal : http:  
- * - Apache 2.0        : http:  
+ * - CC0 1.0 Universal : http:
+ * - Apache 2.0        : http:
  *
  * You should have received a copy of both of these licenses along with this
  * software. If not, they may be obtained at the above URLs.
@@ -31,17 +31,17 @@ enum blake2b_constant {
 
 #pragma pack(push, 1)
 typedef struct __blake2b_param {
-    uint8_t digest_length;                    
-    uint8_t key_length;                       
-    uint8_t fanout;                           
-    uint8_t depth;                            
-    uint32_t leaf_length;                     
-    uint64_t node_offset;                     
-    uint8_t node_depth;                       
-    uint8_t inner_length;                     
-    uint8_t reserved[14];                     
-    uint8_t salt[BLAKE2B_SALTBYTES];          
-    uint8_t personal[BLAKE2B_PERSONALBYTES];  
+    uint8_t digest_length;                   
+    uint8_t key_length;                      
+    uint8_t fanout;                          
+    uint8_t depth;                           
+    uint32_t leaf_length;                    
+    uint64_t node_offset;                    
+    uint8_t node_depth;                      
+    uint8_t inner_length;                    
+    uint8_t reserved[14];                    
+    uint8_t salt[BLAKE2B_SALTBYTES];         
+    uint8_t personal[BLAKE2B_PERSONALBYTES]; 
 } blake2b_param;
 #pragma pack(pop)
 
@@ -55,7 +55,7 @@ typedef struct __blake2b_state {
     uint8_t last_node;
 } blake2b_state;
 
- 
+
 /* Poor man's static_assert */
 enum {
     blake2_size_check_0 = 1 / !!(CHAR_BIT == 8),
@@ -67,7 +67,7 @@ enum {
 extern "C" {
 #endif
 
- 
+
 int blake2b_init(blake2b_state *S, size_t outlen);
 int blake2b_init_key(blake2b_state *S, size_t outlen, const void *key,
                      size_t keylen);
@@ -75,12 +75,12 @@ int blake2b_init_param(blake2b_state *S, const blake2b_param *P);
 int blake2b_update(blake2b_state *S, const void *in, size_t inlen);
 int blake2b_final(blake2b_state *S, void *out, size_t outlen);
 
- 
+
 int blake2b(void *out, size_t outlen, const void *in, size_t inlen,
                          const void *key, size_t keylen);
 
 /* Argon2 Team - Begin Code */
-  
+
 /* Argon2 Team - End Code */
 
 #ifdef __cplusplus

@@ -15,11 +15,11 @@
 /* Class = "UILabel"; text = "添加联系人"; ObjectID = "VKX-dc-jXb"; */
 "VKX-dc-jXb.text" = "添加联系人";
 
-/* Class = "UILabel"; text = "通讯录"; ObjectID = "jFj-Ur-qBe"; */
-"jFj-Ur-qBe.text" = "通讯录";
+/* Class = "UILabel"; text = "联系人"; ObjectID = "jFj-Ur-qBe"; */
+"jFj-Ur-qBe.text" = "联系人";
 
-/* Class = "UITabBarItem"; title = "通讯录"; ObjectID = "qiC-SB-4ZL"; */
-"qiC-SB-4ZL.title" = "通讯录";
+/* Class = "UITabBarItem"; title = "联系人"; ObjectID = "qiC-SB-4ZL"; */
+"qiC-SB-4ZL.title" = "联系人";
 
 /* Class = "UIButton"; normalTitle = "确定添加"; ObjectID = "rX2-zz-kGD"; */
 "rX2-zz-kGD.normalTitle" = "确定添加";

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
@@ -26,7 +26,7 @@ import Foundation
     
     @IBOutlet weak var createTimeL: UILabel?
     @IBOutlet weak var avatarTop: NSLayoutConstraint?
-      
+    
     @IBOutlet weak var avatarBtn: UIButton?
     
     
@@ -37,7 +37,7 @@ import Foundation
     }
     @objc func onTapAvatar() {
         if let d = dataMsg {
-            delegate?.onTapAvatar?(pubkey: d.toPubkey)
+            delegate?.onTapAvatar?(pubkey: d.senderPubKey)
         }
     }
     
@@ -49,13 +49,13 @@ import Foundation
         }
     }
     
-      
+    
     override func msgContentView() -> UIView? {
         return self.msgContentL
     }
 
 
-      
+    
     
     override func reloadData(data: Any) {
         guard let msg = data as? CPMessage else {
@@ -70,42 +70,53 @@ import Foundation
     }
     
     func updateSelf(msg: CPMessage) {
-          
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
-          
-        var img = UIImage(named: "蓝色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
         
-          
+
+
+
+        msgBgImgView?.backgroundColor = UIColor(hexString: Color.blue)
+        
+        
         msgContentL?.text = "[你发送了一条未知消息]"
         
-          
+        
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
+        let color = CPAccountHelper.loginUser()?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
     }
     
     func updateOthers(msg: CPMessage) {
-          
+        
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-          
-        var img = UIImage(named: "灰色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
         
-          
+
+
+
+        msgBgImgView?.backgroundColor = UIColor.white
+        
+        
         msgContentL?.text = "Msg_Recieve_Unknown".localized()
         
-          
-        smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
+        
+        if msg.isGroupChat {
+            smallRemarkL?.text = msg.senderRemark.getSmallRemark()
+        }
+        else {
+            smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
+        }
+        let color = msg.senderPubKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
     }
 }

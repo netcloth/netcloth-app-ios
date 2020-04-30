@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import web3swift
@@ -19,7 +19,7 @@ class CPAddressWraper: NSObject {
     @objc public
     static func addressForPrivateKey(_ privateKey: Data) throws -> String  {
         
-          
+        
         guard let compressedPubkey = Web3.Utils.privateToPublic(privateKey, compressed: true) else {
             throw AbstractKeystoreError.keyDerivationError
         }
@@ -31,9 +31,9 @@ class CPAddressWraper: NSObject {
             return r;
         }
         throw AddressError.unknow
-          
-  
-  
+        
+
+
     }
     
     

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -25,7 +25,7 @@ class ContactNewFriendsListVC: BaseViewController, UITableViewDelegate, UITableV
         }
     }
     
-      
+    
     deinit {
         CPContactHelper.updateAllNewfriend { (r, msg) in
             NotificationCenter.post(name: NoticeNameKey.newFriendsCountChange)

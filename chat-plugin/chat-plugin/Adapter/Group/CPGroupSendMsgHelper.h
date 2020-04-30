@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 
@@ -14,10 +14,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CPGroupSendMsgHelper : NSObject
 
-  
 
-  
-+ (void)sendMsg:(NSString *)text toUser:(NSString *)toPubkey;
+
+
++ (void)sendMsg:(NSString *)text
+         toUser:(NSString *)toPubkey
+         at_all:(BOOL)atAll
+     at_members:(NSArray <NSString *> *)members;
 
 /* Send Audio
  *（mono）
@@ -27,14 +30,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)sendAudioData:(NSData *)data toUser:(NSString *)toPubkey;
 
 
-  
+
 + (void)sendImageData:(NSData *)data
                toUser:(NSString *)pubkey;
 
 + (void)onDownloadImageData:(NSData *)encodeData withMessage:(CPMessage *)msg;
 
 
-  
+
 + (void)retrySendMsg:(long long)msgId;
 + (void)retrySendEncodeData:(NSData *)encodeImageData withinMsg:(CPMessage *)message;
 

@@ -1,14 +1,18 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *kStart_sys_time;
+extern NSString *kStart_sys_hash;
+extern NSString *kStart_query_time;
 
 @interface CPOfflineMsgManager : NSObject
 

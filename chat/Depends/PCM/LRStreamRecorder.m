@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "LRStreamRecorder.h"
 #import <AVFoundation/AVFoundation.h>
@@ -16,7 +16,7 @@
 {
     AudioQueueRef                mQueue;
     AudioQueueBufferRef          mBuffers[kNumberRecordBuffers];
-    int                          mRecordPacket;   
+    int                          mRecordPacket; 
     AudioStreamBasicDescription  mRecordFormat;
 }
 
@@ -71,13 +71,13 @@ void MyInputBufferHandler(    void *                                inUserData,
     errorStatus = AudioQueueNewInput(
                                      &mRecordFormat,
                                      MyInputBufferHandler,
-                                     (__bridge void *)self  ,
-                                     NULL  ,
-                                     NULL  ,
-                                     0  ,
+                                     (__bridge void *)self ,
+                                     NULL ,
+                                     NULL ,
+                                     0 ,
                                      &mQueue);
     
-    int bufferSize = 2 * mRecordFormat.mBytesPerFrame * frequency;   
+    int bufferSize = 2 * mRecordFormat.mBytesPerFrame * frequency; 
     for (int i = 0; i < kNumberRecordBuffers; ++i) {
         errorStatus = AudioQueueAllocateBuffer(mQueue, bufferSize, &mBuffers[i]);
         errorStatus = AudioQueueEnqueueBuffer(mQueue, mBuffers[i], 0, NULL);
@@ -92,7 +92,7 @@ void MyInputBufferHandler(    void *                                inUserData,
     if (self.isRecording) {
         return NO;
     }
-      
+    
     OSStatus errorStatus;
     errorStatus = AudioQueueStart(mQueue, nil);
     if (errorStatus) {

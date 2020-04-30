@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014, 2017 Pieter Wuille, Andrew Poelstra      *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_ECMULT_H
@@ -14,7 +14,7 @@
 
 typedef struct {
     /* For accelerating the computation of a*P + b*G: */
-    secp256k1_ge_storage (*pre_g)[];     
+    secp256k1_ge_storage (*pre_g)[];    
 #ifdef USE_ENDOMORPHISM
     secp256k1_ge_storage (*pre_g_128)[]; /* odd multiples of 2^128*generator */
 #endif
@@ -45,4 +45,4 @@ typedef int (secp256k1_ecmult_multi_callback)(secp256k1_scalar *sc, secp256k1_ge
  */
 static int secp256k1_ecmult_multi_var(const secp256k1_ecmult_context *ctx, secp256k1_scratch *scratch, secp256k1_gej *r, const secp256k1_scalar *inp_g_sc, secp256k1_ecmult_multi_callback cb, void *cbdata, size_t n);
 
-#endif  
+#endif 

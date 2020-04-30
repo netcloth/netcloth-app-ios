@@ -1,6 +1,6 @@
-  
-  
-  
+
+
+
 
 #include "aes.h"
 
@@ -57,7 +57,7 @@ static int CBCEncrypt(const T& enc, const unsigned char iv[AES_BLOCKSIZE], const
 
     memcpy(mixed, iv, AES_BLOCKSIZE);
 
-      
+    
     while (written + AES_BLOCKSIZE <= size) {
         for (int i = 0; i != AES_BLOCKSIZE; i++)
             mixed[i] ^= *data++;
@@ -66,8 +66,8 @@ static int CBCEncrypt(const T& enc, const unsigned char iv[AES_BLOCKSIZE], const
         written += AES_BLOCKSIZE;
     }
     if (pad) {
-          
-          
+        
+        
         for (int i = 0; i != padsize; i++)
             mixed[i] ^= *data++;
         for (int i = padsize; i != AES_BLOCKSIZE; i++)
@@ -91,7 +91,7 @@ static int CBCDecrypt(const T& dec, const unsigned char iv[AES_BLOCKSIZE], const
     if (size % AES_BLOCKSIZE != 0)
         return 0;
 
-      
+    
     while (written != size) {
         dec.Decrypt(out, data + written);
         for (int i = 0; i != AES_BLOCKSIZE; i++)
@@ -100,17 +100,17 @@ static int CBCDecrypt(const T& dec, const unsigned char iv[AES_BLOCKSIZE], const
         written += AES_BLOCKSIZE;
     }
 
-      
+    
     if (pad) {
-          
-          
+        
+        
         unsigned char padsize = *--out;
         fail = !padsize | (padsize > AES_BLOCKSIZE);
 
-          
+        
         padsize *= !fail;
 
-          
+        
         for (int i = AES_BLOCKSIZE; i != 0; i--)
             fail |= ((i > AES_BLOCKSIZE - padsize) & (*out-- != padsize));
 

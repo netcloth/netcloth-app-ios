@@ -47,11 +47,12 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nzb-cd-Qn0">
-                                                            <rect key="frame" x="22.5" y="26.5" width="35" height="27"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="27" id="LF6-SO-16h"/>
-                                                                <constraint firstAttribute="width" constant="35" id="XKO-8a-CCE"/>
-                                                            </constraints>
+                                                            <rect key="frame" x="15" y="15" width="50" height="50"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="25"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="53P-Nt-a1T" userLabel="rightC">
                                                             <rect key="frame" x="75" y="17" width="324" height="46"/>
@@ -131,10 +132,12 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="nzb-cd-Qn0" firstAttribute="centerY" secondItem="b1Z-lX-iOe" secondAttribute="centerY" id="BSQ-Gd-sgO"/>
+                                                        <constraint firstItem="nzb-cd-Qn0" firstAttribute="width" secondItem="b1Z-lX-iOe" secondAttribute="width" id="Byu-B0-f3Q"/>
                                                         <constraint firstItem="53P-Nt-a1T" firstAttribute="leading" secondItem="b1Z-lX-iOe" secondAttribute="trailing" constant="10" id="EPF-L9-b3a"/>
                                                         <constraint firstItem="nzb-cd-Qn0" firstAttribute="centerX" secondItem="b1Z-lX-iOe" secondAttribute="centerX" id="Hg0-Ia-vU9"/>
                                                         <constraint firstItem="Px5-iy-56l" firstAttribute="leading" secondItem="53P-Nt-a1T" secondAttribute="leading" id="N6P-l8-Mi4"/>
                                                         <constraint firstItem="b1Z-lX-iOe" firstAttribute="centerY" secondItem="Mwx-We-vbE" secondAttribute="centerY" id="Ndo-8w-duc"/>
+                                                        <constraint firstItem="nzb-cd-Qn0" firstAttribute="height" secondItem="b1Z-lX-iOe" secondAttribute="height" id="Uv7-oA-fA0"/>
                                                         <constraint firstItem="53P-Nt-a1T" firstAttribute="centerY" secondItem="Mwx-We-vbE" secondAttribute="centerY" id="g3p-JX-8t5"/>
                                                         <constraint firstItem="b1Z-lX-iOe" firstAttribute="leading" secondItem="Mwx-We-vbE" secondAttribute="leading" constant="15" id="hcv-4u-FTC"/>
                                                         <constraint firstItem="Px5-iy-56l" firstAttribute="trailing" secondItem="53P-Nt-a1T" secondAttribute="trailing" id="lMB-0G-8QX"/>

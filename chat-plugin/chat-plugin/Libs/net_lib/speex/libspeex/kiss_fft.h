@@ -36,7 +36,7 @@ extern "C" {
 #  define kiss_fft_scalar spx_int16_t
 #else
 # ifndef kiss_fft_scalar
- 
+
 #   define kiss_fft_scalar float
 # endif
 #endif

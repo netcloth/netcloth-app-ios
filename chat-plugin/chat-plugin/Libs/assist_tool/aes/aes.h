@@ -1,8 +1,8 @@
-  
-  
-  
-  
-  
+
+
+
+
+
 
 #ifndef BITCOIN_CRYPTO_AES_H
 #define BITCOIN_CRYPTO_AES_H
@@ -64,4 +64,4 @@ private:
     unsigned char iv[AES_BLOCKSIZE];
 };
 
-#endif   
+#endif 

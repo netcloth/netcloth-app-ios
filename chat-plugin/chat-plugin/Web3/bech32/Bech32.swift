@@ -1,13 +1,13 @@
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 
 import Foundation
 
-  
+
 
 public enum Bech32 {
     private static let alphabet = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
@@ -29,11 +29,11 @@ public enum Bech32 {
 
     private static func polymod(values: Data) -> Int {
         var chk = 1
-          
+        
         for p in values {
             let top = chk >> 25
             chk = (chk & 0x1ffffff) << 5 ^ Int(p)
-              
+            
             for (i, g) in Bech32.generator.enumerated() where ((top >> i) & 1) != 0 {
                 chk ^= g
             }
@@ -117,7 +117,7 @@ public enum Bech32 {
     }
     
     
-      
+    
 
     public static func parseFallbackAddress(data: Data) -> String? {
         guard data.count >= 2 else {
@@ -140,8 +140,8 @@ extension Bech32 {
 
 
 extension Data {
-      
-      
+    
+    
     func convertBits(fromBits: Int, toBits: Int, pad: Bool) -> Data? {
         var acc: Int = 0
         var bits: Int = 0

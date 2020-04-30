@@ -1,8 +1,8 @@
-  
-  
-  
-  
-  
+
+
+
+
+
 
 #ifndef _PinyinFormatter_H_
 #define _PinyinFormatter_H_
@@ -18,4 +18,4 @@
 - (id)init;
 @end
 
-#endif   
+#endif 

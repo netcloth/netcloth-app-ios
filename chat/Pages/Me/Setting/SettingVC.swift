@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 
@@ -19,19 +19,11 @@ class SettingVC: BaseTableViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            
         }
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(hexString: Config.Color.app_bg_color)
+        self.view.backgroundColor = UIColor(hexString: Color.app_bg_color)
         self.tableView.adjustFooter()
-        fixConfigUI()
-    }
-    
-    func fixConfigUI() {
-        languageLabel?.text = "Language".localized()
-        msgNoticeLabel?.text = "Notifications".localized()
-        cipalLabel?.text = "C-IPAL Settings".localized()
-        commomLabel?.text = "General".localized()
     }
 }
 

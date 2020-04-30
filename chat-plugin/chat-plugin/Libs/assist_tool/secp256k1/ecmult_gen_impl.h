@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014, 2015 Pieter Wuille, Gregory Maxwell      *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_ECMULT_GEN_IMPL_H
@@ -32,7 +32,7 @@ static void secp256k1_ecmult_gen_context_build(secp256k1_ecmult_gen_context *ctx
 #ifndef USE_ECMULT_STATIC_PRECOMPUTATION
     ctx->prec = (secp256k1_ge_storage (*)[64][16])checked_malloc(cb, sizeof(*ctx->prec));
 
-     
+    
     secp256k1_gej_set_ge(&gj, &secp256k1_ge_const_g);
 
     /* Construct a group element with no known corresponding scalar (nothing up my sleeve). */
@@ -140,10 +140,10 @@ static void secp256k1_ecmult_gen(const secp256k1_ecmult_gen_context *ctx, secp25
              *   sidechannels, even when the cache-line access patterns are uniform.
              *  See also:
              *   "A word of warning", CHES 2013 Rump Session, by Daniel J. Bernstein and Peter Schwabe
-             *    (https:  
+             *    (https:
              *   "Cache Attacks and Countermeasures: the Case of AES", RSA 2006,
              *    by Dag Arne Osvik, Adi Shamir, and Eran Tromer
-             *    (http:  
+             *    (http:
              */
             secp256k1_ge_storage_cmov(&adds, &(*ctx->prec)[j][i], i == bits);
         }
@@ -207,4 +207,4 @@ static void secp256k1_ecmult_gen_blind(secp256k1_ecmult_gen_context *ctx, const 
     secp256k1_gej_clear(&gb);
 }
 
-#endif  
+#endif 

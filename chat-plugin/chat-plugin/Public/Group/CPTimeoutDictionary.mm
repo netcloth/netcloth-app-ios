@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import "CPTimeoutDictionary.h"
 #import "CPGroupChatHelper.h"
@@ -74,14 +74,14 @@
     return [_dictionary mutableCopyWithZone:zone];
 }
 
-  
-  
+
+
 - (id)objectForKeyedSubscript:(id)key {
     return [_dictionary objectForKeyedSubscript:key];
 }
 
-  
-  
+
+
 - (void)setObject:(id)obj forKeyedSubscript:(id<NSCopying>)key {
     if (_dictionary == nil) {
         _dictionary = [[NSMutableDictionary alloc] init];
@@ -106,7 +106,7 @@
 }
 
 
-  
+
 - (void)startTimeoutKey:(id<NSCopying>)key {
     [self performSelector:@selector(onTimeoutActionKey:) withObject:key afterDelay:20];
 }
@@ -117,7 +117,7 @@
         MsgResponseBack back = (MsgResponseBack)obj;
         if (back != nil) {
             NSMutableDictionary *response = NSMutableDictionary.dictionary;
-            response[@"code"] = @(-1001);    
+            response[@"code"] = @(-1001);  
             response[@"msg"] = @"null.timeout";
             [CPInnerState.shared asynDoTask:^{
                 back(response);

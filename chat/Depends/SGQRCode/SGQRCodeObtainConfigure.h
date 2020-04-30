@@ -1,16 +1,16 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
 @interface SGQRCodeObtainConfigure : NSObject
- 
+
 + (instancetype)QRCodeObtainConfigure;
 
 /** 会话预置，默认为：AVCaptureSessionPreset1920x1080 */

@@ -1,12 +1,12 @@
 
 /* Class = "UIButton"; normalTitle = "保存到手机"; ObjectID = "3oR-gg-Rrv"; */
-"3oR-gg-Rrv.normalTitle" = "保存到手机";
+"3oR-gg-Rrv.normalTitle" = "分享APP给好友";
 
 /* Class = "UILabel"; text = "Is inviting you to use NetCloth APP"; ObjectID = "88e-Bc-bnK"; */
 "88e-Bc-bnK.text" = "邀请您使用NetCloth APP";
 
 /* Class = "UINavigationItem"; title = "分享APP"; ObjectID = "9QX-lq-LDi"; */
-"9QX-lq-LDi.title" = "分享APP";
+"9QX-lq-LDi.title" = "找朋友一起聊";
 
 /* Class = "UILabel"; text = "Download NetCloth APP，Scan the QR code to add me on NetCloth."; ObjectID = "A3o-Jc-cbh"; */
 "A3o-Jc-cbh.text" = "扫描上方二维码，下载NetCloth APP，使用APP扫描该二维码，可添加我";
@@ -18,7 +18,7 @@
 "Sv0-ai-PnD.text" = "扫描上方二维码，下载NetCloth APP，使用APP扫描该二维码，可添加我";
 
 /* Class = "UILabel"; text = "Be away from data breach on NetCloth"; ObjectID = "Tsc-3i-uQ6"; */
-"Tsc-3i-uQ6.text" = "从衣开始，让信息不再裸奔";
+"Tsc-3i-uQ6.text" = "加密生活，从“衣”开始";
 
 /* Class = "UILabel"; text = "女汉子"; ObjectID = "Wez-9v-Lsm"; */
 "Wez-9v-Lsm.text" = "";

@@ -55,7 +55,7 @@
 #define NB_WINDOW_SIZE (NB_FRAME_SIZE+NB_SUBFRAME_SIZE)
 #define NB_EXCBUF (NB_FRAME_SIZE+NB_PITCH_END+2)
 #define NB_DEC_BUFFER (NB_FRAME_SIZE+2*NB_PITCH_END+NB_SUBFRAME_SIZE+12)
- 
+
 typedef struct EncState {
    const SpeexMode *mode;        /**< Mode corresponding to the state */
    int    first;                 /**< Is this the first frame? */
@@ -121,7 +121,7 @@ typedef struct EncState {
    int    highpass_enabled;        /**< Is the input filter enabled */
 } EncState;
 
- 
+
 typedef struct DecState {
    const SpeexMode *mode;       /**< Mode corresponding to the state */
    int    first;                /**< Is this the first frame? */
@@ -144,12 +144,12 @@ typedef struct DecState {
    spx_word16_t max_level;
    spx_word16_t min_level;
    
-    
+   
    int    last_pitch;           /**< Pitch of last correctly decoded frame */
    spx_word16_t  last_pitch_gain; /**< Pitch gain of last correctly decoded frame */
    spx_word16_t  pitch_gain_buf[3]; /**< Pitch gain of last decoded frames */
    int    pitch_gain_buf_idx;   /**< Tail of the buffer */
-   spx_int32_t seed;             
+   spx_int32_t seed;            
    
    int    encode_submode;
    const SpeexSubmode * const *submodes; /**< Sub-mode data */
@@ -159,7 +159,7 @@ typedef struct DecState {
 
    SpeexCallback user_callback;
 
-    
+   
    spx_word16_t  voc_m1;
    spx_word32_t  voc_m2;
    spx_word16_t  voc_mean;
@@ -170,23 +170,23 @@ typedef struct DecState {
    int    highpass_enabled;        /**< Is the input filter enabled */
 } DecState;
 
- 
+
 void *nb_encoder_init(const SpeexMode *m);
 
 /** De-allocates encoder state resources*/
 void nb_encoder_destroy(void *state);
 
- 
+
 int nb_encode(void *state, void *in, SpeexBits *bits);
 
 
- 
+
 void *nb_decoder_init(const SpeexMode *m);
 
 /** De-allocates decoder state resources*/
 void nb_decoder_destroy(void *state);
 
- 
+
 int nb_decode(void *state, SpeexBits *bits, void *out);
 
 /** ioctl-like function for controlling a narrowband encoder */

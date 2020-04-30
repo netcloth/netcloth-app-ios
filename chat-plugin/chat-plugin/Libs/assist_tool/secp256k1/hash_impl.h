@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2014 Pieter Wuille                                   *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_HASH_IMPL_H
@@ -279,4 +279,4 @@ static void secp256k1_rfc6979_hmac_sha256_finalize(secp256k1_rfc6979_hmac_sha256
 #undef Maj
 #undef Ch
 
-#endif  
+#endif 

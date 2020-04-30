@@ -89,7 +89,7 @@ Heavily modified by Jean-Marc Valin (c) 2002-2006 (fixed-point,
 #include "math_approx.h"
 
 #ifndef M_PI
-#define M_PI           3.14159265358979323846   
+#define M_PI           3.14159265358979323846  
 #endif
 
 #ifndef NULL
@@ -139,7 +139,7 @@ Heavily modified by Jean-Marc Valin (c) 2002-2006 (fixed-point,
 
 #ifndef OVERRIDE_CHEB_POLY_EVA
 static inline spx_word32_t cheb_poly_eva(
-  spx_word16_t *coef,  
+  spx_word16_t *coef, 
   spx_word16_t     x, /* cos of freq (-1.0 to 1.0) in Q14 format  */
   int              m, /* LPC order/2                              */
   char         *stack
@@ -149,17 +149,17 @@ static inline spx_word32_t cheb_poly_eva(
     spx_word16_t b0, b1;
     spx_word32_t sum;
 
-     
+    
     if (x>16383)
        x = 16383;
     if (x<-16383)
        x = -16383;
 
-     
+    
     b1=16384;
     b0=x;
 
-     
+    
     sum = ADD32(EXTEND32(coef[m]), EXTEND32(MULT16_16_P14(coef[m-1],x)));
     for(i=2;i<=m;i++)
     {
@@ -180,7 +180,7 @@ static float cheb_poly_eva(spx_word32_t *coef, spx_word16_t x, int m, char *stac
    int k;
    float b0, b1, tmp;
 
-    
+   
    b0=0; /* b_(m+1) */
    b1=0; /* b_(m+2) */
 
@@ -189,9 +189,9 @@ static float cheb_poly_eva(spx_word32_t *coef, spx_word16_t x, int m, char *stac
    /* Calculate the b_(k) */
    for(k=m;k>0;k--)
    {
-      tmp=b0;                            
-      b0=x*b0-b1+coef[m-k];     
-      b1=tmp;                            
+      tmp=b0;                           
+      b0=x*b0-b1+coef[m-k];    
+      b1=tmp;                           
    }
 
    return(-b1+.5*x*b0+coef[m]);
@@ -218,9 +218,9 @@ static float cheb_poly_eva(spx_word32_t *coef, spx_word16_t x, int m, char *stac
 
 
 int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t delta, char *stack)
- 
+
 /*  int lpcrdr			order of LPC coefficients (10) 		*/
- 
+
 /*  int nb			number of sub-intervals (4) 		*/
 /*  float delta			grid spacing interval (0.02) 		*/
 
@@ -229,9 +229,9 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
     spx_word16_t temp_xr,xl,xr,xm=0;
     spx_word32_t psuml,psumr,psumm,temp_psumr/*,temp_qsumr*/;
     int i,j,m,k;
-    VARDECL(spx_word32_t *Q);                 	 
+    VARDECL(spx_word32_t *Q);                 	
     VARDECL(spx_word32_t *P);
-    VARDECL(spx_word16_t *Q16);          
+    VARDECL(spx_word16_t *Q16);         
     VARDECL(spx_word16_t *P16);
     spx_word32_t *px;                	/* ptrs of respective P'(z) & Q'(z)	*/
     spx_word32_t *qx;
@@ -242,14 +242,14 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
     int roots=0;              	/* DR 8/2/94: number of roots found 	*/
     m = lpcrdr/2;            	/* order of P'(z) & Q'(z) polynomials 	*/
 
-     
+    
     ALLOC(Q, (m+1), spx_word32_t);
     ALLOC(P, (m+1), spx_word32_t);
 
     /* determine P'(z)'s and Q'(z)'s coefficients where
       P'(z) = P(z)/(1 + z^(-1)) and Q'(z) = Q(z)/(1-z^(-1)) */
 
-    px = P;                       
+    px = P;                      
     qx = Q;
     p = px;
     q = qx;
@@ -297,7 +297,7 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
     px = P;             	/* re-initialise ptrs 			*/
     qx = Q;
 
-     
+    
 
     ALLOC(P16, m+1, spx_word16_t);
     ALLOC(Q16, m+1, spx_word16_t);
@@ -311,7 +311,7 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
     /* Search for a zero in P'(z) polynomial first and then alternate to Q'(z).
     Keep alternating between the two polynomials as each zero is found 	*/
 
-    xr = 0;             	 
+    xr = 0;             	
     xl = FREQ_SCALE;               	/* start at point xl = 1 		*/
 
     for(j=0;j<lpcrdr;j++){
@@ -334,7 +334,7 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
            if (fabs(psuml)<.2)
               dd *= .5;
 #endif
-           xr = SUB16(xl, dd);                        	 
+           xr = SUB16(xl, dd);                        	
 	    psumr = cheb_poly_eva(pt,xr,m,stack);/* poly(xl-delta_x) 	*/
 	    temp_psumr = psumr;
 	    temp_xr = xr;
@@ -355,9 +355,9 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
 		psumm=psuml;
 		for(k=0;k<=nb;k++){
 #ifdef FIXED_POINT
-		    xm = ADD16(PSHR16(xl,1),PSHR16(xr,1));        	 
+		    xm = ADD16(PSHR16(xl,1),PSHR16(xr,1));        	
 #else
-                    xm = .5*(xl+xr);        	 
+                    xm = .5*(xl+xr);        	
 #endif
 		    psumm=cheb_poly_eva(pt,xm,m,stack);
 		    /*if(psumm*psuml>0.)*/
@@ -385,7 +385,7 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
     return(roots);
 }
 
-#endif  
+#endif 
 /*---------------------------------------------------------------------------*\
 
 	FUNCTION....: lsp_to_lpc()
@@ -400,9 +400,9 @@ int lpc_to_lsp (spx_coef_t *a,int lpcrdr,spx_lsp_t *freq,int nb,spx_word16_t del
 #ifdef FIXED_POINT
 
 void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
- 
- 
- 
+
+
+
 {
     int i,j;
     spx_word32_t xout1,xout2,xin;
@@ -424,8 +424,8 @@ void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
 
        This is what the ALLOCS below are trying to do:
 
-         int xp[m+1][lpcrdr+1+2];   
-         int xq[m+1][lpcrdr+1+2];   
+         int xp[m+1][lpcrdr+1+2]; 
+         int xq[m+1][lpcrdr+1+2]; 
 
        These matrices store the output of each stage on each row.  The
        final (m-th) row has the output of the final (m-th) cascaded
@@ -449,13 +449,13 @@ void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
       xq[i] = xqmem + i*(lpcrdr+1+2);
     }
 
-     
+    
 
     ALLOC(freqn, lpcrdr, spx_word16_t);
     for (i=0;i<lpcrdr;i++)
        freqn[i] = ANGLE2X(freq[i]);
 
-    #define QIMP  21    
+    #define QIMP  21   
 
     xin = SHL32(EXTEND32(1), (QIMP-1)); /* 0.5 in QIMP format */
 
@@ -477,7 +477,7 @@ void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
 
     xout1 = xout2 = 0;
 
-     
+    
 
     for(i=1;i<m;i++) {
 
@@ -501,7 +501,7 @@ void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
     for(j=1;j<=lpcrdr;j++) {
       int shift = QIMP-13;
 
-       
+      
       a = PSHR32(xp[m][j+2] + xout1 + xq[m][j+2] - xout2, shift);
       xout1 = xp[m][j+2];
       xout2 = xq[m][j+2];
@@ -519,9 +519,9 @@ void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
 #else
 
 void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
- 
- 
- 
+
+
+
 
 
 {
@@ -535,13 +535,13 @@ void lsp_to_lpc(const spx_lsp_t *freq,spx_coef_t *ak,int lpcrdr, char *stack)
     ALLOC(Wp, 4*m+2, float);
     pw = Wp;
 
-     
+    
 
-    for(i=0;i<=4*m+1;i++){       	 
+    for(i=0;i<=4*m+1;i++){       	
 	*pw++ = 0.0;
     }
 
-     
+    
 
     pw = Wp;
     xin1 = 1.0;
@@ -598,7 +598,7 @@ void lsp_interpolate(spx_lsp_t *old_lsp, spx_lsp_t *new_lsp, spx_lsp_t *lsp, int
    spx_word16_t tmp2 = 16384-tmp;
    for (i=0;i<len;i++)
       lsp[i] = MULT16_16_P14(tmp2,old_lsp[i]) + MULT16_16_P14(tmp,new_lsp[i]);
-    
+   
    if (lsp[0]<m)
       lsp[0]=m;
    if (lsp[len-1]>m2)
@@ -622,7 +622,7 @@ void lsp_interpolate(spx_lsp_t *old_lsp, spx_lsp_t *new_lsp, spx_lsp_t *lsp, int
    float tmp = (1.0f + subframe)/nb_subframes;
    for (i=0;i<len;i++)
       lsp[i] = (1-tmp)*old_lsp[i] + tmp*new_lsp[i];
-    
+   
    if (lsp[0]<LSP_SCALING*margin)
       lsp[0]=LSP_SCALING*margin;
    if (lsp[len-1]>LSP_SCALING*(M_PI-margin))

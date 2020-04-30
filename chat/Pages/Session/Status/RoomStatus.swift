@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
 import AudioToolbox
@@ -14,12 +14,12 @@ class RoomStatus {
     static var inChatRoom: Bool? = false
     static var appInBackground: Bool = false
     
-      
+    
     static var sessionId: Int?
     static var toPublicKey: String?
     static var remark: String?
     
-      
+    
     static var createdGroup: CPContact? = nil
 }
 
@@ -31,7 +31,7 @@ class GroupRoomService: RoomStatus {
     
     var relateSession: CPSession?
     
-      
+    
     var chatContact: StoreObservable<CPContact>? {
         didSet {
             self.loadGroupMembers()
@@ -41,7 +41,7 @@ class GroupRoomService: RoomStatus {
         }
     }
     
-      
+    
     let isMeGroupMaster: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     let isMeGroupManager:BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
@@ -55,7 +55,7 @@ class GroupRoomService: RoomStatus {
         }
     }
     
-      
+    
     
     private func loadSession() {
         let sid = Int(self.chatContact?.value.sessionId ?? 0)
@@ -69,7 +69,7 @@ class GroupRoomService: RoomStatus {
         CPGroupManagerHelper.requestServerGroupInfo(pubkey) { [weak self] (r, msg, data) in
             if r == true, let info = data  {
                 let timezone = TimeZone(identifier: "UTC")
-                let locale = Locale.current   
+                let locale = Locale.current 
                 let date = NSDate(string: info.modified_time, format: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone: timezone, locale: locale)
                 let diff = (date?.timeIntervalSince1970 ?? 0) * 1000;
                 
@@ -113,7 +113,7 @@ class GroupRoomService: RoomStatus {
                 }
             }
             else if let info = data {
-                  
+                
                 if info.resultCode == ChatErrorCode.groupNotExist.rawValue {
                     self?.chatContact?.change(commit: { (contact) in
                         contact.groupProgress = GroupCreateProgress.dissolve
@@ -133,9 +133,9 @@ class GroupRoomService: RoomStatus {
          }
      }
     
-      
     
-      
+    
+    
     var groupAllMember: [CPGroupMember]? {
         didSet {
             calMeRole()
@@ -144,7 +144,7 @@ class GroupRoomService: RoomStatus {
         }
     }
     
-      
+    
     var groupManagerTeam: [CPGroupMember]? {
         didSet {
             calMeRole()
@@ -152,7 +152,7 @@ class GroupRoomService: RoomStatus {
     }
     
     
-      
+    
     
     private func calGroupSummaryMember() {
         let isMaster = isMeGroupMaster.value
@@ -222,7 +222,7 @@ class GroupRoomService: RoomStatus {
 
 
 
-  
+
 var key_roomstatus = ""
 extension UIViewController  {
     var roomService: GroupRoomService? {

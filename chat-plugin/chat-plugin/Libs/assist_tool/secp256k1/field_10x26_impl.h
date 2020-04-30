@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http:
  **********************************************************************/
 
 #ifndef SECP256K1_FIELD_REPR_IMPL_H
@@ -43,7 +43,7 @@ static void secp256k1_fe_normalize(secp256k1_fe *r) {
     uint32_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4],
              t5 = r->n[5], t6 = r->n[6], t7 = r->n[7], t8 = r->n[8], t9 = r->n[9];
 
-     
+    
     uint32_t m;
     uint32_t x = t9 >> 22; t9 &= 0x03FFFFFUL;
 
@@ -98,7 +98,7 @@ static void secp256k1_fe_normalize_weak(secp256k1_fe *r) {
     uint32_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4],
              t5 = r->n[5], t6 = r->n[6], t7 = r->n[7], t8 = r->n[8], t9 = r->n[9];
 
-     
+    
     uint32_t x = t9 >> 22; t9 &= 0x03FFFFFUL;
 
     /* The first pass ensures the magnitude is 1, ... */
@@ -129,7 +129,7 @@ static void secp256k1_fe_normalize_var(secp256k1_fe *r) {
     uint32_t t0 = r->n[0], t1 = r->n[1], t2 = r->n[2], t3 = r->n[3], t4 = r->n[4],
              t5 = r->n[5], t6 = r->n[6], t7 = r->n[7], t8 = r->n[8], t9 = r->n[9];
 
-     
+    
     uint32_t m;
     uint32_t x = t9 >> 22; t9 &= 0x03FFFFFUL;
 
@@ -188,7 +188,7 @@ static int secp256k1_fe_normalizes_to_zero(secp256k1_fe *r) {
     /* z0 tracks a possible raw value of 0, z1 tracks a possible raw value of P */
     uint32_t z0, z1;
 
-     
+    
     uint32_t x = t9 >> 22; t9 &= 0x03FFFFFUL;
 
     /* The first pass ensures the magnitude is 1, ... */
@@ -218,7 +218,7 @@ static int secp256k1_fe_normalizes_to_zero_var(secp256k1_fe *r) {
     t0 = r->n[0];
     t9 = r->n[9];
 
-     
+    
     x = t9 >> 22;
 
     /* The first pass ensures the magnitude is 1, ... */
@@ -228,7 +228,7 @@ static int secp256k1_fe_normalizes_to_zero_var(secp256k1_fe *r) {
     z0 = t0 & 0x3FFFFFFUL;
     z1 = z0 ^ 0x3D0UL;
 
-     
+    
     if ((z0 != 0UL) & (z1 != 0x3FFFFFFUL)) {
         return 0;
     }
@@ -445,7 +445,7 @@ SECP256K1_INLINE static void secp256k1_fe_add(secp256k1_fe *r, const secp256k1_f
 
 #if defined(USE_EXTERNAL_ASM)
 
- 
+
 void secp256k1_fe_mul_inner(uint32_t *r, const uint32_t *a, const uint32_t * SECP256K1_RESTRICT b);
 void secp256k1_fe_sqr_inner(uint32_t *r, const uint32_t *a);
 
@@ -1159,4 +1159,4 @@ static SECP256K1_INLINE void secp256k1_fe_from_storage(secp256k1_fe *r, const se
 #endif
 }
 
-#endif  
+#endif 

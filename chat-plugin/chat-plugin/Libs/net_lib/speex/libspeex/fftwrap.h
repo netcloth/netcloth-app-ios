@@ -37,10 +37,10 @@
 
 #include "arch.h"
 
- 
+
 void *spx_fft_init(int size);
 
- 
+
 void spx_fft_destroy(void *table);
 
 /** Forward (real to half-complex) transform */

@@ -46,3 +46,16 @@
 
 /* Class = "UINavigationItem"; title = "导入账户"; ObjectID = "zib-cR-ePd"; */
 "zib-cR-ePd.title" = "导入账户";
+
+/* Class = "UILabel"; text = "您已经阅读并同意以下协议"; ObjectID = "d3K-eW-kd2"; */
+"d3K-eW-kd2.text" = "您已经阅读并同意以下协议";
+
+/* Class = "UIButton"; normalTitle = "《NetCloth隐私政策》"; ObjectID = "2uL-K6-nct"; */
+"2uL-K6-nct.normalTitle" = "《NetCloth隐私政策》";
+
+/* Class = "UIButton"; normalTitle = "《NetCloth软件许可及服务协议》"; ObjectID = "CS4-K5-wyM"; */
+"CS4-K5-wyM.normalTitle" = "《NetCloth软件许可及服务协议》";
+
+
+
+

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -54,7 +54,7 @@ class GroupManageVC: BaseViewController {
     }
     
     
-      
+    
     func onSelectManageStyle() {
         _ = showRecieveNoticeAlert().subscribe(onNext: { [weak self] (style) in
             self?.showLoading()
@@ -88,7 +88,7 @@ class GroupManageVC: BaseViewController {
                 if json["code"].int == 0 {
                     CPGroupManagerHelper.updateGroupProgress(GroupCreateProgress.dissolve, orIpalHash: nil, byPubkey: pubkey, callback: nil)
                     
-                      
+                    
                     if let vcs = self?.navigationController?.viewControllers {
                         for v in vcs {
                             if v is GroupRoomVC {
@@ -105,12 +105,12 @@ class GroupManageVC: BaseViewController {
         });
     }
     
-      
+    
     func showRecieveNoticeAlert() -> Observable<CPGroupInviteType> {
         return Observable.create { [weak self] (observer) -> Disposable in
             
             if let alert = R.loadNib(name: "GroupManageAlert") as? GroupManageAlert {
-                  
+                
                 let rec = self?.roomService?.chatContact?.value.inviteType ?? CPGroupInviteType.allowAll.rawValue
                 alert.hightlightRecieve(isOnlyAdmin: rec == CPGroupInviteType.onlyOwner.rawValue,
                                         invApproval: rec == CPGroupInviteType.needApprove.rawValue,
@@ -145,10 +145,10 @@ class GroupManageVC: BaseViewController {
     func showPostAlert() -> Observable<Void> {
         return Observable.create { (observer) -> Disposable in
             if let alert = R.loadNib(name: "MayEmptyAlertView") as? MayEmptyAlertView {
-                  
+                
                 alert.titleLabel?.isHidden = true
                 alert.msgLabel?.text = "Dissolve_toast".localized()
-                alert.msgLabel?.textColor = UIColor(hexString: "#303133")
+                alert.msgLabel?.textColor = UIColor(hexString: Color.black)
                 
                 alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
                 alert.okButton?.setTitle("Confirm".localized(), for: .normal)

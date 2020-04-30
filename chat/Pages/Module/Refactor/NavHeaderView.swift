@@ -1,50 +1,46 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
 class NavHeaderView: UIView {
     
-    @IBOutlet weak var searchBtn: UIButton?
     @IBOutlet weak var addMoreBtn: UIButton?
-    
-    var onSearchAction: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        configUI()
         configEvent()
     }
     
+    func configUI() {
+        self.backgroundColor = UIColor(hexString: Color.app_nav_theme)
+    }
+    
     func configEvent() {
-        searchBtn?.addTarget(self, action: #selector(tapSearch), for: .touchUpInside)
-        
         addMoreBtn?.addTarget(self, action: #selector(tapMore), for: .touchUpInside)
     }
     
-      
     
-    @objc private func tapSearch() {
-        self.onSearchAction?()
-    }
     @objc private func tapMore() {
-          
+        
         let menuCreate =  YCXMenuItem("New Group Chat".localized(), image: UIImage(named: "create_group_icon")!, target: self, action: #selector(toCreateGroupPage))
-        menuCreate?.foreColor = (UIColor(hexString: "#303133"))!
+        menuCreate?.foreColor = (UIColor(hexString: Color.black))!
         menuCreate?.titleFont = UIFont.systemFont(ofSize: 16)
         menuCreate?.alignment = .left
         
         let menuAddContacts =  YCXMenuItem("Add Contacts".localized(), image: UIImage(named: "add_contact_icon")!, target: self, action: #selector(toAddContactPage))
-        menuAddContacts?.foreColor = (UIColor(hexString: "#303133"))!
+        menuAddContacts?.foreColor = (UIColor(hexString: Color.black))!
         menuAddContacts?.titleFont = UIFont.systemFont(ofSize: 16)
         menuAddContacts?.alignment = .left
         
         let menuScan =  YCXMenuItem("Scan".localized(), image: UIImage(named: "scan_black")!, target: self, action: #selector(toScanContactPage))
-        menuScan?.foreColor = (UIColor(hexString: "#303133"))!
+        menuScan?.foreColor = (UIColor(hexString: Color.black))!
         menuScan?.titleFont = UIFont.systemFont(ofSize: 16)
         menuScan?.alignment = .left
         
@@ -52,7 +48,7 @@ class NavHeaderView: UIView {
         YCXMenu.setSelectedColor(UIColor.clear)
         
         var rect = self.addMoreBtn?.superview?.convert((self.addMoreBtn?.frame)!, to: self.window)
-          
+        
         rect?.size.width -= 15
         rect?.origin.y += 13
         YCXMenu.show(in: self.window, from: rect!, menuItems: [menuCreate!,menuAddContacts!, menuScan!]) { (index, item) in
@@ -60,7 +56,7 @@ class NavHeaderView: UIView {
         }
     }
     
-      
+    
     
     
     @objc func toCreateGroupPage() {
@@ -86,36 +82,18 @@ class NavHeaderView: UIView {
             if (can) {
                 let vc = WCQRCodeVC()
                 vc.callBack = { [weak vc] (output) in
+                    
                     vc?.dismiss(animated: false, completion: nil)
                     
-                    let v2 = InnerHelper.v2_decodeScanInput(str: output, wantType: "contact")
-                    if v2.valid {
-                        let publickey = v2.data as? String  ?? ""
-                        if v2.type == SessionType.P2P {
-                              
-                            let iden = R.className(of: ContactAddVC.self) ?? ""
-                            if let addVc = R.loadSB(name: "Contact", iden: iden) as? ContactAddVC {
-                                addVc.wantAddPublicKey = publickey
-                                addVc.wantRemark = v2.minorData as? String
-                                Router.pushViewController(vc: addVc)
-                            }
-                        }
-                        else if v2.type == SessionType.group {
-                              
-                            if let vc = R.loadSB(name: "GroupInviteDetailVC", iden: "GroupInviteDetailVC") as?  GroupInviteDetailVC {
-                                vc.qr_groupPublickKey = publickey
-                                Router.pushViewController(vc: vc)
-                            }
-                        }
+                    let result = InnerHelper.v3_decodeScanInput(str: output)
+                    
+                    if InnerHelper.handleDecodeContact(vc: vc!, result: result) {
+                    }
+                    else if InnerHelper.handleDecodeRecieveCoin(vc: vc!, result: result) {
                     }
                     else {
                         Toast.show(msg: "System error".localized())
                     }
-                    
-                      
-                    withUnsafeMutablePointer(to: &vc!.navigationController!.viewControllers, { (v) in
-                        v.pointee.removeSubrange((v.pointee.count - 2 ..< v.pointee.count - 1))
-                    })
                 }
                 Router.pushViewController(vc: vc)
             }
@@ -124,7 +102,4 @@ class NavHeaderView: UIView {
             }
         })
     }
-    
-    
-    
 }

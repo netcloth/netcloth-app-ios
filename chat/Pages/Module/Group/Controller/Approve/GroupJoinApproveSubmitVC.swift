@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -26,12 +26,12 @@ class GroupJoinApproveSubmitVC: UIViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            
         }
         super.viewDidLoad()
     }
     
-      
+    
     @IBAction func onTapDone() {
         let summit = textView?.text ?? ""
         sendRealJoin(summit)
@@ -52,14 +52,14 @@ class GroupJoinApproveSubmitVC: UIViewController {
                 Router.dismissVC(animate: true, completion: nil, toRoot: true)
             }
             else if (code == ChatErrorCode.partialOK.rawValue) {
-                  
+                
             }
             else if (code == ChatErrorCode.memberExceed.rawValue) {
-                  
+                
                 self?.showFailJoinAlert()
             }
             else {
-                  
+                
                 Toast.show(msg: "System error".localized())
             }
         }

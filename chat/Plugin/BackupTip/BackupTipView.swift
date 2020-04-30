@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -19,8 +19,8 @@ class BackupTipView: UIView {
         configUI()
     }
     
-      
-      
+    
+    
     func showStatus(showAccount:Bool,showContact:Bool) {
         guard showAccount == true ||
             showContact == true else {
@@ -41,7 +41,7 @@ class BackupTipView: UIView {
         }
     }
     
-      
+    
     
     @IBAction func toAccBackup(_ sender: Any) {
         if let vc = R.loadSB(name: "Export", iden: "BackupContainerVC") as? BackupContainerVC {
@@ -61,7 +61,7 @@ class BackupTipView: UIView {
     }
     
     
-      
+    
     
     private func configUI() {
         accountBackupBtn?.setTitle("Account Backup".localized(), for: .normal)
@@ -90,7 +90,7 @@ class BackupTipView: UIView {
 }
 
 enum BackupKey: String {
-    case accountBackup   
+    case accountBackup 
     case contactBackup
     case backupLater
     

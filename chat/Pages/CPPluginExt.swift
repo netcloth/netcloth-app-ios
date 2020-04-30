@@ -1,12 +1,24 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import Foundation
+
+extension User {
+    
+    func asContact() -> CPContact {
+        let contact = CPContact()
+        contact.remark = self.accountName
+        contact.publicKey = self.publicKey
+        contact.sessionType = SessionType.P2P
+        return contact
+    }
+}
+
 
 extension CPChainClaim {
     func calStates() -> (dotName:String, desc: String, color: UIColor)
@@ -16,7 +28,7 @@ extension CPChainClaim {
         } else if self.chain_status == 2 {
             return ("dot_yellow","history_Fail".localized(),UIColor(hexString: "#F77221")!)
         } else {
-            return ("dot_blue","history_Pending".localized(),UIColor(hexString: "#3D7EFF")!)
+            return ("dot_blue","history_Pending".localized(),UIColor(hexString: Color.blue)!)
         }
     }
 }

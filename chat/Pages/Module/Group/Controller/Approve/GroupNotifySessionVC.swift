@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -56,7 +56,7 @@ class GroupNotifySessionVC: BaseViewController, UITableViewDelegate, UITableView
     }
     
     
-      
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArray?.count ?? 0
     }

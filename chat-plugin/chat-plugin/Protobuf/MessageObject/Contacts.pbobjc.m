@@ -1,8 +1,8 @@
-  
-  
 
-  
-  
+
+
+
+
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
  #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
@@ -14,7 +14,7 @@
 #endif
 
 #import "Contacts.pbobjc.h"
-  
+
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -23,16 +23,16 @@
 
 @implementation NCProtoContactsRoot
 
-  
-  
+
+
 
 @end
 
 #pragma mark - NCProtoContactsRoot_FileDescriptor
 
 static GPBFileDescriptor *NCProtoContactsRoot_FileDescriptor(void) {
-    
-    
+  
+  
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
@@ -58,8 +58,8 @@ typedef struct NCProtoContacts__storage_ {
   NSData *content;
 } NCProtoContacts__storage_;
 
-  
-  
+
+
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
@@ -102,7 +102,7 @@ typedef struct NCProtoContacts__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif    
+    #endif  
     descriptor = localDescriptor;
   }
   return descriptor;
@@ -113,4 +113,4 @@ typedef struct NCProtoContacts__storage_ {
 
 #pragma clang diagnostic pop
 
-  
+

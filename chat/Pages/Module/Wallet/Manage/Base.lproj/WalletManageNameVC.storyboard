@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--管理-->
+        <scene sceneID="Fe4-Bf-4h3">
+            <objects>
+                <viewController storyboardIdentifier="WalletManageNameVC" id="j8a-Iw-uzS" customClass="WalletManageNameVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kDg-CR-108">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yxr-B5-K7g" userLabel="CV">
+                                <rect key="frame" x="0.0" y="54" width="414" height="55"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wallet_card" translatesAutoresizingMaskIntoConstraints="NO" id="OIS-5H-Adm">
+                                        <rect key="frame" x="15" y="17" width="22" height="21"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="修改钱包名" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LzZ-gG-oNv">
+                                        <rect key="frame" x="52" y="17" width="87" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.015686274510000001" green="0.062745098040000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xD-EW-ChB">
+                                        <rect key="frame" x="149" y="0.0" width="228" height="55"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="NCH">
+                                            <color key="titleColor" red="0.67843137249999996" green="0.68627450980000004" blue="0.72941176470000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="Bqc-Wi-cTb">
+                                        <rect key="frame" x="392" y="21.5" width="7" height="12"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="LzZ-gG-oNv" firstAttribute="centerY" secondItem="Yxr-B5-K7g" secondAttribute="centerY" id="0z1-fs-cNQ"/>
+                                    <constraint firstItem="1xD-EW-ChB" firstAttribute="height" secondItem="Yxr-B5-K7g" secondAttribute="height" id="ECa-6X-9NS"/>
+                                    <constraint firstItem="Bqc-Wi-cTb" firstAttribute="centerY" secondItem="Yxr-B5-K7g" secondAttribute="centerY" id="GBC-Wo-3rp"/>
+                                    <constraint firstAttribute="trailing" secondItem="Bqc-Wi-cTb" secondAttribute="trailing" constant="15" id="Nyv-ys-JbD"/>
+                                    <constraint firstItem="OIS-5H-Adm" firstAttribute="centerY" secondItem="Yxr-B5-K7g" secondAttribute="centerY" id="SOA-5f-bC4"/>
+                                    <constraint firstItem="OIS-5H-Adm" firstAttribute="leading" secondItem="Yxr-B5-K7g" secondAttribute="leading" constant="15" id="WHh-0t-Xvm"/>
+                                    <constraint firstItem="Bqc-Wi-cTb" firstAttribute="leading" secondItem="1xD-EW-ChB" secondAttribute="trailing" constant="15" id="rOX-NS-m6F"/>
+                                    <constraint firstItem="1xD-EW-ChB" firstAttribute="leading" secondItem="LzZ-gG-oNv" secondAttribute="trailing" constant="10" id="uUx-dT-IVx"/>
+                                    <constraint firstItem="LzZ-gG-oNv" firstAttribute="leading" secondItem="OIS-5H-Adm" secondAttribute="trailing" constant="15" id="x4w-eL-0X7"/>
+                                    <constraint firstAttribute="height" constant="55" id="yoR-ER-XNU"/>
+                                    <constraint firstItem="1xD-EW-ChB" firstAttribute="centerY" secondItem="Yxr-B5-K7g" secondAttribute="centerY" id="yrQ-6S-rDn"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Yxr-B5-K7g" firstAttribute="leading" secondItem="F2y-Pg-58G" secondAttribute="leading" id="ghy-dU-7hh"/>
+                            <constraint firstItem="Yxr-B5-K7g" firstAttribute="top" secondItem="F2y-Pg-58G" secondAttribute="top" constant="10" id="mYm-cn-o2X"/>
+                            <constraint firstItem="F2y-Pg-58G" firstAttribute="trailing" secondItem="Yxr-B5-K7g" secondAttribute="trailing" id="ufp-Bq-m9l"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="F2y-Pg-58G"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="管理" id="IsP-qp-9pN"/>
+                    <connections>
+                        <outlet property="changeNameBtn" destination="1xD-EW-ChB" id="h1M-iQ-Jof"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DWP-hY-XkO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-383" y="138"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="arrow_rigth" width="7" height="12"/>
+        <image name="wallet_card" width="22" height="21"/>
+    </resources>
+</document>

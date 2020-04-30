@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
@@ -12,6 +12,45 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+
+@interface CPTradeRsp (secpri) <WCTTableCoding>
+
+
+WCDB_PROPERTY(txhash)
+WCDB_PROPERTY(tid)
+
+WCDB_PROPERTY(type)
+
+WCDB_PROPERTY(status);
+
+WCDB_PROPERTY(createTime);
+
+
+WCDB_PROPERTY(amount);
+
+WCDB_PROPERTY(chainId);
+WCDB_PROPERTY(symbol);
+
+
+WCDB_PROPERTY(txfee);
+
+WCDB_PROPERTY(fromAddr);
+WCDB_PROPERTY(toAddr);
+
+WCDB_PROPERTY(memo); 
+
+@end
+
+
+@interface CPAssetToken (secpri) <WCTTableCoding>
+
+WCDB_PROPERTY(chainID)
+WCDB_PROPERTY(symbol)
+WCDB_PROPERTY(balance)
+
+@end
+
 
 @interface CPChainClaim (secpri) <WCTTableCoding>
 
@@ -22,6 +61,7 @@ WCDB_PROPERTY(operator_address)
 WCDB_PROPERTY(createTime)
 WCDB_PROPERTY(updateTime)
 WCDB_PROPERTY(chain_status)
+WCDB_PROPERTY(endpoint)
 
 @end
 
@@ -65,6 +105,8 @@ WCDB_PROPERTY(notice_modified_time)
 WCDB_PROPERTY(notice_publisher)
 WCDB_PROPERTY(inviteType)
 
+WCDB_PROPERTY(avatar)
+WCDB_PROPERTY(server_addr)
 
 @end
 
@@ -103,6 +145,7 @@ WCDB_PROPERTY(groupName)
 WCDB_PROPERTY(server_msg_id)
 WCDB_PROPERTY(isDelete)
 WCDB_PROPERTY(group_pub_key)
+WCDB_PROPERTY(useway)
 
 @end
 
@@ -125,7 +168,7 @@ WCDB_PROPERTY(groupUnreadCount)
 
 @end
 
-  
+
 
 @interface CPGroupMember (secpri) <WCTTableCoding>
 

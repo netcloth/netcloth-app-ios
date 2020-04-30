@@ -1,0 +1,18 @@
+
+/* Class = "UIButton"; normalTitle = "转账"; ObjectID = "2bg-ob-tVm"; */
+"2bg-ob-tVm.normalTitle" = "转账";
+
+/* Class = "UILabel"; text = "100000"; ObjectID = "Sxa-0S-p7N"; */
+"Sxa-0S-p7N.text" = "100000";
+
+/* Class = "UIButton"; normalTitle = "收款"; ObjectID = "Z7N-pd-YfN"; */
+"Z7N-pd-YfN.normalTitle" = "收款";
+
+/* Class = "UILabel"; text = "NetCloth-NCH"; ObjectID = "lBu-zR-OHC"; */
+"lBu-zR-OHC.text" = "NetCloth-NCH";
+
+/* Class = "UILabel"; text = "$"; ObjectID = "qhT-Dm-CZb"; */
+"qhT-Dm-CZb.text" = "$";
+
+/* Class = "UILabel"; text = "0.005005"; ObjectID = "rpM-fp-5va"; */
+"rpM-fp-5va.text" = "0.005005";

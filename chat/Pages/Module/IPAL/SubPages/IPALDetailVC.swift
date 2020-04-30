@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -19,7 +19,7 @@ class IPALDetailVC: BaseViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            
         }
         
         super.viewDidLoad()

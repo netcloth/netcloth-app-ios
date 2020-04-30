@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 import UIKit
 
@@ -13,14 +13,14 @@ UISearchBarDelegate,
 UISearchControllerDelegate,
 UISearchResultsUpdating {
     
-    var resultVC: (UIViewController&Cell)?   
+    var resultVC: (UIViewController&Cell)? 
     var searchTextChange: ((_ input: String?, _ callBack: @escaping (Any) -> Void) -> Void)?
     
     @IBOutlet weak var searchContainerView: UIView?
     fileprivate var searchViewController: UISearchController?
     
     let disbag = DisposeBag()
-      
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.isHideNavBar = true
@@ -35,7 +35,7 @@ UISearchResultsUpdating {
     }
     
     func configUI() {
-          
+        
         let result = resultVC!
         
         let searchVC = UISearchController(searchResultsController: result)

@@ -1,0 +1,63 @@
+
+/* Class = "UILabel"; text = " "; ObjectID = "2hC-9I-ZlA"; */
+"2hC-9I-ZlA.text" = " ";
+
+/* Class = "UILabel"; text = "发送地址"; ObjectID = "4xH-l7-t5t"; */
+"4xH-l7-t5t.text" = "发送地址";
+
+/* Class = "UILabel"; text = "备注"; ObjectID = "8yP-6m-Tts"; */
+"8yP-6m-Tts.text" = "备注";
+
+/* Class = "UILabel"; text = "收款地址"; ObjectID = "9U6-WV-XZw"; */
+"9U6-WV-XZw.text" = "收款地址";
+
+/* Class = "UILabel"; text = "TXID"; ObjectID = "KtZ-U1-Jlt"; */
+"KtZ-U1-Jlt.text" = "TXID";
+
+/* Class = "UILabel"; text = " "; ObjectID = "LzL-pV-2He"; */
+"LzL-pV-2He.text" = " ";
+
+/* Class = "UILabel"; text = " "; ObjectID = "MY4-Yh-SDw"; */
+"MY4-Yh-SDw.text" = " ";
+
+/* Class = "UIButton"; normalTitle = "去区块链浏览器查询"; ObjectID = "SEb-JG-a5c"; */
+"SEb-JG-a5c.normalTitle" = "去区块链浏览器查询";
+
+/* Class = "UILabel"; text = "矿工费"; ObjectID = "Txu-K3-ceo"; */
+"Txu-K3-ceo.text" = "矿工费";
+
+/* Class = "UIButton"; normalTitle = "复制TXID"; ObjectID = "UOX-Ta-V4y"; */
+"UOX-Ta-V4y.normalTitle" = "复制TXID";
+
+/* Class = "UILabel"; text = "时间"; ObjectID = "VOW-Li-b1B"; */
+"VOW-Li-b1B.text" = "时间";
+
+/* Class = "UILabel"; text = " "; ObjectID = "VOp-h7-166"; */
+"VOp-h7-166.text" = " ";
+
+/* Class = "UILabel"; text = " "; ObjectID = "WMh-RS-HC4"; */
+"WMh-RS-HC4.text" = " ";
+
+/* Class = "UILabel"; text = "金额"; ObjectID = "XUI-ZP-CpE"; */
+"XUI-ZP-CpE.text" = "金额";
+
+/* Class = "UILabel"; text = " "; ObjectID = "doM-nH-6Ur"; */
+"doM-nH-6Ur.text" = " ";
+
+/* Class = "UILabel"; text = "操作类型"; ObjectID = "fr7-fo-Att"; */
+"fr7-fo-Att.text" = "操作类型";
+
+/* Class = "UINavigationItem"; title = "历史详情"; ObjectID = "ggI-bQ-ZKF"; */
+"ggI-bQ-ZKF.title" = "历史详情";
+
+/* Class = "UILabel"; text = " "; ObjectID = "hQA-TB-dFE"; */
+"hQA-TB-dFE.text" = " ";
+
+/* Class = "UILabel"; text = "申明中"; ObjectID = "ouc-A5-7cd"; */
+"ouc-A5-7cd.text" = "申明中";
+
+/* Class = "UILabel"; text = "（0/1）"; ObjectID = "y3P-Vg-6Ih"; */
+"y3P-Vg-6Ih.text" = "（0/1）";
+
+/* Class = "UILabel"; text = " "; ObjectID = "zmF-6h-0em"; */
+"zmF-6h-0em.text" = " ";

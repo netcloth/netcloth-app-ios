@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 #import <UIKit/UIKit.h>
 @class SGQRCodeObtainConfigure, SGQRCodeObtain;
@@ -15,11 +15,11 @@ typedef void(^SGQRCodeObtainAlbumDidCancelImagePickerControllerBlock)(SGQRCodeOb
 typedef void(^SGQRCodeObtainAlbumResultBlock)(SGQRCodeObtain *obtain, NSString *result);
 
 @interface SGQRCodeObtain : NSObject
- 
+
 + (instancetype)QRCodeObtain;
 
 #pragma mark - - 生成二维码相关方法
- 
+
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size;
 /**
  *  生成二维码（自定义颜色）
@@ -53,34 +53,37 @@ typedef void(^SGQRCodeObtainAlbumResultBlock)(SGQRCodeObtain *obtain, NSString *
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size logoImage:(UIImage *)logoImage ratio:(CGFloat)ratio logoImageCornerRadius:(CGFloat)logoImageCornerRadius logoImageBorderWidth:(CGFloat)logoImageBorderWidth logoImageBorderColor:(UIColor *)logoImageBorderColor;
 
 #pragma mark - - 扫描二维码相关方法
- 
+
 - (void)establishQRCodeObtainScanWithController:(UIViewController *)controller configure:(SGQRCodeObtainConfigure *)configure;
- 
+
 - (void)setBlockWithQRCodeObtainScanResult:(SGQRCodeObtainScanResultBlock)block;
 /** 扫描二维码光线强弱回调方法；调用之前配置属性 sampleBufferDelegate 必须为 YES */
 - (void)setBlockWithQRCodeObtainScanBrightness:(SGQRCodeObtainScanBrightnessBlock)block;
- 
+
 - (void)startRunningWithBefore:(void (^)(void))before completion:(void (^)(void))completion;
- 
+
 - (void)stopRunning;
 
- 
+
 - (void)playSoundName:(NSString *)name;
 
 #pragma mark - - 相册中读取二维码相关方法
- 
+
 - (void)establishAuthorizationQRCodeObtainAlbumWithController:(UIViewController *)controller;
- 
+
 @property (nonatomic, assign) BOOL isPHAuthorization;
- 
+
 - (void)setBlockWithQRCodeObtainAlbumDidCancelImagePickerController:(SGQRCodeObtainAlbumDidCancelImagePickerControllerBlock)block;
- 
+
 - (void)setBlockWithQRCodeObtainAlbumResult:(SGQRCodeObtainAlbumResultBlock)block;
 
 #pragma mark - - 手电筒相关方法
- 
+
 - (void)openFlashlight;
- 
+
 - (void)closeFlashlight;
+
+
++ (void)checkImage:(UIImage *)image haveQrCodeInfo:(void (^)(BOOL have,  NSString * _Nullable  result))complete;
 
 @end
