@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  FileDownloader.h
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/10.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"

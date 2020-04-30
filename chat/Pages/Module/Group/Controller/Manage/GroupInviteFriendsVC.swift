@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupInviteFriendsVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/9.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
 class GroupInviteFriendsVC: GroupSelectContactVC {
-      
+    /// 0 add , 1 delete
     var pageTag: Int = 0
     
     fileprivate var groupMembers: Set<String>?
@@ -74,10 +74,8 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
         CPContactHelper.getNormalContacts { [weak self]  (contacts) in
             let selfpubkey = CPAccountHelper.loginUser()?.publicKey
             let filter =  contacts.filter { (ct) -> Bool in
-                if ct.publicKey == support_account_pubkey  {
-                    return false
-                }
-                if ct.status == .strange {
+                if ct.status == .assistHelper ||
+                    ct.status == .strange {
                     return false
                 }
                 if self?.pageTag == 1 , ct.publicKey == selfpubkey  {
@@ -93,7 +91,7 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
     
     
     
-      
+    //MARK:- Action
     
     override func onTapDone() {
         guard let node =  IPALManager.shared.store.currentCIpal else {
@@ -101,7 +99,7 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
             return
         }
         
-        var array: [String] = []   
+        var array: [String] = [] //hexpublick keys
         if let sindexs =  self.tableView?.indexPathsForSelectedRows {
             for indexPath in sindexs {
                 let key = indexArray[indexPath.section]
@@ -138,7 +136,7 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
             }
         }
         self.navigationController?.popToRootViewController(animated: true)
-          
+        //select home
         if let rootVC = Router.rootVC as? UINavigationController,
             let baseTabVC = rootVC.topViewController as? GrandTabBarVC {
             baseTabVC.switchToTab(index: 0)
@@ -181,7 +179,7 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
         successV.okButton?.setTitle("OK".localized(), for: .normal)
         Router.showAlert(view: successV)
         successV.okBlock = { [weak self] in
-              
+            //to detail page
             if let vcs = self?.navigationController?.viewControllers {
                 for v in vcs {
                     if v is GroupDetailVC {
@@ -198,12 +196,12 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
         return Observable.create { (observer) -> Disposable in
             
             if let alert = R.loadNib(name: "MayEmptyAlertView") as? MayEmptyAlertView {
-                  
+                //config
                 alert.titleLabel?.isHidden = true
                 var tip = "Group_Member_Kick_Tip".localized()
                 tip = tip.replacingOccurrences(of: "#mark#", with: "\(count)")
                 alert.msgLabel?.text = tip
-                alert.msgLabel?.textColor = UIColor(hexString: "#303133")
+                alert.msgLabel?.textColor = UIColor(hexString: Color.black)
                 
                 alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
                 alert.okButton?.setTitle("Confirm".localized(), for: .normal)
@@ -223,9 +221,9 @@ class GroupInviteFriendsVC: GroupSelectContactVC {
     
     
     
-      
+    //MARK:- Overide
     
-    override func lastHandle(cell: UITableViewCell, model: CPContact?) {
+    override func lastChanceChange(cell: UITableViewCell, model: CPContact?) {
         if pageTag == 0 {
             let member = model?.publicKey ?? ""
             if groupMembers?.contains(member) == true {

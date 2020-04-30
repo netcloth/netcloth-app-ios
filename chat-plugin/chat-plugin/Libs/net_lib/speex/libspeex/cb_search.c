@@ -66,7 +66,7 @@ static void compute_weighted_codebook(const signed char *shape_cb, const spx_wor
          shape[k] = (spx_word16_t)shape_cb[i*subvect_size+k];
       E[i]=0;
 
-       
+      /* Compute codeword response using convolution with impulse response */
       for(j=0;j<subvect_size;j++)
       {
          spx_word32_t resj=0;
@@ -78,7 +78,7 @@ static void compute_weighted_codebook(const signed char *shape_cb, const spx_wor
 #else
          res16 = 0.03125f*resj;
 #endif
-          
+         /* Compute codeword energy */
          E[i]=MAC16_16(E[i],res16,res16);
          res[j] = res16;
          /*printf ("%d\n", (int)res[j]);*/
@@ -100,13 +100,13 @@ static inline void target_update(spx_word16_t *t, spx_word16_t g, spx_word16_t *
 
 
 static void split_cb_search_shape_sign_N1(
-spx_word16_t target[],			 
-spx_coef_t ak[],			 
-spx_coef_t awk1[],			 
-spx_coef_t awk2[],			 
+spx_word16_t target[],			/* target vector */
+spx_coef_t ak[],			/* LPCs for this subframe */
+spx_coef_t awk1[],			/* Weighted LPCs for this subframe */
+spx_coef_t awk2[],			/* Weighted LPCs for this subframe */
 const void *par,                      /* Codebook/search parameters*/
-int   p,                         
-int   nsf,                       
+int   p,                        /* number of LPC coeffs */
+int   nsf,                      /* number of samples in subframe */
 spx_sig_t *exc,
 spx_word16_t *r,
 SpeexBits *bits,
@@ -162,7 +162,7 @@ int   update_target
       if (have_sign)
          vq_nbest_sign(x, resp2, subvect_size, shape_cb_size, E, 1, &best_index, &best_dist, stack);
       else
-#endif  
+#endif /* DISABLE_WIDEBAND */
          vq_nbest(x, resp2, subvect_size, shape_cb_size, E, 1, &best_index, &best_dist, stack);
 
       speex_bits_pack(bits,best_index,params->shape_bits+have_sign);
@@ -223,7 +223,7 @@ int   update_target
       }
    }
 
-    
+   /* Update excitation */
    /* FIXME: We could update the excitation directly above */
    for (j=0;j<nsf;j++)
       exc[j]=ADD32(exc[j],e[j]);
@@ -244,13 +244,13 @@ int   update_target
 
 
 void split_cb_search_shape_sign(
-spx_word16_t target[],			 
-spx_coef_t ak[],			 
-spx_coef_t awk1[],			 
-spx_coef_t awk2[],			 
+spx_word16_t target[],			/* target vector */
+spx_coef_t ak[],			/* LPCs for this subframe */
+spx_coef_t awk1[],			/* Weighted LPCs for this subframe */
+spx_coef_t awk2[],			/* Weighted LPCs for this subframe */
 const void *par,                      /* Codebook/search parameters*/
-int   p,                         
-int   nsf,                       
+int   p,                        /* number of LPC coeffs */
+int   nsf,                      /* number of samples in subframe */
 spx_sig_t *exc,
 spx_word16_t *r,
 SpeexBits *bits,
@@ -357,7 +357,7 @@ int   update_target
    for (j=0;j<N;j++)
       odist[j]=0;
 
-    
+   /*For all subvectors*/
    for (i=0;i<nb_subvect;i++)
    {
       /*"erase" nbest list*/
@@ -385,7 +385,7 @@ int   update_target
          if (have_sign)
             vq_nbest_sign(x, resp2, subvect_size, shape_cb_size, E, N, best_index, best_dist, stack);
          else
-#endif  
+#endif /* DISABLE_WIDEBAND */
             vq_nbest(x, resp2, subvect_size, shape_cb_size, E, N, best_index, best_dist, stack);
 
          /*For all new n-bests*/
@@ -453,7 +453,7 @@ int   update_target
       }
 
       /*update old-new data*/
-       
+      /* just swap pointers instead of a long copy */
       {
          spx_word16_t **tmp2;
          tmp2=ot;
@@ -467,14 +467,14 @@ int   update_target
          odist[j]=ndist[j];
    }
 
-    
+   /*save indices*/
    for (i=0;i<nb_subvect;i++)
    {
       ind[i]=nind[0][i];
       speex_bits_pack(bits,ind[i],params->shape_bits+have_sign);
    }
 
-    
+   /* Put everything back together */
    for (i=0;i<nb_subvect;i++)
    {
       int rind;
@@ -499,7 +499,7 @@ int   update_target
          e[subvect_size*i+j]=sign*0.03125*shape_cb[rind*subvect_size+j];
 #endif
    }
-    
+   /* Update excitation */
    for (j=0;j<nsf;j++)
       exc[j]=ADD32(exc[j],e[j]);
 
@@ -515,13 +515,13 @@ int   update_target
          target[j]=SUB16(target[j],PSHR16(r2[j],2));
    }
 }
-#endif  
+#endif /* DISABLE_ENCODER */
 
 #ifndef DISABLE_DECODER
 void split_cb_shape_sign_unquant(
 spx_sig_t *exc,
 const void *par,                      /* non-overlapping codebook */
-int   nsf,                       
+int   nsf,                      /* number of samples in subframe */
 SpeexBits *bits,
 char *stack,
 spx_int32_t *seed
@@ -545,7 +545,7 @@ spx_int32_t *seed
    ALLOC(ind, nb_subvect, int);
    ALLOC(signs, nb_subvect, int);
 
-    
+   /* Decode codewords and gains */
    for (i=0;i<nb_subvect;i++)
    {
       if (have_sign)
@@ -554,7 +554,7 @@ spx_int32_t *seed
          signs[i] = 0;
       ind[i] = speex_bits_unpack_unsigned(bits, params->shape_bits);
    }
-    
+   /* Compute decoded excitation */
    for (i=0;i<nb_subvect;i++)
    {
       spx_word16_t s=1;
@@ -575,17 +575,17 @@ spx_int32_t *seed
 #endif
    }
 }
-#endif  
+#endif /* DISABLE_DECODER */
 
 #ifndef DISABLE_ENCODER
 void noise_codebook_quant(
-spx_word16_t target[],			 
-spx_coef_t ak[],			 
-spx_coef_t awk1[],			 
-spx_coef_t awk2[],			 
+spx_word16_t target[],			/* target vector */
+spx_coef_t ak[],			/* LPCs for this subframe */
+spx_coef_t awk1[],			/* Weighted LPCs for this subframe */
+spx_coef_t awk2[],			/* Weighted LPCs for this subframe */
 const void *par,                      /* Codebook/search parameters*/
-int   p,                         
-int   nsf,                       
+int   p,                        /* number of LPC coeffs */
+int   nsf,                      /* number of samples in subframe */
 spx_sig_t *exc,
 spx_word16_t *r,
 SpeexBits *bits,
@@ -603,13 +603,13 @@ int   update_target
       exc[i]+=SHL32(EXTEND32(tmp[i]),8);
    SPEEX_MEMSET(target, 0, nsf);
 }
-#endif  
+#endif /* DISABLE_ENCODER */
 
 #ifndef DISABLE_DECODER
 void noise_codebook_unquant(
 spx_sig_t *exc,
 const void *par,                      /* non-overlapping codebook */
-int   nsf,                       
+int   nsf,                      /* number of samples in subframe */
 SpeexBits *bits,
 char *stack,
 spx_int32_t *seed
@@ -620,4 +620,4 @@ spx_int32_t *seed
    for (i=0;i<nsf;i++)
       exc[i]=SHL32(EXTEND32(speex_rand(1, seed)),SIG_SHIFT);
 }
-#endif  
+#endif /* DISABLE_DECODER */

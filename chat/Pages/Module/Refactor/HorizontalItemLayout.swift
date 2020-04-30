@@ -1,26 +1,26 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  File.swift
+//  chat
+//
+//  Created by Grand on 2019/12/5.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
-  
-  
+///  0 3   to  0 1
+///  1 2       2 3
 public final class HorizontalItemLayout: UICollectionViewFlowLayout {
-      
+    /// items
     private lazy var allAttrs = [UICollectionViewLayoutAttributes]()
     
-    public var viewSize: CGSize?   
+    public var viewSize: CGSize? //self width
     
     var rows = 3
     var columns = 6
     
 
-      
+    /// 设置分页大小
     override public var collectionViewContentSize: CGSize {
         
         guard let vs = viewSize else {
@@ -32,7 +32,7 @@ public final class HorizontalItemLayout: UICollectionViewFlowLayout {
     }
 
 
-      
+    // MARK: - 生命周期
     override init() {
         super.init()
         scrollDirection = .horizontal
@@ -43,15 +43,15 @@ public final class HorizontalItemLayout: UICollectionViewFlowLayout {
         scrollDirection = .horizontal
     }
 
-      
+    // MARK: - layout
     override public func prepare() {
         super.prepare()
         guard let collectionView = collectionView, let vs = viewSize else { return }
         
         var item_size = self.itemSize
         var section_inset = self.sectionInset
-        var columnSpace = self.minimumLineSpacing   
-        var rowSpace = self.minimumInteritemSpacing   
+        var columnSpace = self.minimumLineSpacing //for x
+        var rowSpace = self.minimumInteritemSpacing // for y
         
         var x_i:CGFloat = 0, y_i: CGFloat = 0, page_i: Int = 0
         var onePageCount = rows * columns

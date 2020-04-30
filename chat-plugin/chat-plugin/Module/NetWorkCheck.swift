@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  NetWorkCheck.swift
+//  chat-plugin
+//
+//  Created by Grand on 2019/9/29.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import Alamofire

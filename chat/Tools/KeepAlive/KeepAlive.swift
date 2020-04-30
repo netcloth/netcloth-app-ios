@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  KeepAlive.swift
+//  chat
+//
+//  Created by Grand on 2019/8/5.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import CoreLocation
@@ -26,7 +26,7 @@ class KeepAlive: NSObject {
             }
         }
         
-           
+         /// 音乐中断处理
         func audioPlayerEndInterruption(_ player: AVAudioPlayer, withOptions flags: Int) {
             if player.isPlaying == false {
                 try? AVAudioSession.sharedInstance().setActive(true)
@@ -40,10 +40,10 @@ class KeepAlive: NSObject {
             guard let userinfo = notification.userInfo else {return}
             guard let interruptionType: UInt = userinfo[AVAudioSessionInterruptionTypeKey] as! UInt?  else {return}
             if interruptionType == AVAudioSession.InterruptionType.began.rawValue {
-                  
+                // 中断开始，音乐被暂停
                 print("\(type(of:self)): 中断开始 userinfo:\(userinfo)")
             } else if interruptionType == AVAudioSession.InterruptionType.ended.rawValue {
-                  
+                // 中断结束，恢复播放
                 print("\(type(of:self)): 中断结束 userinfo:\(userinfo)")
                 if player?.isPlaying == false {
                     try? AVAudioSession.sharedInstance().setActive(true)
@@ -55,15 +55,15 @@ class KeepAlive: NSObject {
         
     }
     
-      
+    //MARK:- Public
 
-      
+    /// 方案一
     class func startLocation(){
         startTimer()
         setUpLocation()
     }
     
-      
+    /// 方案二
     class func startSilenceAudio() {
         startTimer()
         setupPlayer()
@@ -79,7 +79,7 @@ class KeepAlive: NSObject {
     }
     
     
-      
+    //MARK:- Private
     private static func setupPlayer () {
         
         do {

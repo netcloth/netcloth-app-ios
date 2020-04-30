@@ -58,7 +58,7 @@ typedef struct SpeexBits {
    void *reserved2; /**< Reserved for future use */
 } SpeexBits;
 
- 
+/** Initializes and allocates resources for a SpeexBits struct */
 void speex_bits_init(SpeexBits *bits);
 
 /** Initializes SpeexBits struct using a pre-allocated buffer*/

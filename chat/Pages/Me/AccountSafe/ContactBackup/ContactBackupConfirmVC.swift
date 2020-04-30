@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactBackupConfirmVC.swift
+//  chat
+//
+//  Created by Grand on 2019/10/29.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -22,12 +22,12 @@ class ContactBackupConfirmVC: BaseViewController {
         configUI()
     }
     
-      
+    //MARK:- Config
     func configUI() {
         self.scrollView?.adjustOffset()
-        self.confirmBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.confirmBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
         
-          
+        //current
         self.timeL?.text = NSDate().string(withFormat: "yyyy-MM-dd HH:mm")
         
         CPContactHelper.getBackupStatisticsInfo {[weak self]  (r, msg, whiteN, blackN, groupN) in
@@ -37,21 +37,24 @@ class ContactBackupConfirmVC: BaseViewController {
             let range1 = (atttip.string as? NSString)?.range(of: "#white#")
             if let r1 = range1, r1.location != NSNotFound {
                 let a1 = NSMutableAttributedString(string: "\(whiteN)")
-                a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+                a1.addAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold),
+                                  NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: a1.rangeOfAll())
                 atttip.replaceCharacters(in: r1, with: a1)
             }
             
             let range2 = (atttip.string as? NSString)?.range(of: "#black#")
             if let r1 = range2 {
                 let a1 = NSMutableAttributedString(string: "\(blackN)")
-                a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+                a1.addAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold),
+                NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: a1.rangeOfAll())
                 atttip.replaceCharacters(in: r1, with: a1)
             }
             
             let range3 = (atttip.string as? NSString)?.range(of: "#group#")
             if let r1 = range3 {
                 let a1 = NSMutableAttributedString(string: "\(groupN)")
-                a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+                a1.addAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold),
+                NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: a1.rangeOfAll())
                 atttip.replaceCharacters(in: r1, with: a1)
             }
             self?.listL?.attributedText = atttip
@@ -59,12 +62,8 @@ class ContactBackupConfirmVC: BaseViewController {
     }
     
     @IBAction func onTapConfirm() {
-        
-        self.popAlert()?
-            .then { (res) -> Promise<Data>  in
-                self.showProgress()
-                return self.encryptDatabase()
-        }
+        self.showProgress()
+        self.encryptDatabase()
         .then{ (data) -> Promise<String> in
             return self.uploadContactData(data)
         }
@@ -98,10 +97,8 @@ class ContactBackupConfirmVC: BaseViewController {
         successV.msgLabel?.text = "Contact_backup_result_success".localized()
         successV.okButton?.setTitle("OK".localized(), for: .normal)
         Router.showAlert(view: successV)
+        UserSettings.setObject("1", forKey: BackupKey.contactBackup.rawValue)
         successV.okBlock = { [weak self] in
-            
-            UserSettings.setObject("1", forKey: BackupKey.contactBackup.rawValue)
-            
             if GroupRoomService.createdGroup != nil {
                 let contact = GroupRoomService.createdGroup!
                 Router.dismissVC(animate: false, completion: {
@@ -113,7 +110,7 @@ class ContactBackupConfirmVC: BaseViewController {
                 }, toRoot: true)
             } else {
                 
-                  
+                //to safe page
                 if let vcs = self?.navigationController?.viewControllers {
                     for v in vcs {
                         if v is AccountSafeVC {
@@ -140,7 +137,7 @@ class ContactBackupConfirmVC: BaseViewController {
         }
     }
 
-      
+    //MARK:- Progress
 
     weak var progressView: UploadProgressView?
     
@@ -186,7 +183,7 @@ class ContactBackupConfirmVC: BaseViewController {
             
             alert.checkPreview = { [weak alert] in
                 let pwd = alert?.inputTextField?.text
-                  
+                //check if error
                 if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                     alert?.checkTipsLabel?.isHidden = false
                     return false
@@ -220,14 +217,14 @@ class ContactBackupConfirmVC: BaseViewController {
         return data_promise
     }
     
-      
+    //MARK:- upload
     func uploadContactData(_ data:Data) -> Promise<String> {
         
         let _promise = Promise<String> { [weak self] (resolver) in
             NW.uploadData(data: data, toUrl: APPURL.Config.UploadContact , complete: { (success, res) in
-                  
+                //finish result
                 if success, let data = res {
-                      
+                    //result
                     let json = JSON(data)
                     if json["result"].int == 0 {
                         resolver.fulfill("success")
@@ -240,7 +237,7 @@ class ContactBackupConfirmVC: BaseViewController {
                     resolver.reject(error)
                 }
             }) { (progress) in
-                  
+                //progress
                 self?.updateProgress(progress)
             }
         }

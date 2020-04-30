@@ -1,37 +1,45 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ChatToolBar.swift
+//  chat
+//
+//  Created by Grand on 2019/8/11.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
-enum ToolBarStatus: Int {
-    case text   
-    case audio
-    case emoj
-    case more
+/// View Controller Must Confirm
+protocol KeyboardReturn {
+    var autoDismiss: Bool { get set }
 }
 
-  
+
+/// input tool
 class ChatToolBar:UIView,
 UITextFieldDelegate,
 EmojKeyBoardViewDelegate,
 MoreInputViewDelegate
 {
-    @IBOutlet weak var textField: UITextField!   
+    
+    enum ToolBarStatus: Int {
+        case text //default
+        case audio
+        case emoj
+        case more
+    }
+    
+    @IBOutlet weak var textField: UITextField! //input
     
     @IBOutlet weak var btnRecord: SRAudioRecordButton!
-    @IBOutlet weak var placeHolderBtn: UIButton?    
-    @IBOutlet weak var resetTextBtn: UIButton?    
+    @IBOutlet weak var placeHolderBtn: UIButton?  //占位提示
+    @IBOutlet weak var resetTextBtn: UIButton?  //归位text
     
-    @IBOutlet weak var switchChannelBtn: UIButton!   
+    @IBOutlet weak var switchChannelBtn: UIButton! //音频按钮
     @IBOutlet weak var emojBtn: UIButton!
     @IBOutlet weak var moreBtn: UIButton!
     
     
+    fileprivate let maxTextLength = 1000
     
     var clearTextAfterSend: Bool = true
     private let disbag = DisposeBag()
@@ -47,22 +55,40 @@ MoreInputViewDelegate
         let v =  R.loadNib(name: "MoreInputView") as! MoreInputView
         v.width = YYScreenSize().width
         v.delegate = self
+        
+        if self.roomService?.chatContact?.value.sessionType == SessionType.group  {
+            v.hideTransfer()
+        }
+        
         return v
     }()
     
-      
+    lazy var innerHelper: OCInnerHelper = {
+        let v = OCInnerHelper()
+        v.input = self.textField
+        return v
+    }()
+    
+    lazy var atCache: InputAtCache = {
+        let v = InputAtCache()
+        return v
+    }()
+    
+    
+    
+    /// status 0 text  1audio
     var status:ToolBarStatus? = .text {
         didSet {
             btnRecord.isHidden = !(status == .audio);
             
-              
+            //音频按钮
             let channelImg = (status == .audio)
                 ? UIImage(named: "键盘")
                 : UIImage(named: "编组 2")
             switchChannelBtn.setImage(channelImg, for: .normal)
             textField.isUserInteractionEnabled =  !(status == .audio)
             
-              
+            //resetTextBtn
             resetTextBtn?.isHidden = !(status == .emoj || status == .more)
             
             if status == .text {
@@ -86,9 +112,9 @@ MoreInputViewDelegate
         }
     }
     
-      
+    /// Observer this to handle send data
     var publish:PublishSubject = PublishSubject<Any?>()
-      
+    //MARK:- Lifecycel
     deinit {
         publish.onCompleted()
         SRAudioRecorderManager.shared()?.delegate = nil
@@ -100,7 +126,6 @@ MoreInputViewDelegate
         configEvent()
     }
     
-      
     func configUI() {
         textField.returnKeyType = .send
         textField.delegate = self
@@ -137,19 +162,7 @@ MoreInputViewDelegate
         }).disposed(by: disbag)
     }
     
-      
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let t = textField.text
-        if t?.isEmpty == true {
-            return false
-        }
-        publish.onNext(textField.text)
-        if clearTextAfterSend {
-            textField.text = ""
-        }
-        return false
-    }
-    
+    //MARK:- Public
     func resetInBlack(isBlack: Bool) {
         if isBlack {
             self.isUserInteractionEnabled = false
@@ -169,16 +182,178 @@ MoreInputViewDelegate
             self.placeHolderBtn?.isHidden = false
             self.placeHolderBtn?.titleLabel?.adjustsFontSizeToFitWidth = true
             self.placeHolderBtn?.setTitle(lockStr, for: .normal)
-        } else {
+        }
+        else {
             self.isUserInteractionEnabled = true
             self.placeHolderBtn?.isHidden = true
         }
     }
     
+    //MARK:- TF Delegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let t = textField.text
+        if t?.isEmpty == true {
+            return false
+        }
+        var atUsers = self.atCache.allAtPubkey(ofSenderText: t!)
+        var isAtAll = false
+        if let index = atUsers?.firstIndex(of: FakeAtALLPubkey) {
+            isAtAll = true
+            atUsers?.remove(at: index)
+        }
+        
+        let sender = (textField.text, isAtAll, atUsers)
+        publish.onNext(sender)
+        
+        if clearTextAfterSend {
+            textField.text = ""
+        }
+        clear()
+        return false
+    }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == "" && range.length == 1 {
+            //delete
+            return  onTextDelete()
+        }
+        
+        //check @
+        checkAt(text: string)
+        
+        
+        let str = self.textField.text?.appending(string)
+        let count = str?.count ?? 0
+        if count  > maxTextLength {
+            return false
+        }
+        
+        return true
+    }
+    
+    //MARK: Helper
+    fileprivate func clear() {
+        self.atCache.clean()
+    }
+    
+    fileprivate func checkAt(text: String) {
+        guard text == InputAtStartChar else {
+            return
+        }
+        guard self.roomService?.chatContact?.value.sessionType == SessionType.group else {
+            return
+        }
+        toAtSelectPage()
+    }
+    
+    fileprivate func toAtSelectPage() {
+        if let vc = R.loadSB(name: "ContactAtSelectVC", iden: "ContactAtSelectVC") as? ContactAtSelectVC {
+            vc.atSelectBack = { [weak self] (contacts, isAtAll) in
+                self?.setContainerVC(autoDismiss: true)
+                if isAtAll {
+                    let text = "@all".localized().appending(InputAtEndChar)
+                    self?.insertText(text: text)
+                    
+                    let item = InputAtItem()
+                    item.name = "@all".localized()
+                    item.hexPubkey = FakeAtALLPubkey
+                    self?.atCache.add(atItem: item)
+                }
+                else if contacts.isEmpty == false {
+                    var str = ""
+                    for contact in contacts {
+                        str = str.appending(contact.remark)
+                        str = str.appending(InputAtEndChar)
+                        if contact != contacts.last {
+                            str = str.appending(InputAtStartChar)
+                        }
+                        
+                        let item = InputAtItem()
+                        item.name = contact.remark
+                        item.hexPubkey = contact.publicKey
+                        self?.atCache.add(atItem: item)
+                    }
+                    self?.insertText(text: str)
+                }
+                
+            }
+            setContainerVC(autoDismiss: false)
+            Router.pushViewController(vc: vc)
+        }
+    }
+    
+    fileprivate func setContainerVC(autoDismiss: Bool) {
+        if var containerVC = self.viewController as? KeyboardReturn {
+            containerVC.autoDismiss = autoDismiss
+        }
+    }
+    
+    
+    fileprivate func onTextDelete() -> Bool {
+        let range = delRangeForAt()
+        if range.length == 1 {
+            //删除一个字
+            return true
+        }
+        
+        self.deleteText(range: range)
+        return false
+    }
+    
+    fileprivate func delRangeForAt() -> NSRange {
+        let text = self.textField.text as? NSString
+        let csRange = self.textField.textSelectedRange ?? NSRange(location: NSNotFound, length: 0)
+        
+        var range =  self.innerHelper.range(forPrefix: InputAtStartChar, suffix: InputAtEndChar, currentSelect: csRange)
+        let selectedRange = csRange
+        
+        var item: InputAtItem? = nil
+        if range.length > 1 {
+            let name =  text?.substring(with: range)
+            let set =  InputAtStartChar.appending(InputAtEndChar)
+            let charset = CharacterSet(charactersIn: set)
+            let tmpName = name?.trimmingCharacters(in: charset) ?? ""
+            item =  self.atCache.findItem(byName: tmpName)
+            if item == nil {
+                range = NSRange(location: selectedRange.location - 1, length: 1)
+            }
+        }
+        return range
+    }
+    
+    
+   
+    
+    //MARK: - At @
+    func insertText(text: String) {
+        let textStr = text as NSString
+        if let range = self.textField.textSelectedRange  {
+            let originText = self.textField.text as? NSString
+            let replaceText = originText?.replacingCharacters(in: range, with: text)
+            let rangeNew = NSRange(location: range.location + textStr.length, length: 0)
+            
+            self.textField.text = replaceText
+            self.status = .text //Note: status change
+            self.textField.textSelectedRange = rangeNew
+        }
+    }
+    
+    func deleteText(range: NSRange) {
+        let text = self.textField.text as? NSString
+        if range.location + range.length <= (text?.length ?? 0)
+            && range.location != NSNotFound
+            && range.length != 0 {
+            
+            let replaceText = text?.replacingCharacters(in: range, with: "")
+            let rangeNew = NSRange(location: range.location, length: 0)
+            
+            self.textField.text = replaceText
+            self.textField.textSelectedRange = rangeNew
+        }
+    }
 }
 
-  
+//MARK:- Audio
 extension ChatToolBar: SRAudioRecorderManagerDelegate {
     
     func audioRecorderManagerDidFinishRecordingFailed() {
@@ -190,7 +365,7 @@ extension ChatToolBar: SRAudioRecorderManagerDelegate {
     }
     
     func audioRecorderManagerDidFinishRecordingSuccess(_ audioFilePath: String!) {
-          
+        //send audio
         DispatchQueue.global().async {
             if let data = NSData(contentsOfFile: audioFilePath)  {
                 DispatchQueue.main.async {
@@ -201,7 +376,7 @@ extension ChatToolBar: SRAudioRecorderManagerDelegate {
     }
 }
 
-  
+//MARK:- emoj input
 extension ChatToolBar {
     func onInputEmoj(str: String) {
         self.textField.insertText(str)
@@ -212,16 +387,15 @@ extension ChatToolBar {
     }
     
     func onSendKeyTap() {
-          
         textFieldShouldReturn(self.textField)
     }
 }
 
 
-  
+//MARK:- Image
 extension ChatToolBar {
     func onSelectedPicture(image: UIImage?) {
-          
+        //send image data
         DispatchQueue.global().async {
             
             guard let img = image else {
@@ -257,29 +431,3 @@ extension ChatToolBar {
         }
     }
 }
-
-
-extension UIImage {
-    func compressTo(_ expectedSizeInMb:Int) -> Data? {
-        let sizeInBytes = expectedSizeInMb * 1024 * 1024
-        var needCompress:Bool = true
-        var imgData:Data?
-        var compressingValue:CGFloat = 1.0
-        while (needCompress && compressingValue > 0.0) {
-            if let data:Data = self.jpegData(compressionQuality: compressingValue)  {
-                if data.count < sizeInBytes {
-                    needCompress = false
-                    imgData = data
-                } else {
-                    compressingValue -= 0.25
-                }
-            }
-        }
-        
-        if let data = imgData {
-            return data
-        }
-        return nil
-    }
-}
-

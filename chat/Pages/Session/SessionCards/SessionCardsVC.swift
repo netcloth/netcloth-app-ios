@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SessionCardsVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/20.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -15,7 +15,7 @@ class SessionCardsVC: BaseViewController {
     private var contact: CPContact?
     var contactPublicKey: String?
     
-      
+    //1 from chat,
     var sourceTag: Int? = 0
     
     @IBOutlet weak var smallRemark: UILabel?
@@ -29,7 +29,7 @@ class SessionCardsVC: BaseViewController {
     
     let disbag = DisposeBag()
     
-      
+    //MARK:- Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -57,28 +57,31 @@ class SessionCardsVC: BaseViewController {
         smallRemark?.text = contact?.remark.getSmallRemark()
         remark?.text = contact?.remark
         
+        let color = contact?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemark?.backgroundColor = UIColor(hexString: color)
+        
         markTopSwitch?.isOn = (session?.topMark == 1)
         doNotDisturb?.isOn = (contact?.isDoNotDisturb == true)
         addBlackSwitch?.isOn =  (contact?.isBlack == true)
         
     }
     
-      
+    //MARK:- Config
     func configUI() {
         
-        markTopSwitch?.onTintColor = UIColor(hexString: "#3D7EFF")
+        markTopSwitch?.onTintColor = UIColor(hexString: Color.blue)
         markTopSwitch?.tintColor = UIColor(hexString: "#E1E4E9")
         
-        doNotDisturb?.onTintColor = UIColor(hexString: "#3D7EFF")
+        doNotDisturb?.onTintColor = UIColor(hexString: Color.blue)
         doNotDisturb?.tintColor = UIColor(hexString: "#E1E4E9")
         
-        addBlackSwitch?.onTintColor = UIColor(hexString: "#3D7EFF")
+        addBlackSwitch?.onTintColor = UIColor(hexString: Color.blue)
         addBlackSwitch?.tintColor = UIColor(hexString: "#E1E4E9")
     }
     
     func configEvent() {
         
-          
+        //mark top
         markTopSwitch?.rx.controlEvent(UIControl.Event.valueChanged).subscribe(onNext: { [weak self] (event) in
             let sessionId = Int(self?.contact?.sessionId ?? 0)
             if self?.markTopSwitch?.isOn == true {
@@ -89,26 +92,23 @@ class SessionCardsVC: BaseViewController {
         }).disposed(by: disbag)
         
         
-          
+        //doNotDisturb
         doNotDisturb?.rx.controlEvent(UIControl.Event.valueChanged).subscribe(onNext: { [weak self] (event) in
             let pubkey = self?.contactPublicKey ?? ""
             if self?.doNotDisturb?.isOn == true {
-                CPContactHelper.addUser(toDoNotDisturb: pubkey) { (r, msg) in
-                    if r {
-                        ExtensionShare.noDisturb.addToDisturb(pubkey: pubkey)
-                    }
-                }
+                InnerHelper.addToMute(hexPubkey: pubkey,
+                                      chatType: NCProtoChatType.chatTypeSingle,
+                                      target: self?.doNotDisturb)
+                
             } else {
-                CPContactHelper.removeUser(fromDoNotDisturb: pubkey) { (r, msg) in
-                    if r {
-                        ExtensionShare.noDisturb.removeDisturb(pubkey: pubkey)
-                    }
-                }
+                InnerHelper.removeMute(hexPubkey: pubkey,
+                                       chatType: NCProtoChatType.chatTypeSingle,
+                                       target: self?.doNotDisturb)
             }
         }).disposed(by: disbag)
         
         
-          
+        //add black
         addBlackSwitch?.rx.controlEvent(UIControl.Event.valueChanged).subscribe(onNext: { [weak self] (event) in
             if self?.addBlackSwitch?.isOn == true {
                 self?.onActionAddBlack()
@@ -118,7 +118,7 @@ class SessionCardsVC: BaseViewController {
         }).disposed(by: disbag)
         
         
-          
+        //clear
         clearChatRecord?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] (event) in
             let sessionId = Int(self?.contact?.sessionId ?? 0)
             self?.onActionClearChatRecord(sessionId: sessionId)
@@ -131,7 +131,7 @@ class SessionCardsVC: BaseViewController {
         }).disposed(by: disbag)
     }
     
-      
+    //MARK:- Action
     func onHandleRemarkChange(contact: CPContact) {
         if contact.publicKey != contactPublicKey {
             return
@@ -152,12 +152,12 @@ class SessionCardsVC: BaseViewController {
             let pubkey = self.contactPublicKey ?? ""
             
             alert.okBlock = {
-                CPSessionHelper.deleteSession(sessionId) { [weak self] (r, msg) in
+                
+                CPSessionHelper.clearSessionChats(in: sessionId, with: SessionType.P2P) { [weak self] (r, msg) in
                     if r == true {
                         self?.navigationController?.popViewController(animated: true)
-                          
+                        //notify
                         NotificationCenter.post(name: .chatRecordDeletes, object: pubkey)
-                        
                     } else {
                         Toast.show(msg: "System error".localized())
                     }
@@ -178,13 +178,8 @@ class SessionCardsVC: BaseViewController {
             alert.okButton?.setTitle("Confirm".localized(), for: .normal)
             Router.showAlert(view: alert)
             
-            alert.okBlock = {
-                CPContactHelper.addUser(toBlacklist: contact.publicKey) { [weak self] (r, msg) in
-                    if r == false {
-                        Toast.show(msg: msg)
-                        self?.addBlackSwitch?.isOn = false
-                    }
-                }
+            alert.okBlock = { [weak self] in
+                InnerHelper.addToBlack(hexPubkey: contact.publicKey, target: self?.addBlackSwitch)
             }
             alert.cancelBlock = { [weak self] in
                 self?.addBlackSwitch?.isOn = false
@@ -194,16 +189,13 @@ class SessionCardsVC: BaseViewController {
     
     func onActionDeleteFromBlack() {
         if let contact = self.contact {
-            CPContactHelper.removeUser(fromBlacklist: contact.publicKey) { (r, msg) in
-                if r == false {
-                    Toast.show(msg: msg)
-                }
-            }
+            InnerHelper.removeBlack(hexPubkey: contact.publicKey,
+                                    target: self.addBlackSwitch)
         }
     }
     
     @IBAction func onToContactInfo() {
-        if contactPublicKey == support_account_pubkey {
+        if let _ = contactPublicKey?.isAssistHelper() {
             return
         }
         if let vc = R.loadSB(name: "ContactCard", iden: "ContactCardVC") as? ContactCardVC {
@@ -214,7 +206,7 @@ class SessionCardsVC: BaseViewController {
     }
 }
 
-  
+//MARK:- Helper
 extension SessionCardsVC {
     func findContactByPubkey(_ pubkey:String) -> Promise<CPContact> {
         let _promise = Promise<CPContact> { (resolver) in

@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SystemMsgCell.swift
+//  chat
+//
+//  Created by Grand on 2019/11/25.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
 
-  
+/// style center
 class SystemMsgCell: ChatCommonCell {
     
     deinit {
@@ -46,7 +46,7 @@ class SystemMsgCell: ChatCommonCell {
         msgContentL?.text = msg.msgDecodeContent() as? String
     }
     
-      
+    //MARK:- Interface
     override func msgContentView() -> UIView? {
         return nil
     }

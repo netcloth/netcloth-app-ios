@@ -1,11 +1,11 @@
 
-  
-  
-  
-  
-  
-  
-  
+//
+//  IPALHistoryDetailVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/10.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -75,11 +75,11 @@ class IPALHistoryDetailVC: BaseViewController {
         })
     }
     
-      
+    //MARK:- Reload UI
 
     func reloadUI() {
         if let n = self.queryHistoryNode {
-            typeL?.text = "Communication Address Claim".localized()
+            typeL?.text = "Communication Server Claim".localized()
             timeL?.text = NSDate(timeIntervalSince1970: n.createTime).string(withFormat: "yyyy-MM-dd HH:mm:ss")
             nodeNameL?.text = n.moniker
             txhashL?.text = n.txhash
@@ -107,7 +107,7 @@ class IPALHistoryDetailVC: BaseViewController {
     }
     
     @IBAction func toQueryInBrowser() {
-        let str = "https:  
+        let str = "https://explorer.netcloth.org/transactions/" + (queryHistoryTxHash ?? queryHistoryNode?.txhash ?? "")
         if let url = URL(string: str) {
             UIApplication.shared.openURL(url)
         }

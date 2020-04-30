@@ -1,18 +1,30 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactVC.swift
+//  chat
+//
+//  Created by Grand on 2019/7/25.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
+/*
+ 0
+    new friend
+    observer
  
+ 1
+    heihei
+    douzi
+ 
+ 2
+    blacklist
+ */
 
 class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var searchBtn: UIButton?
+    @IBOutlet weak var searchControl: UIControl?
     @IBOutlet weak var tableView: UITableView!
     
     let disbag = DisposeBag()
@@ -38,14 +50,14 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
             self.tabBarItem.badgeValue = nil
         } else {
             self.tabBarItem.badgeValue = "\(count)"
-            self.tabBarItem.badgeColor = UIColor(hexString: "#FF4141")
+            self.tabBarItem.badgeColor = UIColor(hexString: Color.red)
         }
     }
     
     
     
     
-      
+    //MARK:- Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,14 +73,12 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
     
     func configUI() {
         
-        self.tabBarItem.setStyle(imgName: "通讯录-未选中",
-                                 selectedName: "通讯录选中",
-                                 textColor: UIColor(hexString: "#BFC2CC"),
-                                 selectedColor: UIColor(hexString: "#3D7EFF"))
+        self.tabBarItem.setStyle(imgName: "contact_unselect",
+                                 selectedName: "contact_select",
+                                 textColor: UIColor(hexString: Color.gray),
+                                 selectedColor: UIColor(hexString: Color.black))
         
         
-        self.tableView.tableHeaderView = nil
-        self.tableView.adjustHeader()
         self.tableView.adjustFooter()
         self.tableView.adjustOffset()
         
@@ -85,18 +95,19 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     func configEvent() {
-        self.searchBtn?.rx.tap.subscribe(onNext: { [weak self] in
-            self?.onTapSearch()
+        
+        searchControl?.rx.controlEvent(.touchUpInside).subscribe(onNext: { [weak self] in
+            ContactGroupSearchHelper.onTapSearch()
         }).disposed(by: disbag)
-    
+        
         
         NotificationCenter.default.rx.notification( NoticeNameKey.newFriendsCountChange.noticeName).subscribe(onNext: { [weak self] (notice) in
             self?.reloadData()
         }).disposed(by: disbag)
     }
     
-    func onTapSearch() {
-        ContactGroupSearchHelper.onTapSearch()
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     func reloadData() {
@@ -105,7 +116,8 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
                 if ct.publicKey == support_account_pubkey  {
                     return false
                 }
-                if ct.status == .strange {
+                if ct.status == .strange ||
+                    ct.status == .assistHelper {
                     return false
                 }
                 return true
@@ -113,7 +125,7 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
         
             let contacts: [CPContact]? = filter
             
-              
+            //new friend count
             let newFriends = contacts?.filter({ (ct) -> Bool in
                 if ct.status == .newFriend {
                     return true
@@ -122,7 +134,7 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
             })
             self?.newFriendsCount = newFriends?.count ?? 0
         
-              
+            //group
             self?.models.removeAll()
             if let array = contacts {
                 for contact in array {
@@ -145,7 +157,7 @@ class ContactVC: BaseViewController, UITableViewDelegate, UITableViewDataSource 
                 }
             }
             
-              
+            //sort index
             let titles = self?.models.keys.sorted(by: { l, r in
                 let lIsEn = l.isEnglish()
                 let rIsEn = r.isEnglish()
@@ -247,7 +259,7 @@ extension ContactVC {
             }
         }
         else {
-              
+            //to black list
             if let vc = R.loadSB(name: "BlackList", iden: "BlackListVC") as? BlackListVC {
                 Router.pushViewController(vc: vc)
             }
@@ -265,7 +277,7 @@ extension ContactVC {
         if section == 0 {
             return nil
         }
-          
+        //
         let title = indexArray[safe: section - 1]
         var header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header")
         if let _ = header as? ContactSectionHeader {
@@ -286,15 +298,15 @@ extension ContactVC {
     }
 }
 
-  
+//MARK:- Index
 extension ContactVC {
     
-      
+    //numbers
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.indexArray
     }
     
-      
+    //selection
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index + 1
     }
@@ -302,7 +314,7 @@ extension ContactVC {
 
 }
 
-  
+//MARK:- Delete
 extension ContactVC {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -321,7 +333,7 @@ extension ContactVC {
             return nil
         }
         else if indexPath.section - 1 < indexArray.count {
-              
+            //remark
             let key = indexArray[indexPath.section - 1]
             let model = self.models[key]?[indexPath.row]
             
@@ -330,7 +342,7 @@ extension ContactVC {
                 self?.remarkName(model)
             }
             
-              
+            //delete
             let delete = UITableViewRowAction(style: UITableViewRowAction.Style.destructive, title: NSLocalizedString("Contact_Delete", comment: "")) { [weak self] (action, indexpath) in
                 self?.deleteRow(model)
             }
@@ -340,14 +352,14 @@ extension ContactVC {
         return nil
     }
     
-      
+    //MARK:- edit remark
     func deleteRow(_ contact: CPContact?) {
         
         if let contact = contact {
             
-              
+            //first show tips
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-                  
+                //config
                 alert.titleLabel?.text = NSLocalizedString("Contact_W_Title", comment: "")
                 let msg = NSLocalizedString("Contact_W_msg", comment: "").replacingOccurrences(of: "#remark#", with: contact.remark)
                 alert.msgLabel?.text = msg
@@ -369,9 +381,9 @@ extension ContactVC {
     func remarkName(_ contact: CPContact?) {
         if let contact = contact {
             
-              
+            //first show tips
             if let alert = R.loadNib(name: "NormalInputAlert") as? NormalInputAlert {
-                  
+                //config
                 alert.titleLabel?.text = NSLocalizedString("Contact_Re_Title", comment: "")
     
                 alert.cancelButton?.setTitle(NSLocalizedString("Back", comment: ""), for: .normal)

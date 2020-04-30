@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  WBQRCodeVC.m
+//  SGQRCodeExample
+//
+//  Created by kingsic on 2018/2/8.
+//  Copyright © 2018年 kingsic. All rights reserved.
+//
 
 #import "WBQRCodeVC.h"
 #import "SGQRCode.h"
@@ -45,7 +45,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      
+    // Do any additional setup after loading the view from its nib.
     self.view.backgroundColor = [UIColor blackColor];
     obtain = [SGQRCodeObtain QRCodeObtain];
     
@@ -61,7 +61,7 @@
     SGQRCodeObtainConfigure *configure = [SGQRCodeObtainConfigure QRCodeObtainConfigure];
     configure.openLog = YES;
     configure.rectOfInterest = CGRectMake(0.05, 0.2, 0.7, 0.6);
-      
+    // 这里只是提供了几种作为参考（共：13）；需什么类型添加什么类型即可
     NSArray *arr = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];
     configure.metadataObjectTypes = arr;
     
@@ -108,8 +108,8 @@
 - (SGQRCodeScanView *)scanView {
     if (!_scanView) {
         _scanView = [[SGQRCodeScanView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-          
-          
+        // 静态库加载 bundle 里面的资源使用 SGQRCode.bundle/QRCodeScanLineGrid
+        // 动态库加载直接使用 QRCodeScanLineGrid
         _scanView.scanImageName = @"SGQRCode.bundle/QRCodeScanLineGrid";
         _scanView.scanAnimationStyle = ScanAnimationStyleGrid;
         _scanView.cornerLocation = CornerLoactionOutside;

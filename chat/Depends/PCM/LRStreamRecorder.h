@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  LRStreamRecorder.h
+//  Intercom
+//
+//  Created by CIA on 2016/11/17.
+//  Copyright © 2016年 CIA. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 

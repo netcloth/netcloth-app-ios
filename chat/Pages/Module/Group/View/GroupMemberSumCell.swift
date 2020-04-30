@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupMemberSumCell.swift
+//  chat
+//
+//  Created by Grand on 2019/12/5.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -18,6 +18,10 @@ class GroupMemberSumCell: UICollectionViewCell {
         if let d = data as? CPGroupMember {
             smallRemark?.text = d.nickName.getSmallRemark()
             remark?.text = d.nickName
+            
+            let color = d.hexPubkey.randomColor()
+            smallRemark?.backgroundColor = UIColor(hexString: color)
+            
             
             let type = d.fakePlaceType
             smallRemark?.isHidden = !(type == 0)

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupDistinctSenderVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/26.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -18,7 +18,7 @@ class GroupDistinctSenderVC: BaseViewController, UITableViewDelegate, UITableVie
     
     fileprivate let disbag = DisposeBag()
     
-      
+    //MARK:- Private
     fileprivate var dataArray: [CPGroupNotify]? {
         didSet {
             var count = 0
@@ -82,7 +82,7 @@ class GroupDistinctSenderVC: BaseViewController, UITableViewDelegate, UITableVie
         }).disposed(by: disbag)
     }
     
-      
+    //MARK:- 全部通过
     fileprivate var allPassBag = DisposeBag()
     fileprivate  func onPassAll() {
         guard let array = self.dataArray else {
@@ -154,7 +154,7 @@ class GroupDistinctSenderVC: BaseViewController, UITableViewDelegate, UITableVie
     
     
     
-      
+    //MARK:- TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArray?.count ?? 0
     }

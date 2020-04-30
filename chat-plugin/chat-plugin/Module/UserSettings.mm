@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  UserSettings.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/9/18.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "UserSettings.h"
 #import "CPInnerState.h"
@@ -39,14 +39,14 @@ static YYCache *_UserCache;
     return
     [@(CPInnerState.shared.loginUser.userId).stringValue stringByAppendingString:key];
 }
-  
+//MARK:- Add
  + (void)deleteKey:(NSString *)key ofUser:(NSInteger)uid
 {
     NSString *key1 = [@(uid).stringValue stringByAppendingString:key];
     [_UserCache removeObjectForKey:key1];
 }
 
-  
+//MARK:- Use Source
 + (NSString *)sourceKey:(NSString *)key ofUser:(NSInteger)uid {
     return [@(uid).stringValue stringByAppendingString:key];
 }

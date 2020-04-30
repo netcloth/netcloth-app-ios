@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupJoinApproveSubmitVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/26.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -26,12 +26,12 @@ class GroupJoinApproveSubmitVC: UIViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
         super.viewDidLoad()
     }
     
-      
+    //MARK:- Action
     @IBAction func onTapDone() {
         let summit = textView?.text ?? ""
         sendRealJoin(summit)
@@ -52,14 +52,14 @@ class GroupJoinApproveSubmitVC: UIViewController {
                 Router.dismissVC(animate: true, completion: nil, toRoot: true)
             }
             else if (code == ChatErrorCode.partialOK.rawValue) {
-                  
+                //提交申请成功
             }
             else if (code == ChatErrorCode.memberExceed.rawValue) {
-                  
+                //exceed
                 self?.showFailJoinAlert()
             }
             else {
-                  
+                //system error
                 Toast.show(msg: "System error".localized())
             }
         }

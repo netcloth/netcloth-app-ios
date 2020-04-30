@@ -7,7 +7,7 @@
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
  *                                                                  *
  * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2002             *
- * by the Xiph.Org Foundation http:  
+ * by the Xiph.Org Foundation http://www.xiph.org/                  *
  *                                                                  *
  ********************************************************************
 
@@ -56,7 +56,7 @@
    typedef SInt32 spx_int32_t;
    typedef UInt32 spx_uint32_t;
 
-#elif (defined(__APPLE__) && defined(__MACH__))  
+#elif (defined(__APPLE__) && defined(__MACH__)) /* MacOS X Framework build */
 
 #  include <sys/types.h>
    typedef int16_t spx_int16_t;
@@ -66,7 +66,7 @@
 
 #elif defined(__BEOS__)
 
-    
+   /* Be */
 #  include <inttypes.h>
    typedef int16_t spx_int16_t;
    typedef u_int16_t spx_uint16_t;
@@ -83,21 +83,21 @@
 
 #elif defined (DJGPP)
 
-    
+   /* DJGPP */
    typedef short spx_int16_t;
    typedef int spx_int32_t;
    typedef unsigned int spx_uint32_t;
 
 #elif defined(R5900)
 
-    
+   /* PS2 EE */
    typedef int spx_int32_t;
    typedef unsigned spx_uint32_t;
    typedef short spx_int16_t;
 
 #elif defined(__SYMBIAN32__)
 
-    
+   /* Symbian GCC */
    typedef signed short spx_int16_t;
    typedef unsigned short spx_uint16_t;
    typedef signed int spx_int32_t;
@@ -126,4 +126,4 @@
 
 #endif
 
-#endif   
+#endif  /* _SPEEX_TYPES_H */

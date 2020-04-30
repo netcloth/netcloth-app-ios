@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tb5-dX-c3f">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--设置-->
+        <scene sceneID="no7-C9-YzG">
+            <objects>
+                <tableViewController storyboardIdentifier="SettingVC" id="tb5-dX-c3f" customClass="SettingVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Wjh-Eq-6vH">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <sections>
+                            <tableViewSection id="IvN-Fk-Ue7">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="3OP-qG-dah" style="IBUITableViewCellStyleDefault" id="AaW-Ca-v0M" customClass="SystemCell" customModule="NetCloth" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AaW-Ca-v0M" id="e2q-9v-uWt">
+                                            <rect key="frame" x="0.0" y="0.0" width="569" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="语言" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3OP-qG-dah">
+                                                    <rect key="frame" x="20" y="0.0" width="541" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="showLastSeparator" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="Tf7-OX-OaS" kind="push" id="5CB-OS-Kor"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="Gy6-5a-v7A" style="IBUITableViewCellStyleDefault" id="OdL-yi-7eH" customClass="SystemCell" customModule="NetCloth" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="88" width="600" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OdL-yi-7eH" id="jYe-9A-DCx">
+                                            <rect key="frame" x="0.0" y="0.0" width="569" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="消息提醒" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Gy6-5a-v7A">
+                                                    <rect key="frame" x="20" y="0.0" width="541" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="showLastSeparator" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="CYU-xb-2NI" kind="push" id="HaM-yh-QhH"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="orE-NV-Q6s" style="IBUITableViewCellStyleDefault" id="spf-Y2-dsf" customClass="SystemCell" customModule="NetCloth" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="148" width="600" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="spf-Y2-dsf" id="BI0-ix-n0o">
+                                            <rect key="frame" x="0.0" y="0.0" width="569" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="通用" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="orE-NV-Q6s">
+                                                    <rect key="frame" x="20" y="0.0" width="541" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="showLastSeparator" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="KZU-lO-iBz" kind="push" id="GgM-fY-tfX"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="pe0-fs-UEv">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="QxS-p4-OCx" style="IBUITableViewCellStyleDefault" id="DPJ-0D-fUf">
+                                        <rect key="frame" x="0.0" y="264" width="600" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DPJ-0D-fUf" id="g5m-zl-3QV">
+                                            <rect key="frame" x="0.0" y="0.0" width="569" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="服务器设置（C-IPAL）" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QxS-p4-OCx">
+                                                    <rect key="frame" x="20" y="0.0" width="541" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="B6y-Uq-tPE" kind="push" id="mGl-r6-SIf"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="tb5-dX-c3f" id="ywT-Ln-inQ"/>
+                            <outlet property="delegate" destination="tb5-dX-c3f" id="Jbc-jm-X1a"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="设置" largeTitleDisplayMode="always" id="QCR-ws-bsc"/>
+                    <connections>
+                        <outlet property="cipalLabel" destination="QxS-p4-OCx" id="zSr-9D-fTb"/>
+                        <outlet property="commomLabel" destination="orE-NV-Q6s" id="SEO-K6-zJe"/>
+                        <outlet property="languageLabel" destination="3OP-qG-dah" id="RNW-at-Ebj"/>
+                        <outlet property="msgNoticeLabel" destination="Gy6-5a-v7A" id="qP7-M4-TUc"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jft-V6-7Kp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-12287" y="-1682"/>
+        </scene>
+        <!--LanguageVC-->
+        <scene sceneID="wTj-7x-Zp9">
+            <objects>
+                <viewControllerPlaceholder storyboardName="LanguageVC" referencedIdentifier="LanguageVC" id="Tf7-OX-OaS" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="4IV-ff-igJ"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cbA-zz-4Hi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-11367" y="-1895"/>
+        </scene>
+        <!--MsgAlertSettingVC-->
+        <scene sceneID="krx-Xv-f4P">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MsgAlertSettingVC" id="CYU-xb-2NI" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="D7g-Yy-u8d"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bLM-ZT-gBF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-11337" y="-1704"/>
+        </scene>
+        <!--NCCommonUseTableVC-->
+        <scene sceneID="SS3-A6-rIB">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ClearRecords" referencedIdentifier="NCCommonUseTableVC" id="KZU-lO-iBz" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="OMd-ra-ub2"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2rE-eG-3RR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-11318" y="-1559"/>
+        </scene>
+        <!--IPALIndexVC-->
+        <scene sceneID="3Ug-3P-ehy">
+            <objects>
+                <viewControllerPlaceholder storyboardName="IPAL" referencedIdentifier="IPALIndexVC" id="B6y-Uq-tPE" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="meW-ak-duT"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y7z-At-twj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-11365" y="-1424"/>
+        </scene>
+    </scenes>
+</document>

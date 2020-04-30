@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  RenameVC.swift
+//  chat
+//
+//  Created by Grand on 2019/9/24.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -16,13 +16,13 @@ class RenameVC: BaseViewController {
     
     var disbag = DisposeBag()
     
-      
+    //MARK:- Life Cycle
     override func viewDidLoad() {
         
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
         
         super.viewDidLoad()
@@ -40,21 +40,21 @@ class RenameVC: BaseViewController {
     
     func configUI() {
         
-        self.sureBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.sureBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     func configEvent() {
         
-          
+        ///Input
         inputTF?.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
-                self?.maskView?.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
+                self?.maskView?.backgroundColor = UIColor(hexString: Color.mask_bottom_fill)
             } else {
-                self?.maskView?.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_empty)
+                self?.maskView?.backgroundColor = UIColor(hexString: Color.mask_bottom_empty)
             }
         }.disposed(by: disbag)
         
-          
+        // change
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             
             let r = self?.checkInputAvalid()

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPTimeoutDictionary.m
+//  chat-plugin
+//
+//  Created by Grand on 2020/1/13.
+//  Copyright © 2020 netcloth. All rights reserved.
+//
 
 #import "CPTimeoutDictionary.h"
 #import "CPGroupChatHelper.h"
@@ -74,14 +74,14 @@
     return [_dictionary mutableCopyWithZone:zone];
 }
 
-  
-  
+// Not really needed, but subscripting is likely common enough it doesn't hurt
+// to ensure it goes directly to the real NSMutableDictionary.
 - (id)objectForKeyedSubscript:(id)key {
     return [_dictionary objectForKeyedSubscript:key];
 }
 
-  
-  
+// Not really needed, but subscripting is likely common enough it doesn't hurt
+// to ensure it goes directly to the real NSMutableDictionary.
 - (void)setObject:(id)obj forKeyedSubscript:(id<NSCopying>)key {
     if (_dictionary == nil) {
         _dictionary = [[NSMutableDictionary alloc] init];
@@ -106,7 +106,7 @@
 }
 
 
-  
+//MARK:-  Add logic
 - (void)startTimeoutKey:(id<NSCopying>)key {
     [self performSelector:@selector(onTimeoutActionKey:) withObject:key afterDelay:20];
 }
@@ -117,7 +117,7 @@
         MsgResponseBack back = (MsgResponseBack)obj;
         if (back != nil) {
             NSMutableDictionary *response = NSMutableDictionary.dictionary;
-            response[@"code"] = @(-1001);    
+            response[@"code"] = @(-1001);  //timeout
             response[@"msg"] = @"null.timeout";
             [CPInnerState.shared asynDoTask:^{
                 back(response);

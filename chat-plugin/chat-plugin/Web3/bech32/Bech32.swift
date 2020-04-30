@@ -1,13 +1,13 @@
-  
-  
-  
-  
-  
-  
+//
+//  SwiftBTC
+//
+//  Created by Otto Suess on 28.02.18.
+//  Copyright © 2018 Zap. All rights reserved.
+//
 
 import Foundation
 
-  
+// BIP: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
 
 public enum Bech32 {
     private static let alphabet = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
@@ -29,11 +29,11 @@ public enum Bech32 {
 
     private static func polymod(values: Data) -> Int {
         var chk = 1
-          
+        // swiftlint:disable:next identifier_name
         for p in values {
             let top = chk >> 25
             chk = (chk & 0x1ffffff) << 5 ^ Int(p)
-              
+            // swiftlint:disable:next identifier_name
             for (i, g) in Bech32.generator.enumerated() where ((top >> i) & 1) != 0 {
                 chk ^= g
             }
@@ -117,7 +117,7 @@ public enum Bech32 {
     }
     
     
-      
+    //MARK:- Extenstion
 
     public static func parseFallbackAddress(data: Data) -> String? {
         guard data.count >= 2 else {
@@ -140,8 +140,8 @@ extension Bech32 {
 
 
 extension Data {
-      
-      
+    // ConvertBits converts a byte slice where each byte is encoding fromBits bits,
+    // to a byte slice where each byte is encoding toBits bits.
     func convertBits(fromBits: Int, toBits: Int, pad: Bool) -> Data? {
         var acc: Int = 0
         var bits: Int = 0

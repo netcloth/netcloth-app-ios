@@ -5,11 +5,17 @@
 /* Class = "UILabel"; text = "About"; ObjectID = "6mg-nm-3vQ"; */
 "6mg-nm-3vQ.text" = "About";
 
+/* Class = "UILabel"; text = "Connecting"; ObjectID = "DP4-Ok-fRQ"; */
+"DP4-Ok-fRQ.text" = "Connecting";
+
 /* Class = "UILabel"; text = "edit"; ObjectID = "FGo-EE-7A9"; */
 "FGo-EE-7A9.text" = "edit";
 
 /* Class = "UILabel"; text = "My Account Address"; ObjectID = "JlK-i2-xVZ"; */
 "JlK-i2-xVZ.text" = "My Account Address";
+
+/* Class = "UILabel"; text = "My Wallet"; ObjectID = "SxW-En-VDV"; */
+"SxW-En-VDV.text" = "My Wallet";
 
 /* Class = "UILabel"; text = "Account and Security"; ObjectID = "Wma-r2-plV"; */
 "Wma-r2-plV.text" = "Account and Security";

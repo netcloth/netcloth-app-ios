@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  IPALDetailVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/13.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -19,7 +19,7 @@ class IPALDetailVC: BaseViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
         
         super.viewDidLoad()

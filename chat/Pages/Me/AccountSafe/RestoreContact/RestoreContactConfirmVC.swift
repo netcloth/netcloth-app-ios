@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactBackupConfirmVC.swift
+//  chat
+//
+//  Created by Grand on 2019/10/29.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -23,10 +23,10 @@ class RestoreContactConfirmVC: BaseViewController {
         requestSummary()
     }
     
-      
+    //MARK:- Config
     func configUI() {
         self.scrollView?.adjustOffset()
-        self.confirmBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.confirmBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
         
     }
     
@@ -63,7 +63,7 @@ class RestoreContactConfirmVC: BaseViewController {
     }
     
     func fillUI(time: String, whiteN: Int, blackN: Int, groupN: Int) {
-          
+        //current
         self.timeL?.text = time
         var tip = "Contact_info".localized()
         var atttip = NSMutableAttributedString(string: tip)
@@ -71,27 +71,30 @@ class RestoreContactConfirmVC: BaseViewController {
         let range1 = (atttip.string as? NSString)?.range(of: "#white#")
         if let r1 = range1, r1.location != NSNotFound {
             let a1 = NSMutableAttributedString(string: "\(whiteN)")
-            a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+            a1.addAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold),
+            NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: a1.rangeOfAll())
             atttip.replaceCharacters(in: r1, with: a1)
         }
         
         let range2 = (atttip.string as? NSString)?.range(of: "#black#")
         if let r1 = range2 {
             let a1 = NSMutableAttributedString(string: "\(blackN)")
-            a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+            a1.addAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold),
+            NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: a1.rangeOfAll())
             atttip.replaceCharacters(in: r1, with: a1)
         }
         let range3 = (atttip.string as? NSString)?.range(of: "#group#")
         if let r1 = range3 {
             let a1 = NSMutableAttributedString(string: "\(groupN)")
-            a1.addAttributes([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15)], range: a1.rangeOfAll())
+            a1.addAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold),
+            NSAttributedString.Key.foregroundColor : UIColor(hexString: Color.blue)!], range: a1.rangeOfAll())
             atttip.replaceCharacters(in: r1, with: a1)
         }
         
         self.listL?.attributedText = atttip
     }
     
-      
+    //MARK:- Action
 
     
     @IBAction func onTapConfirm() {
@@ -106,7 +109,7 @@ class RestoreContactConfirmVC: BaseViewController {
         }
         .done { (result) in
             
-              
+            //update do not disturb
             CPContactHelper.getAllContacts { (result) in
                 for contact in result {
                     if (contact.isDoNotDisturb) {
@@ -146,7 +149,7 @@ class RestoreContactConfirmVC: BaseViewController {
         successV.okButton?.setTitle("OK".localized(), for: .normal)
         Router.showAlert(view: successV)
         successV.okBlock = { [weak self] in
-              
+            //to safe page
             if let vcs = self?.navigationController?.viewControllers {
                 for v in vcs {
                     if v is AccountSafeVC {
@@ -172,7 +175,7 @@ class RestoreContactConfirmVC: BaseViewController {
         }
     }
     
-      
+    //MARK:- Progress
     
     weak var progressView: UploadProgressView?
     
@@ -218,7 +221,7 @@ class RestoreContactConfirmVC: BaseViewController {
             
             alert.checkPreview = { [weak alert] in
                 let pwd = alert?.inputTextField?.text
-                  
+                //check if error
                 if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                     alert?.checkTipsLabel?.isHidden = false
                     return false
@@ -252,7 +255,7 @@ class RestoreContactConfirmVC: BaseViewController {
         return data_promise
     }
     
-      
+    //MARK:- download
     func downloadContact() -> Promise<Data> {
         
         let _promise = Promise<Data> { [weak self] (resolver) in

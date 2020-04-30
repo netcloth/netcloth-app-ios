@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  BackupTipView.swift
+//  chat
+//
+//  Created by Grand on 2019/12/23.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -19,8 +19,8 @@ class BackupTipView: UIView {
         configUI()
     }
     
-      
-      
+    //MARK:- Public
+    //1acc 2contact  3all
     func showStatus(showAccount:Bool,showContact:Bool) {
         guard showAccount == true ||
             showContact == true else {
@@ -41,7 +41,7 @@ class BackupTipView: UIView {
         }
     }
     
-      
+    //MARK:- Action
     
     @IBAction func toAccBackup(_ sender: Any) {
         if let vc = R.loadSB(name: "Export", iden: "BackupContainerVC") as? BackupContainerVC {
@@ -61,7 +61,7 @@ class BackupTipView: UIView {
     }
     
     
-      
+    //MARK:- Helper
     
     private func configUI() {
         accountBackupBtn?.setTitle("Account Backup".localized(), for: .normal)
@@ -90,7 +90,7 @@ class BackupTipView: UIView {
 }
 
 enum BackupKey: String {
-    case accountBackup   
+    case accountBackup //if finish，set "1"
     case contactBackup
     case backupLater
     

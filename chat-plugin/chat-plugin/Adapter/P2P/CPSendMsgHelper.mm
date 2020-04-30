@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPSendMsgHelper.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/29.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPSendMsgHelper.h"
 #import "CPInnerState.h"
@@ -27,25 +27,25 @@
 @implementation CPSendMsgHelper
 
 
-  
-  
+//MARK:- send Msg
+// audio
 + (void)sendAudioData:(NSData *)data toUser:(NSString *)toPubkey {
     if ([NSString cp_isEmpty:toPubkey]) {
         return;
     }
     
     [CPInnerState.shared asynWriteTask:^{
-          
+        //1、 refactor msg
         CPMessage *message = [self _msgFromSendToStoreDBMsg:data type:MessageTypeAudio toPubkey:toPubkey];
-          
+        //2、store msgId；  session | session user | message
         [CPInnerState.shared.msgRecieve storeMessge:message isCacheMsg:NO];
         
-          
+        //3
         std::string sourceBytes;
         NSData *sd = data;
         std::string audioData((char *)sd.bytes, sd.length);
         AudioFormatTool audio_tool = AudioFormatTool(0, audioData, false);
-          
+        //3、Note: show
         message.audioTimes = audio_tool.GetSec() + 1;
         [CPInnerState.shared msgAsynCallBack:message];
         
@@ -54,15 +54,18 @@
         
         
         NCProtoNetMsg *netmsg = ({
-              
+            //me
             std::string str_pri_key(getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password));
             NSLog(@">>> end str_pri_key");
             
             std::string fromstrpubkey(getPublicKeyFromUser(CPInnerState.shared.loginUser));
             
-              
+            //to
             std::string str_pub_key(HexAsc2ByteString([toPubkey UTF8String]));
             NSLog(@">>> end str_pub_key");
+            
+            
+            
             
             std::string for_send = [CPBridge coreEcdhEncodeMsg:sourceBytes prikey:str_pri_key toPubkey:str_pub_key];
             message.msgData = dataHexFromBytes(for_send);
@@ -75,16 +78,16 @@
     }];
 }
 
-  
+//text
 + (void)sendMsg:(NSString *)text toUser:(NSString *)toPubkey {
     if ([NSString cp_isEmpty:toPubkey]) {
         return;
     }
     
     [CPInnerState.shared asynWriteTask:^{
-          
+        //1、 refactor msg
         CPMessage *message = [self _msgFromSendToStoreDBMsg:text type:MessageTypeText toPubkey:toPubkey];
-          
+        //2、store msgId；  session | session user | message
         [CPInnerState.shared.msgRecieve storeMessge:message isCacheMsg:NO];
         [CPInnerState.shared msgAsynCallBack:message];
         
@@ -106,7 +109,7 @@
 }
 
 + (void)commonSendNetMsg:(NCProtoNetMsg *)netmsg withFactoryMsg:(CPMessage *)message {
-      
+    //6 update db
     long long sign_hash = (long long)GetHash(nsdata2bytes(netmsg.head.signature));
     message.signHash = sign_hash;
     message.version = GetAppVersion();
@@ -123,7 +126,7 @@
     [CPInnerState.shared _pbmsgSend:netmsg autoCallNetStatus:message];
 }
 
-  
+//MARK:- send img
 + (void)sendImageData:(NSData *)data
                toUser:(NSString *)toPubkey {
     if ([NSData cp_isEmpty:data]) {
@@ -136,28 +139,28 @@
     
     [CPInnerState.shared asynWriteTask:^{
         
-          
+        //1、save data to local file cache
         std::string str_pub_key(HexAsc2ByteString([toPubkey UTF8String]));
         
-          
+        //factory cpmessage to store
         NSString *topubkey = toPubkey;
         CPMessage *message = [self _msgFromSendToStoreDBMsg:data type:MessageTypeImage toPubkey:topubkey];
         
-        [CPInnerState.shared.msgRecieve storeMessge:message isCacheMsg:NO];   
+        [CPInnerState.shared.msgRecieve storeMessge:message isCacheMsg:NO]; //get msg id
         [CPInnerState.shared msgAsynCallBack:message];
         
-          
+        //2、 upload data to http storage
         std::string str_pri_key(getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password));
         std::string fromstrpubkey(getPublicKeyFromUser(CPInnerState.shared.loginUser));
 
         std::string sourceBytes = nsdata2bytes(data);
         std::string for_send = [CPBridge coreEcdhEncodeMsg:sourceBytes prikey:str_pri_key toPubkey:str_pub_key];
         
-          
+        //this sign hash is not msg send sha
         long long sign_hash_first = (long long)GetHash(for_send);
         message.signHash = sign_hash_first;
         
-          
+        //update sign hash
         [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Message
                                                     onProperties:CPMessage.signHash
                                                       withObject:message
@@ -170,18 +173,18 @@
         
         [CPNetWork uploadImageDataWithData:encodeImageData toUrl:CPNetURL.UploadImage fromPubkey:frompbkey complete:^(BOOL success, id _Nullable response) {
             
-              
+            //send
             if (success &&
                 [response isKindOfClass:NSDictionary.class] &&
                 [response[@"result"] integerValue] == 0 &&
                 [NSString cp_isEmpty:response[@"id"]] == false) {
                 
-                  
-                  
+                //3、send msg to pubkey succss or fail
+                //upload hash who in cache store
                 NSString *fileHash = response[@"id"];
                 NCProtoNetMsg *send_msg_incache = CreateImageMsg(fromstrpubkey, str_pub_key, str_pri_key, fileHash,W,H);
                 long long sign_hash = (long long)GetHash(nsdata2bytes(send_msg_incache.head.signature));
-                message.signHash = sign_hash;   
+                message.signHash = sign_hash; //the push sign
                 message.version = GetAppVersion();
                 message.fileHash = fileHash;
                 
@@ -203,7 +206,7 @@
             else {
                 
                 message.toServerState = 2;
-                  
+                //update db
                 [CPInnerState.shared.loginUserDataBase
                  updateRowsInTable:kTableName_Message
                  onProperties:{CPMessage.toServerState}
@@ -229,11 +232,11 @@
     if (filehash == nil || [NSData cp_isEmpty:encodeData]) {
         return;
     }
-  
+//    msg.msgData = encodeData;
     [CPInnerState.shared.imageCaches setObject:encodeData forKey:filehash];
 }
 
-  
+//MARK:- Resend
 
 
 + (void)retrySendMsg:(long long)msgId
@@ -245,7 +248,7 @@
             return;
         }
         
-          
+        //5 send
         std::string fromstrpubkey = bytesFromHexString(msg.senderPubKey);
         std::string for_send = bytesHexFromData(msg.msgData);
         std::string str_pub_key = bytesFromHexString(msg.toPubkey);
@@ -267,7 +270,7 @@
             if ([NSString cp_isEmpty:msg.fileHash] == false) {
                 send_msg = CreateImageMsg(fromstrpubkey, str_pub_key, str_pri_key, msg.fileHash, msg.pixelWidth, msg.pixelHeight);
             } else {
-                  
+                //resent encode forsend
                 long long signhash = (long long)msg.signHash;
                 id for_send = [CPInnerState.shared.imageCaches objectForKey:@(signhash).stringValue];
                 if ([NSData cp_isEmpty:for_send]) {
@@ -280,7 +283,7 @@
         else {
             return;
         }
-          
+        //to send
         [CPInnerState.shared _pbmsgSend:send_msg];
     }];
 }
@@ -289,14 +292,14 @@
 {
     NSString *frompbkey = message.senderPubKey;
     [CPNetWork uploadImageDataWithData:encodeImageData toUrl:CPNetURL.UploadImage fromPubkey:frompbkey complete:^(BOOL success, id _Nullable response) {
-                 
+               //send
                if (success &&
                    [response isKindOfClass:NSDictionary.class] &&
                    [response[@"result"] integerValue] == 0 &&
                    [NSString cp_isEmpty:response[@"id"]] == false) {
                    
-                     
-                     
+                   //3、send msg to pubkey succss or fail
+                   //upload hash who in cache store
                    NSString *fileHash = response[@"id"];
                    message.fileHash = fileHash;
                    
@@ -306,11 +309,11 @@
                    
                    message.toServerState = 3;
                    
-                     
+                   //1、save data to local file cache
                    std::string str_pub_key(HexAsc2ByteString([message.toPubkey UTF8String]));
                    
 
-                     
+                   //2、 upload data to http storage
                    std::string str_pri_key(getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, CPInnerState.shared.loginUser.password));
                    std::string fromstrpubkey(getPublicKeyFromUser(CPInnerState.shared.loginUser));
                    
@@ -322,7 +325,7 @@
                                                                     message.pixelHeight);
                    
                    long long sign_hash = (long long)GetHash(nsdata2bytes(send_msg_incache.head.signature));
-                   message.signHash = sign_hash;   
+                   message.signHash = sign_hash; //the push sign
                    
                    BOOL update = [CPInnerState.shared.loginUserDataBase
                                   updateRowsInTable:kTableName_Message
@@ -343,7 +346,7 @@
     } uploadProgress:nil];
 }
 
-  
+//MARK: Helper
 
 + (CPMessage *)_msgFromSendToStoreDBMsg:(id)sourceMsgContent
                                    type:(MessageType)type
@@ -357,7 +360,7 @@
     message.read = YES;
     message.toServerState = 0;
     
-      
+    //decode
     if (type == MessageTypeText) {
         message -> _msgDecode = sourceMsgContent;
     } else if (type == MessageTypeAudio) {
@@ -370,7 +373,7 @@
     return  message;
 }
 
-  
+//MARK:- APNS
 NSString *_deviceToken;
 + (void)setDeviceToken:(NSString *)deviceToken {
     _deviceToken = deviceToken;

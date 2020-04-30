@@ -7,7 +7,7 @@
 
 #include <random>
 #include <array>
-  
+//#include <openssl/rand.h>
 #include <string>
 #include <list>
 #include <time.h>
@@ -55,7 +55,7 @@ private:
         std::string strCPUId;
         unsigned long s1, s2;
         __asm{
-            mov eax, 01h     
+            mov eax, 01h   //eax=1:取CPU序列号
                     xor edx, edx
                     cpuid
                     mov s1, edx
@@ -80,7 +80,7 @@ private:
     static void RandOpenSSL(blake2b_state& hash_state){
         unsigned char buf[32];
         uint64_t r1 = 0, r2 = 0;
-        __asm__ volatile ("rdtsc" : "=a"(r1), "=d"(r2));   
+        __asm__ volatile ("rdtsc" : "=a"(r1), "=d"(r2)); // Constrain r1 to rax and r2 to rdx.
         uint64_t r=  (r2 << 32) | r1;
         RAND_add(&r, sizeof(r), 1.5);
         RAND_bytes(buf, 32);
@@ -109,10 +109,10 @@ private:
     static void RandHardWare(blake2b_state& hash_state){
         uint64_t r[4] = {0};
         uint8_t ok;
-        __asm__ volatile (".byte 0x48, 0x0f, 0xc7, 0xf0, "   
-                          "0x48, 0x0f, 0xc7, 0xf3, "   
-                          "0x48, 0x0f, 0xc7, 0xf1, "   
-                          "0x48, 0x0f, 0xc7, 0xf2; "   
+        __asm__ volatile (".byte 0x48, 0x0f, 0xc7, 0xf0, " // rdrand %rax
+                          "0x48, 0x0f, 0xc7, 0xf3, " // rdrand %rbx
+                          "0x48, 0x0f, 0xc7, 0xf1, " // rdrand %rcx
+                          "0x48, 0x0f, 0xc7, 0xf2; " // rdrand %rdx
                           "setc %4" :
                           "=a"(r[0]), "=b"(r[1]), "=c"(r[2]), "=d"(r[3]), "=q"(ok) :: "cc");
         if (!ok) return;

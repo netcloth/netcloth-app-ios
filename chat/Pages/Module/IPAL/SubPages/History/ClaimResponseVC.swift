@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ClaimResponseVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/10.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -14,7 +14,7 @@ class ClaimResponseVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Communication Address".localized()
+        self.title = "Communication Server".localized()
     }
     
     @IBAction func toDetail() {

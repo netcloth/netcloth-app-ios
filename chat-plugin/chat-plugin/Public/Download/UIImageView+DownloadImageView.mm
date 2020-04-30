@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  UIImageView+DownloadImageView.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/10.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "UIImageView+DownloadImageView.h"
 #import <YYKit/YYKit.h>
@@ -27,19 +27,19 @@ char *keyMsg;
 }
 
 - (void)cancel {
-    self.image = nil;   
+    self.image = nil; //clean cache
     NSOperation *op1 = [self getAssociatedValueForKey:&operationKey];
     [op1 cancel];
 }
 
 - (void)_handleMsg:(CPMessage *)message  autoSendRequest:(BOOL)send
 {
-      
+    //check image ok
     if (message.msgType != MessageTypeImage) {
         return;
     }
     
-      
+    //local
     if ([message->_imageDecode isKindOfClass:[NSData class]]) {
         self.image = [YYImage imageWithData:message->_imageDecode];
         if (message.normalCompleteHandle) {
@@ -53,7 +53,7 @@ char *keyMsg;
         return;
     }
     
-      
+    //need download
     [self setAssociateValue:message withKey:&keyMsg];
     
     @weakify(self);
@@ -76,21 +76,21 @@ char *keyMsg;
         if ([FileDownloader isInDownloadingMsg:message]) {
             return;
         }
-          
+        //Note:Download send msg request
         [FileDownloader addDownloadPool:message];
         NSString *url = [CPNetURL.RequestImage stringByReplacingOccurrencesOfString:@"{hash}" withString:hash];
         [CPNetWork getDataUrlWithPath:url method:@"GET" para:nil complete:^(BOOL r, id _Nullable data) {
             [FileDownloader removeDownloadPool:message];
             if (r && data) {
-                  
+                //encode
                 [CPSendMsgHelper onDownloadImageData:data withMessage:message];
-                  
+                //decode
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     NSData *imageData = message.msgDecodeContent;
                     [self restoreMsg:message hash:hash withData:imageData inOperation:op];
                 });
             } else {
-                  
+                //error
                 if (message.normalCompleteHandle) {
                     message.normalCompleteHandle(false);
                 }
@@ -98,7 +98,7 @@ char *keyMsg;
         }];
     }];
     
-    [FileDownloader addDownloadOperation:op];   
+    [FileDownloader addDownloadOperation:op]; //start operation
     [self setAssociateValue:op withKey:&operationKey];
 }
 

@@ -58,9 +58,9 @@ extern "C" {
 /** Obtain frame size used by encoder/decoder */
 #define SPEEX_GET_FRAME_SIZE 3
 
- 
+/** Set quality value */
 #define SPEEX_SET_QUALITY 4
- 
+/** Get current quality setting */
 /* #define SPEEX_GET_QUALITY 5 -- Doesn't make much sense, does it? */
 
 /** Set sub-mode to use */
@@ -133,7 +133,7 @@ extern "C" {
 
 /** Set submode encoding in each frame (1 for yes, 0 for no, setting to no breaks the standard) */
 #define SPEEX_SET_SUBMODE_ENCODING 36
- 
+/** Get submode encoding in each frame */
 #define SPEEX_GET_SUBMODE_ENCODING 37
 
 /*#define SPEEX_SET_LOOKAHEAD 38*/
@@ -143,7 +143,7 @@ extern "C" {
 
 /** Sets tuning for packet-loss concealment (expected loss rate) */
 #define SPEEX_SET_PLC_TUNING 40
- 
+/** Gets tuning for PLC */
 #define SPEEX_GET_PLC_TUNING 41
 
 /** Sets the max bit-rate allowed in VBR mode */
@@ -162,16 +162,16 @@ extern "C" {
 
 
 /* Preserving compatibility:*/
- 
+/** Equivalent to SPEEX_SET_ENH */
 #define SPEEX_SET_PF 0
- 
+/** Equivalent to SPEEX_GET_ENH */
 #define SPEEX_GET_PF 1
 
 
 
 
- 
- 
+/* Values allowed for mode queries */
+/** Query the frame size of a mode */
 #define SPEEX_MODE_FRAME_SIZE 0
 
 /** Query the size of an encoded frame for a particular sub-mode */
@@ -179,15 +179,15 @@ extern "C" {
 
 
 
- 
+/** Get major Speex version */
 #define SPEEX_LIB_GET_MAJOR_VERSION 1
- 
+/** Get minor Speex version */
 #define SPEEX_LIB_GET_MINOR_VERSION 3
- 
+/** Get micro Speex version */
 #define SPEEX_LIB_GET_MICRO_VERSION 5
- 
+/** Get extra Speex version */
 #define SPEEX_LIB_GET_EXTRA_VERSION 7
- 
+/** Get Speex version string */
 #define SPEEX_LIB_GET_VERSION_STRING 9
 
 /*#define SPEEX_LIB_SET_ALLOC_FUNC 10
@@ -201,13 +201,13 @@ extern "C" {
 #define SPEEX_LIB_GET_ERROR_FUNC 17
 */
 
- 
+/** Number of defined modes in Speex */
 #define SPEEX_NB_MODES 3
 
- 
+/** modeID for the defined narrowband mode */
 #define SPEEX_MODEID_NB 0
 
- 
+/** modeID for the defined wideband mode */
 #define SPEEX_MODEID_WB 1
 
 /** modeID for the defined ultra-wideband mode */
@@ -216,70 +216,70 @@ extern "C" {
 struct SpeexMode;
 
 
- 
+/* Prototypes for mode function pointers */
 
- 
+/** Encoder state initialization function */
 typedef void *(*encoder_init_func)(const struct SpeexMode *mode);
 
- 
+/** Encoder state destruction function */
 typedef void (*encoder_destroy_func)(void *st);
 
- 
+/** Main encoding function */
 typedef int (*encode_func)(void *state, void *in, SpeexBits *bits);
 
- 
+/** Function for controlling the encoder options */
 typedef int (*encoder_ctl_func)(void *state, int request, void *ptr);
 
- 
+/** Decoder state initialization function */
 typedef void *(*decoder_init_func)(const struct SpeexMode *mode);
 
- 
+/** Decoder state destruction function */
 typedef void (*decoder_destroy_func)(void *st);
 
- 
+/** Main decoding function */
 typedef int  (*decode_func)(void *state, SpeexBits *bits, void *out);
 
- 
+/** Function for controlling the decoder options */
 typedef int (*decoder_ctl_func)(void *state, int request, void *ptr);
 
 
- 
+/** Query function for a mode */
 typedef int (*mode_query_func)(const void *mode, int request, void *ptr);
 
- 
+/** Struct defining a Speex mode */
 typedef struct SpeexMode {
    /** Pointer to the low-level mode data */
    const void *mode;
 
-    
+   /** Pointer to the mode query function */
    mode_query_func query;
 
    /** The name of the mode (you should not rely on this to identify the mode)*/
    const char *modeName;
 
-    
+   /**ID of the mode*/
    int modeID;
 
    /**Version number of the bitstream (incremented every time we break
     bitstream compatibility*/
    int bitstream_version;
 
-    
+   /** Pointer to encoder initialization function */
    encoder_init_func enc_init;
 
-    
+   /** Pointer to encoder destruction function */
    encoder_destroy_func enc_destroy;
 
-    
+   /** Pointer to frame encoding function */
    encode_func enc;
 
-    
+   /** Pointer to decoder initialization function */
    decoder_init_func dec_init;
 
-    
+   /** Pointer to decoder destruction function */
    decoder_destroy_func dec_destroy;
 
-    
+   /** Pointer to frame decoding function */
    decode_func dec;
 
    /** ioctl-like requests for encoder */
@@ -397,23 +397,23 @@ int speex_mode_query(const SpeexMode *mode, int request, void *ptr);
  */
 int speex_lib_ctl(int request, void *ptr);
 
- 
+/** Default narrowband mode */
 extern const SpeexMode speex_nb_mode;
 
- 
+/** Default wideband mode */
 extern const SpeexMode speex_wb_mode;
 
 /** Default "ultra-wideband" mode */
 extern const SpeexMode speex_uwb_mode;
 
- 
+/** List of all modes available */
 extern const SpeexMode * const speex_mode_list[SPEEX_NB_MODES];
 
- 
+/** Obtain one of the modes available */
 const SpeexMode * speex_lib_get_mode (int mode);
 
 #ifndef _WIN32
- 
+/* We actually override the function in the narrowband case so that we can avoid linking in the wideband stuff */
 #define speex_lib_get_mode(mode) ((mode)==SPEEX_MODEID_NB ? &speex_nb_mode : speex_lib_get_mode (mode))
 #endif
 

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPAddress.swift
+//  chat-plugin
+//
+//  Created by Grand on 2019/11/7.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 import web3swift
@@ -19,7 +19,7 @@ class CPAddressWraper: NSObject {
     @objc public
     static func addressForPrivateKey(_ privateKey: Data) throws -> String  {
         
-          
+        //compressed pubkey
         guard let compressedPubkey = Web3.Utils.privateToPublic(privateKey, compressed: true) else {
             throw AbstractKeystoreError.keyDerivationError
         }
@@ -31,9 +31,9 @@ class CPAddressWraper: NSObject {
             return r;
         }
         throw AddressError.unknow
-          
-  
-  
+        //this is eth address
+//        guard let addr = Web3.Utils.publicToAddress(pubKey) else {throw AbstractKeystoreError.keyDerivationError}
+//        self.address = addr
     }
     
     

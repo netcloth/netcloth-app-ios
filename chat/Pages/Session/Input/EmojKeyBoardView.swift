@@ -1,21 +1,21 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  EmojKeyBoardView.swift
+//  chat
+//
+//  Created by Grand on 2019/8/30.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
 @objc protocol EmojKeyBoardViewDelegate: NSObjectProtocol {
-      
+    /// tap input emoj
     func onInputEmoj(str: String)
     
-      
+    /// tap delete
     func onDeleteInput()
     
-      
+    /// tap sender
     func onSendKeyTap()
 }
 
@@ -47,7 +47,7 @@ class EmojKeyBoardView: UIView, UICollectionViewDataSource, UICollectionViewDele
         return text.components(separatedBy: cs)
     }()
     
-      
+    //MARK:- Life Cycle
     deinit {
         print("dealloc \(type(of: self))")
     }
@@ -106,12 +106,12 @@ class EmojKeyBoardView: UIView, UICollectionViewDataSource, UICollectionViewDele
         if #available(iOS 11.0, *) {
             h += Int(Router.currentViewOfVC?.safeAreaInsets.bottom ?? 0)
         } else {
-              
+            // Fallback on earlier versions
         }
         return CGSize(width: UIView.noIntrinsicMetric, height: CGFloat(h))
     }
     
-      
+    //MARK:- CollectionView
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.width)
         self.pageControl.currentPage = page

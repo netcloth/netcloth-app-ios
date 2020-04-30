@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  Access.swift
+//  swift-cli
+//
+//  Created by Grand on 2019/7/30.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 import AVFoundation
@@ -78,8 +78,12 @@ open class Authorize : Access {
 }
 
 
-open class Device {
+open class AppBundle {
     static public func getAppVersion() -> String {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    }
+    
+    static public func getAppBundleId() -> String {
+        return Bundle.main.infoDictionary?["CFBundleIdentifier"] as! String
     }
 }

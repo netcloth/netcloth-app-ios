@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  NetWork.swift
+//  chat
+//
+//  Created by Grand on 2019/8/13.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 import Alamofire
@@ -32,7 +32,7 @@ class CPNetWork: NSObject {
      }
      */
     
-      
+    //request json
     @objc public
     static func requestUrl(path:String,
                            method: String,
@@ -48,7 +48,7 @@ class CPNetWork: NSObject {
         }
     }
 
-      
+    //download data
     @objc public
     static func getDataUrl(path:String,
                            method: String,
@@ -62,15 +62,41 @@ class CPNetWork: NSObject {
             cb(res.value != nil && res.isValid(), res.data)
         }
     }
+    
+    /// get cache data and request raw data: only @"GET" method
+    @objc public
+    static func getCacheDataUrl(path:String,
+                                cacheRsp:((_ value:Data?) -> Void)? = nil,
+                                fetchComplete: ((_ success:Bool, _ value:Data?) -> Void)? = nil) {
+        
+        
+        let method_a = HTTPMethod.get
+        
+        // get cache
+        if let request = try? URLRequest(url: path.asURL(), method: method_a, headers: nil),
+            let rspCallback = cacheRsp {
+            if let urlrequest = try? URLEncoding.default.encode(request, with: nil) {
+                let cachedURLResponse  = URLCache.shared.cachedResponse(for: urlrequest)
+                rspCallback(cachedURLResponse?.data)
+            }
+        }
+        
+        AF.request(path, method: method_a, parameters: nil).responseData { (res) in
+            guard let cb = fetchComplete else {
+                return
+            }
+            cb(res.value != nil && res.isValid(), res.data)
+        }
+    }
 
 
-      
-      
-      
-      
-      
-      
-      
+    /// <#Description#>
+    /// - Parameter data: <#data description#>
+    /// - Parameter fileName: <#fileName description#>
+    /// - Parameter toUrl: <#toUrl description#>
+    /// - Parameter complete: <#complete description#>
+    /// - Parameter uploadProgress: like 0.1
+    //upload data
     @objc public
     static func uploadData(data: Data,
                            toUrl: String,
@@ -82,7 +108,7 @@ class CPNetWork: NSObject {
             multipartFormData.append(data, withName: "uploadfile", fileName: "uploadfile", mimeType: "*/*")
         }, to: toUrl).responseJSON { response in
 
-              
+            //upload finish
             guard let cb = complete else {
                 return
             }
@@ -113,7 +139,7 @@ class CPNetWork: NSObject {
             }
         }, to: toUrl).responseJSON { response in
 
-              
+            //upload finish
             guard let cb = complete else {
                 return
             }
@@ -124,6 +150,25 @@ class CPNetWork: NSObject {
             request.uploadProgress { (progress) in
                 uploadProgress!(progress.fractionCompleted)
             }
+        }
+    }
+}
+
+extension CPNetWork {
+    //MARK:- upload Body
+    @objc public
+    static func uploadHttp(body: Data,
+                           toUrl: String,
+                           method: String? = "POST",
+                           complete: ((_ success:Bool, _ value:Data?) -> Void)? = nil) {
+        let rv =  method?.uppercased() ?? "POST"
+        let method_a = Alamofire.HTTPMethod(rawValue:rv)
+
+        AF.upload(body, to: toUrl, method: method_a).responseData { (res) in
+            guard let cb = complete else {
+                return
+            }
+            cb(res.isValid(), res.data)
         }
     }
 }

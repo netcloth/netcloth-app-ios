@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ExportPrivateKeyVerifyVC.swift
+//  chat
+//
+//  Created by Grand on 2019/9/12.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
 
-  
+/// verify private key
 class ExportPrivateKeyVerifyVC: BaseViewController {
     
     @IBOutlet weak var privateKeyInput: AutoHeightTextView?
@@ -27,7 +27,7 @@ class ExportPrivateKeyVerifyVC: BaseViewController {
     
     func configUI() {
         self.view?.backgroundColor = UIColor(hexString: "#F7F8FA")
-        self.verifyBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.verifyBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     func configEvent() {
@@ -41,7 +41,7 @@ class ExportPrivateKeyVerifyVC: BaseViewController {
                 }
             }
             else {
-                Toast.show(msg: "WalletManager.Error.invalidData")
+                Toast.show(msg: "WalletManager.Error.invalidData".localized())
             }
         }).disposed(by: disbag)
     }

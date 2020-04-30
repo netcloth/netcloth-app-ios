@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SRAudioRecorderButton.m
+//  SRAudioRecorderDemo
+//
+//  Created by SRRecorderTool on 2018/8/2.
+//  Copyright © 2018年 SR. All rights reserved.
+//
 
 #import "SRAudioRecordButton.h"
 #import "SRAudioRecorderManager.h"
@@ -67,13 +67,13 @@
     NSLog(@"dealloc %@",self.className);
 }
 
-  
+// 手指按下开始录音
 - (void)touchDown {
     if (self.recordButtonTouchDownBlock) {
         self.recordButtonTouchDownBlock(self);
     }
     
-      
+    //Note: because of auth ，life loop error
     [[SRAudioRecorderManager sharedManager] startRecording:^(BOOL grand) {
         if (grand && self.isTracking) {
             [self setButtonStateRecording];
@@ -91,7 +91,7 @@
     [[SRAudioRecorderManager sharedManager] stopRecording];
 }
 
-  
+// 手指按钮范围内抬起完成录音
 - (void)touchUpInside {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;
@@ -108,7 +108,7 @@
     [[SRAudioRecorderManager sharedManager] stopRecording];
 }
 
-  
+// 手指按钮范围外抬起取消录音
 - (void)touchUpOutside {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;
@@ -133,7 +133,7 @@
     }
 }
 
-  
+// TouchDragOutside -> TouchDragInside
 - (void)touchDragEnter {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;
@@ -149,7 +149,7 @@
     }
 }
 
-  
+// TouchDragInside -> TouchDragOutside
 - (void)touchDragExit {
     if ([SRAudioRecorderManager sharedManager].audioRecorderState == SRAudioRecorderStateNormal) {
         return;

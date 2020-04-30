@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  AppDelegate.swift
+//  chat
+//
+//  Created by Grand on 2019/7/19.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import FCFileManager
@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-          
+        //language setting
         Bundle.swizzleImp()
         let cul = Bundle.currentLanguage()
         if cul.isManual {
@@ -46,37 +46,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Router.rootWindow = window
-          
+        //APNS
         PPNotificationCenter.shared.registerNotice()
         
-          
+        //disable dark mode
         if #available(iOS 13.0, *) {
             window?.overrideUserInterfaceStyle = .light
         } else {
-              
+            // Fallback on earlier versions
         }
         
-          
+        //third part void network speed
+        ThirdPartTool.setup()
+        
+        //for test
         #if DEBUG
-        
-  
-  
-  
-  
-  
-  
-        
-       
-        
-  
-  
-  
-  
-  
-  
-  
-  
-        
+        TestSwiftObj.testTransfer()
         #endif
         
         return true
@@ -102,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PPNotificationCenter.shared.resetZeroBadge()
     }
 
-      
+    //MARK:- APNS
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("deviceToken error \(error)")
     }

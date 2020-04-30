@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  AuthorizeVC.swift
+//  chat
+//
+//  Created by Grand on 2020/1/16.
+//  Copyright © 2020 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -92,7 +92,7 @@ class AuthorizeVC: UIViewController {
         }
     }
     
-      
+    //MARK:- Animate
     fileprivate func animateShow() {
         self.view?.layoutIfNeeded()
         UIView.animate(withDuration: 0.25, animations: {

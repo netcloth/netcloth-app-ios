@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactNewFriendsListVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/25.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -25,7 +25,7 @@ class ContactNewFriendsListVC: BaseViewController, UITableViewDelegate, UITableV
         }
     }
     
-      
+    //MARK:- Life Cycle
     deinit {
         CPContactHelper.updateAllNewfriend { (r, msg) in
             NotificationCenter.post(name: NoticeNameKey.newFriendsCountChange)

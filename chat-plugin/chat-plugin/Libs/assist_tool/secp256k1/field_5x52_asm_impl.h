@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013-2014 Diederik Huys, Pieter Wuille               *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
 /**
@@ -499,4 +499,4 @@ __asm__ __volatile__(
 );
 }
 
-#endif  
+#endif /* SECP256K1_FIELD_INNER5X52_IMPL_H */

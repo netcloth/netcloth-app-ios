@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  IPALDescribeVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/5.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -21,7 +21,7 @@ class IPALIndexVC: BaseViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
         super.viewDidLoad()
     }
@@ -40,12 +40,12 @@ class IPALIndexVC: BaseViewController {
     func configUI() {
                 
         cipalContainer?.fakesetLayerCornerRadiusAndShadow( 4,
-                                                       color: UIColor(hexString: "#BFC2CC")!,
+                                                       color: UIColor(hexString: Color.gray_bf)!,
                                                        offset: CGSize(width: 0, height: 2),
                                                        radius: 7,
                                                        opacity: 0.3)
         aipalContainer?.fakesetLayerCornerRadiusAndShadow( 4,
-                                                       color: UIColor(hexString: "#BFC2CC")!,
+                                                       color: UIColor(hexString: Color.gray_bf)!,
                                                        offset: CGSize(width: 0, height: 2),
                                                        radius: 7,
                                                        opacity: 0.3)
@@ -54,7 +54,9 @@ class IPALIndexVC: BaseViewController {
     func fillData() {
         let node = IPALManager.shared.store.currentCIpal
         self.cipalLabel?.text = node?.moniker
-        self.aipalLabel?.text = nil
+        
+        let anode = IPALManager.shared.store.curAIPALNode
+        self.aipalLabel?.text = anode?.moniker
     }
     
     @IBAction func toC_IPAL() {
@@ -65,7 +67,10 @@ class IPALIndexVC: BaseViewController {
     }
     
     @IBAction func toA_IPAL() {
-        
+        if let vc = R.loadSB(name: "IPALList", iden: "IPAListVC") as? IPAListVC {
+            Router.pushViewController(vc: vc)
+            vc.fromSource = .A_IPAL
+        }
     }
     
 }

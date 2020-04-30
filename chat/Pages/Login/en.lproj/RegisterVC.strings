@@ -1,0 +1,45 @@
+
+/* Class = "UITextField"; placeholder = "请输入账号名称"; ObjectID = "3wv-dZ-IlA"; */
+"3wv-dZ-IlA.placeholder" = "Enter Your Account Name";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "BbA-lI-BV0"; */
+"BbA-lI-BV0.text" = "Pasword";
+
+/* Class = "UITextField"; placeholder = "请输入密码"; ObjectID = "BdS-SA-Kot"; */
+"BdS-SA-Kot.placeholder" = "Enter Password";
+
+/* Class = "UITextField"; placeholder = "请确认密码"; ObjectID = "FPk-9v-PkI"; */
+"FPk-9v-PkI.placeholder" = "Confirm Pasword";
+
+/* Class = "UIButton"; normalTitle = "注册"; ObjectID = "Ja0-eo-BNN"; */
+"Ja0-eo-BNN.normalTitle" = "Set Up";
+
+/* Class = "UIButton"; normalTitle = "服务协议"; ObjectID = "KBR-aE-Ev3"; */
+"KBR-aE-Ev3.normalTitle" = "<NetCloth Terms of Service>";
+
+/* Class = "UILabel"; text = "欢迎创建账户"; ObjectID = "LhM-4d-44s"; */
+"LhM-4d-44s.text" = "Create Your Account";
+
+/* Class = "UILabel"; text = "已有账户？"; ObjectID = "NJi-oO-hf9"; */
+"NJi-oO-hf9.text" = "Already have an account？";
+
+/* Class = "UILabel"; text = "NetCloth无法找回密码，请妥善保管您的密码"; ObjectID = "Ph0-RG-esR"; */
+"Ph0-RG-esR.text" = "NetCloth can't retrieve the password,please keep your password safe.";
+
+/* Class = "UIButton"; normalTitle = "隐私政策"; ObjectID = "QPx-Fc-p64"; */
+"QPx-Fc-p64.normalTitle" = "<NetCloth Privacy Policy>";
+
+/* Class = "UILabel"; text = "已经阅读并同意以下协议"; ObjectID = "aeC-3N-3kt"; */
+"aeC-3N-3kt.text" = "You have read and agreed to the following agreement:";
+
+/* Class = "UILabel"; text = "密码"; ObjectID = "f8j-MR-Jt1"; */
+"f8j-MR-Jt1.text" = "Pasword";
+
+/* Class = "UIButton"; normalTitle = "立即登录"; ObjectID = "hXw-yy-38w"; */
+"hXw-yy-38w.normalTitle" = "Log in now!";
+
+/* Class = "UILabel"; text = "账户名"; ObjectID = "iN4-mj-YZf"; */
+"iN4-mj-YZf.text" = "Account Name";
+
+/* Class = "UILabel"; text = "弱"; ObjectID = "sVE-P4-niD"; */
+"sVE-P4-niD.text" = "weak";

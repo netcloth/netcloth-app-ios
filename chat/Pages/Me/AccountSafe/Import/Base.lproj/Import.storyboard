@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -120,7 +120,7 @@
 
 </string>
                                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" red="0.95686274510000002" green="0.2156862745" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="1" green="0.25490196079999999" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c0h-BV-6ra" userLabel="re_pwd_container">
@@ -144,7 +144,7 @@
                                                     </view>
                                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Lf-6x-AIR">
                                                         <rect key="frame" x="20" y="356" width="311" height="44"/>
-                                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="5Wb-ub-LYw"/>
                                                         </constraints>
@@ -241,7 +241,7 @@
                                 <rect key="frame" x="12" y="0.0" width="351" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b8l-SF-3BV" userLabel="Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="351" height="514.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="351" height="667"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="iCm-Dc-Hv4" userLabel="infoV">
                                                 <rect key="frame" x="0.0" y="0.0" width="351" height="514.5"/>
@@ -440,7 +440,7 @@
                                                     </stackView>
                                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qZk-Mx-35a">
                                                         <rect key="frame" x="20" y="440.5" width="311" height="44"/>
-                                                        <color key="backgroundColor" red="0.23921568630000001" green="0.4941176471" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="y2B-kc-tiC"/>
                                                         </constraints>
@@ -490,7 +490,7 @@
                                             <constraint firstItem="iCm-Dc-Hv4" firstAttribute="top" secondItem="b8l-SF-3BV" secondAttribute="top" id="0X0-ba-eNm"/>
                                             <constraint firstItem="iCm-Dc-Hv4" firstAttribute="leading" secondItem="b8l-SF-3BV" secondAttribute="leading" id="K5A-zh-MZd"/>
                                             <constraint firstAttribute="trailing" secondItem="iCm-Dc-Hv4" secondAttribute="trailing" id="Kvw-91-r3n"/>
-                                            <constraint firstAttribute="bottom" secondItem="iCm-Dc-Hv4" secondAttribute="bottom" id="p9y-Qe-saK"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="iCm-Dc-Hv4" secondAttribute="bottom" constant="50" id="p9y-Qe-saK"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -505,11 +505,11 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="b8l-SF-3BV" firstAttribute="height" secondItem="tBt-uy-bVL" secondAttribute="height" priority="250" id="BhA-q3-wt0"/>
                             <constraint firstItem="PTb-uP-haI" firstAttribute="bottom" secondItem="2ln-ss-v1j" secondAttribute="bottom" id="IDf-Qs-IpZ"/>
                             <constraint firstItem="2ln-ss-v1j" firstAttribute="leading" secondItem="PTb-uP-haI" secondAttribute="leading" constant="12" id="MiL-G9-CRq"/>
                             <constraint firstItem="PTb-uP-haI" firstAttribute="trailing" secondItem="2ln-ss-v1j" secondAttribute="trailing" constant="12" id="Nqt-SV-b8Q"/>
                             <constraint firstItem="2ln-ss-v1j" firstAttribute="top" secondItem="PTb-uP-haI" secondAttribute="top" id="fL6-T1-HFn"/>
+                            <constraint firstItem="b8l-SF-3BV" firstAttribute="height" secondItem="PTb-uP-haI" secondAttribute="height" priority="100" id="tGq-fR-Dqa"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PTb-uP-haI"/>
                     </view>
@@ -538,10 +538,49 @@
                     <view key="view" contentMode="scaleToFill" id="ie6-wN-LKn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您已经阅读并同意以下协议" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d3K-eW-kd2">
+                                <rect key="frame" x="114" y="618.5" width="147.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.67843137249999996" green="0.68627450980000004" blue="0.72941176470000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="f6x-bG-VkS">
+                                <rect key="frame" x="27.5" y="635" width="320" height="27"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CS4-K5-wyM">
+                                        <rect key="frame" x="0.0" y="0.0" width="186" height="27"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="《NetCloth软件许可及服务协议》">
+                                            <color key="titleColor" red="0.015686274510000001" green="0.062745098040000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2uL-K6-nct">
+                                        <rect key="frame" x="196" y="0.0" width="124" height="27"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="《NetCloth隐私政策》">
+                                            <color key="titleColor" red="0.015686274510000001" green="0.062745098040000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="d3K-eW-kd2" firstAttribute="bottom" secondItem="f6x-bG-VkS" secondAttribute="top" constant="-2" id="1Rf-kM-TdU"/>
+                            <constraint firstItem="LvE-gf-KiY" firstAttribute="bottom" secondItem="f6x-bG-VkS" secondAttribute="bottom" constant="5" id="dLM-Gz-7BI"/>
+                            <constraint firstItem="d3K-eW-kd2" firstAttribute="centerX" secondItem="f6x-bG-VkS" secondAttribute="centerX" id="hxD-6M-vcN"/>
+                            <constraint firstItem="f6x-bG-VkS" firstAttribute="centerX" secondItem="ie6-wN-LKn" secondAttribute="centerX" id="vOJ-z7-GL9"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="LvE-gf-KiY"/>
                     </view>
                     <navigationItem key="navigationItem" title="导入账户" id="zib-cR-ePd"/>
+                    <connections>
+                        <outlet property="privacyBtn" destination="2uL-K6-nct" id="H65-p1-8p7"/>
+                        <outlet property="serviceBtn" destination="CS4-K5-wyM" id="9E9-P8-cEW"/>
+                        <outletCollection property="proxyVs" destination="d3K-eW-kd2" collectionClass="NSMutableArray" id="2cT-2U-GzY"/>
+                        <outletCollection property="proxyVs" destination="f6x-bG-VkS" collectionClass="NSMutableArray" id="B3C-jA-Xtl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7g7-hw-AJa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

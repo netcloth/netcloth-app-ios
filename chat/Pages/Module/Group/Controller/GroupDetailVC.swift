@@ -1,14 +1,14 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupDetailVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/3.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
-  
+/// Group Detail Info
 class GroupDetailVC: BaseTableViewController {
     
     @IBOutlet weak var Vheader: NVGroupMemberSummary?
@@ -37,7 +37,7 @@ class GroupDetailVC: BaseTableViewController {
     
     let disbag = DisposeBag()
     
-      
+    //MARK:- Layout UI
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -47,7 +47,7 @@ class GroupDetailVC: BaseTableViewController {
     func configUI() {
         self.tableView.adjustFooter()
         fillInfo()
-        markTopSwitch?.onTintColor = UIColor(hexString: "#3D7EFF")
+        markTopSwitch?.onTintColor = UIColor(hexString: Color.blue)
         markTopSwitch?.tintColor = UIColor(hexString: "#E1E4E9")
     }
     
@@ -107,7 +107,7 @@ class GroupDetailVC: BaseTableViewController {
         
         
         
-          
+        //mark top
         markTopSwitch?.rx.controlEvent(UIControl.Event.valueChanged).subscribe(onNext: { [weak self] (event) in
             let sessionId = Int(self?.roomService?.relateSession?.sessionId ?? 0)
             if self?.markTopSwitch?.isOn == true {
@@ -141,7 +141,7 @@ class GroupDetailVC: BaseTableViewController {
             :  "Receive Notifications".localized()
     }
     
-      
+    //MARK: - Action
     func onTapSetName() {
         guard self.roomService?.isMeGroupMaster.value == true else {
             return
@@ -174,7 +174,7 @@ class GroupDetailVC: BaseTableViewController {
         }
     }
     
-      
+    //删除历史消息
     func onTapDeleteChats() {
         _ = showDeleteChatAlert().subscribe(onNext: { [weak self] (e) in
             
@@ -184,7 +184,7 @@ class GroupDetailVC: BaseTableViewController {
             CPSessionHelper.clearSessionChats(in: sessionId, with: SessionType.group, complete: {(r, msg) in
                 if r == true {
                     self?.navigationController?.popViewController(animated: true)
-                      
+                    //notify
                     NotificationCenter.post(name: .chatRecordDeletes, object: pubkey)
                     
                 } else {
@@ -201,7 +201,7 @@ class GroupDetailVC: BaseTableViewController {
         }
     }
     
-     
+   //MARK:- 离开群聊
     func onTapLeaveGroup() {
         _ = showLeaveChatAlert().subscribe(onNext: { [weak self] (e) in
             let sessionId = Int(self?.roomService?.chatContact?.value.sessionId ?? 0)
@@ -224,40 +224,45 @@ class GroupDetailVC: BaseTableViewController {
         })
     }
     
-      
+    //消息接受方式
     func onTapGroupRecieveStyle() {
         _ = showRecieveNoticeAlert().subscribe(onNext: { [weak self] (v) in
             let pubkey = (self?.roomService?.chatContact?.value.publicKey ?? "")
             if v == 1 {
-                  
-                CPContactHelper.removeUser(fromDoNotDisturb: pubkey) { (r, msg) in
-                    if r {
-                        ExtensionShare.noDisturb.removeDisturb(pubkey: pubkey)
-                        self?.roomService?.chatContact?.change(commit: { (ct) in
-                            ct.isDoNotDisturb = false
-                        })
-                    }
-                }
-            } else if v == 2 {
-                  
-                CPContactHelper.addUser(toDoNotDisturb: pubkey) { (r, msg) in
-                    if r {
-                        ExtensionShare.noDisturb.addToDisturb(pubkey: pubkey)
-                        self?.roomService?.chatContact?.change(commit: { (ct) in
-                            ct.isDoNotDisturb = true
-                        })
-                    }
-                }
+                //remove
+                InnerHelper.removeMute(hexPubkey: pubkey,
+                                       chatType: NCProtoChatType.chatTypeGroup,
+                                       target: self?.cellRecieveNotify,
+                                       complete: { (r) in
+                                        if r {
+                                            self?.roomService?.chatContact?.change(commit: { (ct) in
+                                                ct.isDoNotDisturb = false
+                                            })
+                                        }
+                })
+            }
+            else if v == 2 {
+                //mute
+                InnerHelper.addToMute(hexPubkey: pubkey,
+                                      chatType: NCProtoChatType.chatTypeGroup,
+                                      target: self?.cellRecieveNotify,
+                                      complete: { (r) in
+                                        if r {
+                                            self?.roomService?.chatContact?.change(commit: { (ct) in
+                                                ct.isDoNotDisturb = true
+                                            })
+                                        }
+                })
             }
         })
     }
     
-      
+    //MARK:- Helper
     func showRecieveNoticeAlert() -> Observable<Int> {
         return Observable.create { [weak self] (observer) -> Disposable in
             
             if let alert = R.loadNib(name: "GroupNoticeAlert") as? GroupNoticeAlert {
-                  
+                //config
                 let rec = !(self?.roomService?.chatContact?.value.isDoNotDisturb == true)
                 alert.hightlightRecieve(isRec: rec)
                 
@@ -286,10 +291,10 @@ class GroupDetailVC: BaseTableViewController {
         return Observable.create { (observer) -> Disposable in
             
             if let alert = R.loadNib(name: "MayEmptyAlertView") as? MayEmptyAlertView {
-                  
+                //config
                 alert.titleLabel?.isHidden = true
                 alert.msgLabel?.text = "Group_Chat_Leave_Tip".localized()
-                alert.msgLabel?.textColor = UIColor(hexString: "#303133")
+                alert.msgLabel?.textColor = UIColor(hexString: Color.black)
                 
                 alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
                 alert.okButton?.setTitle("Confirm".localized(), for: .normal)
@@ -311,10 +316,10 @@ class GroupDetailVC: BaseTableViewController {
         return Observable.create { (observer) -> Disposable in
             
             if let alert = R.loadNib(name: "MayEmptyAlertView") as? MayEmptyAlertView {
-                  
+                //config
                 alert.titleLabel?.isHidden = true
                 alert.msgLabel?.text = "Group_Chat_Dele_Tip".localized()
-                alert.msgLabel?.textColor = UIColor(hexString: "#303133")
+                alert.msgLabel?.textColor = UIColor(hexString: Color.black)
                 
                 alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
                 alert.okButton?.setTitle("Confirm".localized(), for: .normal)

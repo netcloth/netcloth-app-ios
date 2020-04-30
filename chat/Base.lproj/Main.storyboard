@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Q5A-Db-5NX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Q5A-Db-5NX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,7 +11,7 @@
         <!--Grand NavVC-->
         <scene sceneID="7om-in-uBj">
             <objects>
-                <navigationController id="Q5A-Db-5NX" customClass="GrandNavVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="Q5A-Db-5NX" customClass="GrandNavVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OPk-rO-V1L">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -27,7 +29,7 @@
             <objects>
                 <viewController id="Qgt-lW-7dA" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MRO-cQ-Pgf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="DEN-eH-KxB"/>
@@ -41,7 +43,7 @@
         <!--Grand Tab BarVC-->
         <scene sceneID="37B-MF-pki">
             <objects>
-                <tabBarController storyboardIdentifier="main_tab" id="lvG-Pj-zCW" customClass="GrandTabBarVC" customModule="chat" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="main_tab" id="lvG-Pj-zCW" customClass="GrandTabBarVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="p1B-6V-K4R">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -51,6 +53,7 @@
                     <connections>
                         <segue destination="dJJ-rA-InH" kind="relationship" relationship="viewControllers" id="0Fd-zm-g3f"/>
                         <segue destination="Dpf-eN-GQe" kind="relationship" relationship="viewControllers" id="ddh-Hu-3IV"/>
+                        <segue destination="unR-CA-sdp" kind="relationship" relationship="viewControllers" id="F9o-3g-Bf8"/>
                         <segue destination="K22-pt-1Cz" kind="relationship" relationship="viewControllers" id="JXL-wr-YzC"/>
                     </connections>
                 </tabBarController>
@@ -77,6 +80,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tN8-zw-goX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-7" y="-188"/>
+        </scene>
+        <!--MiniAppVC-->
+        <scene sceneID="5Yu-Vl-aRF">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MiniAppVC" id="unR-CA-sdp" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Apps" id="tkG-YS-FqO"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ICe-6Z-exD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7" y="42"/>
         </scene>
         <!--Me-->
         <scene sceneID="NWy-Qb-fx5">

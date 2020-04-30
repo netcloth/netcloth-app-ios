@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="NFl-51-azC" customClass="ProtocolAlertView" customModule="NetCloth" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="301" height="164"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ONG-vL-ywb">
+                    <rect key="frame" x="25" y="25" width="251" height="52"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="dd" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F7v-T7-2OR">
+                            <rect key="frame" x="0.0" y="0.0" width="251" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <color key="textColor" red="0.18823529410000001" green="0.19215686269999999" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="protocol" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="CUn-DQ-T0Q" customClass="LoginAlertTextView" customModule="NetCloth" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="30.5" width="251" height="21.5"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="textColor" red="0.38431372549019605" green="0.38823529411764707" blue="0.41960784313725491" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                </stackView>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="o0V-we-Wsc">
+                    <rect key="frame" x="25" y="99" width="251" height="40"/>
+                    <subviews>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TYj-JT-bsc">
+                            <rect key="frame" x="0.0" y="0.0" width="115.5" height="40"/>
+                            <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="EZ6-MQ-D43"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <state key="normal" title="返回">
+                                <color key="titleColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onCancelTap" destination="NFl-51-azC" eventType="touchUpInside" id="Ljv-Ns-vxK"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cnz-qt-mTu">
+                            <rect key="frame" x="135.5" y="0.0" width="115.5" height="40"/>
+                            <color key="backgroundColor" red="0.27450980390000002" green="0.36862745099999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="vgv-aZ-9id"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <state key="normal" title="确认注册">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="20"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onOkTap" destination="NFl-51-azC" eventType="touchUpInside" id="gSi-wl-OnT"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="o0V-we-Wsc" firstAttribute="leading" secondItem="NFl-51-azC" secondAttribute="leading" constant="25" id="088-mH-NBx"/>
+                <constraint firstItem="ONG-vL-ywb" firstAttribute="top" secondItem="NFl-51-azC" secondAttribute="top" constant="25" id="2f0-Hh-tqr"/>
+                <constraint firstItem="ONG-vL-ywb" firstAttribute="leading" secondItem="NFl-51-azC" secondAttribute="leading" constant="25" id="Gdp-ru-kRa"/>
+                <constraint firstAttribute="trailing" secondItem="o0V-we-Wsc" secondAttribute="trailing" constant="25" id="g8U-Uh-gFx"/>
+                <constraint firstAttribute="bottom" secondItem="o0V-we-Wsc" secondAttribute="bottom" constant="25" id="gB3-Pg-6ad"/>
+                <constraint firstAttribute="trailing" secondItem="ONG-vL-ywb" secondAttribute="trailing" constant="25" id="hhd-dt-4YC"/>
+                <constraint firstItem="o0V-we-Wsc" firstAttribute="top" secondItem="ONG-vL-ywb" secondAttribute="bottom" constant="22" id="m0q-WA-K5O"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="BxT-rd-Ysx"/>
+            <connections>
+                <outlet property="cancelButton" destination="TYj-JT-bsc" id="Wc3-3w-J16"/>
+                <outlet property="msgTV" destination="CUn-DQ-T0Q" id="gV4-B7-sNx"/>
+                <outlet property="okButton" destination="cnz-qt-mTu" id="hC9-03-E8y"/>
+                <outlet property="titleLabel" destination="F7v-T7-2OR" id="qbZ-0L-eOt"/>
+            </connections>
+            <point key="canvasLocation" x="-190.57971014492756" y="-358.92857142857139"/>
+        </view>
+    </objects>
+</document>

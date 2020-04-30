@@ -1,15 +1,18 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  IPALHistoryVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/9.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
 class IPALHistoryVC: BaseViewController,
 UITableViewDataSource, UITableViewDelegate {
+    
+    // 1 chat  3application
+    var pageTag: IPAListVC.PageTag?
     
     @IBOutlet weak var tableView: UITableView?
     var list:[CPChainClaim]?
@@ -26,9 +29,17 @@ UITableViewDataSource, UITableViewDelegate {
     }
     
     func requestData() {
-        CPAssetHelper.getCipalHistoryLimited {[weak self] (array) in
-            self?.list = array
-            self?.tableView?.reloadData()
+        if pageTag ==  IPAListVC.PageTag.C_IPAL {
+            CPAssetHelper.getCipalHistoryLimited {[weak self] (array) in
+                self?.list = array
+                self?.tableView?.reloadData()
+            }
+        }
+        else if pageTag == IPAListVC.PageTag.A_IPAL {
+            CPAssetHelper.getAIPALHistoryLimited {[weak self] (array) in
+                self?.list = array
+                self?.tableView?.reloadData()
+            }
         }
     }
 }
@@ -49,7 +60,11 @@ extension IPALHistoryVC {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-          
+        guard self.pageTag == .C_IPAL else {
+            return
+        }
+        
+        //to detail
         if let data = list?[safe: indexPath.row] {
             if let vc = R.loadSB(name: "IPALResult", iden: "IPALHistoryDetailVC") as? IPALHistoryDetailVC {
                 vc.queryHistoryNode = data

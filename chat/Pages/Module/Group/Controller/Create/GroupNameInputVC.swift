@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupNameInputVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/29.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -22,7 +22,7 @@ class GroupNameInputVC: BaseViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
         
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class GroupNameInputVC: BaseViewController {
     }
     
     func configUI() {
-        confirmBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
+        confirmBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
     }
     
     func configEvent() {
@@ -40,7 +40,7 @@ class GroupNameInputVC: BaseViewController {
             if text?.isEmpty == true {
                 self?.sepV?.backgroundColor = UIColor(hexString: "#E9E9E9")
             } else {
-                self?.sepV?.backgroundColor = UIColor(hexString: "#303133")
+                self?.sepV?.backgroundColor = UIColor(hexString: Color.black)
             }
         }).disposed(by: disbag)
         
@@ -66,7 +66,7 @@ class GroupNameInputVC: BaseViewController {
         }).disposed(by: disbag)
     }
     
-      
+    //MARK:- Action
     func toNext() {
         if let vc = R.loadSB(name: "GroupCreate", iden: "GroupSelectContactVC") as? GroupSelectContactVC {
             vc.groupName = nameInputTF?.text

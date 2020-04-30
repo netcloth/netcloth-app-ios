@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPTools.h
+//  chat-plugin
+//
+//  Created by Grand on 2019/11/1.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 #import "CPGroupChatHelper.h"
 
-  
+//MARK:- DB Name
 extern NSString *kTableName_User;
 extern NSString *kTableName_Contact;
 extern NSString *kTableName_Session;
@@ -19,6 +19,9 @@ extern NSString *kTableName_Claim;
 extern NSString *kTableName_GroupMember;
 extern NSString *kTableName_GroupMessage;
 extern NSString *kTableName_GroupNotify;
+
+extern NSString *kTableName_AssetToken;
+extern NSString *kTableName_TradeRecord;
 
 
 @interface CPTools : NSObject
@@ -43,9 +46,9 @@ extern NSString *kTableName_GroupNotify;
 
 
 #define kPrivateKeySize 32
-#define kPublicKeySize 65   
+#define kPublicKeySize 65 //unzip pubkey
 
-  
+//log
 #if DEBUG
 #define NSLog(...) NSLog(__VA_ARGS__)
 #else
@@ -55,7 +58,7 @@ extern NSString *kTableName_GroupNotify;
 
 
 
-  
+//MARK:- Tool
 
 #ifndef dispatch_main_async_safe
 #define dispatch_main_async_safe(block)\

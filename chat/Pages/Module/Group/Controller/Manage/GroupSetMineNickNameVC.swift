@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupSetMineNickNameVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/9.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -15,7 +15,7 @@ class GroupSetMineNickNameVC: BaseViewController {
     
     var disbag = DisposeBag()
     
-      
+    //MARK:- Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -33,12 +33,12 @@ class GroupSetMineNickNameVC: BaseViewController {
     
     func configUI() {
         
-          
+        //done
         let btn = UIButton(type: .custom)
         btn.setTitle("Done".localized(), for: .normal)
         btn.setTitleColor(UIColor.white, for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        btn.backgroundColor = UIColor(hexString: "#3D7EFF")
+        btn.backgroundColor = UIColor(hexString: Color.blue)
         btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         btn.layer.cornerRadius = 4
         btn.size.height = 32
@@ -49,7 +49,7 @@ class GroupSetMineNickNameVC: BaseViewController {
     
     func configEvent() {
         
-          
+        ///Input
         inputTF?.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             } else {
@@ -57,13 +57,13 @@ class GroupSetMineNickNameVC: BaseViewController {
             self?.inputTF?.limitLength(by: nil, maxLength: Config.Group.Max_Name_Len)
         }.disposed(by: disbag)
         
-          
+        // change
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.onTapDone()
         }).disposed(by: disbag)
     }
     
-      
+    //MARK:- Action
     func onTapDone() {
         let r = self.checkInputAvalid()
         if r.result == false {

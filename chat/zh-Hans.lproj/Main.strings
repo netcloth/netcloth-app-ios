@@ -2,8 +2,11 @@
 /* Class = "UITabBarItem"; title = "消息"; ObjectID = "ILc-BQ-RyP"; */
 "ILc-BQ-RyP.title" = "消息";
 
-/* Class = "UITabBarItem"; title = "通讯录"; ObjectID = "nZv-vz-Nfa"; */
-"nZv-vz-Nfa.title" = "通讯录";
+/* Class = "UITabBarItem"; title = "联系人"; ObjectID = "nZv-vz-Nfa"; */
+"nZv-vz-Nfa.title" = "联系人";
+
+/* Class = "UITabBarItem"; title = "Item"; ObjectID = "tkG-YS-FqO"; */
+"tkG-YS-FqO.title" = "小应用";
 
 /* Class = "UITabBarItem"; title = "我"; ObjectID = "ydJ-Tg-vQv"; */
 "ydJ-Tg-vQv.title" = "我";

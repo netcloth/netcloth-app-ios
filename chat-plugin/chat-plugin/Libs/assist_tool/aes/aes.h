@@ -1,8 +1,8 @@
-  
-  
-  
-  
-  
+// Copyright (c) 2015-2018 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+//
+// C++ wrapper around ctaes, a constant-time AES implementation
 
 #ifndef BITCOIN_CRYPTO_AES_H
 #define BITCOIN_CRYPTO_AES_H
@@ -64,4 +64,4 @@ private:
     unsigned char iv[AES_BLOCKSIZE];
 };
 
-#endif   
+#endif // BITCOIN_CRYPTO_AES_H

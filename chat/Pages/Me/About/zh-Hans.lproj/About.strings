@@ -1,6 +1,6 @@
 
-/* Class = "UILabel"; text = "https:  
-"EaI-Tk-9X2.text" = "https:  
+/* Class = "UILabel"; text = "https://www.netcloth.org"; ObjectID = "EaI-Tk-9X2"; */
+"EaI-Tk-9X2.text" = "https://chat-app.netcloth.org";
 
 /* Class = "UILabel"; text = "NetCloth"; ObjectID = "HJ9-SN-qbR"; */
 "HJ9-SN-qbR.text" = "NetCloth";
@@ -12,7 +12,7 @@
 "c4N-ym-57p.text" = "Github";
 
 /* Class = "UILabel"; text = "Instruction"; ObjectID = "e3o-yv-oqu"; */
-"e3o-yv-oqu.text" = "用户手册";
+"e3o-yv-oqu.text" = "Blog";
 
 /* Class = "UILabel"; text = "v1.0"; ObjectID = "hNC-4e-MvG"; */
 "hNC-4e-MvG.text" = "v1.0";
@@ -20,8 +20,24 @@
 /* Class = "UILabel"; text = "Help&Feedback"; ObjectID = "gmb-fY-dIO"; */
 "gmb-fY-dIO.text" = "联系我们";
 
-/* Class = "UILabel"; text = "https:  
-"jYE-Gl-j4H.text" = "https:  
+/* Class = "UILabel"; text = "https://blog.netcloth.org"; ObjectID = "jYE-Gl-j4H"; */
+"jYE-Gl-j4H.text" = "https://blog.netcloth.org";
 
-/* Class = "UILabel"; text = "https:  
-"jgs-gX-agK.text" = "https:  
+/* Class = "UILabel"; text = "https://github.com/netcloth"; ObjectID = "jgs-gX-agK"; */
+"jgs-gX-agK.text" = "https://github.com/netcloth";
+
+
+/* Class = "UILabel"; text = "https://netcloth.zendesk.com"; ObjectID = "Vu1-eg-2yb"; */
+"Vu1-eg-2yb.text" = "https://netcloth.zendesk.com";
+
+/* Class = "UILabel"; text = "User Center"; ObjectID = "u9e-R5-Rwu"; */
+"u9e-R5-Rwu.text" = "用户中心";
+
+/* Class = "UILabel"; text = "Privacy protected encrypted chat app"; ObjectID = "fJh-g8-i04"; */
+"fJh-g8-i04.text" = "加密生活，从“衣”开始";
+
+/* Class = "UIButton"; normalTitle = "<NetCloth Privacy Policy>"; ObjectID = "5aB-zq-1UP"; */
+"5aB-zq-1UP.normalTitle" = "《NetCloth隐私政策》";
+
+/* Class = "UIButton"; normalTitle = "<NetCloth Terms of Service>"; ObjectID = "gSn-dE-cWm"; */
+"gSn-dE-cWm.normalTitle" = "《NetCloth软件许可及服务协议》";

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SRRecordingAudioPlayer.m
+//  SRAudioRecorderDemo
+//
+//  Created by SRRecorderTool on 2018/8/2.
+//  Copyright © 2018年 SR. All rights reserved.
+//
 
 #import "SRRecordingAudioPlayerManager.h"
 #import "LRSPlayer.h"
@@ -31,12 +31,12 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-          
+        // init setting
     }
     return self;
 }
 
-  
+//MARK:- PCM
 
 - (void)playData:(NSData *)pcm  withBlock:(callBack)back
 {
@@ -66,7 +66,7 @@
 
 
 
-  
+//MARK:- == Discard
 
 
 - (AVAudioPlayer *)playerWithFilePath:(NSString *)filePath {
@@ -96,8 +96,8 @@
 }
 
 - (void)setupAudio {
-  
-  
+//    [NSNotificationCenter.defaultCenter removeObserver:self];
+//    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(audioInterrupte:) name:AVAudioSessionInterruptionNotification object:nil];
     NSError *err_1;
     [AVAudioSession.sharedInstance setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:&err_1];
     [AVAudioSession.sharedInstance setActive:true error:nil];
@@ -146,7 +146,7 @@
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-  
+//MARK:- Observer
 - (void)audioInterrupte:(NSNotification *)notice {
     if (_audioPlayer == nil) {
         return;

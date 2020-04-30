@@ -1,4 +1,4 @@
-/* Copyright (C) 2002 Jean-Marc Valin
+﻿/* Copyright (C) 2002 Jean-Marc Valin
    File: speex_header.c
    Describes the Speex header
 
@@ -44,7 +44,7 @@
 #define NULL 0
 #endif
 
- 
+/** Convert little endian */
 static inline spx_int32_t le_int(spx_int32_t i)
 {
 #if !defined(__LITTLE_ENDIAN__) && ( defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__) )

@@ -90,8 +90,8 @@ void pitch_xcorr(const spx_word16_t *_x, const spx_word16_t *_y, spx_word32_t *c
    int i,j;
    for (i=0;i<nb_pitch;i+=4)
    {
-       
-        
+      /* Compute correlation*/
+      //corr[nb_pitch-1-i]=inner_prod(x, _y+i, len);
       spx_word32_t sum1=0;
       spx_word32_t sum2=0;
       spx_word32_t sum3=0;

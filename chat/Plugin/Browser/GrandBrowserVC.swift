@@ -1,19 +1,21 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GrandBrowserVC.swift
+//  chat
+//
+//  Created by Grand on 2020/1/14.
+//  Copyright © 2020 netcloth. All rights reserved.
+//
 
 import UIKit
 import WebKit
 
 class GrandBrowserVC: BaseViewController,WKUIDelegate, WKNavigationDelegate {
     
-    fileprivate var webView: WKWebView?
-    fileprivate var originUrl: String?
-    fileprivate var bridgeHandle: BrowserJsBridgeHandle?
+    var webView: WKWebView?
+    var bridgeHandle: BrowserJsBridgeHandle?
+    var originUrl: String?
+    
+    let disbag = DisposeBag()
     
     deinit {
         if let apis = self.bridgeHandle?.supportApisName() {
@@ -22,20 +24,58 @@ class GrandBrowserVC: BaseViewController,WKUIDelegate, WKNavigationDelegate {
                 webUC?.removeScriptMessageHandler(forName: name)
             }
         }
+        self.webView?.removeObserverBlocks()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor(hexString: Color.app_bg_color)
         setupWKWebView()
+        configUI()
+        configEvent()
         _load()
     }
     
+    var _willAppear: Bool = false
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if _willAppear == false {
+            webView?.isHidden = true
+        }
+        _willAppear = true
+    }
+    
+    var _didAppear: Bool = false
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if _didAppear == false {
+            webView?.isHidden = false
+        }
+        _didAppear = true   
+    }
+    
+    //MARK:- Override
+    func supportConfigs() -> (WKWebViewConfiguration, BrowserJsBridgeHandle) {
+        return (WKWebViewConfiguration(), BrowserJsBridgeHandle())
+    }
+    
+    func supportWeb(byConfig: WKWebViewConfiguration) -> WKWebView {
+        return WKWebView(frame: CGRect.zero, configuration: byConfig)
+    }
+    
+    func supportToOtherPage(url: String) {
+        let browser = GrandBrowserVC()
+        browser.loadUrl(string: url)
+        Router.pushViewController(vc: browser)
+    }
+    
+    
     fileprivate func setupWKWebView() {
-        let config = WKWebViewConfiguration()
-        let usercontent = WKUserContentController()
+        let support = supportConfigs()
+        let config = support.0
+        let bridge = support.1
         
-        let bridge = BrowserJsBridgeHandle()
-        self.bridgeHandle = bridge
+        let usercontent = WKUserContentController()
         let apis = bridge.supportApisName()
         for name in apis {
             usercontent.add(bridge, name: name)
@@ -43,18 +83,28 @@ class GrandBrowserVC: BaseViewController,WKUIDelegate, WKNavigationDelegate {
 
         config.userContentController = usercontent
         
-        let webview = WKWebView(frame: CGRect.zero, configuration: config)
+        let webview = supportWeb(byConfig: config)
+        self.view.addSubview(webview)
         webview.uiDelegate = self
         webview.navigationDelegate = self
+        webview.scrollView.adjustOffset()
         
-        self.view.addSubview(webview)
         webview.snp.makeConstraints { (maker) in
-            maker.edges.equalTo(self.view)
+            maker.left.right.bottom.equalTo(self.view)
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            } else {
+                // Fallback on earlier versions
+                maker.top.equalTo(self.view)
+            }
         }
+        
+        
+        self.bridgeHandle = bridge
         self.webView = webview
         bridge.webView = webview
     }
-    
+        
     func loadUrl(string: String) {
         originUrl = string
         _load()
@@ -70,7 +120,88 @@ class GrandBrowserVC: BaseViewController,WKUIDelegate, WKNavigationDelegate {
         web.load(request)
     }
     
-      
+    //MARK:- Property
+    func configUI() {
+        self.view.addSubview(progressView)
+        progressView.isHidden = true
+        progressView.snp.makeConstraints { (maker) in
+            maker.left.equalTo(self.view)
+            maker.height.equalTo(0.5)
+            if #available(iOS 11.0, *) {
+                maker.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            } else {
+                // Fallback on earlier versions
+                maker.top.equalTo(self.view)
+            }
+            maker.width.equalTo(0)
+        }
+    }
+    
+    func configEvent() {
+        self.webView?.addObserverBlock(forKeyPath: "title", block: { [weak self] (obj, oldv, newv) in
+            if self?.title == nil,
+                let nv = newv as? String {
+                self?.title = nv
+            }
+        })
+        
+        self.webView?.addObserverBlock(forKeyPath: "estimatedProgress", block: { [weak self] (obj, oldv, newv) in
+            if let nv = newv as? Double {
+                self?.setProgressAnimate(p: CGFloat(nv))
+            }
+        })
+    }
+    
+//    var progressLenConstraint: NSLayoutConstraint?
+    lazy var progressView: UIView = {
+        let v = UIView()
+        v.backgroundColor = UIColor(hexString: Color.blue)
+        return v
+    }()
+    
+    func setProgressAnimate(p: CGFloat) {
+        var len = self.view.size.width * p
+        len = max(0,len)
+        progressView.snp.updateConstraints { (maker) in
+            maker.width.equalTo(len)
+        }
+        self.progressView.setNeedsLayout()
+        UIView.animate(withDuration: 0.25, animations: {
+            //            self.progressLenConstraint?.constant = len
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    lazy var backItem: UIBarButtonItem = {
+        let image = UIImage(named: "返回1")
+        let v = UIBarButtonItem(image: image, style: UIBarButtonItem.Style.plain, target: self, action: #selector(onBackAction))
+        return v
+    }()
+    
+    @objc func onBackAction() {
+        if checkCanBack() {
+            self.webView?.goBack()
+        }
+        else {
+            Router.dismissVC()
+        }
+    }
+    
+    lazy var closeItem: UIBarButtonItem = {
+        let image = UIImage(named: "btn_web_close")
+        let v = UIBarButtonItem(image: image, style: UIBarButtonItem.Style.plain, target: self, action: #selector(onCloseAction))
+        return v
+    }()
+    
+    @objc func onCloseAction() {
+        Router.dismissVC(animate: true, completion: nil, toRoot: true)
+    }
+    
+    func checkCanBack() -> Bool {
+        return self.webView?.canGoBack == true
+    }
+    
+    //MARK:- Public
     func goBack() {
         self.webView?.goBack()
     }
@@ -83,22 +214,73 @@ class GrandBrowserVC: BaseViewController,WKUIDelegate, WKNavigationDelegate {
         self.webView?.reload()
     }
     
-      
+    //MARK:- Override
+    func webViewDidStart() {
+        progressView.isHidden = false
+    }
+    func webViewLoadFinish() {
+        progressView.isHidden = true
+    }
     
-      
+    //MARK:- WKUIDelegate
     func webViewDidClose(_ webView: WKWebView) {
         DispatchQueue.main.async {
             Router.dismissVC()
         }
     }
     
-      
-      
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        
+        if let url = navigationAction.request.url?.absoluteString {
+            supportToOtherPage(url: url)
+        }
+        return nil
     }
     
-      
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        
+        let alertController =  UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "Confirm".localized(), style: UIAlertAction.Style.default) { (action) in
+            completionHandler()
+        }
+        alertController.addAction(action)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+        let alertController =  UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert)
+        
+        var action = UIAlertAction(title: "Cancel".localized(), style: UIAlertAction.Style.cancel) { (action) in
+            completionHandler(false)
+        }
+        alertController.addAction(action)
+        
+        action = UIAlertAction(title: "Confirm".localized(), style: UIAlertAction.Style.default) { (action) in
+            completionHandler(true)
+        }
+        alertController.addAction(action)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    //MARK:- WKNavigationDelegate
+    /// start load
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        webViewDidStart()
+    }
+    
+    /// finish load
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webViewLoadFinish()
+    }
+    
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        webViewLoadFinish()
+    }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+       webViewLoadFinish()
     }
 }
 

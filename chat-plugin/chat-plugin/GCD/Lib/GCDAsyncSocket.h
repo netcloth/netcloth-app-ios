@@ -1,12 +1,12 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
+//  
+//  GCDAsyncSocket.h
+//  
+//  This class is in the public domain.
+//  Originally created by Robbie Hanson in Q3 2010.
+//  Updated and maintained by Deusty LLC and the Apple development community.
+//  
+//  https://github.com/robbiehanson/CocoaAsyncSocket
+//
 
 #import <Foundation/Foundation.h>
 #import <Security/Security.h>
@@ -14,7 +14,7 @@
 #import <dispatch/dispatch.h>
 #import <Availability.h>
 
-#include <sys/socket.h>   
+#include <sys/socket.h> // AF_INET, AF_INET6
 
 @class GCDAsyncReadPacket;
 @class GCDAsyncWritePacket;
@@ -50,20 +50,20 @@ extern NSString *const GCDAsyncSocketSSLDiffieHellmanParameters;
 
 
 typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
-	GCDAsyncSocketNoError = 0,             
-	GCDAsyncSocketBadConfigError,          
-	GCDAsyncSocketBadParamError,           
-	GCDAsyncSocketConnectTimeoutError,     
-	GCDAsyncSocketReadTimeoutError,        
-	GCDAsyncSocketWriteTimeoutError,       
-	GCDAsyncSocketReadMaxedOutError,       
-	GCDAsyncSocketClosedError,             
-	GCDAsyncSocketOtherError,              
+	GCDAsyncSocketNoError = 0,           // Never used
+	GCDAsyncSocketBadConfigError,        // Invalid configuration
+	GCDAsyncSocketBadParamError,         // Invalid parameter was passed
+	GCDAsyncSocketConnectTimeoutError,   // A connect operation timed out
+	GCDAsyncSocketReadTimeoutError,      // A read operation timed out
+	GCDAsyncSocketWriteTimeoutError,     // A write operation timed out
+	GCDAsyncSocketReadMaxedOutError,     // Reached set maxLength without completing
+	GCDAsyncSocketClosedError,           // The remote peer closed the connection
+	GCDAsyncSocketOtherError,            // Description provided in userInfo
 };
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 @interface GCDAsyncSocket : NSObject
@@ -89,7 +89,9 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 - (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq;
 - (instancetype)initWithDelegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq socketQueue:(nullable dispatch_queue_t)sq;
 
- 
+/**
+ * Create GCDAsyncSocket from already connect BSD socket file descriptor
+**/
 + (nullable instancetype)socketFromConnectedSocketFD:(int)socketFD socketQueue:(nullable dispatch_queue_t)sq error:(NSError**)error;
 
 + (nullable instancetype)socketFromConnectedSocketFD:(int)socketFD delegate:(nullable id<GCDAsyncSocketDelegate>)aDelegate delegateQueue:(nullable dispatch_queue_t)dq error:(NSError**)error;
@@ -135,7 +137,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 @property (atomic, assign, readwrite, getter=isIPv4PreferredOverIPv6) BOOL IPv4PreferredOverIPv6;
 
 /** 
- * When connecting to both IPv4 and IPv6 using Happy Eyeballs (RFC 6555) https:  
+ * When connecting to both IPv4 and IPv6 using Happy Eyeballs (RFC 6555) https://tools.ietf.org/html/rfc6555
  * this is the delay between connecting to the preferred protocol and the fallback protocol.
  *
  * Defaults to 300ms.
@@ -407,18 +409,18 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 
 #pragma mark Reading
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+// The readData and writeData methods won't block (they are asynchronous).
+// 
+// When a read is complete the socket:didReadData:withTag: delegate method is dispatched on the delegateQueue.
+// When a write is complete the socket:didWriteDataWithTag: delegate method is dispatched on the delegateQueue.
+// 
+// You may optionally set a timeout for any read/write operation. (To not timeout, use a negative time interval.)
+// If a read/write opertion times out, the corresponding "socket:shouldTimeout..." delegate method
+// is called to optionally allow you to extend the timeout.
+// Upon a timeout, the "socket:didDisconnectWithError:" method is called
+// 
+// The tag is for your convenience.
+// You can use it as an array index, step number, state id, pointer, etc.
 
 /**
  * Reads the first available bytes that become available on the socket.
@@ -692,7 +694,7 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  *
  *     For more information on trust evaluation see:
  *     Apple's Technical Note TN2232 - HTTPS Server Trust Evaluation
- *     https:  
+ *     https://developer.apple.com/library/ios/technotes/tn2232/_index.html
  *     
  *     If unspecified, the default value is NO.
  *
@@ -1047,16 +1049,16 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
 /**
  * A few common line separators, for use with the readDataToData:... methods.
 **/
-+ (NSData *)CRLFData;     
-+ (NSData *)CRData;       
-+ (NSData *)LFData;       
-+ (NSData *)ZeroData;     
++ (NSData *)CRLFData;   // 0x0D0A
++ (NSData *)CRData;     // 0x0D
++ (NSData *)LFData;     // 0x0A
++ (NSData *)ZeroData;   // 0x00
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @protocol GCDAsyncSocketDelegate <NSObject>
 @optional
@@ -1179,12 +1181,12 @@ typedef NS_ERROR_ENUM(GCDAsyncSocketErrorDomain, GCDAsyncSocketError) {
  * but the sock parameter will be nil. (It must necessarily be nil since it is no longer available.)
  * This is a generally rare, but is possible if one writes code like this:
  * 
- * asyncSocket = nil;   
+ * asyncSocket = nil; // I'm implicitly disconnecting the socket
  * 
  * In this case it may preferrable to nil the delegate beforehand, like this:
  * 
- * asyncSocket.delegate = nil;   
- * asyncSocket = nil;   
+ * asyncSocket.delegate = nil; // Don't invoke my delegate method
+ * asyncSocket = nil; // I'm implicitly disconnecting the socket
  * 
  * Of course, this depends on how your state machine is configured.
 **/

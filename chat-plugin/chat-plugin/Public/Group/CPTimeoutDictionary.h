@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPTimeoutDictionary.h
+//  chat-plugin
+//
+//  Created by Grand on 2020/1/13.
+//  Copyright © 2020 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 

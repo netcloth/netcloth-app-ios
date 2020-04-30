@@ -1,0 +1,30 @@
+
+/* Class = "UILabel"; text = "用Keystore导入账户激活钱包"; ObjectID = "8ms-tF-07Z"; */
+"8ms-tF-07Z.text" = "用Keystore导入账户激活钱包";
+
+/* Class = "UIButton"; normalTitle = "确认激活"; ObjectID = "JGJ-1q-u3x"; */
+"JGJ-1q-u3x.normalTitle" = "确认激活";
+
+/* Class = "UILabel"; text = "如何获取私钥？"; ObjectID = "TTq-3I-na3"; */
+"TTq-3I-na3.text" = "如何获取私钥？";
+
+/* Class = "UIButton"; normalTitle = "确认激活"; ObjectID = "VE3-95-bGO"; */
+"VE3-95-bGO.normalTitle" = "确认激活";
+
+/* Class = "UILabel"; text = "请输入账户密码"; ObjectID = "fJ5-AG-jyA"; */
+"fJ5-AG-jyA.text" = "请输入账户密码";
+
+/* Class = "UILabel"; text = "请输入Keystore字符"; ObjectID = "h8x-LV-Foc"; */
+"h8x-LV-Foc.text" = "请输入Keystore字符";
+
+/* Class = "UILabel"; text = "用私钥导入账户激活钱包"; ObjectID = "lhh-ox-AXX"; */
+"lhh-ox-AXX.text" = "用私钥导入账户激活钱包";
+
+/* Class = "UILabel"; text = "如何获取Keystore？"; ObjectID = "nSX-Iv-Arh"; */
+"nSX-Iv-Arh.text" = "如何获取Keystore？";
+
+/* Class = "UINavigationItem"; title = "激活钱包"; ObjectID = "qdI-HR-MdY"; */
+"qdI-HR-MdY.title" = "激活钱包";
+
+/* Class = "UILabel"; text = "请输入私钥（注意区分大小写）"; ObjectID = "tfq-YA-Srn"; */
+"tfq-YA-Srn.text" = "请输入私钥（注意区分大小写）";

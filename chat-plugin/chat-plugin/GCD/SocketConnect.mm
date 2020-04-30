@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SocketConnect.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/14.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "SocketConnect.h"
 #import "GCDAsyncSocket.h"
@@ -16,14 +16,14 @@
 #define kTagHeartBeat  1001
 #define kTagRegisterReq  1002
 
-const NSInteger OnePackMaxLen = 1024 * 1024 *100;   
+const NSInteger OnePackMaxLen = 1024 * 1024 *100; //100M
 
 @interface SocketConnect () <GCDAsyncSocketDelegate>
 {
     GCDAsyncSocket *_socket;
     NSString *_host;
     uint16_t _port;
-    int8_t _timeout;   
+    int8_t _timeout; //time out
     
     dispatch_queue_t  _serialWriteQueue;
     dispatch_queue_t  _serialReadQueue;
@@ -75,7 +75,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
     }
     return self;
 }
-  
+//MARK:- Connect
 
 -(void)connect
 {
@@ -103,20 +103,20 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
 - (void)disconnect
 {
     [self stoptimeoutTimer];
-      
+    //remove all write 、read buff
     dispatch_barrier_async(_serialReadQueue, ^{
         [self->_socket synchronouslySetDelegate:nil];
         [self->_socket synchronouslySetDelegateQueue:nil];
-        [self->_socket disconnect];   
+        [self->_socket disconnect]; //syn maybe delay
         self->_pbBuffer = NSMutableData.data;
     });
 }
 
-  
+//MARK:- Send
 
 - (void)sendMsg:(NCProtoNetMsg *)message {
     dispatch_async(_serialWriteQueue, ^{
-  
+//        NSLog(@"pb>> sendname: %@",message.name);
         NSAssert(!(message.name == nil || [message.name isEqualToString:@""] || message.name == NULL), @"message name must set");
         NSData *data = [MessageObjects encodeNetMsg:message];
         if ([message.name isEqualToString:kMsg_Heartbeat]) {
@@ -141,7 +141,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
 }
 
 
-  
+//MARK:- Timeout
 - (void)starttimeoutTimer {
     [self stoptimeoutTimer];
     self.timeoutTimer = [NSTimer timerWithTimeInterval:kHeartTimeoutInterval target:self selector:@selector(onTimeout) userInfo:nil repeats:NO];
@@ -166,7 +166,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
 }
 
 
-  
+//MARK:- Socket Delegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
     NSLog(@"coremsg-didConnectToHost %@",host);
     LogFormat(@"connect-didConnectToHost %@  %hu", host, port);
@@ -194,23 +194,23 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
     dispatch_async(_serialReadQueue, ^{
         @strongify(self);
         [self.pbBuffer appendData:data];
-          
+        //decode msg
         int8_t count = 0;
         while (1) {
             if (count > 5) {
                 NSLog(@"coremsg-loop-max");
-                return;   
+                return; //Note: avoid busy read
             }
             int bufferLen = self.pbBuffer.length;
             if (bufferLen < kHeaderLen) {
-  
+//                NSLog(@"coremsg-bufferlen<kheaderLen");
                 return;
             }
             NSData *header = [self.pbBuffer subdataWithRange:NSMakeRange(0, kHeaderLen)];
             __uint32_t nl_headlen = *((__uint32_t *)header.bytes);
             int32_t host_headlen = ntohl(nl_headlen);
             if (host_headlen < kLeastSize || host_headlen >= OnePackMaxLen) {
-                  
+                //error
                 NSLog(@"socket len err");
                 LogFormat(@"socket len err");
                 [self disconnect];
@@ -225,7 +225,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
             int total = host_headlen + kHeaderLen;
             bufferLen = self.pbBuffer.length;
             if (bufferLen < total) {
-  
+//                NSLog(@"coremsg-bufferlen<total");
                 return;
             }
             NSRange packRange = NSMakeRange(0, total);
@@ -233,7 +233,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
             
             bufferLen = self.pbBuffer.length;
             if (bufferLen < total) {
-  
+//                NSLog(@"coremsg-bufferlen<total");
                 return;
             }
             [self.pbBuffer replaceBytesInRange:packRange withBytes:NULL length:0];
@@ -246,7 +246,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
                         [self.delegate onSocketReadPack:netmsg];
                     }
                 });
-  
+//                NSLog(@"coremsg-pb-recieve-name: %@",netmsg.name);
                 [CPChatLog recordRecieveMsg:netmsg];
             }
             else {
@@ -257,7 +257,7 @@ const NSInteger OnePackMaxLen = 1024 * 1024 *100;
         }
     });
     [self->_socket readDataWithTimeout:-1 tag:0];
-  
+//    NSLog(@"coremsg-didReadData");
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag {

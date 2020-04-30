@@ -55,13 +55,13 @@ void filter_mem16_10(const float *x, const float *_num, const float *_den, float
    {
       __m128 xx;
       __m128 yy;
-       
+      /* Compute next filter result */
       xx = _mm_load_ps1(x+i);
       yy = _mm_add_ss(xx, mem[0]);
       _mm_store_ss(y+i, yy);
       yy = _mm_shuffle_ps(yy, yy, 0);
       
-       
+      /* Update memory */
       mem[0] = _mm_move_ss(mem[0], mem[1]);
       mem[0] = _mm_shuffle_ps(mem[0], mem[0], 0x39);
 
@@ -79,7 +79,7 @@ void filter_mem16_10(const float *x, const float *_num, const float *_den, float
       mem[2] = _mm_add_ps(mem[2], _mm_mul_ps(xx, num[2]));
       mem[2] = _mm_sub_ps(mem[2], _mm_mul_ps(yy, den[2]));
    }
-    
+   /* Put memory back in its place */
    _mm_storeu_ps(_mem, mem[0]);
    _mm_storeu_ps(_mem+4, mem[1]);
    _mm_store_ss(_mem+8, mem[2]);
@@ -105,13 +105,13 @@ void filter_mem16_8(const float *x, const float *_num, const float *_den, float 
    {
       __m128 xx;
       __m128 yy;
-       
+      /* Compute next filter result */
       xx = _mm_load_ps1(x+i);
       yy = _mm_add_ss(xx, mem[0]);
       _mm_store_ss(y+i, yy);
       yy = _mm_shuffle_ps(yy, yy, 0);
       
-       
+      /* Update memory */
       mem[0] = _mm_move_ss(mem[0], mem[1]);
       mem[0] = _mm_shuffle_ps(mem[0], mem[0], 0x39);
 
@@ -124,7 +124,7 @@ void filter_mem16_8(const float *x, const float *_num, const float *_den, float 
       mem[1] = _mm_add_ps(mem[1], _mm_mul_ps(xx, num[1]));
       mem[1] = _mm_sub_ps(mem[1], _mm_mul_ps(yy, den[1]));
    }
-    
+   /* Put memory back in its place */
    _mm_storeu_ps(_mem, mem[0]);
    _mm_storeu_ps(_mem+4, mem[1]);
 }
@@ -160,13 +160,13 @@ void iir_mem16_10(const float *x, const float *_den, float *y, int N, int ord, f
    {
       __m128 xx;
       __m128 yy;
-       
+      /* Compute next filter result */
       xx = _mm_load_ps1(x+i);
       yy = _mm_add_ss(xx, mem[0]);
       _mm_store_ss(y+i, yy);
       yy = _mm_shuffle_ps(yy, yy, 0);
       
-       
+      /* Update memory */
       mem[0] = _mm_move_ss(mem[0], mem[1]);
       mem[0] = _mm_shuffle_ps(mem[0], mem[0], 0x39);
 
@@ -181,7 +181,7 @@ void iir_mem16_10(const float *x, const float *_den, float *y, int N, int ord, f
 
       mem[2] = _mm_sub_ps(mem[2], _mm_mul_ps(yy, den[2]));
    }
-    
+   /* Put memory back in its place */
    _mm_storeu_ps(_mem, mem[0]);
    _mm_storeu_ps(_mem+4, mem[1]);
    _mm_store_ss(_mem+8, mem[2]);
@@ -207,13 +207,13 @@ void iir_mem16_8(const float *x, const float *_den, float *y, int N, int ord, fl
    {
       __m128 xx;
       __m128 yy;
-       
+      /* Compute next filter result */
       xx = _mm_load_ps1(x+i);
       yy = _mm_add_ss(xx, mem[0]);
       _mm_store_ss(y+i, yy);
       yy = _mm_shuffle_ps(yy, yy, 0);
       
-       
+      /* Update memory */
       mem[0] = _mm_move_ss(mem[0], mem[1]);
       mem[0] = _mm_shuffle_ps(mem[0], mem[0], 0x39);
 
@@ -224,7 +224,7 @@ void iir_mem16_8(const float *x, const float *_den, float *y, int N, int ord, fl
 
       mem[1] = _mm_sub_ps(mem[1], _mm_mul_ps(yy, den[1]));
    }
-    
+   /* Put memory back in its place */
    _mm_storeu_ps(_mem, mem[0]);
    _mm_storeu_ps(_mem+4, mem[1]);
 }
@@ -258,13 +258,13 @@ void fir_mem16_10(const float *x, const float *_num, float *y, int N, int ord, f
    {
       __m128 xx;
       __m128 yy;
-       
+      /* Compute next filter result */
       xx = _mm_load_ps1(x+i);
       yy = _mm_add_ss(xx, mem[0]);
       _mm_store_ss(y+i, yy);
       yy = _mm_shuffle_ps(yy, yy, 0);
       
-       
+      /* Update memory */
       mem[0] = _mm_move_ss(mem[0], mem[1]);
       mem[0] = _mm_shuffle_ps(mem[0], mem[0], 0x39);
 
@@ -279,7 +279,7 @@ void fir_mem16_10(const float *x, const float *_num, float *y, int N, int ord, f
 
       mem[2] = _mm_add_ps(mem[2], _mm_mul_ps(xx, num[2]));
    }
-    
+   /* Put memory back in its place */
    _mm_storeu_ps(_mem, mem[0]);
    _mm_storeu_ps(_mem+4, mem[1]);
    _mm_store_ss(_mem+8, mem[2]);
@@ -304,13 +304,13 @@ void fir_mem16_8(const float *x, const float *_num, float *y, int N, int ord, fl
    {
       __m128 xx;
       __m128 yy;
-       
+      /* Compute next filter result */
       xx = _mm_load_ps1(x+i);
       yy = _mm_add_ss(xx, mem[0]);
       _mm_store_ss(y+i, yy);
       yy = _mm_shuffle_ps(yy, yy, 0);
       
-       
+      /* Update memory */
       mem[0] = _mm_move_ss(mem[0], mem[1]);
       mem[0] = _mm_shuffle_ps(mem[0], mem[0], 0x39);
 
@@ -321,7 +321,7 @@ void fir_mem16_8(const float *x, const float *_num, float *y, int N, int ord, fl
 
       mem[1] = _mm_add_ps(mem[1], _mm_mul_ps(xx, num[1]));
    }
-    
+   /* Put memory back in its place */
    _mm_storeu_ps(_mem, mem[0]);
    _mm_storeu_ps(_mem+4, mem[1]);
 }

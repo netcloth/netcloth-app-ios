@@ -42,7 +42,7 @@ void _spx_autocorr(
               spx_word16_t *ac,   /* out: [0...lag-1] ac values */
               int lag, int   n);
 
-spx_word32_t                       
+spx_word32_t                      /* returns minimum mean square error    */
 _spx_lpc(
     spx_coef_t       * lpc, /*      [0...p-1] LPC coefficients      */
     const spx_word16_t * ac,  /*  in: [0...p] autocorrelation values  */

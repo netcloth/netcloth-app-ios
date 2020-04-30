@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  NCCommonUseTableVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/19.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -17,18 +17,9 @@ class NCCommonUseTableVC: BaseTableViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
-        
         super.viewDidLoad()
-        
         self.tableView.adjustFooter()
-        
-        fixConfigUI()
     }
-    
-    func fixConfigUI() {
-        
-        recordL?.text = "Chat History".localized()
-     }
 }

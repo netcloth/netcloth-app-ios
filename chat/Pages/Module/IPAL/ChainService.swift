@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ChainService.swift
+//  chat
+//
+//  Created by Grand on 2019/11/12.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -15,7 +15,7 @@ import YYKit
 
 class ChainService: NSObject {
     
-      
+    //MARK: - Step1
     static func requestLastRegisterInfo() -> Promise<String?> {
         
         let _promise = Promise<String?> { (resolver) in
@@ -44,7 +44,7 @@ class ChainService: NSObject {
         return _promise;
     }
     
-      
+    //request all user
     static func requestAllChatServer() -> Promise<EnterPoint> {
         let _promise = Promise<EnterPoint> { (resolver) in
             NW.requestUrl(path: APPURL.Chain.CipalServerlist, method: .get, para: nil) { (r, res) in
@@ -80,8 +80,8 @@ class ChainService: NSObject {
     
     
     
-      
-      
+    //MARK: - Step2 bind
+    /// txhash
     static func requestBindCIpal(node: IPALNode) -> Promise<String> {
         let prikey = OC_Chat_Plugin_Bridge.privateKeyOfLoginedUser()
         return ipalBind(node: node, byPrivateKey: prikey ?? Data())
@@ -89,7 +89,7 @@ class ChainService: NSObject {
     
     static func queryServerNodeByAddress(server_address: String) -> Promise<IPALNode> {
         let _promise = Promise<IPALNode> { (resolver) in
-              
+            //hex
             let path = APPURL.Chain.QueryServerIPALNode.replacingOccurrences(of: "{addr}", with: server_address)
             NW.requestUrl(path: path, method: .get, para: nil) { (r, res) in
                 
@@ -110,8 +110,8 @@ class ChainService: NSObject {
         return _promise;
     }
     
-      
-      
+    //MARK:- Bind Group
+    ///bindType: 1 chat ， 2 groupchat
     static func ipalBind(node:IPALNode,bindType: Int = 1, byPrivateKey: Data) -> Promise<String> {
         let _promise = Promise<String> { (resolver) in
             guard let server = node.cIpalEnd(), let enter = server.endpoint else {
@@ -123,7 +123,7 @@ class ChainService: NSObject {
             let useraddress = OC_Chat_Plugin_Bridge.address(ofUserPrivateKey: byPrivateKey)
             
             let timezone = TimeZone(identifier: "UTC")
-            let locale = Locale.current   
+            let locale = Locale.current //Locale(identifier: "en_US_POSIX")
             let time = NSDate(timeIntervalSinceNow: 180)
                 .string(withFormat: "yyyy-MM-dd'T'HH:mm:ss'Z'", timeZone: timezone, locale: locale)
             
@@ -140,7 +140,7 @@ class ChainService: NSObject {
             
             dic["params"] = params
             
-              
+            //get sign
             let writer:SBJson5Writer = SBJson5Writer.writer(withMaxDepth: 20, humanReadable: false, sortKeys: true) as! SBJson5Writer
             let jsonData = writer.data(with: params)
             let sha256 = jsonData?.sha256()
@@ -164,7 +164,7 @@ class ChainService: NSObject {
             Session.default.request(request).responseJSON {(res) in
                 print(res)
                 if let response = res.value as? NSDictionary, let txhash = response["hash"]  as? String {
-                      
+                    //success
                     resolver.fulfill(txhash)
                 }
                 else {

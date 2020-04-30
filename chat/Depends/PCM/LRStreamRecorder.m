@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  LRStreamRecorder.m
+//  Intercom
+//
+//  Created by CIA on 2016/11/17.
+//  Copyright © 2016年 CIA. All rights reserved.
+//
 
 #import "LRStreamRecorder.h"
 #import <AVFoundation/AVFoundation.h>
@@ -16,7 +16,7 @@
 {
     AudioQueueRef                mQueue;
     AudioQueueBufferRef          mBuffers[kNumberRecordBuffers];
-    int                          mRecordPacket;   
+    int                          mRecordPacket; // current packet number in record file
     AudioStreamBasicDescription  mRecordFormat;
 }
 
@@ -71,13 +71,13 @@ void MyInputBufferHandler(    void *                                inUserData,
     errorStatus = AudioQueueNewInput(
                                      &mRecordFormat,
                                      MyInputBufferHandler,
-                                     (__bridge void *)self  ,
-                                     NULL  ,
-                                     NULL  ,
-                                     0  ,
+                                     (__bridge void *)self /* userData */,
+                                     NULL /* run loop */,
+                                     NULL /* run loop mode */,
+                                     0 /* flags */,
                                      &mQueue);
     
-    int bufferSize = 2 * mRecordFormat.mBytesPerFrame * frequency;   
+    int bufferSize = 2 * mRecordFormat.mBytesPerFrame * frequency; //2s 市场buff
     for (int i = 0; i < kNumberRecordBuffers; ++i) {
         errorStatus = AudioQueueAllocateBuffer(mQueue, bufferSize, &mBuffers[i]);
         errorStatus = AudioQueueEnqueueBuffer(mQueue, mBuffers[i], 0, NULL);
@@ -92,7 +92,7 @@ void MyInputBufferHandler(    void *                                inUserData,
     if (self.isRecording) {
         return NO;
     }
-      
+    // start the queue
     OSStatus errorStatus;
     errorStatus = AudioQueueStart(mQueue, nil);
     if (errorStatus) {

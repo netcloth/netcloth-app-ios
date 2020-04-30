@@ -1,0 +1,6 @@
+framework module UMVisual {
+  umbrella header "UMVisual.h"
+
+  export *
+  module * { export * }
+}

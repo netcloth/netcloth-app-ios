@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactBackUpStartVC.swift
+//  chat
+//
+//  Created by Grand on 2019/10/29.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -17,10 +17,10 @@ class RestoreContactStartVC: BaseViewController {
         super.viewDidLoad()
     }
     
-      
+    //MARK:- Config
     func configUI() {
         self.scrollView?.adjustOffset()
-        self.backupBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.backupBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     @IBAction func onTapConfirm() {

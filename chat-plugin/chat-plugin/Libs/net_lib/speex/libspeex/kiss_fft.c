@@ -274,7 +274,7 @@ static void kf_bfly5(
     }
 }
 
- 
+/* perform the butterfly for one stage of a mixed radix FFT */
 static void kf_bfly_generic(
         kiss_fft_cpx * Fout,
         const size_t fstride,
@@ -328,7 +328,7 @@ void kf_shuffle(
          const kiss_fft_cfg st
             )
 {
-   const int p=*factors++;  
+   const int p=*factors++; /* the radix  */
    const int m=*factors++; /* stage's fft length/p */
 
     /*printf ("fft %d %d %d %d %d %d\n", p*m, m, p, s2, fstride*in_stride, N);*/
@@ -366,7 +366,7 @@ void kf_work(
 {
    int i;
     kiss_fft_cpx * Fout_beg=Fout;
-    const int p=*factors++;  
+    const int p=*factors++; /* the radix  */
     const int m=*factors++; /* stage's fft length/p */
 #if 0
     /*printf ("fft %d %d %d %d %d %d\n", p*m, m, p, s2, fstride*in_stride, N);*/
@@ -465,7 +465,7 @@ kiss_fft_cfg kiss_fft_alloc(int nfft,int inverse_fft,void * mem,size_t * lenmem 
 {
     kiss_fft_cfg st=NULL;
     size_t memneeded = sizeof(struct kiss_fft_state)
-        + sizeof(kiss_fft_cpx)*(nfft-1);  
+        + sizeof(kiss_fft_cpx)*(nfft-1); /* twiddle factors*/
 
     if ( lenmem==NULL ) {
         st = ( kiss_fft_cfg)KISS_FFT_MALLOC( memneeded );

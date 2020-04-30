@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,8 +14,8 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="216"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="zRy-Pp-YOL">
-                    <rect key="frame" x="24" y="15" width="152" height="64"/>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="zRy-Pp-YOL" userLabel="stack1">
+                    <rect key="frame" x="24" y="15" width="366" height="64"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fh2-jh-AP3" userLabel="lib">
                             <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
@@ -25,47 +26,131 @@
                             <state key="normal" image="btn_photolib"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZg-pw-qae" userLabel="camera">
-                            <rect key="frame" x="88" y="0.0" width="64" height="64"/>
+                            <rect key="frame" x="100.5" y="0.0" width="64" height="64"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="64" id="9Kp-Qm-UtA"/>
                                 <constraint firstAttribute="height" constant="64" id="dcW-Q3-Yzl"/>
                             </constraints>
                             <state key="normal" image="btn_camera"/>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ojT-z7-YbQ" userLabel="camera">
+                            <rect key="frame" x="201.5" y="0.0" width="64" height="64"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="64" id="Zwa-M9-wPc"/>
+                                <constraint firstAttribute="height" constant="64" id="hzz-aL-QY5"/>
+                            </constraints>
+                            <state key="normal" image="语音通话-开发中"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MH4-wl-aTs" userLabel="camera">
+                            <rect key="frame" x="302" y="0.0" width="64" height="64"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="64" id="1np-tE-tBU"/>
+                                <constraint firstAttribute="width" constant="64" id="elm-rn-PZe"/>
+                            </constraints>
+                            <state key="normal" image="发送文件-开发中"/>
+                        </button>
                     </subviews>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="照片" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O62-eH-F03">
                     <rect key="frame" x="43.5" y="84" width="25" height="14.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" red="0.56470588235294117" green="0.57647058823529407" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.015686274510000001" green="0.062745098040000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="拍照" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rSn-Fe-MZA">
-                    <rect key="frame" x="131.5" y="84" width="25" height="14.5"/>
+                    <rect key="frame" x="144" y="84" width="25" height="14.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" red="0.56470588239999997" green="0.57647058819999997" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.015686274510000001" green="0.062745098040000002" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="语音通话" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M4W-yO-leE">
+                    <rect key="frame" x="232.5" y="84" width="49.5" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.38431372549019605" green="0.38823529411764707" blue="0.41960784313725491" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="发送文件" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OsX-PP-c9f">
+                    <rect key="frame" x="333.5" y="84" width="49.5" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.38431372549999998" green="0.38823529410000002" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="JaK-wn-odz" userLabel="stack2">
+                    <rect key="frame" x="24" y="118.5" width="152" height="64"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jwA-l3-Wbf" userLabel="camera">
+                            <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="64" id="LhJ-zN-Meq"/>
+                                <constraint firstAttribute="height" constant="64" id="zbs-vP-7zl"/>
+                            </constraints>
+                            <state key="normal" image="转账-开发中"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4vO-Hl-ccs" userLabel="camera">
+                            <rect key="frame" x="88" y="0.0" width="64" height="64"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="64" id="09i-Yj-AGY"/>
+                                <constraint firstAttribute="width" constant="64" id="SjN-3M-XB7"/>
+                            </constraints>
+                            <state key="normal" image="红包-开发中"/>
+                        </button>
+                    </subviews>
+                </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="转账" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ncP-O2-mzM">
+                    <rect key="frame" x="43.5" y="187.5" width="25" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.38431372549999998" green="0.38823529410000002" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="红包" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iur-Er-tAJ">
+                    <rect key="frame" x="131.5" y="187.5" width="25" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.38431372549999998" green="0.38823529410000002" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="zRy-Pp-YOL" secondAttribute="trailing" constant="24" id="2Os-AU-OPl"/>
+                <constraint firstItem="ncP-O2-mzM" firstAttribute="top" secondItem="jwA-l3-Wbf" secondAttribute="bottom" constant="5" id="2sE-b8-vTA"/>
+                <constraint firstItem="JaK-wn-odz" firstAttribute="leading" secondItem="zRy-Pp-YOL" secondAttribute="leading" id="6Cs-Zq-dZQ"/>
                 <constraint firstItem="O62-eH-F03" firstAttribute="centerX" secondItem="fh2-jh-AP3" secondAttribute="centerX" id="8JW-Wl-7ZG"/>
                 <constraint firstItem="zRy-Pp-YOL" firstAttribute="top" secondItem="z8a-ax-jq2" secondAttribute="top" constant="15" id="DHl-8F-7x9"/>
+                <constraint firstItem="OsX-PP-c9f" firstAttribute="top" secondItem="MH4-wl-aTs" secondAttribute="bottom" constant="5" id="FyV-XN-02F"/>
+                <constraint firstItem="OsX-PP-c9f" firstAttribute="centerX" secondItem="MH4-wl-aTs" secondAttribute="centerX" id="NKu-dV-0tA"/>
                 <constraint firstItem="rSn-Fe-MZA" firstAttribute="top" secondItem="sZg-pw-qae" secondAttribute="bottom" constant="5" id="NfI-Lm-2yG"/>
+                <constraint firstItem="Iur-Er-tAJ" firstAttribute="centerX" secondItem="4vO-Hl-ccs" secondAttribute="centerX" id="QEw-XA-OW6"/>
                 <constraint firstItem="rSn-Fe-MZA" firstAttribute="centerX" secondItem="sZg-pw-qae" secondAttribute="centerX" id="T7q-nd-YqF"/>
+                <constraint firstItem="M4W-yO-leE" firstAttribute="centerX" secondItem="ojT-z7-YbQ" secondAttribute="centerX" id="Xsi-nb-RLm"/>
                 <constraint firstItem="O62-eH-F03" firstAttribute="top" secondItem="fh2-jh-AP3" secondAttribute="bottom" constant="5" id="XuT-Fr-06P"/>
+                <constraint firstItem="M4W-yO-leE" firstAttribute="top" secondItem="ojT-z7-YbQ" secondAttribute="bottom" constant="5" id="ZIc-fG-0rA"/>
+                <constraint firstItem="Iur-Er-tAJ" firstAttribute="top" secondItem="4vO-Hl-ccs" secondAttribute="bottom" constant="5" id="b4b-nm-1hF"/>
+                <constraint firstItem="ncP-O2-mzM" firstAttribute="centerX" secondItem="jwA-l3-Wbf" secondAttribute="centerX" id="hHG-Sv-E92"/>
                 <constraint firstItem="zRy-Pp-YOL" firstAttribute="leading" secondItem="z8a-ax-jq2" secondAttribute="leading" constant="24" id="isR-qD-erh"/>
+                <constraint firstItem="JaK-wn-odz" firstAttribute="top" secondItem="O62-eH-F03" secondAttribute="bottom" constant="20" id="pev-6i-Ddu"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="albumBtn" destination="fh2-jh-AP3" id="jg3-2P-3im"/>
                 <outlet property="cameraBtn" destination="sZg-pw-qae" id="jhQ-iO-nSl"/>
+                <outlet property="filesBtn" destination="MH4-wl-aTs" id="2Xt-m5-sEM"/>
+                <outlet property="redPackBtn" destination="4vO-Hl-ccs" id="qSf-Nw-cfh"/>
+                <outlet property="redPackL" destination="Iur-Er-tAJ" id="Akj-Zt-gx4"/>
+                <outlet property="stackBottom" destination="JaK-wn-odz" id="zix-3e-aCJ"/>
+                <outlet property="stackTop" destination="zRy-Pp-YOL" id="u1y-uu-J2z"/>
+                <outlet property="tranferBtn" destination="jwA-l3-Wbf" id="r9H-Ws-Ugq"/>
+                <outlet property="tranferL" destination="ncP-O2-mzM" id="Sv1-eD-vB8"/>
+                <outlet property="voiceBtn" destination="ojT-z7-YbQ" id="C9g-p7-p5H"/>
             </connections>
-            <point key="canvasLocation" x="-746" y="-36"/>
+            <point key="canvasLocation" x="-746.37681159420299" y="-36.160714285714285"/>
         </view>
     </objects>
     <resources>
         <image name="btn_camera" width="64" height="64"/>
         <image name="btn_photolib" width="64" height="64"/>
+        <image name="发送文件-开发中" width="64" height="64"/>
+        <image name="红包-开发中" width="64" height="64"/>
+        <image name="语音通话-开发中" width="64" height="64"/>
+        <image name="转账-开发中" width="64" height="64"/>
     </resources>
 </document>

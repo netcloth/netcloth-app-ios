@@ -1,12 +1,12 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
+//  
+//  GCDAsyncUdpSocket
+//  
+//  This class is in the public domain.
+//  Originally created by Robbie Hanson of Deusty LLC.
+//  Updated and maintained by Deusty LLC and the Apple development community.
+//  
+//  https://github.com/robbiehanson/CocoaAsyncSocket
+//
 
 #import <Foundation/Foundation.h>
 #import <dispatch/dispatch.h>
@@ -21,17 +21,17 @@ extern NSString *const GCDAsyncUdpSocketQueueName;
 extern NSString *const GCDAsyncUdpSocketThreadName;
 
 typedef NS_ERROR_ENUM(GCDAsyncUdpSocketErrorDomain, GCDAsyncUdpSocketError) {
-	GCDAsyncUdpSocketNoError = 0,            
-	GCDAsyncUdpSocketBadConfigError,         
-	GCDAsyncUdpSocketBadParamError,          
-	GCDAsyncUdpSocketSendTimeoutError,       
-	GCDAsyncUdpSocketClosedError,            
-	GCDAsyncUdpSocketOtherError,             
+	GCDAsyncUdpSocketNoError = 0,          // Never used
+	GCDAsyncUdpSocketBadConfigError,       // Invalid configuration
+	GCDAsyncUdpSocketBadParamError,        // Invalid parameter was passed
+	GCDAsyncUdpSocketSendTimeoutError,     // A send operation timed out
+	GCDAsyncUdpSocketClosedError,          // The socket was closed
+	GCDAsyncUdpSocketOtherError,           // Description provided in userInfo
 };
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @class GCDAsyncUdpSocket;
 
@@ -999,7 +999,7 @@ typedef BOOL (^GCDAsyncUdpSocketSendFilterBlock)(NSData *data, NSData *address, 
  * 
  * NOTE : Apple doesn't currently support backgrounding UDP sockets. (Only TCP for now).
 **/
-  
+//- (BOOL)enableBackgroundingOnSockets;
 
 #endif
 

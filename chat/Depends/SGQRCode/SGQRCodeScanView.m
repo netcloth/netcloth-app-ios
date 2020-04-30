@@ -1,18 +1,18 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SGQRCodeScanView.m
+//  SGQRCodeExample
+//
+//  Created by kingsic on 2017/8/23.
+//  Copyright © 2017年 kingsic All rights reserved.
+//
 
 #import "SGQRCodeScanView.h"
 
- 
+/** 扫描内容的 W 值 */
 #define scanBorderW 0.7 * self.frame.size.width
- 
+/** 扫描内容的 x 值 */
 #define scanBorderX 0.5 * (1 - 0.7) * self.frame.size.width
- 
+/** 扫描内容的 Y 值 */
 #define scanBorderY 0.5 * (self.frame.size.height - scanBorderW)
 
 @interface SGQRCodeScanView ()
@@ -61,26 +61,26 @@
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
-      
+    /// 边框 frame
     CGFloat borderW = scanBorderW;
     CGFloat borderH = borderW;
     CGFloat borderX = scanBorderX;
     CGFloat borderY = scanBorderY;
     CGFloat borderLineW = 0.2;
 
-      
+    /// 空白区域设置
     [[[UIColor blackColor] colorWithAlphaComponent:self.backgroundAlpha] setFill];
     UIRectFill(rect);
-      
+    // 获取上下文，并设置混合模式 -> kCGBlendModeDestinationOut
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetBlendMode(context, kCGBlendModeDestinationOut);
-      
+    // 设置空白区
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(borderX + 0.5 * borderLineW, borderY + 0.5 *borderLineW, borderW - borderLineW, borderH - borderLineW)];
     [bezierPath fill];
-      
+    // 执行混合模式
     CGContextSetBlendMode(context, kCGBlendModeNormal);
     
-      
+    /// 边框设置
     UIBezierPath *borderPath = [UIBezierPath bezierPathWithRect:CGRectMake(borderX, borderY, borderW, borderH)];
     borderPath.lineCapStyle = kCGLineCapButt;
     borderPath.lineWidth = borderLineW;
@@ -89,7 +89,7 @@
     
     
     CGFloat cornerLenght = 20;
-      
+    /// 左上角小图标
     UIBezierPath *leftTopPath = [UIBezierPath bezierPath];
     leftTopPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -112,7 +112,7 @@
 
     [leftTopPath stroke];
     
-      
+    /// 左下角小图标
     UIBezierPath *leftBottomPath = [UIBezierPath bezierPath];
     leftBottomPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -133,7 +133,7 @@
 
     [leftBottomPath stroke];
     
-      
+    /// 右上角小图标
     UIBezierPath *rightTopPath = [UIBezierPath bezierPath];
     rightTopPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -154,7 +154,7 @@
 
     [rightTopPath stroke];
     
-      
+    /// 右下角小图标
     UIBezierPath *rightBottomPath = [UIBezierPath bezierPath];
     rightBottomPath.lineWidth = self.cornerWidth;
     [self.cornerColor set];
@@ -277,10 +277,10 @@
     if (!_scanningline) {
         _scanningline = [[UIImageView alloc] init];
         
-          
+        /// 静态库 url 的获取
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"SGQRCode" withExtension:@"bundle"];
         if (!url) {
-              
+            /// 动态库 url 的获取
             url = [[NSBundle bundleForClass:[self class]] URLForResource:@"SGQRCode" withExtension:@"bundle"];
         }
         NSBundle *bundle = [NSBundle bundleWithURL:url];

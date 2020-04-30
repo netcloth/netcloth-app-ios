@@ -4,3 +4,17 @@
 
 /* Class = "UILabel"; text = "拍照"; ObjectID = "rSn-Fe-MZA"; */
 "rSn-Fe-MZA.text" = "Camera";
+
+
+/* Class = "UILabel"; text = "发送文件"; ObjectID = "OsX-PP-c9f"; */
+"OsX-PP-c9f.text" = "Files";
+
+/* Class = "UILabel"; text = "转账"; ObjectID = "ncP-O2-mzM"; */
+"ncP-O2-mzM.text" = "Transfer";
+
+
+/* Class = "UILabel"; text = "红包"; ObjectID = "Iur-Er-tAJ"; */
+"Iur-Er-tAJ.text" = "Red Envelope";
+
+/* Class = "UILabel"; text = "语音通话"; ObjectID = "M4W-yO-leE"; */
+"M4W-yO-leE.text" = "Voice";

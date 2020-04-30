@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  YCXMenuItem.m
+//  YCXMenuDemo_ObjC
+//
+//  Created by 牛萌 on 15/5/6.
+//  Copyright (c) 2015年 NiuMeng. All rights reserved.
+//
 
 #import "YCXMenuItem.h"
 
@@ -51,7 +51,7 @@
 
 #pragma mark - Private Methods
 
-  
+/// init
 - (id)init:(NSString *)title image:(UIImage *)image tag:(NSInteger)tag userInfo:(NSDictionary *)userInfo target:(id)target action:(SEL) action {
     NSParameterAssert(title.length || image);
     self = [super init];

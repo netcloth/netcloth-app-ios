@@ -1,4 +1,4 @@
-#ifndef AUDIO_FORMAT_TOOL_H
+﻿#ifndef AUDIO_FORMAT_TOOL_H
 #define AUDIO_FORMAT_TOOL_H
 
 #include <string>
@@ -30,4 +30,4 @@ private:
     std::string audio_pcm_;
     std::string audio_encoded_;
 };
-#endif   
+#endif // AUDIO_FORMAT_TOOL_H

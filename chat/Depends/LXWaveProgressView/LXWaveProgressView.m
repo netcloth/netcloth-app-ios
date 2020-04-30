@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  LXWaveProgressView.m
+//  LXWaveProgressDemo
+//
+//  Created by liuxin on 16/8/1.
+//  Copyright © 2016年 liuxin. All rights reserved.
+//
 
 #define LXDefaultFirstWaveColor [UIColor colorWithRed:61/255.0 green:126/255.0 blue:255/255.0 alpha:1]
 #define LXDefaultSecondWaveColor [UIColor colorWithRed:61/255.0 green:126/255.0 blue:255/255.0 alpha:0.3]
@@ -89,7 +89,7 @@
     }
 
     self.offset += self.speed;
-      
+    //第一个波纹
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGFloat startOffY = waveHeight * sinf(self.offset * M_PI * 2 / self.bounds.size.width);
     CGFloat orignOffY = 0.0;
@@ -108,7 +108,7 @@
     self.firstWaveLayer.fillColor = self.firstWaveColor.CGColor;
     CGPathRelease(pathRef);
     
-      
+    //第二个波纹
     if (!self.isShowSingleWave) {
         CGMutablePathRef pathRef1 = CGPathCreateMutable();
         CGFloat startOffY1 = waveHeight * sinf(self.offset * M_PI * 2 / self.bounds.size.width);

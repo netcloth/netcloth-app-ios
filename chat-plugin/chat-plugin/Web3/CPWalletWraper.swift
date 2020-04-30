@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPWalletWraper.swift
+//  chat-plugin
+//
+//  Created by Grand on 2019/9/11.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import web3swift
@@ -37,7 +37,7 @@ class NCKeyStore: NSObject {
     
     @objc static public var shared = NCKeyStore()
     
-      
+    /// you must call this befor login
     @objc public func login(_ uid:Int, pwd: String) throws {
         do {
             let path = self.pathForKeystore(uid)
@@ -45,7 +45,7 @@ class NCKeyStore: NSObject {
             if let ksjson = FCFileManager.readFileAtPath(as: path) {
                 print("keystore path \(path)  content \(ksjson)")
                 _ = try CPWalletWraper.decodeKeystore(ksjson, password: pwd)
-                  
+                //valid
                 self.keystore = EthereumKeystoreV3(ksjson)
                 if self.keystore == nil {
                     throw KSError.unknow
@@ -106,7 +106,7 @@ class NCKeyStore: NSObject {
         return FCFileManager.pathForDocumentsDirectory(withPath: "\(uid)/user.data")
     }
     
-      
+    //save
     func saveKeystore(_ ksjson: String, uid: Int) throws {
         let path = self.pathForKeystore(uid)
         if FCFileManager.writeFile(atPath: path, content: ksjson as NSString) == false {
@@ -149,7 +149,7 @@ class CPWalletWraper: NSObject {
         }
     }
     
-      
+    // 验证私钥是否 合法有效 能否还原成 公钥
     @objc public
     static func verifyPrivateKey(privateKey: Data) -> Bool {
         let result =

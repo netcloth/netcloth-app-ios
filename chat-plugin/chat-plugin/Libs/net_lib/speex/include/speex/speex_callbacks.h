@@ -45,7 +45,7 @@
 extern "C" {
 #endif
 
- 
+/** Total number of callbacks */
 #define SPEEX_MAX_CALLBACKS 16
 
 /* Describes all the in-band requests */
@@ -53,19 +53,19 @@ extern "C" {
 /*These are 1-bit requests*/
 /** Request for perceptual enhancement (1 for on, 0 for off) */
 #define SPEEX_INBAND_ENH_REQUEST         0
- 
+/** Reserved */
 #define SPEEX_INBAND_RESERVED1           1
 
 /*These are 4-bit requests*/
- 
+/** Request for a mode change */
 #define SPEEX_INBAND_MODE_REQUEST        2
- 
+/** Request for a low mode change */
 #define SPEEX_INBAND_LOW_MODE_REQUEST    3
- 
+/** Request for a high mode change */
 #define SPEEX_INBAND_HIGH_MODE_REQUEST   4
 /** Request for VBR (1 on, 0 off) */
 #define SPEEX_INBAND_VBR_QUALITY_REQUEST 5
- 
+/** Request to be sent acknowledge */
 #define SPEEX_INBAND_ACKNOWLEDGE_REQUEST 6
 /** Request for VBR (1 for on, 0 for off) */
 #define SPEEX_INBAND_VBR_REQUEST         7
@@ -73,7 +73,7 @@ extern "C" {
 /*These are 8-bit requests*/
 /** Send a character in-band */
 #define SPEEX_INBAND_CHAR                8
- 
+/** Intensity stereo information */
 #define SPEEX_INBAND_STEREO              9
 
 /*These are 16-bit requests*/
@@ -81,13 +81,13 @@ extern "C" {
 #define SPEEX_INBAND_MAX_BITRATE         10
 
 /*These are 32-bit requests*/
- 
+/** Acknowledge packet reception */
 #define SPEEX_INBAND_ACKNOWLEDGE         12
 
- 
+/** Callback function type */
 typedef int (*speex_callback_func)(SpeexBits *bits, void *state, void *data);
 
- 
+/** Callback information */
 typedef struct SpeexCallback {
    int callback_id;             /**< ID associated to the callback */
    speex_callback_func func;    /**< Callback handler function */

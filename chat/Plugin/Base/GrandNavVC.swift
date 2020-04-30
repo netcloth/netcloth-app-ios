@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  BaseNavVC.swift
+//  chat
+//
+//  Created by Grand on 2019/7/24.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -20,34 +20,37 @@ class GrandNavVC: UINavigationController , UIGestureRecognizerDelegate , UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
-          
-        handleLoginLogic()
-        configEvent()
-        
-          
+        //bar
         configNavBar()
         
-          
+        //left icon
         let image = UIImage(named: "返回1")
         self.navigationBar.backIndicatorImage = image;
-        self.navigationBar.backIndicatorTransitionMaskImage = image; 
-     
+        self.navigationBar.backIndicatorTransitionMaskImage = image;
         
-        self.view.backgroundColor = UIColor(hexString: Config.Color.app_bg_color)
-        Router.rootWindow?.backgroundColor = UIColor(hexString: Config.Color.app_bg_color)
-
+        
+        self.view.backgroundColor = UIColor(hexString: Color.app_bg_color)
+        Router.rootWindow?.backgroundColor = UIColor(hexString: Color.app_bg_color)
+        
         if #available(iOS 11.0, *) {
             self.navigationBar.prefersLargeTitles = true
             self.navigationBar.largeTitleTextAttributes =
                 [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22, weight: .semibold)]
         } else {
-              
+            // Fallback on earlier versions
         };
         
-          
+        //login
+        mainAppLogic()
+    }
+    
+    func mainAppLogic() {
+        handleLoginLogic()
+        configEvent()
+        
+        //request
         getUpgradeInfo()
         
-          
         PPNotificationCenter.shared.resetZeroBadge()
     }
     
@@ -57,12 +60,12 @@ class GrandNavVC: UINavigationController , UIGestureRecognizerDelegate , UINavig
     }
     
     func configNavBar() -> Void {
-          
+        //开启滑动手势
         self.interactivePopGestureRecognizer?.delegate = self as! UIGestureRecognizerDelegate;
         self.delegate = self
     }
     
-      
+    //MARK:- gesture
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if self.viewControllers.count <= 1 {
             return false
@@ -70,12 +73,12 @@ class GrandNavVC: UINavigationController , UIGestureRecognizerDelegate , UINavig
         return true
     }
     
-      
+    //MARK:- nav delegate
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         viewController.configBackBarItem()
     }
     
-      
+    //MARK:- Logic
     func configEvent() {
         obv =
         NotificationCenter.default.addObserver(forName: NoticeNameKey.loginStateChange.noticeName, object: nil, queue: .main) { [weak self] (notification) in
@@ -83,42 +86,56 @@ class GrandNavVC: UINavigationController , UIGestureRecognizerDelegate , UINavig
         }
     }
     
-    func handleLoginLogic(shouldDealIpal:Bool? = true) -> Void {
+    /// switch lauguage , triger shouldDealIpal = fale
+    func handleLoginLogic() -> Void {
         logined = CPAccountHelper.loginUser() != nil
         if logined == true {
-            if shouldDealIpal == true {
-                IPALManager.shared.resetForLogin()
-            }
-            let tab = R.loadSB(name: "Main", iden: "main_tab")
-            setViewControllers([tab], animated: true)
+            IPALManager.shared.resetForLogin()
+            GlobalStatusStore.shared.onLogin()
+            NCUserCenter.onLogoin()
+            resetMainPage()
         }
         else {
-            let login = R.loadSB(name: "Login", iden: "LoginVC")
-            setViewControllers([login], animated: true)
+            resetLoginPage()
+            RelateColorCache.removeAll()
         }
+    }
+    
+    func resetMainPage() {
+        let tab = R.loadSB(name: "Main", iden: "main_tab")
+        setViewControllers([tab], animated: true)
+    }
+    
+    func resetLoginPage() {
+        let login = R.loadSB(name: "Login", iden: "LoginVC")
+        setViewControllers([login], animated: true)
     }
     
     func switchLuguage() {
-          
-        handleLoginLogic(shouldDealIpal: false)
+        //switch main
+        resetMainPage()
         IPALManager.shared.toast = nil
         
-          
+        //Note: Me
         if let baseTabVC = self.topViewController as? GrandTabBarVC {
-            baseTabVC.selectedIndex = 2   
+            baseTabVC.selectedIndex = 3
         }
-          
-        let vc = R.loadSB(name: "Setting", iden: "SettingVC")
+        //push to setting
+        let vc = R.loadSB(name: "Settings", iden: "SettingVC")
         Router.pushViewController(vc: vc)
     }
     
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.topViewController?.preferredStatusBarStyle ?? .default
+    }
     
-      
+    
+    //MARK:- Helper
     func getUpgradeInfo() {
         let cul = Bundle.currentLanguage().language ?? "en"
-        
+        let localVersion = AppBundle.getAppVersion()
         NW.requestUrl(path: APPURL.Config.Info,  para: ["os":"2",
-                                                        "version":Device.getAppVersion(),
+                                                        "version":localVersion,
                                                         "language": cul
         ]) { (suc, res) in
             guard let data = res , suc else {
@@ -142,6 +159,13 @@ class GrandNavVC: UINavigationController , UIGestureRecognizerDelegate , UINavig
                 Alert.showSimpleAlert(title: nil, msg: json["message"].string, cancelAction: nil, okAction: {
                     goWeb(json["download"].string)
                 })
+            }
+            
+            if json["version"].string?.compare(localVersion, options: [.numeric]) == ComparisonResult.orderedAscending {
+                Config.In_ACV = true
+            }
+            else {
+                Config.In_ACV = false
             }
         }
     }

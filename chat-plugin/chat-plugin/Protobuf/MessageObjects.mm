@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  MessageObjects.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/16.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 #import "MessageObjects.h"
@@ -19,16 +19,16 @@
 #import <CPMessageRecieveHandleProtocol.h>
 #import "CPTools.h"
 
-  
+//MARK: - Msg Names
 NSString *const kMsg_RegisterRsp = NCProtoRegisterRsp.descriptor.fullName;
 NSString *const kMsg_Heartbeat = NCProtoHeartbeat.descriptor.fullName;
 
 
 
-  
+//MARK:- factory
 
 
-  
+//Whole Pack
 std::string CalcHash(NCProtoNetMsg *net_msg) {
     std::string rtn(32, 0);
     blake2b_state hash_state;
@@ -51,7 +51,7 @@ NSData * GetSignByPrivateKeyRecover(const uint8_t* contenthash, size_t contentha
     return recover_serial_sign;
 }
 
-  
+//return yes: valid
 BOOL CheckSignature(NCProtoNetMsg *net_msg) {
     if (net_msg.head.signature.length != SIGN_SIZE_RECOVER) {
         return false;
@@ -66,7 +66,7 @@ BOOL CheckSignature(NCProtoNetMsg *net_msg) {
 }
 
 
-  
+//Get Sign
 void FillSignature(NCProtoNetMsg *net_msg, const std::string& private_key) {
     std::string hash = CalcHash(net_msg);
     NSData *sign = GetSignByPrivateKeyRecover((uint8_t*)hash.data(), hash.size(), private_key);
@@ -76,7 +76,7 @@ void FillSignature(NCProtoNetMsg *net_msg, const std::string& private_key) {
 
 
 
-  
+//factory
 NCProtoNetMsg * CreateNetMsgPackFillName(GPBMessage *body, NCProtoHead *head ,bool compress = false) {
     NCProtoNetMsg *pack = NCProtoNetMsg.alloc.init;
     NSString *name = body.descriptor.fullName;
@@ -87,19 +87,19 @@ NCProtoNetMsg * CreateNetMsgPackFillName(GPBMessage *body, NCProtoHead *head ,bo
     return pack;
 }
 
-  
+//MARK:- Msgs
 
 NCProtoNetMsg * CreateRegister(const std::string& from_public_key, const std::string &pri_key) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     
-      
+    //body
     NCProtoRegisterReq *body = NCProtoRegisterReq.alloc.init;
     body.version = GetAppVersion();
-    body.deviceType = NCProtoDeviceType_Ios;
+    body.deviceType = NCProtoDeviceType_DeviceTypeIos;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -116,16 +116,16 @@ NCProtoNetMsg * CreateTextMsg(const std::string &from_public_key,
                               const std::string &to_public_key,
                               const std::string &pri_key,
                               const std::string &content) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoText *body = NCProtoText.alloc.init;
     body.content = bytes2nsdata(content);
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -136,16 +136,16 @@ NCProtoNetMsg * CreateAudioMsg(const std::string &from_public_key,
                                const std::string &pri_key,
                                const std::string &content,
                                uint32_t playTime) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoAudio *body = NCProtoAudio.alloc.init;
     body.content = bytes2nsdata(content);
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -158,18 +158,18 @@ extern NCProtoNetMsg * CreateImageMsg(const std::string &from_public_key,
                                       int32_t width,
                                       int32_t height) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoImage *body = NCProtoImage.alloc.init;
     body.id_p = imageHash;
     body.width = width;
     body.height = height;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -182,18 +182,18 @@ NCProtoNetMsg *CreateRequestCacheMsg(const std::string &pri_key,
                                      uint32_t size) {
     
     std::string from_public_key = GetPublicKeyByPrivateKey(pri_key);
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     
-      
+    //body
     NCProtoCacheMsgReq *body = NCProtoCacheMsgReq.alloc.init;
     body.roundId = rand_id;
     body.time = time;
     body.hash_p = hash;
     body.size = size;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -208,19 +208,19 @@ NCProtoNetMsg * CreateClientReplyMsg(NCProtoNetMsg * targetMsg)
 }
 
 
-  
+//MARK: APNS
 NCProtoNetMsg * CreateBindAppleId(const std::string &pri_key,
                                   NSString *apple_id) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     std::string from_public_key = GetPublicKeyByPrivateKey(pri_key);
     head.fromPubKey = bytes2nsdata(from_public_key);
     
-      
+    //body
     NCProtoAppleIdBind *body = NCProtoAppleIdBind.alloc.init;
     body.appleId = apple_id;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -228,46 +228,46 @@ NCProtoNetMsg * CreateBindAppleId(const std::string &pri_key,
 
 NCProtoNetMsg * CreateUnBindAppleId(const std::string &pri_key,
                                     NSString *apple_id) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     std::string from_public_key = GetPublicKeyByPrivateKey(pri_key);
     head.fromPubKey = bytes2nsdata(from_public_key);
     
-      
+    //body
     NCProtoAppleIdUnbind *body = NCProtoAppleIdUnbind.alloc.init;
     body.appleId = apple_id;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
 }
 
-  
+//MARK:- Group
 NCProtoNetMsg * CreateGroupCreate(NSString * group_name,
-                                  int group_type,   
-                                  NSString *owner_nick_name,   
-                                  NSArray <NCProtoNetMsg *> *to_invitee_msgs,   
+                                  int group_type, /// 群类型  0: 普通群 1：禁言群
+                                  NSString *owner_nick_name, // 群主昵称
+                                  NSArray <NCProtoNetMsg *> *to_invitee_msgs, // 转发给邀请人的消息
                                   
                                   const std::string &from_public_key,
-                                  const std::string &to_public_key,   
+                                  const std::string &to_public_key, //group pubkey
                                   const std::string &pri_key
                                   ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
     
-      
+    //body
     NCProtoGroupCreate *body = NCProtoGroupCreate.alloc.init;
     body.groupName = group_name;
     body.groupType = group_type;
     body.ownerNickName = owner_nick_name;
     body.toInviteeMsgsArray = to_invitee_msgs;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -278,20 +278,20 @@ NCProtoNetMsg * CreateGroupInvite(NSData * group_private_key,
                                   NSData *group_pub_key,
                                   NSString *group_name,
                                   const std::string &from_public_key,
-                                  const std::string &to_public_key,   
-                                  const std::string &pri_key   
+                                  const std::string &to_public_key, //invite pubkey, users
+                                  const std::string &pri_key //me prikey
 ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     head.msgTime =  (uint64_t)([NSDate.date timeIntervalSince1970] * 1000);
     
-      
+    //body
     NSData *datap = nil;
     if (group_private_key.length == kPrivateKeySize ||
-        group_private_key.length == 4   
+        group_private_key.length == 4 //fake
         ) {
         std::string source = nsdata2bytes(group_private_key);
         std::string encode = [CPBridge coreEcdhEncodeMsg:source prikey:pri_key toPubkey:to_public_key];
@@ -303,7 +303,7 @@ NCProtoNetMsg * CreateGroupInvite(NSData * group_private_key,
     body.groupName = group_name;
     body.groupPubKey = group_pub_key;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -311,32 +311,32 @@ NCProtoNetMsg * CreateGroupInvite(NSData * group_private_key,
 }
 
 NCProtoNetMsg * CreateGroupJoin(NSString *nick_name,
-                                NSString *desc,   
-                                int source,   
-                                NSString *inviter_pub_key,  
+                                NSString *desc, //入群描述
+                                int source, //0 邀请  1 扫码
+                                NSString *inviter_pub_key,// 邀请人公钥
                                 
                                 const std::string &from_public_key,
-                                const std::string &to_public_key,   
-                                const std::string &pri_key   
+                                const std::string &to_public_key, //group pubkey
+                                const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupJoin *body = NCProtoGroupJoin.alloc.init;
     body.nickName = nick_name;
     body.source = source;
     
-      
+    //加密
     std::string encryDesc = [CPBridge coreEcdhEncodeMsg:nsstring2bytes(desc) prikey:pri_key toPubkey:to_public_key];
     body.description_p = hexStringFromBytes(encryDesc);
     
     std::string inviter = bytesFromHexString(inviter_pub_key);
-    body.inviterPubKey = bytes2nsdata(inviter);   
+    body.inviterPubKey = bytes2nsdata(inviter); //邀请人公钥
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -345,19 +345,19 @@ NCProtoNetMsg * CreateGroupJoin(NSString *nick_name,
 
 NCProtoNetMsg * CreateGroupUpdateName(NSString *groupName,
                                       const std::string &from_public_key,
-                                      const std::string &to_public_key,   
-                                      const std::string &pri_key   
+                                      const std::string &to_public_key, //group pubkey
+                                      const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupUpdateName *body = NCProtoGroupUpdateName.alloc.init;
     body.name = groupName;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -365,19 +365,19 @@ NCProtoNetMsg * CreateGroupUpdateName(NSString *groupName,
 
 NCProtoNetMsg * CreateGroupUpdateNotice(NSString *groupNotice,
                                         const std::string &from_public_key,
-                                        const std::string &to_public_key,   
-                                        const std::string &pri_key   
+                                        const std::string &to_public_key, //group pubkey
+                                        const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupUpdateNotice *body = NCProtoGroupUpdateNotice.alloc.init;
     body.notice = groupNotice;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -386,20 +386,20 @@ NCProtoNetMsg * CreateGroupUpdateNotice(NSString *groupNotice,
 
 NCProtoNetMsg * CreateGroupUpdateNickName(NSString *nicknameInGroup,
                                           const std::string &from_public_key,
-                                          const std::string &to_public_key,   
-                                          const std::string &pri_key   
+                                          const std::string &to_public_key, //group pubkey
+                                          const std::string &pri_key //for sign
 ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupUpdateNickName *body = NCProtoGroupUpdateNickName.alloc.init;
     body.nickName = nicknameInGroup;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -407,20 +407,20 @@ NCProtoNetMsg * CreateGroupUpdateNickName(NSString *nicknameInGroup,
 }
 
 
-  
+//MARK:- Member
 NCProtoNetMsg * CreateGroupGetMemberReq(const std::string &from_public_key,
-                                        const std::string &to_public_key,   
-                                        const std::string &pri_key   
+                                        const std::string &to_public_key, //group pubkey
+                                        const std::string &pri_key //for sign
 ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
-      
+    //body
     NCProtoGroupGetMemberReq *body = NCProtoGroupGetMemberReq.alloc.init;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -428,22 +428,22 @@ NCProtoNetMsg * CreateGroupGetMemberReq(const std::string &from_public_key,
 }
 
 
-  
+//MARK:- Group Message
 NCProtoNetMsg * CreateGroupText(const std::string &content,
                                 bool at_all,
                                 NSArray <NSString *> *hexPubkey_at_members,
                                 
                                 const std::string &from_public_key,
-                                const std::string &to_public_key,   
-                                const std::string &pri_key   
+                                const std::string &to_public_key, //group pubkey
+                                const std::string &pri_key //for sign
 ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupText *body = NCProtoGroupText.alloc.init;
     body.content = bytes2nsdata(content);
     body.atAll = at_all;
@@ -458,30 +458,30 @@ NCProtoNetMsg * CreateGroupText(const std::string &content,
     }
     body.atMembersArray = bytes;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
     
 }
 
-NCProtoNetMsg * CreateGroupAudio(const std::string &content,   
+NCProtoNetMsg * CreateGroupAudio(const std::string &content, //use encode content
                                  uint32_t playTime,
                                  const std::string &from_public_key,
-                                 const std::string &to_public_key,   
-                                 const std::string &pri_key   
+                                 const std::string &to_public_key, //group pubkey
+                                 const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupAudio *body = NCProtoGroupAudio.alloc.init;
     body.content = bytes2nsdata(content);
     body.playTime = playTime;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -492,21 +492,21 @@ NCProtoNetMsg * CreateGroupImage(NSString *imageId,
                                  uint32_t height,
                                  
                                  const std::string &from_public_key,
-                                 const std::string &to_public_key,   
-                                 const std::string &pri_key   
+                                 const std::string &to_public_key, //group pubkey
+                                 const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupImage *body = NCProtoGroupImage.alloc.init;
     body.id_p = imageId;
     body.width = width;
     body.height = height;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -516,28 +516,28 @@ NCProtoNetMsg * CreateGroupGetMsgReq(int64_t begin_id,
                                      int64_t end_id,
                                      uint32_t count,
                                      const std::string &from_public_key,
-                                     const std::string &to_public_key,   
-                                     const std::string &pri_key   
+                                     const std::string &to_public_key, //group pubkey
+                                     const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupGetMsgReq *body = NCProtoGroupGetMsgReq.alloc.init;
     body.beginId = begin_id;
     body.endId = end_id;
     body.count = count;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
 }
 
 NCProtoGroupUnreadReq * CreateGroupUnreadReq(int64_t lastMsgId,
-                                            const std::string &group_public_key   
+                                            const std::string &group_public_key //group pubkey
 ) {
     NCProtoGroupUnreadReq *req = NCProtoGroupUnreadReq.alloc.init;
     req.lastMsgId = lastMsgId;
@@ -548,56 +548,56 @@ NCProtoGroupUnreadReq * CreateGroupUnreadReq(int64_t lastMsgId,
 
 NCProtoNetMsg * CreateGroupGetUnreadReq(NSArray<NCProtoGroupUnreadReq *> *req_items,
                                                const std::string &from_public_key,
-                                               const std::string &to_public_key,   
-                                               const std::string &pri_key   
+                                               const std::string &to_public_key, //group pubkey
+                                               const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupGetUnreadReq *body = NCProtoGroupGetUnreadReq.alloc.init;
     body.reqItemsArray = req_items;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
     
 }
 
-  
+//MARK:- Group Op
 NCProtoNetMsg * CreateGroupDismiss(  const std::string &from_public_key,
-                                   const std::string &to_public_key,   
-                                   const std::string &pri_key   
+                                   const std::string &to_public_key, //group pubkey
+                                   const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupDismiss *body = NCProtoGroupDismiss.alloc.init;
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
 }
 
-  
+//master kick batch
 NCProtoNetMsg * CreateGroupKickReq(
                                    NSArray * kickHexpubkeys,
                                    const std::string &from_public_key,
-                                   const std::string &to_public_key,   
-                                   const std::string &pri_key   
+                                   const std::string &to_public_key, //group pubkey
+                                   const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupKickReq *body = NCProtoGroupKickReq.alloc.init;
     NSMutableArray *array = NSMutableArray.array;
     for (NSString *hexpub in kickHexpubkeys) {
@@ -605,7 +605,7 @@ NCProtoNetMsg * CreateGroupKickReq(
     }
     body.kickPubKeysArray = array;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -614,91 +614,91 @@ NCProtoNetMsg * CreateGroupKickReq(
 
 NCProtoNetMsg * CreateGroupQuit(
                                        const std::string &from_public_key,
-                                       const std::string &to_public_key,   
-                                       const std::string &pri_key   
+                                       const std::string &to_public_key, //group pubkey
+                                       const std::string &pri_key //for sign
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupQuit *body = NCProtoGroupQuit.alloc.init;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
 }
 
-  
+//MARK:- 群邀请机制
 NCProtoNetMsg * CreateGroupUpdateInviteType(
                                                    CPGroupInviteType inviteType,
                                                    const std::string &from_public_key,
-                                                   const std::string &to_public_key,   
-                                                   const std::string &pri_key   
+                                                   const std::string &to_public_key, //group pubkey
+                                                   const std::string &pri_key //for sign
 ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupUpdateInviteType *body = NCProtoGroupUpdateInviteType.alloc.init;
     body.inviteType = inviteType;
     
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
 }
 
-  
+//同意入群
 NCProtoNetMsg * CreateGroupJoinApproved(NCProtoNetMsg *join_msg,
-                                        NSData * group_private_key,   
-                                        NSString *group_name,   
+                                        NSData * group_private_key, //群私钥
+                                        NSString *group_name, //群名称
                                         const std::string &from_public_key,
-                                        const std::string &to_public_key,   
-                                        const std::string &pri_key   
+                                        const std::string &to_public_key, //group pubkey
+                                        const std::string &pri_key //for sign
 
 ) {
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     head.toPubKey = bytes2nsdata(to_public_key);
     
-      
+    //body
     NCProtoGroupJoinApproved *body = NCProtoGroupJoinApproved.alloc.init;
     body.joinMsg = join_msg;
     body.groupName = group_name;
     
-      
+    //Note：加密
     std::string p2pPubkey = nsdata2bytes(join_msg.head.fromPubKey);
     std::string prikeyEncry = [CPBridge coreEcdhEncodeMsg:nsdata2bytes(group_private_key) prikey:pri_key toPubkey:p2pPubkey];
     body.groupPrivateKey = bytes2nsdata(prikeyEncry);
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
     
 }
 
-  
+//MARK:- 删除消息
 NCProtoNetMsg * CreateDeleteCacheMsg( NCProtoDeleteAction action,
-                                            int64_t hash,   
-                                            const std::string  &related_pub_key,    
+                                            int64_t hash, // DELETE_ACTION_HASH，要删除的消息hash
+                                            const std::string  &related_pub_key,  // DELETE_ACTION_SESSION，传入对方的公钥
                                             const std::string &from_public_key,
-                                            const std::string &pri_key   
+                                            const std::string &pri_key //for sign
 ) {
     
-      
+    //head
     NCProtoHead *head = NCProtoHead.alloc.init;
     head.fromPubKey = bytes2nsdata(from_public_key);
     
-      
+    //body
     NCProtoDeleteCacheMsg *body = NCProtoDeleteCacheMsg.alloc.init;
     body.action = action;
     body.hash_p = hash;
@@ -706,7 +706,7 @@ NCProtoNetMsg * CreateDeleteCacheMsg( NCProtoDeleteAction action,
     NSData *pdata = bytes2nsdata(related_pub_key);
     body.relatedPubKey = pdata;
     
-      
+    //pack
     NCProtoNetMsg *pack = CreateNetMsgPackFillName(body, head);
     FillSignature(pack, pri_key);
     return pack;
@@ -715,7 +715,7 @@ NCProtoNetMsg * CreateDeleteCacheMsg( NCProtoDeleteAction action,
 
 
 
-  
+//MARK:- Helper
 int32_t GetAppVersion() {
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
@@ -744,7 +744,11 @@ static NSMutableDictionary *_ActionNamesMap;
     _ActionNamesMap[NCProtoServerReceipt.descriptor.fullName] = NSValuePoint(@selector(actionForServerReceipt:));
     _ActionNamesMap[NCProtoCacheMsgRsp.descriptor.fullName] = NSValuePoint(@selector(actionForCacheMsgRsp:));
     
-      
+    /// Recall Msg
+    _ActionNamesMap[NCProtoRecallMsgNotify.descriptor.fullName] = NSValuePoint(@selector(actionForRecallMsgNotify:));
+    _ActionNamesMap[NCProtoRecallMsgFailedNotify.descriptor.fullName] = NSValuePoint(@selector(actionForRecallMsgFailedNotify:));
+    
+    //Group
     _ActionNamesMap[NCProtoGroupInvite.descriptor.fullName] = NSValuePoint(@selector(actionForGroupInvite:));
     _ActionNamesMap[NCProtoGroupJoin.descriptor.fullName] = NSValuePoint(@selector(actionForGroupJoin:));
     
@@ -776,7 +780,7 @@ static NSMutableDictionary *_ActionNamesMap;
 
 
 + (SEL)actionSelectorForPack:(NSString *)pbname {
-      
+    //
     SEL method = (SEL)[_ActionNamesMap[pbname] pointerValue];
     return method;
 }
@@ -793,12 +797,12 @@ static NSMutableDictionary *_ActionNamesMap;
     int total = bytes.length + kHeaderLen;
     char *buff = (char *)malloc(sizeof(char) * (total + 10));
     
-      
+    //len
     __uint32_t len = htonl(bytes.length);
     memcpy(buff, &len, kHeaderLen);
-      
+    //pack
     memcpy(buff + kHeaderLen, bytes.pack.bytes, bytes.pack.length);
-      
+    //checksum
     __uint32_t checksum_nl= htonl(bytes.checksum);
     memcpy(buff + kHeaderLen + bytes.pack.length, &checksum_nl, kChecksumLen);
     
@@ -839,10 +843,10 @@ static NSMutableDictionary *_ActionNamesMap;
     NSData *body_data = [data subdataWithRange:body_range];
     pack.pack = body_data;
     
-      
-      
-      
-      
+    //    char *body = (char *)malloc(sizeof(char) * (body_len + 10));
+    //    memcpy(body, buffer + kHeaderLen, body_len);
+    //    pack.pack = [NSData dataWithBytes:body length:body_len];
+    //    free(body);
     
     memcpy(&pack.checksum, buffer+kHeaderLen + body_len, kChecksumLen);
     
@@ -860,7 +864,7 @@ static NSMutableDictionary *_ActionNamesMap;
         NSLog(@"coremsg-parseFromData-err");
         return nil;
     }
-      
+    //check sign
     if ([self shouldCheckSign:nm]) {
         BOOL valid = CheckSignature(nm);
         if (!valid) {

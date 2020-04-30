@@ -1,14 +1,18 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPOfflineMsgManager.h
+//  chat-plugin
+//
+//  Created by Grand on 2019/9/18.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 #import "CPDataModel.h"
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *kStart_sys_time;
+extern NSString *kStart_sys_hash;
+extern NSString *kStart_query_time;
 
 @interface CPOfflineMsgManager : NSObject
 

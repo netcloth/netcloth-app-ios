@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  Router.swift
+//  swift-cli
+//
+//  Created by Grand on 2019/7/25.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
 open class Router:NSObject {
-      
+    /// you must set
     public static var rootWindow: UIWindow?
     
     public static func pushViewController(vc: UIViewController, animate:Bool = true) {
@@ -22,7 +22,7 @@ open class Router:NSObject {
             nav = rootnav
         }
         else if let rootNav = self.rootVC as? UINavigationController {
-              
+            //使用根对象
             nav = rootNav
         }
         
@@ -42,7 +42,7 @@ open class Router:NSObject {
     
     public static func present(vc: UIViewController, animate: Bool = true) {
         vc.modalPresentationStyle = .overCurrentContext
-  
+//        vc.modalTransitionStyle = .crossDissolve
         self.topContianerVC?.present(vc, animated: animate, completion: nil)
     }
     

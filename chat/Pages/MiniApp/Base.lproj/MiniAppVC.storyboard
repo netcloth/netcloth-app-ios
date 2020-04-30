@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="keC-Jq-lsm">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Apps-->
+        <scene sceneID="Zmj-Ca-BLj">
+            <objects>
+                <viewController storyboardIdentifier="MiniAppVC" id="keC-Jq-lsm" customClass="MiniAppVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Vqu-x5-Zto">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GUR-W4-cse" userLabel="headerView" customClass="NavHeaderView" customModule="NetCloth" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="小应用" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kKZ-ym-lKV">
+                                        <rect key="frame" x="176.5" y="56" width="61" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rt3-BX-BFn">
+                                        <rect key="frame" x="378.5" y="59" width="20.5" height="18"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="18" id="J3y-a8-YAM"/>
+                                            <constraint firstAttribute="width" secondItem="Rt3-BX-BFn" secondAttribute="height" multiplier="32:28" id="RHU-ar-4GH"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="refresh_white"/>
+                                        <connections>
+                                            <action selector="refreshWeb" destination="keC-Jq-lsm" eventType="touchUpInside" id="KHa-rD-4cG"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="Rt3-BX-BFn" firstAttribute="centerY" secondItem="kKZ-ym-lKV" secondAttribute="centerY" id="Iox-4l-Dbw"/>
+                                    <constraint firstAttribute="trailing" secondItem="Rt3-BX-BFn" secondAttribute="trailing" constant="15" id="l29-LQ-0Tz"/>
+                                    <constraint firstItem="kKZ-ym-lKV" firstAttribute="centerX" secondItem="GUR-W4-cse" secondAttribute="centerX" id="vZZ-6s-hgO"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TLR-VC-gJ9" userLabel="bindv">
+                                <rect key="frame" x="0.0" y="88" width="414" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="此应用平台由：netcloth-official运营" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WW9-Gu-Q1Q">
+                                        <rect key="frame" x="15" y="20.5" width="342" height="19"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                        <color key="textColor" red="0.015686274509803921" green="0.062745098039215685" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" horizontalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nX0-DG-xjU">
+                                        <rect key="frame" x="362" y="9" width="52" height="42"/>
+                                        <inset key="contentEdgeInsets" minX="15" minY="10" maxX="15" maxY="10"/>
+                                        <state key="normal" image="aipal_icon"/>
+                                        <connections>
+                                            <action selector="onSwitchAIPAL:" destination="keC-Jq-lsm" eventType="touchUpInside" id="oMo-Om-MgR"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IyO-9T-3Qy" userLabel="spe">
+                                        <rect key="frame" x="15" y="59.5" width="384" height="0.5"/>
+                                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="0.5" id="6vY-hr-A0x"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="0aV-Aa-YFW"/>
+                                    <constraint firstItem="nX0-DG-xjU" firstAttribute="centerY" secondItem="TLR-VC-gJ9" secondAttribute="centerY" id="0hr-Wf-R7r"/>
+                                    <constraint firstItem="IyO-9T-3Qy" firstAttribute="leading" secondItem="TLR-VC-gJ9" secondAttribute="leading" constant="15" id="7J4-md-Wv3"/>
+                                    <constraint firstItem="WW9-Gu-Q1Q" firstAttribute="centerY" secondItem="TLR-VC-gJ9" secondAttribute="centerY" id="8ia-dG-X8t"/>
+                                    <constraint firstAttribute="trailing" secondItem="nX0-DG-xjU" secondAttribute="trailing" id="Lxz-V2-cQD"/>
+                                    <constraint firstItem="nX0-DG-xjU" firstAttribute="leading" secondItem="WW9-Gu-Q1Q" secondAttribute="trailing" constant="5" id="Zke-QZ-nZd"/>
+                                    <constraint firstAttribute="trailing" secondItem="IyO-9T-3Qy" secondAttribute="trailing" constant="15" id="g3R-xg-mxC"/>
+                                    <constraint firstAttribute="bottom" secondItem="IyO-9T-3Qy" secondAttribute="bottom" id="lih-00-b2C"/>
+                                    <constraint firstItem="WW9-Gu-Q1Q" firstAttribute="leading" secondItem="TLR-VC-gJ9" secondAttribute="leading" constant="15" id="owv-E3-QvH"/>
+                                </constraints>
+                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BdU-am-JMW">
+                                <rect key="frame" x="0.0" y="148" width="414" height="665"/>
+                                <connections>
+                                    <segue destination="aX1-Ah-eDv" kind="embed" id="2lU-0F-4XV"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="GUR-W4-cse" firstAttribute="top" secondItem="Vqu-x5-Zto" secondAttribute="top" id="6un-BA-LsY"/>
+                            <constraint firstItem="TLR-VC-gJ9" firstAttribute="leading" secondItem="3vg-CD-rxw" secondAttribute="leading" id="9DY-YD-ijg"/>
+                            <constraint firstItem="3vg-CD-rxw" firstAttribute="trailing" secondItem="GUR-W4-cse" secondAttribute="trailing" id="9KS-a7-7Mm"/>
+                            <constraint firstItem="3vg-CD-rxw" firstAttribute="bottom" secondItem="BdU-am-JMW" secondAttribute="bottom" id="HPw-ij-ZIg"/>
+                            <constraint firstItem="BdU-am-JMW" firstAttribute="leading" secondItem="3vg-CD-rxw" secondAttribute="leading" id="I5f-FN-Aon"/>
+                            <constraint firstItem="kKZ-ym-lKV" firstAttribute="top" secondItem="3vg-CD-rxw" secondAttribute="top" constant="12" id="M0O-d7-ouy"/>
+                            <constraint firstItem="3vg-CD-rxw" firstAttribute="trailing" secondItem="TLR-VC-gJ9" secondAttribute="trailing" id="MWQ-GX-8cK"/>
+                            <constraint firstItem="GUR-W4-cse" firstAttribute="leading" secondItem="3vg-CD-rxw" secondAttribute="leading" id="byr-cg-rTJ"/>
+                            <constraint firstItem="TLR-VC-gJ9" firstAttribute="top" secondItem="GUR-W4-cse" secondAttribute="bottom" id="jIg-2b-w7n"/>
+                            <constraint firstItem="BdU-am-JMW" firstAttribute="top" secondItem="TLR-VC-gJ9" secondAttribute="bottom" id="lHm-Qx-40e"/>
+                            <constraint firstItem="GUR-W4-cse" firstAttribute="bottom" secondItem="3vg-CD-rxw" secondAttribute="top" constant="44" id="nHI-CM-LGw"/>
+                            <constraint firstItem="BdU-am-JMW" firstAttribute="trailing" secondItem="3vg-CD-rxw" secondAttribute="trailing" id="oZE-UX-U60"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3vg-CD-rxw"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Apps" image="小应用-未选中" selectedImage="小应用-选中" id="ahD-yu-Ah3"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="bindTipL" destination="WW9-Gu-Q1Q" id="qUF-al-920"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WDg-Tx-B3I" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1484" y="117"/>
+        </scene>
+        <!--Mini App BrowserVC-->
+        <scene sceneID="GsA-7m-bJr">
+            <objects>
+                <viewController id="aX1-Ah-eDv" customClass="MiniAppBrowserVC" customModule="NetCloth" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7xS-Pi-tCk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="665"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="hsF-bd-e5e"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vfT-ic-QQT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-632" y="117"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="aipal_icon" width="22" height="18"/>
+        <image name="refresh_white" width="16" height="14"/>
+        <image name="小应用-未选中" width="31" height="32"/>
+        <image name="小应用-选中" width="31" height="32"/>
+    </resources>
+</document>

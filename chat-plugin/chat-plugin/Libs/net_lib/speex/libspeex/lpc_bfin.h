@@ -75,18 +75,18 @@ int          n
    __asm__ __volatile__ 
    (
          "P2 = %0;\n\t"
-         "I0 = P2;\n\t"  
-         "B0 = P2;\n\t"  
-         "R0 = %3;\n\t"  
-         "P3 = %3;\n\t"  
-         "P4 = %4;\n\t"  
-         "R1 = R0 << 1;\n\t"  
+         "I0 = P2;\n\t" /* x in I0 */
+         "B0 = P2;\n\t" /* x in B0 */
+         "R0 = %3;\n\t" /* len in R0 */
+         "P3 = %3;\n\t" /* len in R0 */
+         "P4 = %4;\n\t" /* nb_pitch in R0 */
+         "R1 = R0 << 1;\n\t" /* number of bytes in x */
          "L0 = R1;\n\t"
          "P0 = %1;\n\t"
          "P1 = %2;\n\t"
          "B1 = P1;\n\t"
          "R4 = %5;\n\t"
-         "L1 = 0;\n\t"  
+         "L1 = 0;\n\t" /*Disable looping on I1*/
 
          "r0 = [I0++];\n\t"
          "R2 = 0;R3=0;"

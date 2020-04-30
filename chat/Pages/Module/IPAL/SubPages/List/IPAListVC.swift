@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  IPAListVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/5.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -15,21 +15,21 @@ class IPAListVC:
     UITableViewDataSource,
 UITableViewDelegate,
 UISearchControllerDelegate,
-UISearchResultsUpdating{
+UISearchResultsUpdating {
     
-    enum PageTag {
-        case C_IPAL
-        case A_IPAL
+    enum PageTag: Int {
+        case C_IPAL = 1
+        case A_IPAL = 3
     }
-    
+ 
     var fromSource: PageTag =  .C_IPAL {
         didSet {
             let fs = self.fromSource
             switch fs {
             case .C_IPAL:
-                self.title = "Communication Address".localized()
+                self.title = "Communication Server".localized()
             case .A_IPAL:
-                self.title = "A-IPAL"
+                self.title = "Application Server".localized()
             }
         }
     }
@@ -42,12 +42,16 @@ UISearchResultsUpdating{
     var list:[IPALNode]?
     
     let disbag = DisposeBag()
-      
+    //MARK:- LifeCycle
+    deinit {
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
         configEvent()
         requestAllCIpals()
+        self.headerView?.vcViewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,11 +64,12 @@ UISearchResultsUpdating{
         self.tableView?.adjustFooter()
         
         
-          
-        let result = R.loadSB(name: "IPALList", iden: "SearchResultVC") as? SearchResultVC
+        //search
+        let result = R.loadSB(name: "IPALList", iden: "IPALSearchResultVC") as? IPALSearchResultVC
         result?.selectedNodeCallBack = {[weak self] node in
             self?.selectConnectNode(node)
         }
+        result?.pageTag = self.fromSource
         
         let searchVC = UISearchController(searchResultsController: result)
         self.searchViewController = searchVC
@@ -80,21 +85,21 @@ UISearchResultsUpdating{
         searchBar.placeholder = "Search".localized()
         
         searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
-        
-  
-  
-  
-        
+
     }
     
     func configEvent() {
         IPALManager.shared.store.rx.observe(IPALNode.self, "currentCIpal").subscribe {[weak self] (event) in
-            if let e = event.element {
-                self?.headerView?.reloadData(e)
-            } else {
-                self?.headerView?.reloadData(nil)
+            if self?.fromSource == .C_IPAL {
+                self?.reloadHeader(node: event.element ?? nil)
             }
-            
+        }.disposed(by: disbag)
+        
+        IPALManager.shared.store.rx.observe(IPALNode.self, "curAIPALNode").subscribe {[weak self] (event) in
+            if self?.fromSource == .A_IPAL {
+                self?.reloadHeader(node: event.element ?? nil)
+                self?.reloadTableView()
+            }
         }.disposed(by: disbag)
         
         self.headerView?.historyBtn?.rx.tap.subscribe(onNext: { [weak self] in
@@ -102,7 +107,11 @@ UISearchResultsUpdating{
         }).disposed(by: disbag)
     }
     
-      
+    fileprivate func reloadHeader(node: IPALNode?) {
+        self.headerView?.reloadData(node)
+    }
+    
+    //MARK:- header
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.calculateHeaderView()
     }
@@ -135,40 +144,108 @@ UISearchResultsUpdating{
 
     
     
-      
+    //MARK:- Action
     func toHistory() {
         if let vc = R.loadSB(name: "IPALResult", iden: "IPALHistoryVC") as? IPALHistoryVC {
+            vc.pageTag = self.fromSource
             Router.pushViewController(vc: vc)
         }
     }
     
-      
-    let sessionT = URLSession(configuration: URLSessionConfiguration.default)
-    let signal = DispatchSemaphore(value: 3)
-    let queue =  OS_dispatch_queue_concurrent(label: "ping.queue")
-    
-    deinit {
+    // Connect Node
+    func selectConnectNode(_ node: IPALNode?) {
+        if self.fromSource == .C_IPAL {
+            _cipal_selectNode(node)
+        }
+        else if self.fromSource == .A_IPAL {
+            _aipal_selectNode(node)
+        }
     }
     
+    fileprivate func _cipal_selectNode(_ node: IPALNode?) {
+        guard let n = node else {
+            return
+        }
+        
+        if IPALManager.shared.store.currentCIpal == nil {
+            if let server = node {
+                self.tryToBind_Cipal_Service(server)
+            }
+        }
+        else if IPALManager.shared.store.currentCIpal?.operator_address != node?.operator_address {
+            self.popTips().done { (result) in
+                if result == "ok" {
+                    //pop to callback vc
+                    if let server = node {
+                        self.tryToBind_Cipal_Service(server)
+                    }
+                }
+            }
+        }
+    }
+    
+    fileprivate func _aipal_selectNode(_ node: IPALNode?) {
+        guard let n = node else {
+            return
+        }
+        
+        if IPALManager.shared.store.curAIPALNode == nil {
+            if let server = node {
+                self.tryToBind_AIpal_Service(server)
+            }
+        }
+        else if IPALManager.shared.store.curAIPALNode?.operator_address != node?.operator_address {
+            self.popAIPALTips().done { (result) in
+                if result == "ok" {
+                    //pop to callback vc
+                    if let server = node {
+                        self.tryToBind_AIpal_Service(server)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    //MARK:- Fetch
     func requestAllCIpals() {
         self.showLoading()
         ChainService.requestAllChatServer().done { (list:[IPALNode]) in
-            let chatEnters = list.filter({ (item:IPALNode) -> Bool in
-                if let obj = UserDefaults.standard.object(forKey: "CusDeb") as? String, obj == "cd" {
-                    if item.cIpalEnd() != nil  {
-                        return true
-                    }
-                }
-                else {
-                    if item.cIpalEnd() != nil,
-                        item.details?.starts(with: "test") == false  {
-                        return true
-                    }
-                }
-                return false
-            })
+            var chatEnters: [IPALNode] = []
+            if self.fromSource == .C_IPAL {
+                chatEnters = InnerHelper.filterCIPALs(list: list)
+            } else if self.fromSource == .A_IPAL {
+                chatEnters = InnerHelper.filterAIPALs(list: list)
+            }
             self.list = chatEnters
-            self.requestPings()
+            
+            if self.fromSource == .C_IPAL &&
+                self.shouldShowGuide() &&
+                chatEnters.count > 0 {
+                self.dismissLoading()
+                
+                
+                ///Note
+                var officeNode: IPALNode? = nil
+                var targetIndex = 0
+                for index in 0 ..< chatEnters.count {
+                    if let item = chatEnters[index] as? IPALNode,
+                        item.operator_address == Config.officialNodeAddress  {
+                        officeNode = item
+                        targetIndex = index
+                    }
+                }
+                if officeNode != nil && targetIndex != 0 {
+                    chatEnters.swapAt(0, targetIndex)
+                    self.list = chatEnters
+                }
+                
+                self.requestPings(showLoading: false, notOrder: true)
+                self.handleShowGuide()
+            }
+            else {
+                self.requestPings()
+            }
             self.reloadTableView()
         }
         .catch { (err) in
@@ -176,15 +253,26 @@ UISearchResultsUpdating{
         }
     }
     
+    
+    
+    //MARK:- Ping
+    let sessionT = URLSession(configuration: URLSessionConfiguration.default)
+    let signal = DispatchSemaphore(value: 3)
+    let queue =  OS_dispatch_queue_concurrent(label: "ping.queue")
     var total = 0
-    func requestPings() {
-        guard let seq = self.list else {
-            return
+    func requestPings(showLoading: Bool = false, notOrder: Bool = false) {
+        if showLoading {
+            self.showLoading()
+        }
+        guard let seq = self.list,
+            seq.count > 0 else {
+                self.dismissLoading()
+                return
         }
         total = 0
         for item in seq {
             if let endPoint = item.cIpalEnd(), let address = endPoint.endpoint {
-                  
+                //v1/ping
                 let str = address + "/v1/ping"
                 let url = URL(string: str)
                 if url == nil {
@@ -195,10 +283,10 @@ UISearchResultsUpdating{
                 let request = URLRequest(url: url!, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 5)
                 self.queue.async {
                     self.signal.wait()
-                    let starttime = Date().timeIntervalSince1970 * 1000   
-                    let starttime2 = Date().timeIntervalSince1970 * 1000   
+                    let starttime = Date().timeIntervalSince1970 * 1000 //ms
+                    let starttime2 = Date().timeIntervalSince1970 * 1000 //ms
                     let task = self.sessionT.dataTask(with: request, completionHandler: { (data, response, error) in
-                        let endtime = Date().timeIntervalSince1970 * 1000   
+                        let endtime = Date().timeIntervalSince1970 * 1000 //ms
                         self.signal.signal()
                         let diff = fabs(endtime - starttime)
                         if error == nil {
@@ -207,7 +295,7 @@ UISearchResultsUpdating{
                             item.ping = NSNotFound
                         }
                         DispatchQueue.main.async {
-                            self.exeafterPing()
+                            self.exeafterPing(notOrder: notOrder)
                         }
                     })
                     task.resume()
@@ -217,24 +305,34 @@ UISearchResultsUpdating{
         }
     }
     
-    func exeafterPing() {
+    func exeafterPing(notOrder: Bool) {
         total -= 1
+        
         if total % 2 == 0 {
-            self.list?.sort(by: { (l, r) -> Bool in
-                if l.ping == 0 {
-                    if r.ping == 0 {
-                        return true
+            if notOrder == false {
+                self.list?.sort(by: { (l, r) -> Bool in
+                    if l.ping == 0 {
+                        if r.ping == 0 {
+                            return true
+                        }
+                        return false
                     }
-                    return false
-                }
-                return l.ping < r.ping
-            })
-              
+                    return l.ping < r.ping
+                })
+            }
+            //multi times
             self.reloadTableView()
         }
         
+        /// 全部ping 结束，本轮结束开始下一轮
         if total == 0 {
-            self.recycleReloadTableAfterPings()
+            DispatchQueue.main.async {
+                self.dismissLoading()
+                self.tableView?.reloadData()
+            }
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10, execute: { [weak self] in
+                self?.requestPings(notOrder: notOrder)
+            })
         }
     }
     
@@ -245,56 +343,47 @@ UISearchResultsUpdating{
         }
     }
     
-    func recycleReloadTableAfterPings() {
-        DispatchQueue.main.async {
-            self.dismissLoading()
-            self.tableView?.reloadData()
-        }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10, execute: { [weak self] in
-            self?.requestPings()
+    func orderListAndRefresh() {
+        self.list?.sort(by: { (l, r) -> Bool in
+            if l.ping == 0 {
+                if r.ping == 0 {
+                    return true
+                }
+                return false
+            }
+            return l.ping < r.ping
         })
+        reloadTableView()
     }
     
-      
-    func selectConnectNode(_ node: IPALNode?) {
-        guard let n = node else {
-            return
-        }
-        
-        if IPALManager.shared.store.currentCIpal == nil {
-              
-            self.popAlert()
-            .done { (result) in
-                if result == "ok" {
-                      
-                    if let server = node {
-                        self.tryToBindCipalService(server)
-                    }
-                }
-            }
-        }
-        else if IPALManager.shared.store.currentCIpal?.operator_address != node?.operator_address {
-            self.popTips().then({ (result) -> Promise<String> in
-                return self.popAlert()
-            }).done { (result) in
-                if result == "ok" {
-                      
-                    if let server = node {
-                        self.tryToBindCipalService(server)
-                    }
-                }
-            }
-        }
-    }
     
-    func tryToBindCipalService(_ node: IPALNode) {
+    
+    //MARK:-
+    func tryToBind_Cipal_Service(_ node: IPALNode) {
         IPALManager.shared.onStep2_BindNode(node)
     }
+    
+    func tryToBind_AIpal_Service(_ node: IPALNode) {
+        
+        ///Note: close proxy before
+        NCUserCenter.shared?.proxy.change(commit: { (store) in
+            store.openProxy = false
+            store.host = ""
+            store.port = 0
+        })
+        
+        CPAssetHelper.insertAIPALHistroyMoniker(node.moniker,
+                                                server_address: node.operator_address,
+                                                endPoint: (node.aIpal()?.endpoint ?? ""),
+                                                callback: nil)
+        IPALManager.shared.store.curAIPALNode = node
+    }
+
     
     func popTips() -> Promise<String> {
         let alert =  Promise<String> { (resolver) in
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-                  
+                //config
                 alert.titleLabel?.text = "Tips_Title".localized()
                 alert.msgLabel?.text = "Tips_Msg_Switch".localized()
                 
@@ -314,44 +403,146 @@ UISearchResultsUpdating{
         return alert
     }
     
-    
-    func popAlert() -> Promise<String>  {
-        let _promise = Promise<String> { [weak self] (resolver) in
-            
-            guard let alert = R.loadNib(name: "ErrorTipsInputAlert") as? ErrorTipsInputAlert  else {
-                let error = NSError(domain: "ipal", code: 0, userInfo: nil)
-                resolver.reject(error)
-                return
-            }
-            
-            alert.titleLabel?.text = "Enter Password".localized()
-            alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
-            alert.okButton?.setTitle("Confirm".localized(), for: .normal)
-            alert.checkTipsLabel?.text = "login_wrong_pwd".localized()
-            alert.checkTipsLabel?.isHidden = true
-            alert.inputTextField?.isSecureTextEntry = true
-            Router.showAlert(view: alert)
-            
-            alert.checkPreview = { [weak alert] in
-                let pwd = alert?.inputTextField?.text
-                  
-                if CPAccountHelper.checkLoginUserPwd(pwd) == false {
-                    alert?.checkTipsLabel?.isHidden = false
-                    return false
+    func popAIPALTips() -> Promise<String> {
+        let alert =  Promise<String> { (resolver) in
+            if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
+                //config
+                alert.titleLabel?.text = "Tips_Title".localized()
+                alert.msgLabel?.text = "Tips_Msg_Switch_AIPAL".localized()
+                
+                alert.cancelButton?.setTitle("Cancel".localized(), for: .normal)
+                alert.okButton?.setTitle("Confirm".localized(), for: .normal)
+                
+                alert.okBlock = {
+                    resolver.fulfill("ok")
                 }
-                return true
-            }
-            
-            alert.cancelBlock = {
-                let error = NSError(domain: "ipal", code: 0, userInfo: nil)
-                resolver.reject(error)
-            }
-            
-            alert.okBlock = {
-                resolver.fulfill("ok")
+                alert.cancelBlock = {
+                    let error = NSError(domain: "ipallist", code: 0, userInfo: nil)
+                    resolver.reject(error)
+                }
+                Router.showAlert(view: alert)
             }
         }
-        return _promise
+        return alert
+    }
+}
+
+//MARK:-  Guide
+extension IPAListVC {
+    
+    func shouldShowGuide() -> Bool {
+        #if DEBUG
+        return true
+        #endif
+        
+        if let ng = UserSettings.object(forKey: "NG_IPAL") as? String,
+            ng == "NG" {
+            return false
+        }
+        return true
+    }
+    
+    func handleShowGuide() {
+        UserSettings.setObject("NG", forKey: "NG_IPAL")
+        DispatchQueue.main.async {
+            self.showGuide_1()
+        }
+    }
+    
+    fileprivate func showGuide_1() {
+        let gv = GuideView()
+        
+        let headframe = self.headerView?.frame ?? CGRect.zero
+        let toMaskRect = self.headerView?.superview?.convert(headframe, to: Router.rootWindow!) ?? CGRect.zero
+        
+        let x: CGFloat = 12
+        let y = toMaskRect.maxY + 8
+        let w = YYScreenSize().width - 120
+        let h = YYScreenSize().height - y - 18
+        let tMaskR = CGRect(x: x, y: y, width: w, height: h)
+        
+        let imgName = Bundle.is_zh_Hans() ? "ipal_guide_zh_1" : "ipal_guide_en_1"
+        let image = UIImage(named: imgName)
+        
+        
+        let imgW: CGFloat = image?.size.width ?? 0
+        let imgH: CGFloat = image?.size.height ?? 0
+        
+        let x_1 = min(76, YYScreenSize().width - imgW - 44)
+        let imgRect = CGRect(x: x_1, y: y - 20 - imgH , width: imgW, height: imgH)
+        gv.addMask(maskRect: tMaskR, cornerRadius: 10, image: image, imageRect: imgRect)
+        
+        gv.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self,weak gv] in
+            gv?.removeFromSuperview()
+            self?.showGuide_2()
+        }).disposed(by: disbag)
+    }
+    
+    
+    fileprivate func showGuide_2() {
+        
+        let gv = GuideView()
+        
+        let firstCell = self.tableView?.cellForRow(at: IndexPath(row: 0, section: 0)) as? IPCell
+        
+        let headframe = firstCell?.evaluationL?.frame ?? CGRect.zero
+        let toMaskRect = firstCell?.evaluationL?.superview?.convert(headframe, to: Router.rootWindow!) ?? CGRect.zero
+        
+        let w = toMaskRect.width + 30 * 2
+        let h = toMaskRect.height + 20 * 2
+        
+        let x: CGFloat = toMaskRect.minX - 30
+        let y = toMaskRect.minY - 20
+        
+        let tMaskR = CGRect(x: x, y: y, width: w, height: h)
+        
+        let imgName = Bundle.is_zh_Hans() ? "ipal_guide_zh_2" : "ipal_guide_en_2"
+        let image = UIImage(named: imgName)
+        let imgW: CGFloat = image?.size.width ?? 0
+        let imgH: CGFloat = image?.size.height ?? 0
+        
+        let x_1 = min(toMaskRect.minX, YYScreenSize().width - imgW - 44)
+        
+        let imgRect = CGRect(x: x_1, y: tMaskR.maxY + 20 , width: imgW, height: imgH)
+        gv.addMask(maskRect: tMaskR, cornerRadius: 10, image: image, imageRect: imgRect)
+        
+        
+        gv.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self, weak gv] in
+            gv?.removeFromSuperview()
+            self?.showGuide_3()
+        }).disposed(by: disbag)
+    }
+    
+    
+    fileprivate func showGuide_3() {
+        
+        let gv = GuideView()
+        
+        let headframe = self.headerView?.frame ?? CGRect.zero
+        let toMaskRect = self.headerView?.superview?.convert(headframe, to: Router.rootWindow!) ?? CGRect.zero
+        
+        let firstCell = self.tableView?.cellForRow(at: IndexPath(row: 0, section: 0)) as? IPCell
+        
+        let w: CGFloat = (firstCell?.connectBtn?.width ?? 40) + 30 + 12
+        let x: CGFloat = YYScreenSize().width - w - 12
+        let y = toMaskRect.maxY + 8
+        let h = YYScreenSize().height - y - 18
+        
+        let tMaskR = CGRect(x: x, y: y, width: w, height: h)
+        
+        let imgName = Bundle.is_zh_Hans() ? "ipal_guide_zh_3" : "ipal_guide_en_3"
+        let image = UIImage(named: imgName)
+        let imgW: CGFloat = image?.size.width ?? 0
+        let imgH: CGFloat = image?.size.height ?? 0
+        
+        let x_1 = YYScreenSize().width - 46 - imgW
+        let imgRect = CGRect(x: x_1, y: y - 5 - imgH , width: imgW, height: imgH)
+        gv.addMask(maskRect: tMaskR, cornerRadius: 10, image: image, imageRect: imgRect)
+        
+        gv.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self, weak gv] in
+            gv?.removeFromSuperview()
+            self?.orderListAndRefresh()
+        }).disposed(by: disbag)
     }
 
 }
@@ -375,15 +566,31 @@ extension IPAListVC {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "IPCell", for: indexPath) as! IPCell
         let data = self.list?[safe: indexPath.row]
-        cell.reloadData(atIndex: indexPath.row + 1, data: data)
+        cell.reloadData(atIndex: indexPath.row + 1, data: data, pageTag: self.fromSource)
         
-          
+        //abserver button click
         cell.connectBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.selectConnectNode(data)
         }).disposed(by: cell.disposeBag)
         
         cell.selectionStyle = .none
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard self.fromSource == .A_IPAL else {
+            return
+        }
+        let node = self.list?[safe: indexPath.row]
+        if node?.operator_address ==
+            IPALManager.shared.store.curAIPALNode?.operator_address {
+            Router.dismissVC(animate: true, completion: nil, toRoot: true)
+            //select ipal
+            if let rootVC = Router.rootVC as? UINavigationController,
+                let baseTabVC = rootVC.topViewController as? GrandTabBarVC {
+                baseTabVC.switchToTab(index: 2)
+            }
+        }
     }
     
 }
@@ -407,88 +614,9 @@ extension IPAListVC {
             searchResult = []
         }
         
-        (self.searchViewController?.searchResultsController as? SearchResultVC)?.reloadTable(list: searchResult)
+        (self.searchViewController?.searchResultsController as? IPALSearchResultVC)?.reloadTable(list: searchResult)
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
-  
-    }
-    
-}
-
-
-  
-
-  
-class IPAListHeaderView: UIView {
-    
-    @IBOutlet weak var searchBar: UISearchBar?
-    @IBOutlet weak var tipLabel: UILabel?
-    
-    @IBOutlet weak var containerV : UIView?
-    @IBOutlet weak var bgImageV : UIImageView?
-    
-    @IBOutlet weak var nameL : UILabel?
-    @IBOutlet weak var statusL : UILabel?
-    @IBOutlet weak var historyBtn : UIButton?
-    
-      
-
-    func reloadData(_ data: IPALNode?) {
-        nameL?.text = data?.moniker
-        handleConnectChange()
-    }
-    
-    @objc func handleConnectChange() {
-        let isClaimOk = IPALManager.shared.store.currentCIpal?.isClaimOk == 1
-        let isClaimFail = IPALManager.shared.store.currentCIpal?.isClaimOk == 2
-        
-        if CPAccountHelper.isConnected() && isClaimOk {
-            self.statusL?.text = "ipal_connect_ok".localized()
-            self.bgImageV?.image = UIImage(named: "ipal_connect_ok_bg")
-        } else {
-            if CPAccountHelper.isNetworkOk() && !isClaimFail {
-                self.statusL?.text = "ipal_connect_ing".localized()
-                self.bgImageV?.image = UIImage(named: "ipal_connect_ing_bg")
-            } else {
-                self.statusL?.text = "ipal_connect_fail".localized()
-                self.bgImageV?.image = UIImage(named: "ipal_connect_fail_bg")
-            }
-        }
-    }
-    
-    deinit {
-        print("dealloc \(type(of: self))")
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleConnectChange), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleConnectChange), name: NSNotification.Name.serviceConnectStatusChange, object: nil)
-    }
-}
-
-class HeaderContainerView: UIView {
-    @IBOutlet weak var header: UIView?
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let view = super.hitTest(point, with: event)
-        if view == nil {
-            var array = self.header?.allSubViews ?? []
-            array = array.filter { (v) -> Bool in
-                return v is UIButton
-            }
-            
-            for subview in array {
-                let subPoint = subview.convert(point, from: self)
-                if subview.bounds.contains(subPoint) {
-                    return subview
-                }
-            }
-        }
-        return view
     }
 }

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPInnerHelper.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/7/24.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPInnerState.h"
 #import "key_tool.h"
@@ -63,8 +63,8 @@ dispatch_queue_t writeSerialQueue;
 - (instancetype)_init {
     self = [super init];
     if (self) {
-        readSerialQueue = dispatch_queue_create("com.netcloth.chat.sq.rd", DISPATCH_QUEUE_SERIAL);   
-        writeSerialQueue = dispatch_queue_create("com.netcloth.chat.sq.wt", DISPATCH_QUEUE_SERIAL);   
+        readSerialQueue = dispatch_queue_create("com.netcloth.chat.sq.rd", DISPATCH_QUEUE_SERIAL); // read msg from connect
+        writeSerialQueue = dispatch_queue_create("com.netcloth.chat.sq.wt", DISPATCH_QUEUE_SERIAL); //op db
         self.chatDelegates = [NSHashTable weakObjectsHashTable];
         
         self.netChecker = [[NetWorkCheck alloc] init];
@@ -75,8 +75,8 @@ dispatch_queue_t writeSerialQueue;
     return self;
 }
 
-  
-  
+//MARK:- Login
+//now reset resource
 - (void)userlogin {
     self.cacheMsgManager = [[CPOfflineMsgManager alloc] init];
     self.imageCaches = [[CPImageCaches alloc] initWithUid:self.loginUser.userId];
@@ -101,7 +101,7 @@ dispatch_queue_t writeSerialQueue;
 }
 
 
-  
+//MARK:- Connect
 BOOL _RegisterOk = false;
 - (BOOL)connectServiceHost:(NSString *)host
                       port:(uint16_t)port {
@@ -127,15 +127,15 @@ BOOL _RegisterOk = false;
     return self.netChecker.netOk;
 }
 
-  
+//MARK: Connect Delegate
 - (void)onConnectSuccess {
-      
+    //send register msg
     [self sendRegisterMsg];
     [NSNotificationCenter.defaultCenter postNotificationName:kServiceConnectStatusChange object:nil];
 }
 
 - (void)onConnectError {
-      
+    //may need toast ui
     _RegisterOk = false;
     [NSNotificationCenter.defaultCenter postNotificationName:kServiceConnectStatusChange object:nil];
 }
@@ -151,14 +151,14 @@ BOOL _RegisterOk = false;
     [CPAccountHelper onShouldReinitConnectToUseNewHostAndPort];
 }
 
-  
+//MARK:- Register
 - (void)sendRegisterMsg {
     NCProtoNetMsg *pack =
     CreateRegister(getPublicKeyFromUser(self.loginUser), getDecodePrivateKeyForUser(self.loginUser, self.loginUser.password));
     [self.connectManager sendMsg:pack];
 }
 
-  
+//MARK:- 发消息
 
 - (void)_pbmsgSend:(NCProtoNetMsg *)netmsg {
     [self _pbmsgSend:netmsg autoCallNetStatus:nil];
@@ -167,10 +167,10 @@ BOOL _RegisterOk = false;
     
     [self asynDoTask:^{
         if ([self isConnected] == false && message) {
-              
+            //Note:
             [self asynWriteTask:^{
                 message.toServerState = 2;
-                  
+                //update db
                 [CPInnerState.shared.loginUserDataBase
                  updateRowsInTable:kTableName_Message
                  onProperties:{CPMessage.toServerState}
@@ -190,13 +190,13 @@ BOOL _RegisterOk = false;
         
 #if DEBUG
         long long sign_hash = (long long)GetHash(nsdata2bytes(netmsg.head.signature));
-          
+        //INTEGER  值是一个带符号的整数，根据值的大小存储在 1、2、3、4、6 或 8 字节中
         NSLog(@"pb >> sendname %@, hash %lld", netmsg.name , sign_hash);
 #endif
     }];
 }
 
-  
+//MARK:- 收消息
 
 - (void)OnGetPbPack:(NCProtoNetMsg *)pack
 {
@@ -213,7 +213,7 @@ BOOL _RegisterOk = false;
         long long sign_hash = (long long)GetHash(nsdata2bytes(pack.head.signature));
         NSLog(@"pb << msgId: %lld \n msgname: %@ \n senderKey: %@ \n toKey: %@ \n sign: %lld",pack.head.msgId, pack.name, fromPubkey, toPubkey , sign_hash);
 #endif
-          
+        //dispatch msg
         SEL method = [MessageObjects actionSelectorForPack:pack.name];
         if (!method) {
             NSLog(@"pb << unknown %@",pack.name);
@@ -236,7 +236,7 @@ BOOL _RegisterOk = false;
 - (void)actionForRegisterRsp:(NCProtoNetMsg *)pack {
     NCProtoRegisterRsp *body = [NCProtoRegisterRsp parseFromData:pack.data_p error:nil];
     if (body.result != 0) {
-          
+        //error
         _RegisterOk = false;
         [self.connectManager disconnect];
     } else {
@@ -250,15 +250,15 @@ BOOL _RegisterOk = false;
         [CPSendMsgHelper bindDeviceToken];
         [self.msgRecieve resendLatest_180s_unsendMsg];
     }
-      
+    //replay
     [self.msgRecieve clientReplay:pack];
 }
 
 
 
-  
+//MARK:- Call Delegate
 
-  
+// 收到消息回调
 - (void)msgAsynCallBack:(CPMessage *)msg {
     [self asynDoTask:^{
         for (id<ChatDelegate> face in self.chatDelegates) {
@@ -347,11 +347,37 @@ BOOL _RegisterOk = false;
     }];
 }
 
+//MARK: 消息撤回
+- (void)onRecallSuccessNotify:(NCProtoNetMsg *)successNotify {
+    [self dispatchSelector:_cmd body:successNotify];
+}
 
-  
+- (void)onRecallFailedNotify:(NCProtoNetMsg *)failNotify {
+    [self dispatchSelector:_cmd body:failNotify];
+}
+
+- (void)dispatchSelector:(SEL)selector  body:(id)para {
+    [self asynDoTask:^{
+        for (id<ChatDelegate> face in self.chatDelegates) {
+            if (face != nil && [face respondsToSelector:selector]) {
+                try {
+                    [face performSelector:selector withObject:para];
+                } catch (NSError *err) {
+                    
+                }
+            }
+        }
+    }];
+}
 
 
- 
+//MARK:- Tool
+
+
+/**
+ On Main queue
+ @param task
+ */
 - (void)asynDoTask:(dispatch_block_t)task {
     [self doTask:task onQueue:dispatch_get_main_queue()];
 }

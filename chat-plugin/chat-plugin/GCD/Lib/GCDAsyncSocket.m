@@ -1,12 +1,12 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
+//
+//  GCDAsyncSocket.m
+//  
+//  This class is in the public domain.
+//  Originally created by Robbie Hanson in Q4 2010.
+//  Updated and maintained by Deusty LLC and the Apple development community.
+//
+//  https://github.com/robbiehanson/CocoaAsyncSocket
+//
 
 #import "GCDAsyncSocket.h"
 
@@ -31,7 +31,7 @@
 
 #if ! __has_feature(objc_arc)
 #warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
-  
+// For more information see: https://github.com/robbiehanson/CocoaAsyncSocket/wiki/ARC
 #endif
 
 
@@ -41,12 +41,12 @@
 
 #if GCDAsyncSocketLoggingEnabled
 
-  
+// Logging Enabled - See log level below
 
-  
-  
-  
-  
+// Logging uses the CocoaLumberjack framework (which is also GCD based).
+// https://github.com/robbiehanson/CocoaLumberjack
+// 
+// It allows us to do a lot of logging without significantly slowing down the code.
 #import "DDLog.h"
 
 #define LogAsync   YES
@@ -72,12 +72,12 @@
 #define GCDAsyncSocketLogLevel LOG_LEVEL_VERBOSE
 #endif
 
-  
+// Log levels : off, error, warn, info, verbose
 static const int logLevel = GCDAsyncSocketLogLevel;
 
 #else
 
-  
+// Logging Disabled
 
 #define LogError(frmt, ...)     {}
 #define LogWarn(frmt, ...)      {}
@@ -131,49 +131,49 @@ NSString *const GCDAsyncSocketSSLDiffieHellmanParameters = @"GCDAsyncSocketSSLDi
 
 enum GCDAsyncSocketFlags
 {
-	kSocketStarted                 = 1 <<  0,    
-	kConnected                     = 1 <<  1,    
-	kForbidReadsWrites             = 1 <<  2,    
-	kReadsPaused                   = 1 <<  3,    
-	kWritesPaused                  = 1 <<  4,    
-	kDisconnectAfterReads          = 1 <<  5,    
-	kDisconnectAfterWrites         = 1 <<  6,    
-	kSocketCanAcceptBytes          = 1 <<  7,    
-	kReadSourceSuspended           = 1 <<  8,    
-	kWriteSourceSuspended          = 1 <<  9,    
-	kQueuedTLS                     = 1 << 10,    
-	kStartingReadTLS               = 1 << 11,    
-	kStartingWriteTLS              = 1 << 12,    
-	kSocketSecure                  = 1 << 13,    
-	kSocketHasReadEOF              = 1 << 14,    
-	kReadStreamClosed              = 1 << 15,    
-	kDealloc                       = 1 << 16,    
+	kSocketStarted                 = 1 <<  0,  // If set, socket has been started (accepting/connecting)
+	kConnected                     = 1 <<  1,  // If set, the socket is connected
+	kForbidReadsWrites             = 1 <<  2,  // If set, no new reads or writes are allowed
+	kReadsPaused                   = 1 <<  3,  // If set, reads are paused due to possible timeout
+	kWritesPaused                  = 1 <<  4,  // If set, writes are paused due to possible timeout
+	kDisconnectAfterReads          = 1 <<  5,  // If set, disconnect after no more reads are queued
+	kDisconnectAfterWrites         = 1 <<  6,  // If set, disconnect after no more writes are queued
+	kSocketCanAcceptBytes          = 1 <<  7,  // If set, we know socket can accept bytes. If unset, it's unknown.
+	kReadSourceSuspended           = 1 <<  8,  // If set, the read source is suspended
+	kWriteSourceSuspended          = 1 <<  9,  // If set, the write source is suspended
+	kQueuedTLS                     = 1 << 10,  // If set, we've queued an upgrade to TLS
+	kStartingReadTLS               = 1 << 11,  // If set, we're waiting for TLS negotiation to complete
+	kStartingWriteTLS              = 1 << 12,  // If set, we're waiting for TLS negotiation to complete
+	kSocketSecure                  = 1 << 13,  // If set, socket is using secure communication via SSL/TLS
+	kSocketHasReadEOF              = 1 << 14,  // If set, we have read EOF from socket
+	kReadStreamClosed              = 1 << 15,  // If set, we've read EOF plus prebuffer has been drained
+	kDealloc                       = 1 << 16,  // If set, the socket is being deallocated
 #if TARGET_OS_IPHONE
-	kAddedStreamsToRunLoop         = 1 << 17,    
-	kUsingCFStreamForTLS           = 1 << 18,    
-	kSecureSocketHasBytesAvailable = 1 << 19,    
+	kAddedStreamsToRunLoop         = 1 << 17,  // If set, CFStreams have been added to listener thread
+	kUsingCFStreamForTLS           = 1 << 18,  // If set, we're forced to use CFStream instead of SecureTransport
+	kSecureSocketHasBytesAvailable = 1 << 19,  // If set, CFReadStream has notified us of bytes available
 #endif
 };
 
 enum GCDAsyncSocketConfig
 {
-	kIPv4Disabled              = 1 << 0,    
-	kIPv6Disabled              = 1 << 1,    
-	kPreferIPv6                = 1 << 2,    
-	kAllowHalfDuplexConnection = 1 << 3,    
+	kIPv4Disabled              = 1 << 0,  // If set, IPv4 is disabled
+	kIPv6Disabled              = 1 << 1,  // If set, IPv6 is disabled
+	kPreferIPv6                = 1 << 2,  // If set, IPv6 is preferred over IPv4
+	kAllowHalfDuplexConnection = 1 << 3,  // If set, the socket will stay open even if the read stream closes
 };
 
 #if TARGET_OS_IPHONE
-  static NSThread *cfstreamThread;    
+  static NSThread *cfstreamThread;  // Used for CFStreams
 
 
-  static uint64_t cfstreamThreadRetainCount;     
-  static dispatch_queue_t cfstreamThreadSetupQueue;   
+  static uint64_t cfstreamThreadRetainCount;   // setup & teardown
+  static dispatch_queue_t cfstreamThreadSetupQueue; // setup & teardown
 #endif
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * A PreBuffer is used when there is more data available on the socket
@@ -288,7 +288,7 @@ enum GCDAsyncSocketConfig
 	
 	if (readPointer == writePointer)
 	{
-		  
+		// The prebuffer has been drained. Reset pointers.
 		readPointer  = preBuffer;
 		writePointer = preBuffer;
 	}
@@ -323,9 +323,9 @@ enum GCDAsyncSocketConfig
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * The GCDAsyncReadPacket encompasses the instructions for any given read.
@@ -440,37 +440,37 @@ enum GCDAsyncSocketConfig
 	
 	if (readLength > 0)
 	{
-		  
+		// Read a specific length of data
 		result = readLength - bytesDone;
 		
-		  
-		  
-		  
+		// There is no need to prebuffer since we know exactly how much data we need to read.
+		// Even if the buffer isn't currently big enough to fit this amount of data,
+		// it would have to be resized eventually anyway.
 		
 		if (shouldPreBufferPtr)
 			*shouldPreBufferPtr = NO;
 	}
 	else
 	{
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// Either reading until we find a specified terminator,
+		// or we're simply reading all available data.
+		// 
+		// In other words, one of:
+		// 
+		// - readDataToData packet
+		// - readDataWithTimeout packet
 		
 		if (maxLength > 0)
 			result =  MIN(defaultValue, (maxLength - bytesDone));
 		else
 			result = defaultValue;
 		
-		  
-		  
-		  
-		  
-		  
-		  
+		// Since we don't know the size of the read in advance,
+		// the shouldPreBuffer decision is based upon whether the returned value would fit
+		// in the current buffer without requiring a resize of the buffer.
+		// 
+		// This is because, in all likelyhood, the amount read from the socket will be less than the default value.
+		// Thus we should avoid over-allocating the read buffer when we can simply use the pre-buffer instead.
 		
 		if (shouldPreBufferPtr)
 		{
@@ -505,21 +505,21 @@ enum GCDAsyncSocketConfig
 	
 	if (readLength > 0)
 	{
-		  
+		// Read a specific length of data
 		
 		return MIN(bytesAvailable, (readLength - bytesDone));
 		
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// No need to avoid resizing the buffer.
+		// If the user provided their own buffer,
+		// and told us to read a certain length of data that exceeds the size of the buffer,
+		// then it is clear that our code will resize the buffer during the read operation.
+		// 
+		// This method does not actually do any resizing.
+		// The resizing will happen elsewhere if needed.
 	}
 	else
 	{
-		  
+		// Read all available data
 		
 		NSUInteger result = bytesAvailable;
 		
@@ -528,13 +528,13 @@ enum GCDAsyncSocketConfig
 			result = MIN(result, (maxLength - bytesDone));
 		}
 		
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// No need to avoid resizing the buffer.
+		// If the user provided their own buffer,
+		// and told us to read all available data without giving us a maxLength,
+		// then it is clear that our code might resize the buffer during the read operation.
+		// 
+		// This method does not actually do any resizing.
+		// The resizing will happen elsewhere if needed.
 		
 		return result;
 	}
@@ -564,45 +564,45 @@ enum GCDAsyncSocketConfig
 		result = MIN(result, (maxLength - bytesDone));
 	}
 	
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	// Should the data be read into the read packet's buffer, or into a pre-buffer first?
+	// 
+	// One would imagine the preferred option is the faster one.
+	// So which one is faster?
+	// 
+	// Reading directly into the packet's buffer requires:
+	// 1. Possibly resizing packet buffer (malloc/realloc)
+	// 2. Filling buffer (read)
+	// 3. Searching for term (memcmp)
+	// 4. Possibly copying overflow into prebuffer (malloc/realloc, memcpy)
+	// 
+	// Reading into prebuffer first:
+	// 1. Possibly resizing prebuffer (malloc/realloc)
+	// 2. Filling buffer (read)
+	// 3. Searching for term (memcmp)
+	// 4. Copying underflow into packet buffer (malloc/realloc, memcpy)
+	// 5. Removing underflow from prebuffer (memmove)
+	// 
+	// Comparing the performance of the two we can see that reading
+	// data into the prebuffer first is slower due to the extra memove.
+	// 
+	// However:
+	// The implementation of NSMutableData is open source via core foundation's CFMutableData.
+	// Decreasing the length of a mutable data object doesn't cause a realloc.
+	// In other words, the capacity of a mutable data object can grow, but doesn't shrink.
+	// 
+	// This means the prebuffer will rarely need a realloc.
+	// The packet buffer, on the other hand, may often need a realloc.
+	// This is especially true if we are the buffer owner.
+	// Furthermore, if we are constantly realloc'ing the packet buffer,
+	// and then moving the overflow into the prebuffer,
+	// then we're consistently over-allocating memory for each term read.
+	// And now we get into a bit of a tradeoff between speed and memory utilization.
+	// 
+	// The end result is that the two perform very similarly.
+	// And we can answer the original question very simply by another means.
+	// 
+	// If we can read all the data directly into the packet's buffer without resizing it first,
+	// then we do so. Otherwise we use the prebuffer.
 	
 	if (shouldPreBufferPtr)
 	{
@@ -630,40 +630,40 @@ enum GCDAsyncSocketConfig
 	NSAssert(term != nil, @"This method does not apply to non-term reads");
 	NSAssert([preBuffer availableBytes] > 0, @"Invoked with empty pre buffer!");
 	
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	// We know that the terminator, as a whole, doesn't exist in our own buffer.
+	// But it is possible that a _portion_ of it exists in our buffer.
+	// So we're going to look for the terminator starting with a portion of our own buffer.
+	// 
+	// Example:
+	// 
+	// term length      = 3 bytes
+	// bytesDone        = 5 bytes
+	// preBuffer length = 5 bytes
+	// 
+	// If we append the preBuffer to our buffer,
+	// it would look like this:
+	// 
+	// ---------------------
+	// |B|B|B|B|B|P|P|P|P|P|
+	// ---------------------
+	// 
+	// So we start our search here:
+	// 
+	// ---------------------
+	// |B|B|B|B|B|P|P|P|P|P|
+	// -------^-^-^---------
+	// 
+	// And move forwards...
+	// 
+	// ---------------------
+	// |B|B|B|B|B|P|P|P|P|P|
+	// ---------^-^-^-------
+	// 
+	// Until we find the terminator or reach the end.
+	// 
+	// ---------------------
+	// |B|B|B|B|B|P|P|P|P|P|
+	// ---------------^-^-^-
 	
 	BOOL found = NO;
 	
@@ -672,7 +672,7 @@ enum GCDAsyncSocketConfig
 	
 	if ((bytesDone + preBufferLength) < termLength)
 	{
-		  
+		// Not enough data for a full term sequence yet
 		return preBufferLength;
 	}
 	
@@ -680,7 +680,7 @@ enum GCDAsyncSocketConfig
 	if (maxLength > 0) {
 		maxPreBufferLength = MIN(preBufferLength, (maxLength - bytesDone));
 		
-		  
+		// Note: maxLength >= termLength
 	}
 	else {
 		maxPreBufferLength = preBufferLength;
@@ -695,7 +695,7 @@ enum GCDAsyncSocketConfig
 	NSUInteger preLen = termLength - bufLen;
 	const uint8_t *pre = [preBuffer readBuffer];
 	
-	NSUInteger loopCount = bufLen + maxPreBufferLength - termLength + 1;   
+	NSUInteger loopCount = bufLen + maxPreBufferLength - termLength + 1; // Plus one. See example above.
 	
 	NSUInteger result = maxPreBufferLength;
 	
@@ -704,7 +704,7 @@ enum GCDAsyncSocketConfig
 	{
 		if (bufLen > 0)
 		{
-			  
+			// Combining bytes from buffer and preBuffer
 			
 			memcpy(seq, buf, bufLen);
 			memcpy(seq + bufLen, pre, preLen);
@@ -722,11 +722,11 @@ enum GCDAsyncSocketConfig
 		}
 		else
 		{
-			  
+			// Comparing directly from preBuffer
 			
 			if (memcmp(pre, termBuf, termLength) == 0)
 			{
-				NSUInteger preOffset = pre - [preBuffer readBuffer];   
+				NSUInteger preOffset = pre - [preBuffer readBuffer]; // pointer arithmetic
 				
 				result = preOffset + termLength;
 				found = YES;
@@ -737,7 +737,7 @@ enum GCDAsyncSocketConfig
 		}
 	}
 	
-	  
+	// There is no need to avoid resizing the buffer in this particular situation.
 	
 	if (foundPtr) *foundPtr = found;
 	return result;
@@ -760,8 +760,8 @@ enum GCDAsyncSocketConfig
 {
 	NSAssert(term != nil, @"This method does not apply to non-term reads");
 	
-	  
-	  
+	// The implementation of this method is very similar to the above method.
+	// See the above method for a discussion of the algorithm used here.
 	
 	uint8_t *buff = [buffer mutableBytes];
 	NSUInteger buffLength = bytesDone + numBytes;
@@ -769,8 +769,8 @@ enum GCDAsyncSocketConfig
 	const void *termBuff = [term bytes];
 	NSUInteger termLength = [term length];
 	
-	  
-	  
+	// Note: We are dealing with unsigned integers,
+	// so make sure the math doesn't go below zero.
 	
 	NSUInteger i = ((buffLength - numBytes) >= termLength) ? (buffLength - numBytes - termLength + 1) : 0;
 	
@@ -792,9 +792,9 @@ enum GCDAsyncSocketConfig
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * The GCDAsyncWritePacket encompasses the instructions for any given write.
@@ -816,7 +816,7 @@ enum GCDAsyncSocketConfig
 {
 	if((self = [super init]))
 	{
-		buffer = d;   
+		buffer = d; // Retain not copy. For performance as documented in header file.
 		bytesDone = 0;
 		timeout = t;
 		tag = i;
@@ -827,9 +827,9 @@ enum GCDAsyncSocketConfig
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * The GCDAsyncSpecialPacket encompasses special instructions for interruptions in the read/write queues.
@@ -857,9 +857,9 @@ enum GCDAsyncSocketConfig
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @implementation GCDAsyncSocket
 {
@@ -967,22 +967,22 @@ enum GCDAsyncSocketConfig
 			socketQueue = dispatch_queue_create([GCDAsyncSocketQueueName UTF8String], NULL);
 		}
 		
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// The dispatch_queue_set_specific() and dispatch_get_specific() functions take a "void *key" parameter.
+		// From the documentation:
+		//
+		// > Keys are only compared as pointers and are never dereferenced.
+		// > Thus, you can use a pointer to a static variable for a specific subsystem or
+		// > any other value that allows you to identify the value uniquely.
+		//
+		// We're just going to use the memory address of an ivar.
+		// Specifically an ivar that is explicitly named for our purpose to make the code more readable.
+		//
+		// However, it feels tedious (and less readable) to include the "&" all the time:
+		// dispatch_get_specific(&IsOnSocketQueueOrTargetQueueKey)
+		//
+		// So we're going to make it so it doesn't matter if we use the '&' or not,
+		// by assigning the value of the ivar to the address of the ivar.
+		// Thus: IsOnSocketQueueOrTargetQueueKey == &IsOnSocketQueueOrTargetQueueKey;
 		
 		IsOnSocketQueueOrTargetQueueKey = &IsOnSocketQueueOrTargetQueueKey;
 		
@@ -1005,8 +1005,8 @@ enum GCDAsyncSocketConfig
 {
 	LogInfo(@"%@ - %@ (start)", THIS_METHOD, self);
 	
-	  
-	  
+	// Set dealloc flag.
+	// This is used by closeWithError to ensure we don't accidentally retain ourself.
 	flags |= kDealloc;
 	
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
@@ -1098,9 +1098,9 @@ enum GCDAsyncSocketConfig
   return errorOccured? nil: socket;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Configuration
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (id)delegate
 {
@@ -1257,7 +1257,7 @@ enum GCDAsyncSocketConfig
 
 - (BOOL)isIPv4Enabled
 {
-	  
+	// Note: YES means kIPv4Disabled is OFF
 	
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 	{
@@ -1277,7 +1277,7 @@ enum GCDAsyncSocketConfig
 
 - (void)setIPv4Enabled:(BOOL)flag
 {
-	  
+	// Note: YES means kIPv4Disabled is OFF
 	
 	dispatch_block_t block = ^{
 		
@@ -1295,7 +1295,7 @@ enum GCDAsyncSocketConfig
 
 - (BOOL)isIPv6Enabled
 {
-	  
+	// Note: YES means kIPv6Disabled is OFF
 	
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 	{
@@ -1315,7 +1315,7 @@ enum GCDAsyncSocketConfig
 
 - (void)setIPv6Enabled:(BOOL)flag
 {
-	  
+	// Note: YES means kIPv6Disabled is OFF
 	
 	dispatch_block_t block = ^{
 		
@@ -1333,7 +1333,7 @@ enum GCDAsyncSocketConfig
 
 - (BOOL)isIPv4PreferredOverIPv6
 {
-	  
+	// Note: YES means kPreferIPv6 is OFF
 	
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 	{
@@ -1353,7 +1353,7 @@ enum GCDAsyncSocketConfig
 
 - (void)setIPv4PreferredOverIPv6:(BOOL)flag
 {
-	  
+	// Note: YES means kPreferIPv6 is OFF
 	
 	dispatch_block_t block = ^{
 		
@@ -1424,9 +1424,9 @@ enum GCDAsyncSocketConfig
 		dispatch_async(socketQueue, block);
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Accepting
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)acceptOnPort:(uint16_t)port error:(NSError **)errPtr
 {
@@ -1437,14 +1437,14 @@ enum GCDAsyncSocketConfig
 {
 	LogTrace();
 	
-	  
+	// Just in-case interface parameter is immutable.
 	NSString *interface = [inInterface copy];
 	
 	__block BOOL result = NO;
 	__block NSError *err = nil;
 	
-	  
-	  
+	// CreateSocket Block
+	// This block will be invoked within the dispatch block below.
 	
 	int(^createSocket)(int, NSData*) = ^int (int domain, NSData *interfaceAddr) {
 		
@@ -1460,7 +1460,7 @@ enum GCDAsyncSocketConfig
 		
 		int status;
 		
-		  
+		// Set socket options
 		
 		status = fcntl(socketFD, F_SETFL, O_NONBLOCK);
 		if (status == -1)
@@ -1485,7 +1485,7 @@ enum GCDAsyncSocketConfig
 			return SOCKET_NULL;
 		}
 		
-		  
+		// Bind socket
 		
 		status = bind(socketFD, (const struct sockaddr *)[interfaceAddr bytes], (socklen_t)[interfaceAddr length]);
 		if (status == -1)
@@ -1498,7 +1498,7 @@ enum GCDAsyncSocketConfig
 			return SOCKET_NULL;
 		}
 		
-		  
+		// Listen
 		
 		status = listen(socketFD, 1024);
 		if (status == -1)
@@ -1514,11 +1514,11 @@ enum GCDAsyncSocketConfig
 		return socketFD;
 	};
 	
-	  
+	// Create dispatch block and run on socketQueue
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-        if (self->delegate == nil)   
+        if (self->delegate == nil) // Must have delegate set
 		{
 			NSString *msg = @"Attempting to accept without a delegate. Set a delegate first.";
 			err = [self badConfigError:msg];
@@ -1526,7 +1526,7 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-        if (self->delegateQueue == NULL)   
+        if (self->delegateQueue == NULL) // Must have delegate queue set
 		{
 			NSString *msg = @"Attempting to accept without a delegate queue. Set a delegate queue first.";
 			err = [self badConfigError:msg];
@@ -1537,7 +1537,7 @@ enum GCDAsyncSocketConfig
         BOOL isIPv4Disabled = (self->config & kIPv4Disabled) ? YES : NO;
         BOOL isIPv6Disabled = (self->config & kIPv6Disabled) ? YES : NO;
 		
-		if (isIPv4Disabled && isIPv6Disabled)   
+		if (isIPv4Disabled && isIPv6Disabled) // Must have IPv4 or IPv6 enabled
 		{
 			NSString *msg = @"Both IPv4 and IPv6 have been disabled. Must enable at least one protocol first.";
 			err = [self badConfigError:msg];
@@ -1545,7 +1545,7 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		if (![self isDisconnected])   
+		if (![self isDisconnected]) // Must be disconnected
 		{
 			NSString *msg = @"Attempting to accept while connected or accepting connections. Disconnect first.";
 			err = [self badConfigError:msg];
@@ -1553,11 +1553,11 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Clear queues (spurious read/write requests post disconnect)
         [self->readQueue removeAllObjects];
         [self->writeQueue removeAllObjects];
 		
-		  
+		// Resolve interface from description
 		
 		NSMutableData *interface4 = nil;
 		NSMutableData *interface6 = nil;
@@ -1591,7 +1591,7 @@ enum GCDAsyncSocketConfig
 		BOOL enableIPv4 = !isIPv4Disabled && (interface4 != nil);
 		BOOL enableIPv6 = !isIPv6Disabled && (interface6 != nil);
 		
-		  
+		// Create sockets, configure, bind, and listen
 		
 		if (enableIPv4)
 		{
@@ -1610,8 +1610,8 @@ enum GCDAsyncSocketConfig
 			
 			if (enableIPv4 && (port == 0))
 			{
-				  
-				  
+				// No specific port was specified, so we allowed the OS to pick an available port for us.
+				// Now we need to make sure the IPv6 socket listens on the same port as the IPv4 socket.
 				
 				struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)[interface6 mutableBytes];
 				addr6->sin6_port = htons([self localPort4]);
@@ -1632,7 +1632,7 @@ enum GCDAsyncSocketConfig
 			}
 		}
 		
-		  
+		// Create accept sources
 		
 		if (enableIPv4)
 		{
@@ -1757,8 +1757,8 @@ enum GCDAsyncSocketConfig
 	__block BOOL result = NO;
 	__block NSError *err = nil;
 	
-	  
-	  
+	// CreateSocket Block
+	// This block will be invoked within the dispatch block below.
 	
 	int(^createSocket)(int, NSData*) = ^int (int domain, NSData *interfaceAddr) {
 		
@@ -1774,7 +1774,7 @@ enum GCDAsyncSocketConfig
 		
 		int status;
 		
-		  
+		// Set socket options
 		
 		status = fcntl(socketFD, F_SETFL, O_NONBLOCK);
 		if (status == -1)
@@ -1799,7 +1799,7 @@ enum GCDAsyncSocketConfig
 			return SOCKET_NULL;
 		}
 		
-		  
+		// Bind socket
 		
 		status = bind(socketFD, (const struct sockaddr *)[interfaceAddr bytes], (socklen_t)[interfaceAddr length]);
 		if (status == -1)
@@ -1812,7 +1812,7 @@ enum GCDAsyncSocketConfig
 			return SOCKET_NULL;
 		}
 		
-		  
+		// Listen
 		
 		status = listen(socketFD, 1024);
 		if (status == -1)
@@ -1828,11 +1828,11 @@ enum GCDAsyncSocketConfig
 		return socketFD;
 	};
 	
-	  
+	// Create dispatch block and run on socketQueue
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-        if (self->delegate == nil)   
+        if (self->delegate == nil) // Must have delegate set
 		{
 			NSString *msg = @"Attempting to accept without a delegate. Set a delegate first.";
 			err = [self badConfigError:msg];
@@ -1840,7 +1840,7 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-        if (self->delegateQueue == NULL)   
+        if (self->delegateQueue == NULL) // Must have delegate queue set
 		{
 			NSString *msg = @"Attempting to accept without a delegate queue. Set a delegate queue first.";
 			err = [self badConfigError:msg];
@@ -1848,7 +1848,7 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		if (![self isDisconnected])   
+		if (![self isDisconnected]) // Must be disconnected
 		{
 			NSString *msg = @"Attempting to accept while connected or accepting connections. Disconnect first.";
 			err = [self badConfigError:msg];
@@ -1856,11 +1856,11 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Clear queues (spurious read/write requests post disconnect)
         [self->readQueue removeAllObjects];
         [self->writeQueue removeAllObjects];
 		
-		  
+		// Remove a previous socket
 		
 		NSError *error = nil;
 		NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -1874,19 +1874,19 @@ enum GCDAsyncSocketConfig
 			}
 		}
 		
-		  
+		// Resolve interface from description
 		
 		NSData *interface = [self getInterfaceAddressFromUrl:url];
 		
 		if (interface == nil)
 		{
-			NSString *msg = @"Invalid unix domain url. Specify a valid file url that does not exist (e.g. \"file:  
+			NSString *msg = @"Invalid unix domain url. Specify a valid file url that does not exist (e.g. \"file:///tmp/socket\")";
 			err = [self badParamError:msg];
 			
 			return_from_block;
 		}
 		
-		  
+		// Create sockets, configure, bind, and listen
 		
 		LogVerbose(@"Creating unix domain socket");
         self->socketUN = createSocket(AF_UNIX, interface);
@@ -1898,7 +1898,7 @@ enum GCDAsyncSocketConfig
 		
         self->socketUrl = url;
 		
-		  
+		// Create accept sources
 		
         self->acceptUNSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, self->socketUN, 0, self->socketQueue);
 		
@@ -1994,7 +1994,7 @@ enum GCDAsyncSocketConfig
 		
 		childSocketAddress = [NSData dataWithBytes:&addr length:addrLen];
 	}
-	else   
+	else // if (parentSocketFD == socketUN)
 	{
 		socketType = 2;
 		
@@ -2012,7 +2012,7 @@ enum GCDAsyncSocketConfig
 		childSocketAddress = [NSData dataWithBytes:&addr length:addrLen];
 	}
 	
-	  
+	// Enable non-blocking IO on the socket
 	
 	int result = fcntl(childSocketFD, F_SETFL, O_NONBLOCK);
 	if (result == -1)
@@ -2023,12 +2023,12 @@ enum GCDAsyncSocketConfig
 		return NO;
 	}
 	
-	  
+	// Prevent SIGPIPE signals
 	
 	int nosigpipe = 1;
 	setsockopt(childSocketFD, SOL_SOCKET, SO_NOSIGPIPE, &nosigpipe, sizeof(nosigpipe));
 	
-	  
+	// Notify delegate
 	
 	if (delegateQueue)
 	{
@@ -2036,7 +2036,7 @@ enum GCDAsyncSocketConfig
 		
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
 			
-			  
+			// Query delegate for custom socket queue
 			
 			dispatch_queue_t childSocketQueue = NULL;
 			
@@ -2046,7 +2046,7 @@ enum GCDAsyncSocketConfig
 				                                                              onSocket:self];
 			}
 			
-			  
+			// Create GCDAsyncSocket instance for accepted socket
 			
 			GCDAsyncSocket *acceptedSocket = [[[self class] alloc] initWithDelegate:theDelegate
                                                                       delegateQueue:self->delegateQueue
@@ -2061,36 +2061,36 @@ enum GCDAsyncSocketConfig
 			
 			acceptedSocket->flags = (kSocketStarted | kConnected);
 			
-			  
+			// Setup read and write sources for accepted socket
 			
 			dispatch_async(acceptedSocket->socketQueue, ^{ @autoreleasepool {
 				
 				[acceptedSocket setupReadAndWriteSourcesForNewlyConnectedSocket:childSocketFD];
 			}});
 			
-			  
+			// Notify delegate
 			
 			if ([theDelegate respondsToSelector:@selector(socket:didAcceptNewSocket:)])
 			{
 				[theDelegate socket:self didAcceptNewSocket:acceptedSocket];
 			}
 			
-			  
+			// Release the socket queue returned from the delegate (it was retained by acceptedSocket)
 			#if !OS_OBJECT_USE_OBJC
 			if (childSocketQueue) dispatch_release(childSocketQueue);
 			#endif
 			
-			  
-			  
+			// The accepted socket should have been retained by the delegate.
+			// Otherwise it gets properly released when exiting the block.
 		}});
 	}
 	
 	return YES;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Connecting
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * This method runs through the various checks required prior to a connection attempt.
@@ -2101,7 +2101,7 @@ enum GCDAsyncSocketConfig
 {
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	if (delegate == nil)   
+	if (delegate == nil) // Must have delegate set
 	{
 		if (errPtr)
 		{
@@ -2111,7 +2111,7 @@ enum GCDAsyncSocketConfig
 		return NO;
 	}
 	
-	if (delegateQueue == NULL)   
+	if (delegateQueue == NULL) // Must have delegate queue set
 	{
 		if (errPtr)
 		{
@@ -2121,7 +2121,7 @@ enum GCDAsyncSocketConfig
 		return NO;
 	}
 	
-	if (![self isDisconnected])   
+	if (![self isDisconnected]) // Must be disconnected
 	{
 		if (errPtr)
 		{
@@ -2134,7 +2134,7 @@ enum GCDAsyncSocketConfig
 	BOOL isIPv4Disabled = (config & kIPv4Disabled) ? YES : NO;
 	BOOL isIPv6Disabled = (config & kIPv6Disabled) ? YES : NO;
 	
-	if (isIPv4Disabled && isIPv6Disabled)   
+	if (isIPv4Disabled && isIPv6Disabled) // Must have IPv4 or IPv6 enabled
 	{
 		if (errPtr)
 		{
@@ -2185,7 +2185,7 @@ enum GCDAsyncSocketConfig
 		connectInterface6 = interface6;
 	}
 	
-	  
+	// Clear queues (spurious read/write requests post disconnect)
 	[readQueue removeAllObjects];
 	[writeQueue removeAllObjects];
 	
@@ -2196,7 +2196,7 @@ enum GCDAsyncSocketConfig
 {
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	if (delegate == nil)   
+	if (delegate == nil) // Must have delegate set
 	{
 		if (errPtr)
 		{
@@ -2206,7 +2206,7 @@ enum GCDAsyncSocketConfig
 		return NO;
 	}
 	
-	if (delegateQueue == NULL)   
+	if (delegateQueue == NULL) // Must have delegate queue set
 	{
 		if (errPtr)
 		{
@@ -2216,7 +2216,7 @@ enum GCDAsyncSocketConfig
 		return NO;
 	}
 	
-	if (![self isDisconnected])   
+	if (![self isDisconnected]) // Must be disconnected
 	{
 		if (errPtr)
 		{
@@ -2240,7 +2240,7 @@ enum GCDAsyncSocketConfig
 	
 	connectInterfaceUN = interface;
 	
-	  
+	// Clear queues (spurious read/write requests post disconnect)
 	[readQueue removeAllObjects];
 	[writeQueue removeAllObjects];
 	
@@ -2268,7 +2268,7 @@ enum GCDAsyncSocketConfig
 {
 	LogTrace();
 	
-	  
+	// Just in case immutable objects were passed
 	NSString *host = [inHost copy];
 	NSString *interface = [inInterface copy];
 	
@@ -2277,7 +2277,7 @@ enum GCDAsyncSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Check for problems with host parameter
 		
 		if ([host length] == 0)
 		{
@@ -2287,23 +2287,23 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Run through standard pre-connect checks
 		
 		if (![self preConnectWithInterface:interface error:&preConnectErr])
 		{
 			return_from_block;
 		}
 		
-		  
-		  
+		// We've made it past all the checks.
+		// It's time to start the connection process.
 		
         self->flags |= kSocketStarted;
 		
 		LogVerbose(@"Dispatching DNS lookup...");
 		
-		  
-		  
-		  
+		// It's possible that the given host parameter is actually a NSMutableString.
+		// So we want to copy it now, within this block that will be executed synchronously.
+		// This way the asynchronous lookup block below doesn't have to worry about it changing.
 		
 		NSString *hostCpy = [host copy];
 		
@@ -2386,7 +2386,7 @@ enum GCDAsyncSocketConfig
 {
 	LogTrace();
 	
-	  
+	// Just in case immutable objects were passed
 	NSData *remoteAddr = [inRemoteAddr copy];
 	NSString *interface = [inInterface copy];
 	
@@ -2395,7 +2395,7 @@ enum GCDAsyncSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Check for problems with remoteAddr parameter
 		
 		NSData *address4 = nil;
 		NSData *address6 = nil;
@@ -2447,15 +2447,15 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Run through standard pre-connect checks
 		
 		if (![self preConnectWithInterface:interface error:&err])
 		{
 			return_from_block;
 		}
 		
-		  
-		  
+		// We've made it past all the checks.
+		// It's time to start the connection process.
 		
 		if (![self connectWithAddress4:address4 address6:address6 error:&err])
 		{
@@ -2492,7 +2492,7 @@ enum GCDAsyncSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Check for problems with host parameter
 		
 		if ([url.path length] == 0)
 		{
@@ -2502,19 +2502,19 @@ enum GCDAsyncSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Run through standard pre-connect checks
 		
 		if (![self preConnectWithUrl:url error:&err])
 		{
 			return_from_block;
 		}
 		
-		  
-		  
+		// We've made it past all the checks.
+		// It's time to start the connection process.
 		
         self->flags |= kSocketStarted;
 		
-		  
+		// Start the normal connection process
 		
 		NSError *connectError = nil;
         if (![self connectWithAddressUN:self->connectInterfaceUN error:&connectError])
@@ -2569,12 +2569,12 @@ enum GCDAsyncSocketConfig
 	{
 		LogInfo(@"Ignoring lookupDidSucceed, already disconnected");
 		
-		  
-		  
+		// The connect operation has been cancelled.
+		// That is, socket was disconnected, or connection has already timed out.
 		return;
 	}
 	
-	  
+	// Check for problems
 	
 	BOOL isIPv4Disabled = (config & kIPv4Disabled) ? YES : NO;
 	BOOL isIPv6Disabled = (config & kIPv6Disabled) ? YES : NO;
@@ -2595,7 +2595,7 @@ enum GCDAsyncSocketConfig
 		return;
 	}
 	
-	  
+	// Start the normal connection process
 	
 	NSError *err = nil;
 	if (![self connectWithAddress4:address4 address6:address6 error:&err])
@@ -2623,8 +2623,8 @@ enum GCDAsyncSocketConfig
 	{
 		LogInfo(@"Ignoring lookup:didFail: - already disconnected");
 		
-		  
-		  
+		// The connect operation has been cancelled.
+		// That is, socket was disconnected, or connection has already timed out.
 		return;
 	}
 	
@@ -2634,7 +2634,7 @@ enum GCDAsyncSocketConfig
 
 - (BOOL)bindSocket:(int)socketFD toInterface:(NSData *)connectInterface error:(NSError **)errPtr
 {
-      
+    // Bind the socket to the desired interface (if needed)
     
     if (connectInterface)
     {
@@ -2642,8 +2642,8 @@ enum GCDAsyncSocketConfig
         
         if ([[self class] portFromAddress:connectInterface] > 0)
         {
-              
-              
+            // Since we're going to be binding to a specific port,
+            // we should turn on reuseaddr to allow us to override sockets in time_wait.
             
             int reuseOn = 1;
             setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, &reuseOn, sizeof(reuseOn));
@@ -2683,7 +2683,7 @@ enum GCDAsyncSocketConfig
         return SOCKET_NULL;
     }
     
-      
+    // Prevent SIGPIPE signals
     
     int nosigpipe = 1;
     setsockopt(socketFD, SOL_SOCKET, SO_NOSIGPIPE, &nosigpipe, sizeof(nosigpipe));
@@ -2693,14 +2693,14 @@ enum GCDAsyncSocketConfig
 
 - (void)connectSocket:(int)socketFD address:(NSData *)address stateIndex:(int)aStateIndex
 {
-      
+    // If there already is a socket connected, we close socketFD and return
     if (self.isConnected)
     {
         [self closeSocket:socketFD];
         return;
     }
     
-      
+    // Start the connection process in a background queue
     
     __weak GCDAsyncSocket *weakSelf = self;
     
@@ -2733,7 +2733,7 @@ enum GCDAsyncSocketConfig
             {
                 [strongSelf closeSocket:socketFD];
                 
-                  
+                // If there are no more sockets trying to connect, we inform the error to the delegate
                 if (strongSelf.socket4FD == SOCKET_NULL && strongSelf.socket6FD == SOCKET_NULL)
                 {
                     NSError *error = [strongSelf errorWithErrno:err reason:@"Error in connect() function"];
@@ -2789,11 +2789,11 @@ enum GCDAsyncSocketConfig
 	LogVerbose(@"IPv4: %@:%hu", [[self class] hostFromAddress:address4], [[self class] portFromAddress:address4]);
 	LogVerbose(@"IPv6: %@:%hu", [[self class] hostFromAddress:address6], [[self class] portFromAddress:address6]);
 	
-	  
+	// Determine socket type
 	
 	BOOL preferIPv6 = (config & kPreferIPv6) ? YES : NO;
 	
-	  
+	// Create and bind the sockets
     
     if (address4)
     {
@@ -2852,7 +2852,7 @@ enum GCDAsyncSocketConfig
 	
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	  
+	// Create the socket
 	
 	int socketFD;
 	
@@ -2870,30 +2870,30 @@ enum GCDAsyncSocketConfig
 		return NO;
 	}
 	
-	  
+	// Bind the socket to the desired interface (if needed)
 	
 	LogVerbose(@"Binding socket...");
 	
 	int reuseOn = 1;
 	setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, &reuseOn, sizeof(reuseOn));
 
-  	const struct sockaddr *interfaceAddr = (const struct sockaddr *)[address bytes];
-  	
-  	int result = bind(socketFD, interfaceAddr, (socklen_t)[address length]);
-  	if (result != 0)
-  	{
-  		if (errPtr)
-  			*errPtr = [self errnoErrorWithReason:@"Error in bind() function"];
-  		
-  		return NO;
-  	}
+//	const struct sockaddr *interfaceAddr = (const struct sockaddr *)[address bytes];
+//	
+//	int result = bind(socketFD, interfaceAddr, (socklen_t)[address length]);
+//	if (result != 0)
+//	{
+//		if (errPtr)
+//			*errPtr = [self errnoErrorWithReason:@"Error in bind() function"];
+//		
+//		return NO;
+//	}
 	
-	  
+	// Prevent SIGPIPE signals
 	
 	int nosigpipe = 1;
 	setsockopt(socketFD, SOL_SOCKET, SO_NOSIGPIPE, &nosigpipe, sizeof(nosigpipe));
 	
-	  
+	// Start the connection process in a background queue
 	
 	int aStateIndex = stateIndex;
 	
@@ -2911,7 +2911,7 @@ enum GCDAsyncSocketConfig
 		}
 		else
 		{
-			  
+			// TODO: Bad file descriptor
 			perror("connect");
 			NSError *error = [self errorWithErrno:errno reason:@"Error in connect() function"];
 			
@@ -2938,8 +2938,8 @@ enum GCDAsyncSocketConfig
 	{
 		LogInfo(@"Ignoring didConnect, already disconnected");
 		
-		  
-		  
+		// The connect operation has been cancelled.
+		// That is, socket was disconnected, or connection has already timed out.
 		return;
 	}
 	
@@ -2948,18 +2948,18 @@ enum GCDAsyncSocketConfig
 	[self endConnectTimeout];
 	
 	#if TARGET_OS_IPHONE
-	  
+	// The endConnectTimeout method executed above incremented the stateIndex.
 	aStateIndex = stateIndex;
 	#endif
 	
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	// Setup read/write streams (as workaround for specific shortcomings in the iOS platform)
+	// 
+	// Note:
+	// There may be configuration options that must be set by the delegate before opening the streams.
+	// The primary example is the kCFStreamNetworkServiceTypeVoIP flag, which only works on an unopened stream.
+	// 
+	// Thus we wait until after the socket:didConnectToHost:port: delegate method has completed.
+	// This gives the delegate time to properly configure the streams if needed.
 	
 	dispatch_block_t SetupStreamsPart1 = ^{
 		#if TARGET_OS_IPHONE
@@ -2983,7 +2983,7 @@ enum GCDAsyncSocketConfig
 		
         if (aStateIndex != self->stateIndex)
 		{
-			  
+			// The socket has been disconnected.
 			return;
 		}
 		
@@ -3002,7 +3002,7 @@ enum GCDAsyncSocketConfig
 		#endif
 	};
 	
-	  
+	// Notify delegate
 	
 	NSString *host = [self connectedHost];
 	uint16_t port = [self connectedPort];
@@ -3044,11 +3044,11 @@ enum GCDAsyncSocketConfig
 		SetupStreamsPart2();
 	}
 		
-	  
+	// Get the connected socket
 	
 	int socketFD = (socket4FD != SOCKET_NULL) ? socket4FD : (socket6FD != SOCKET_NULL) ? socket6FD : socketUN;
 	
-	  
+	// Enable non-blocking IO on the socket
 	
 	int result = fcntl(socketFD, F_SETFL, O_NONBLOCK);
 	if (result == -1)
@@ -3059,11 +3059,11 @@ enum GCDAsyncSocketConfig
 		return;
 	}
 	
-	  
+	// Setup our read/write sources
 	
 	[self setupReadAndWriteSourcesForNewlyConnectedSocket:socketFD];
 	
-	  
+	// Dequeue any pending read/write requests
 	
 	[self maybeDequeueRead];
 	[self maybeDequeueWrite];
@@ -3080,8 +3080,8 @@ enum GCDAsyncSocketConfig
 	{
 		LogInfo(@"Ignoring didNotConnect, already disconnected");
 		
-		  
-		  
+		// The connect operation has been cancelled.
+		// That is, socket was disconnected, or connection has already timed out.
 		return;
 	}
 	
@@ -3138,11 +3138,11 @@ enum GCDAsyncSocketConfig
 		connectTimer = NULL;
 	}
 	
-	  
-	  
-	  
-	  
-	  
+	// Increment stateIndex.
+	// This will prevent us from processing results from any related background asynchronous operations.
+	// 
+	// Note: This should be called from close method even if connectTimer is NULL.
+	// This is because one might disconnect a socket prior to a successful connection which had no timeout.
 	
 	stateIndex++;
 	
@@ -3164,9 +3164,9 @@ enum GCDAsyncSocketConfig
 	[self closeWithError:[self connectTimeoutError]];
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Disconnecting
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)closeWithError:(NSError *)error
 {
@@ -3212,8 +3212,8 @@ enum GCDAsyncSocketConfig
 	
 	if (sslContext)
 	{
-		  
-		  
+		// Getting a linker error here about the SSLx() functions?
+		// You need to add the Security Framework to your application.
 		
 		SSLClose(sslContext);
 		
@@ -3226,10 +3226,10 @@ enum GCDAsyncSocketConfig
 		sslContext = NULL;
 	}
 	
-	  
-	  
-	  
-	  
+	// For some crazy reason (in my opinion), cancelling a dispatch source doesn't
+	// invoke the cancel handler if the dispatch source is paused.
+	// So we have to unpause the source if needed.
+	// This allows the cancel handler to be run, which in turn releases the source and closes the socket.
 	
 	if (!accept4Source && !accept6Source && !acceptUNSource && !readSource && !writeSource)
 	{
@@ -3265,7 +3265,7 @@ enum GCDAsyncSocketConfig
 			LogVerbose(@"dispatch_source_cancel(accept4Source)");
 			dispatch_source_cancel(accept4Source);
 			
-			  
+			// We never suspend accept4Source
 			
 			accept4Source = NULL;
 		}
@@ -3275,7 +3275,7 @@ enum GCDAsyncSocketConfig
 			LogVerbose(@"dispatch_source_cancel(accept6Source)");
 			dispatch_source_cancel(accept6Source);
 			
-			  
+			// We never suspend accept6Source
 			
 			accept6Source = NULL;
 		}
@@ -3285,7 +3285,7 @@ enum GCDAsyncSocketConfig
 			LogVerbose(@"dispatch_source_cancel(acceptUNSource)");
 			dispatch_source_cancel(acceptUNSource);
 			
-			  
+			// We never suspend acceptUNSource
 			
 			acceptUNSource = NULL;
 		}
@@ -3310,19 +3310,19 @@ enum GCDAsyncSocketConfig
 			writeSource = NULL;
 		}
 		
-		  
+		// The sockets will be closed by the cancel handlers of the corresponding source
 		
 		socket4FD = SOCKET_NULL;
 		socket6FD = SOCKET_NULL;
 		socketUN = SOCKET_NULL;
 	}
 	
-	  
-	  
+	// If the client has passed the connect/accept method, then the connection has at least begun.
+	// Notify delegate that it is now ending.
 	BOOL shouldCallDelegate = (flags & kSocketStarted) ? YES : NO;
 	BOOL isDeallocating = (flags & kDealloc) ? YES : NO;
 	
-	  
+	// Clear stored socket info and all flags (config remains as is)
 	socketFDBytesAvailable = 0;
 	flags = 0;
 	sslWriteCachedLength = 0;
@@ -3352,7 +3352,7 @@ enum GCDAsyncSocketConfig
 		}
 	}};
 	
-	  
+	// Synchronous disconnection, as documented in the header file
 	
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 		block();
@@ -3438,9 +3438,9 @@ enum GCDAsyncSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Errors
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (NSError *)badConfigError:(NSString *)errMsg
 {
@@ -3560,9 +3560,9 @@ enum GCDAsyncSocketConfig
 	return [NSError errorWithDomain:GCDAsyncSocketErrorDomain code:GCDAsyncSocketOtherError userInfo:userInfo];
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Diagnostics
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)isDisconnected
 {
@@ -3639,7 +3639,7 @@ enum GCDAsyncSocketConfig
 		__block uint16_t result = 0;
 		
 		dispatch_sync(socketQueue, ^{
-			  
+			// No need for autorelease pool
 			
             if (self->socket4FD != SOCKET_NULL)
                 result = [self connectedPortFromSocket4:self->socket4FD];
@@ -3717,7 +3717,7 @@ enum GCDAsyncSocketConfig
 		__block uint16_t result = 0;
 		
 		dispatch_sync(socketQueue, ^{
-			  
+			// No need for autorelease pool
 			
             if (self->socket4FD != SOCKET_NULL)
                 result = [self localPortFromSocket4:self->socket4FD];
@@ -4027,9 +4027,9 @@ enum GCDAsyncSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Utilities
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Finds the address of an interface description.
@@ -4071,7 +4071,7 @@ enum GCDAsyncSocketConfig
 	
 	if (interface == nil)
 	{
-		  
+		// ANY address
 		
 		struct sockaddr_in sockaddr4;
 		memset(&sockaddr4, 0, sizeof(sockaddr4));
@@ -4094,7 +4094,7 @@ enum GCDAsyncSocketConfig
 	}
 	else if ([interface isEqualToString:@"localhost"] || [interface isEqualToString:@"loopback"])
 	{
-		  
+		// LOOPBACK address
 		
 		struct sockaddr_in sockaddr4;
 		memset(&sockaddr4, 0, sizeof(sockaddr4));
@@ -4129,14 +4129,14 @@ enum GCDAsyncSocketConfig
 			{
 				if ((addr4 == nil) && (cursor->ifa_addr->sa_family == AF_INET))
 				{
-					  
+					// IPv4
 					
 					struct sockaddr_in nativeAddr4;
 					memcpy(&nativeAddr4, cursor->ifa_addr, sizeof(nativeAddr4));
 					
 					if (strcmp(cursor->ifa_name, iface) == 0)
 					{
-						  
+						// Name match
 						
 						nativeAddr4.sin_port = htons(port);
 						
@@ -4150,7 +4150,7 @@ enum GCDAsyncSocketConfig
 						
 						if ((conversion != NULL) && (strcmp(ip, iface) == 0))
 						{
-							  
+							// IP match
 							
 							nativeAddr4.sin_port = htons(port);
 							
@@ -4160,14 +4160,14 @@ enum GCDAsyncSocketConfig
 				}
 				else if ((addr6 == nil) && (cursor->ifa_addr->sa_family == AF_INET6))
 				{
-					  
+					// IPv6
 					
 					struct sockaddr_in6 nativeAddr6;
 					memcpy(&nativeAddr6, cursor->ifa_addr, sizeof(nativeAddr6));
 					
 					if (strcmp(cursor->ifa_name, iface) == 0)
 					{
-						  
+						// Name match
 						
 						nativeAddr6.sin6_port = htons(port);
 						
@@ -4181,7 +4181,7 @@ enum GCDAsyncSocketConfig
 						
 						if ((conversion != NULL) && (strcmp(ip, iface) == 0))
 						{
-							  
+							// IP match
 							
 							nativeAddr6.sin6_port = htons(port);
 							
@@ -4222,7 +4222,7 @@ enum GCDAsyncSocketConfig
 	readSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socketFD, 0, socketQueue);
 	writeSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE, socketFD, 0, socketQueue);
 	
-	  
+	// Setup event handlers
 	
 	__weak GCDAsyncSocket *weakSelf = self;
 	
@@ -4261,7 +4261,7 @@ enum GCDAsyncSocketConfig
 	#pragma clang diagnostic pop
 	}});
 	
-	  
+	// Setup cancel handlers
 	
 	__block int socketFDRefCount = 2;
 	
@@ -4310,8 +4310,8 @@ enum GCDAsyncSocketConfig
 	#pragma clang diagnostic pop
 	});
 	
-	  
-	  
+	// We will not be able to read until data arrives.
+	// But we should be able to write immediately.
 	
 	socketFDBytesAvailable = 0;
 	flags &= ~kReadSourceSuspended;
@@ -4329,7 +4329,7 @@ enum GCDAsyncSocketConfig
 	
 	if ((flags & kSocketSecure) && (flags & kUsingCFStreamForTLS))
 	{
-		  
+		// The startTLS method was given the GCDAsyncSocketUseCFStreamForTLS flag.
 		
 		return YES;
 	}
@@ -4341,13 +4341,13 @@ enum GCDAsyncSocketConfig
 
 - (BOOL)usingSecureTransportForTLS
 {
-	  
+	// Invoking this method is equivalent to ![self usingCFStreamForTLS] (just more readable)
 	
 	#if TARGET_OS_IPHONE
 	
 	if ((flags & kSocketSecure) && (flags & kUsingCFStreamForTLS))
 	{
-		  
+		// The startTLS method was given the GCDAsyncSocketUseCFStreamForTLS flag.
 		
 		return NO;
 	}
@@ -4401,9 +4401,9 @@ enum GCDAsyncSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Reading
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)readDataWithTimeout:(NSTimeInterval)timeout tag:(long)tag
 {
@@ -4448,8 +4448,8 @@ enum GCDAsyncSocketConfig
 		}
 	}});
 	
-	  
-	  
+	// Do not rely on the block being run in order to release the packet,
+	// as the queue might get released without the block completing.
 }
 
 - (void)readDataToLength:(NSUInteger)length withTimeout:(NSTimeInterval)timeout tag:(long)tag
@@ -4491,8 +4491,8 @@ enum GCDAsyncSocketConfig
 		}
 	}});
 	
-	  
-	  
+	// Do not rely on the block being run in order to release the packet,
+	// as the queue might get released without the block completing.
 }
 
 - (void)readDataToData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag
@@ -4553,8 +4553,8 @@ enum GCDAsyncSocketConfig
 		}
 	}});
 	
-	  
-	  
+	// Do not rely on the block being run in order to release the packet,
+	// as the queue might get released without the block completing.
 }
 
 - (float)progressOfReadReturningTag:(long *)tagPtr bytesDone:(NSUInteger *)donePtr total:(NSUInteger *)totalPtr
@@ -4565,7 +4565,7 @@ enum GCDAsyncSocketConfig
 		
         if (!self->currentRead || ![self->currentRead isKindOfClass:[GCDAsyncReadPacket class]])
 		{
-			  
+			// We're not reading anything right now.
 			
 			if (tagPtr != NULL)   *tagPtr = 0;
 			if (donePtr != NULL)  *donePtr = 0;
@@ -4575,9 +4575,9 @@ enum GCDAsyncSocketConfig
 		}
 		else
 		{
-			  
-			  
-			  
+			// It's only possible to know the progress of our read if we're reading to a certain length.
+			// If we're reading to data, we of course have no idea when the data will arrive.
+			// If we're reading to timeout, then we have no idea when the next chunk of data will arrive.
 			
             NSUInteger done = self->currentRead->bytesDone;
             NSUInteger total = self->currentRead->readLength;
@@ -4616,12 +4616,12 @@ enum GCDAsyncSocketConfig
 	LogTrace();
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	  
+	// If we're not currently processing a read AND we have an available read stream
 	if ((currentRead == nil) && (flags & kConnected))
 	{
 		if ([readQueue count] > 0)
 		{
-			  
+			// Dequeue the next object in the write queue
 			currentRead = [readQueue objectAtIndex:0];
 			[readQueue removeObjectAtIndex:0];
 			
@@ -4630,20 +4630,20 @@ enum GCDAsyncSocketConfig
 			{
 				LogVerbose(@"Dequeued GCDAsyncSpecialPacket");
 				
-				  
+				// Attempt to start TLS
 				flags |= kStartingReadTLS;
 				
-				  
+				// This method won't do anything unless both kStartingReadTLS and kStartingWriteTLS are set
 				[self maybeStartTLS];
 			}
 			else
 			{
 				LogVerbose(@"Dequeued GCDAsyncReadPacket");
 				
-				  
+				// Setup read timer (if needed)
 				[self setupReadTimerWithTimeout:currentRead->timeout];
 				
-				  
+				// Immediately read, if possible
 				[self doReadData];
 			}
 		}
@@ -4665,20 +4665,20 @@ enum GCDAsyncSocketConfig
 		{
 			[self flushSSLBuffers];
 			
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
+			// Edge case:
+			// 
+			// We just drained all data from the ssl buffers,
+			// and all known data from the socket (socketFDBytesAvailable).
+			// 
+			// If we didn't get any data from this process,
+			// then we may have reached the end of the TCP stream.
+			// 
+			// Be sure callbacks are enabled so we're notified about a disconnection.
 			
 			if ([preBuffer availableBytes] == 0)
 			{
 				if ([self usingCFStreamForTLS]) {
-					  
+					// Callbacks never disabled
 				}
 				else {
 					[self resumeReadSource];
@@ -4696,8 +4696,8 @@ enum GCDAsyncSocketConfig
 	
 	if ([preBuffer availableBytes] > 0)
 	{
-		  
-		  
+		// Only flush the ssl buffers if the prebuffer is empty.
+		// This is to avoid growing the prebuffer inifinitely large.
 		
 		return;
 	}
@@ -4736,15 +4736,15 @@ enum GCDAsyncSocketConfig
 	
 	dispatch_block_t updateEstimatedBytesAvailable = ^{
 		
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// Figure out if there is any data available to be read
+		// 
+		// socketFDBytesAvailable        <- Number of encrypted bytes we haven't read from the bsd socket
+		// [sslPreBuffer availableBytes] <- Number of encrypted bytes we've buffered from bsd socket
+		// sslInternalBufSize            <- Number of decrypted bytes SecureTransport has buffered
+		// 
+		// We call the variable "estimated" because we don't know how many decrypted bytes we'll get
+		// from the encrypted bytes in the sslPreBuffer.
+		// However, we do know this is an upper bound on the estimation.
 		
         estimatedBytesAvailable = self->socketFDBytesAvailable + [self->sslPreBuffer availableBytes];
 		
@@ -4765,11 +4765,11 @@ enum GCDAsyncSocketConfig
 		{
 			LogVerbose(@"%@ - estimatedBytesAvailable = %lu", THIS_METHOD, (unsigned long)estimatedBytesAvailable);
 			
-			  
+			// Make sure there's enough room in the prebuffer
 			
 			[preBuffer ensureCapacityForWrite:estimatedBytesAvailable];
 			
-			  
+			// Read data into prebuffer
 			
 			uint8_t *buffer = [preBuffer writeBuffer];
 			size_t bytesRead = 0;
@@ -4801,46 +4801,46 @@ enum GCDAsyncSocketConfig
 {
 	LogTrace();
 	
-	  
-	  
+	// This method is called on the socketQueue.
+	// It might be called directly, or via the readSource when data is available to be read.
 	
 	if ((currentRead == nil) || (flags & kReadsPaused))
 	{
 		LogVerbose(@"No currentRead or kReadsPaused");
 		
-		  
+		// Unable to read at this time
 		
 		if (flags & kSocketSecure)
 		{
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
+			// Here's the situation:
+			// 
+			// We have an established secure connection.
+			// There may not be a currentRead, but there might be encrypted data sitting around for us.
+			// When the user does get around to issuing a read, that encrypted data will need to be decrypted.
+			// 
+			// So why make the user wait?
+			// We might as well get a head start on decrypting some data now.
+			// 
+			// The other reason we do this has to do with detecting a socket disconnection.
+			// The SSL/TLS protocol has it's own disconnection handshake.
+			// So when a secure socket is closed, a "goodbye" packet comes across the wire.
+			// We want to make sure we read the "goodbye" packet so we can properly detect the TCP disconnection.
 			
 			[self flushSSLBuffers];
 		}
 		
 		if ([self usingCFStreamForTLS])
 		{
-			  
-			  
+			// CFReadStream only fires once when there is available data.
+			// It won't fire again until we've invoked CFReadStreamRead.
 		}
 		else
 		{
-			  
-			  
-			  
-			  
-			  
+			// If the readSource is firing, we need to pause it
+			// or else it will continue to fire over and over again.
+			// 
+			// If the readSource is not firing,
+			// we want it to continue monitoring the socket.
 			
 			if (socketFDBytesAvailable > 0)
 			{
@@ -4857,7 +4857,7 @@ enum GCDAsyncSocketConfig
 	{
 		#if TARGET_OS_IPHONE
 		
-		  
+		// Requested CFStream, rather than SecureTransport, for TLS (via GCDAsyncSocketUseCFStreamForTLS)
 		
 		estimatedBytesAvailable = 0;
 		if ((flags & kSecureSocketHasBytesAvailable) && CFReadStreamHasBytesAvailable(readStream))
@@ -4873,33 +4873,33 @@ enum GCDAsyncSocketConfig
 		
 		if (flags & kSocketSecure)
 		{
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
+			// There are 2 buffers to be aware of here.
+			// 
+			// We are using SecureTransport, a TLS/SSL security layer which sits atop TCP.
+			// We issue a read to the SecureTranport API, which in turn issues a read to our SSLReadFunction.
+			// Our SSLReadFunction then reads from the BSD socket and returns the encrypted data to SecureTransport.
+			// SecureTransport then decrypts the data, and finally returns the decrypted data back to us.
+			// 
+			// The first buffer is one we create.
+			// SecureTransport often requests small amounts of data.
+			// This has to do with the encypted packets that are coming across the TCP stream.
+			// But it's non-optimal to do a bunch of small reads from the BSD socket.
+			// So our SSLReadFunction reads all available data from the socket (optimizing the sys call)
+			// and may store excess in the sslPreBuffer.
 			
 			estimatedBytesAvailable += [sslPreBuffer availableBytes];
 			
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
+			// The second buffer is within SecureTransport.
+			// As mentioned earlier, there are encrypted packets coming across the TCP stream.
+			// SecureTransport needs the entire packet to decrypt it.
+			// But if the entire packet produces X bytes of decrypted data,
+			// and we only asked SecureTransport for X/2 bytes of data,
+			// it must store the extra X/2 bytes of decrypted data for the next read.
+			// 
+			// The SSLGetBufferedReadSize function will tell us the size of this internal buffer.
+			// From the documentation:
+			// 
+			// "This function does not block or cause any low-level read operations to occur."
 			
 			size_t sslInternalBufSize = 0;
 			SSLGetBufferedReadSize(sslContext, &sslInternalBufSize);
@@ -4914,12 +4914,12 @@ enum GCDAsyncSocketConfig
 	{
 		LogVerbose(@"No data available to read...");
 		
-		  
+		// No data available to read.
 		
 		if (![self usingCFStreamForTLS])
 		{
-			  
-			  
+			// Need to wait for readSource to fire and notify us of
+			// available data in the socket's internal read buffer.
 			
 			[self resumeReadSource];
 		}
@@ -4930,26 +4930,26 @@ enum GCDAsyncSocketConfig
 	{
 		LogVerbose(@"Waiting for SSL/TLS handshake to complete");
 		
-		  
+		// The readQueue is waiting for SSL/TLS handshake to complete.
 		
 		if (flags & kStartingWriteTLS)
 		{
 			if ([self usingSecureTransportForTLS] && lastSSLHandshakeError == errSSLWouldBlock)
 			{
-				  
-				  
+				// We are in the process of a SSL Handshake.
+				// We were waiting for incoming data which has just arrived.
 				
 				[self ssl_continueSSLHandshake];
 			}
 		}
 		else
 		{
-			  
-			  
+			// We are still waiting for the writeQueue to drain and start the SSL/TLS process.
+			// We now know data is available to read.
 			
 			if (![self usingCFStreamForTLS])
 			{
-				  
+				// Suspend the read source or else it will continue to fire nonstop.
 				
 				[self suspendReadSource];
 			}
@@ -4958,77 +4958,77 @@ enum GCDAsyncSocketConfig
 		return;
 	}
 	
-	BOOL done        = NO;    
-	NSError *error   = nil;   
+	BOOL done        = NO;  // Completed read operation
+	NSError *error   = nil; // Error occurred
 	
 	NSUInteger totalBytesReadForCurrentRead = 0;
 	
-	  
-	  
-	  
+	// 
+	// STEP 1 - READ FROM PREBUFFER
+	// 
 	
 	if ([preBuffer availableBytes] > 0)
 	{
-		  
-		  
-		  
-		  
-		  
+		// There are 3 types of read packets:
+		// 
+		// 1) Read all available data.
+		// 2) Read a specific length of data.
+		// 3) Read up to a particular terminator.
 		
 		NSUInteger bytesToCopy;
 		
 		if (currentRead->term != nil)
 		{
-			  
+			// Read type #3 - read up to a terminator
 			
 			bytesToCopy = [currentRead readLengthForTermWithPreBuffer:preBuffer found:&done];
 		}
 		else
 		{
-			  
+			// Read type #1 or #2
 			
 			bytesToCopy = [currentRead readLengthForNonTermWithHint:[preBuffer availableBytes]];
 		}
 		
-		  
+		// Make sure we have enough room in the buffer for our read.
 		
 		[currentRead ensureCapacityForAdditionalDataOfLength:bytesToCopy];
 		
-		  
+		// Copy bytes from prebuffer into packet buffer
 		
 		uint8_t *buffer = (uint8_t *)[currentRead->buffer mutableBytes] + currentRead->startOffset +
 		                                                                  currentRead->bytesDone;
 		
 		memcpy(buffer, [preBuffer readBuffer], bytesToCopy);
 		
-		  
+		// Remove the copied bytes from the preBuffer
 		[preBuffer didRead:bytesToCopy];
 		
 		LogVerbose(@"copied(%lu) preBufferLength(%zu)", (unsigned long)bytesToCopy, [preBuffer availableBytes]);
 		
-		  
+		// Update totals
 		
 		currentRead->bytesDone += bytesToCopy;
 		totalBytesReadForCurrentRead += bytesToCopy;
 		
-		  
+		// Check to see if the read operation is done
 		
 		if (currentRead->readLength > 0)
 		{
-			  
+			// Read type #2 - read a specific length of data
 			
 			done = (currentRead->bytesDone == currentRead->readLength);
 		}
 		else if (currentRead->term != nil)
 		{
-			  
+			// Read type #3 - read up to a terminator
 			
-			  
+			// Our 'done' variable was updated via the readLengthForTermWithPreBuffer:found: method
 			
 			if (!done && currentRead->maxLength > 0)
 			{
-				  
-				  
+				// We're not done and there's a set maxLength.
+				// Have we reached that maxLength yet?
 				
 				if (currentRead->bytesDone >= currentRead->maxLength)
 				{
@@ -5038,23 +5038,23 @@ enum GCDAsyncSocketConfig
 		}
 		else
 		{
-			  
-			  
-			  
-			  
-			  
+			// Read type #1 - read all available data
+			// 
+			// We're done as soon as
+			// - we've read all available data (in prebuffer and socket)
+			// - we've read the maxLength of read packet.
 			
 			done = ((currentRead->maxLength > 0) && (currentRead->bytesDone == currentRead->maxLength));
 		}
 		
 	}
 	
-	  
-	  
-	  
+	// 
+	// STEP 2 - READ FROM SOCKET
+	// 
 	
-	BOOL socketEOF = (flags & kSocketHasReadEOF) ? YES : NO;    
-	BOOL waiting   = !done && !error && !socketEOF && !hasBytesAvailable;   
+	BOOL socketEOF = (flags & kSocketHasReadEOF) ? YES : NO;  // Nothing more to read via socket (end of file)
+	BOOL waiting   = !done && !error && !socketEOF && !hasBytesAvailable; // Ran out of data, waiting for more
 	
 	if (!done && !error && !socketEOF && hasBytesAvailable)
 	{
@@ -5070,17 +5070,17 @@ enum GCDAsyncSocketConfig
 			{
 				#if TARGET_OS_IPHONE
 				
-				  
+				// Using CFStream, rather than SecureTransport, for TLS
 				
 				NSUInteger defaultReadLength = (1024 * 32);
 				
 				NSUInteger bytesToRead = [currentRead optimalReadLengthWithDefault:defaultReadLength
 				                                                   shouldPreBuffer:&readIntoPreBuffer];
 				
-				  
-				  
-				  
-				  
+				// Make sure we have enough room in the buffer for our read.
+				//
+				// We are either reading directly into the currentRead->buffer,
+				// or we're reading into the temporary preBuffer.
 				
 				if (readIntoPreBuffer)
 				{
@@ -5097,7 +5097,7 @@ enum GCDAsyncSocketConfig
 					       + currentRead->bytesDone;
 				}
 				
-				  
+				// Read data into buffer
 				
 				CFIndex result = CFReadStreamRead(readStream, buffer, (CFIndex)bytesToRead);
 				LogVerbose(@"CFReadStreamRead(): result = %i", (int)result);
@@ -5116,26 +5116,26 @@ enum GCDAsyncSocketConfig
 					bytesRead = (size_t)result;
 				}
 				
-				  
-				  
-				  
+				// We only know how many decrypted bytes were read.
+				// The actual number of bytes read was likely more due to the overhead of the encryption.
+				// So we reset our flag, and rely on the next callback to alert us of more data.
 				flags &= ~kSecureSocketHasBytesAvailable;
 				
 				#endif
 			}
 			else
 			{
-				  
-				  
-				  
-				  
-				  
-				  
-				  
-				  
-				  
-				  
-				  
+				// Using SecureTransport for TLS
+				//
+				// We know:
+				// - how many bytes are available on the socket
+				// - how many encrypted bytes are sitting in the sslPreBuffer
+				// - how many decypted bytes are sitting in the sslContext
+				//
+				// But we do NOT know:
+				// - how many encypted bytes are sitting in the sslContext
+				//
+				// So we play the regular game of using an upper bound instead.
 				
 				NSUInteger defaultReadLength = (1024 * 32);
 				
@@ -5146,14 +5146,14 @@ enum GCDAsyncSocketConfig
 				NSUInteger bytesToRead = [currentRead optimalReadLengthWithDefault:defaultReadLength
 				                                                   shouldPreBuffer:&readIntoPreBuffer];
 				
-				if (bytesToRead > SIZE_MAX) {   
+				if (bytesToRead > SIZE_MAX) { // NSUInteger may be bigger than size_t
 					bytesToRead = SIZE_MAX;
 				}
 				
-				  
-				  
-				  
-				  
+				// Make sure we have enough room in the buffer for our read.
+				//
+				// We are either reading directly into the currentRead->buffer,
+				// or we're reading into the temporary preBuffer.
 				
 				if (readIntoPreBuffer)
 				{
@@ -5170,13 +5170,13 @@ enum GCDAsyncSocketConfig
 					       + currentRead->bytesDone;
 				}
 				
-				  
-				  
-				  
-				  
-				  
-				  
-				  
+				// The documentation from Apple states:
+				// 
+				//     "a read operation might return errSSLWouldBlock,
+				//      indicating that less data than requested was actually transferred"
+				// 
+				// However, starting around 10.7, the function will sometimes return noErr,
+				// even if it didn't read as much data as requested. So we need to watch out for that.
 				
 				OSStatus result;
 				do
@@ -5201,8 +5201,8 @@ enum GCDAsyncSocketConfig
 					{
 						if (result == errSSLClosedGraceful || result == errSSLClosedAbort)
 						{
-							  
-							  
+							// We've reached the end of the stream.
+							// Handle this the same way we would an EOF from the socket.
 							socketEOF = YES;
 							sslErrCode = result;
 						}
@@ -5211,9 +5211,9 @@ enum GCDAsyncSocketConfig
 							error = [self sslError:result];
 						}
 					}
-					  
-					  
-					  
+					// It's possible that bytesRead > 0, even if the result was errSSLWouldBlock.
+					// This happens when the SSLRead function is able to read some data,
+					// but not the entire amount we requested.
 					
 					if (bytesRead <= 0)
 					{
@@ -5221,44 +5221,44 @@ enum GCDAsyncSocketConfig
 					}
 				}
 				
-				  
-				  
+				// Do not modify socketFDBytesAvailable.
+				// It will be updated via the SSLReadFunction().
 			}
 		}
 		else
 		{
-			  
+			// Normal socket operation
 			
 			NSUInteger bytesToRead;
 			
-			  
-			  
-			  
-			  
-			  
+			// There are 3 types of read packets:
+			//
+			// 1) Read all available data.
+			// 2) Read a specific length of data.
+			// 3) Read up to a particular terminator.
 			
 			if (currentRead->term != nil)
 			{
-				  
+				// Read type #3 - read up to a terminator
 				
 				bytesToRead = [currentRead readLengthForTermWithHint:estimatedBytesAvailable
 				                                     shouldPreBuffer:&readIntoPreBuffer];
 			}
 			else
 			{
-				  
+				// Read type #1 or #2
 				
 				bytesToRead = [currentRead readLengthForNonTermWithHint:estimatedBytesAvailable];
 			}
 			
-			if (bytesToRead > SIZE_MAX) {   
+			if (bytesToRead > SIZE_MAX) { // NSUInteger may be bigger than size_t (read param 3)
 				bytesToRead = SIZE_MAX;
 			}
 			
-			  
-			  
-			  
-			  
+			// Make sure we have enough room in the buffer for our read.
+			//
+			// We are either reading directly into the currentRead->buffer,
+			// or we're reading into the temporary preBuffer.
 			
 			if (readIntoPreBuffer)
 			{
@@ -5275,7 +5275,7 @@ enum GCDAsyncSocketConfig
 				       + currentRead->bytesDone;
 			}
 			
-			  
+			// Read data into buffer
 			
 			int socketFD = (socket4FD != SOCKET_NULL) ? socket4FD : (socket6FD != SOCKET_NULL) ? socket6FD : socketUN;
 			
@@ -5302,9 +5302,9 @@ enum GCDAsyncSocketConfig
 				
 				if (bytesRead < bytesToRead)
 				{
-					  
-					  
-					  
+					// The read returned less data than requested.
+					// This means socketFDBytesAvailable was a bit off due to timing,
+					// because we read from the socket right when the readSource event was firing.
 					socketFDBytesAvailable = 0;
 				}
 				else
@@ -5324,13 +5324,13 @@ enum GCDAsyncSocketConfig
 		
 		if (bytesRead > 0)
 		{
-			  
+			// Check to see if the read operation is done
 			
 			if (currentRead->readLength > 0)
 			{
-				  
-				  
-				  
+				// Read type #2 - read a specific length of data
+				// 
+				// Note: We should never be using a prebuffer when we're reading a specific length of data.
 				
 				NSAssert(readIntoPreBuffer == NO, @"Invalid logic");
 				
@@ -5341,53 +5341,53 @@ enum GCDAsyncSocketConfig
 			}
 			else if (currentRead->term != nil)
 			{
-				  
+				// Read type #3 - read up to a terminator
 				
 				if (readIntoPreBuffer)
 				{
-					  
+					// We just read a big chunk of data into the preBuffer
 					
 					[preBuffer didWrite:bytesRead];
 					LogVerbose(@"read data into preBuffer - preBuffer.length = %zu", [preBuffer availableBytes]);
 					
-					  
+					// Search for the terminating sequence
 					
 					NSUInteger bytesToCopy = [currentRead readLengthForTermWithPreBuffer:preBuffer found:&done];
 					LogVerbose(@"copying %lu bytes from preBuffer", (unsigned long)bytesToCopy);
 					
-					  
+					// Ensure there's room on the read packet's buffer
 					
 					[currentRead ensureCapacityForAdditionalDataOfLength:bytesToCopy];
 					
-					  
+					// Copy bytes from prebuffer into read buffer
 					
 					uint8_t *readBuf = (uint8_t *)[currentRead->buffer mutableBytes] + currentRead->startOffset
 					                                                                 + currentRead->bytesDone;
 					
 					memcpy(readBuf, [preBuffer readBuffer], bytesToCopy);
 					
-					  
+					// Remove the copied bytes from the prebuffer
 					[preBuffer didRead:bytesToCopy];
 					LogVerbose(@"preBuffer.length = %zu", [preBuffer availableBytes]);
 					
-					  
+					// Update totals
 					currentRead->bytesDone += bytesToCopy;
 					totalBytesReadForCurrentRead += bytesToCopy;
 					
-					  
+					// Our 'done' variable was updated via the readLengthForTermWithPreBuffer:found: method above
 				}
 				else
 				{
-					  
-					  
+					// We just read a big chunk of data directly into the packet's buffer.
+					// We need to move any overflow into the prebuffer.
 					
 					NSInteger overflow = [currentRead searchForTermAfterPreBuffering:bytesRead];
 					
 					if (overflow == 0)
 					{
-						  
-						  
-						  
+						// Perfect match!
+						// Every byte we read stays in the read buffer,
+						// and the last byte we read was the last byte of the term.
 						
 						currentRead->bytesDone += bytesRead;
 						totalBytesReadForCurrentRead += bytesRead;
@@ -5395,13 +5395,13 @@ enum GCDAsyncSocketConfig
 					}
 					else if (overflow > 0)
 					{
-						  
-						  
-						  
+						// The term was found within the data that we read,
+						// and there are extra bytes that extend past the end of the term.
+						// We need to move these excess bytes out of the read packet and into the prebuffer.
 						
 						NSInteger underflow = bytesRead - overflow;
 						
-						  
+						// Copy excess data into preBuffer
 						
 						LogVerbose(@"copying %ld overflow bytes into preBuffer", (long)overflow);
 						[preBuffer ensureCapacityForWrite:overflow];
@@ -5412,7 +5412,7 @@ enum GCDAsyncSocketConfig
 						[preBuffer didWrite:overflow];
 						LogVerbose(@"preBuffer.length = %zu", [preBuffer availableBytes]);
 						
-						  
+						// Note: The completeCurrentRead method will trim the buffer for us.
 						
 						currentRead->bytesDone += underflow;
 						totalBytesReadForCurrentRead += underflow;
@@ -5420,7 +5420,7 @@ enum GCDAsyncSocketConfig
 					}
 					else
 					{
-						  
+						// The term was not found within the data that we read.
 						
 						currentRead->bytesDone += bytesRead;
 						totalBytesReadForCurrentRead += bytesRead;
@@ -5430,8 +5430,8 @@ enum GCDAsyncSocketConfig
 				
 				if (!done && currentRead->maxLength > 0)
 				{
-					  
-					  
+					// We're not done and there's a set maxLength.
+					// Have we reached that maxLength yet?
 					
 					if (currentRead->bytesDone >= currentRead->maxLength)
 					{
@@ -5441,34 +5441,34 @@ enum GCDAsyncSocketConfig
 			}
 			else
 			{
-				  
+				// Read type #1 - read all available data
 				
 				if (readIntoPreBuffer)
 				{
-					  
+					// We just read a chunk of data into the preBuffer
 					
 					[preBuffer didWrite:bytesRead];
 					
-					  
-					  
-					  
-					  
-					  
-					  
+					// Now copy the data into the read packet.
+					// 
+					// Recall that we didn't read directly into the packet's buffer to avoid
+					// over-allocating memory since we had no clue how much data was available to be read.
+					// 
+					// Ensure there's room on the read packet's buffer
 					
 					[currentRead ensureCapacityForAdditionalDataOfLength:bytesRead];
 					
-					  
+					// Copy bytes from prebuffer into read buffer
 					
 					uint8_t *readBuf = (uint8_t *)[currentRead->buffer mutableBytes] + currentRead->startOffset
 					                                                                 + currentRead->bytesDone;
 					
 					memcpy(readBuf, [preBuffer readBuffer], bytesRead);
 					
-					  
+					// Remove the copied bytes from the prebuffer
 					[preBuffer didRead:bytesRead];
 					
-					  
+					// Update totals
 					currentRead->bytesDone += bytesRead;
 					totalBytesReadForCurrentRead += bytesRead;
 				}
@@ -5481,21 +5481,21 @@ enum GCDAsyncSocketConfig
 				done = YES;
 			}
 			
-		}   
+		} // if (bytesRead > 0)
 		
-	}   
+	} // if (!done && !error && !socketEOF && hasBytesAvailable)
 	
 	
 	if (!done && currentRead->readLength == 0 && currentRead->term == nil)
 	{
-		  
-		  
-		  
+		// Read type #1 - read all available data
+		// 
+		// We might arrive here if we read data from the prebuffer but not from the socket.
 		
 		done = (totalBytesReadForCurrentRead > 0);
 	}
 	
-	  
+	// Check to see if we're done, or if we've made progress
 	
 	if (done)
 	{
@@ -5508,12 +5508,12 @@ enum GCDAsyncSocketConfig
 	}
 	else if (totalBytesReadForCurrentRead > 0)
 	{
-		  
-		  
-		  
-		  
-		  
-		  
+		// We're not done read type #2 or #3 yet, but we have read in some bytes
+		//
+		// We ensure that `waiting` is set in order to resume the readSource (if it is suspended). It is
+		// possible to reach this point and `waiting` not be set, if the current read's length is
+		// sufficiently large. In that case, we may have read to some upperbound successfully, but
+		// that upperbound could be smaller than the desired length.
 		waiting = YES;
 
 		__strong id theDelegate = delegate;
@@ -5529,7 +5529,7 @@ enum GCDAsyncSocketConfig
 		}
 	}
 	
-	  
+	// Check for errors
 	
 	if (error)
 	{
@@ -5543,27 +5543,27 @@ enum GCDAsyncSocketConfig
 	{
 		if (![self usingCFStreamForTLS])
 		{
-			  
+			// Monitor the socket for readability (if we're not already doing so)
 			[self resumeReadSource];
 		}
 	}
 	
-	  
+	// Do not add any code here without first adding return statements in the error cases above.
 }
 
 - (void)doReadEOF
 {
 	LogTrace();
 	
-	  
-	  
-	  
+	// This method may be called more than once.
+	// If the EOF is read while there is still data in the preBuffer,
+	// then this method may be called continually after invocations of doReadData to see if it's time to disconnect.
 	
 	flags |= kSocketHasReadEOF;
 	
 	if (flags & kSocketSecure)
 	{
-		  
+		// If the SSL layer has any buffered data, flush it into the preBuffer now.
 		
 		[self flushSSLBuffers];
 	}
@@ -5573,8 +5573,8 @@ enum GCDAsyncSocketConfig
 	
 	if ((flags & kStartingReadTLS) || (flags & kStartingWriteTLS))
 	{
-		  
-		  
+		// We received an EOF during or prior to startTLS.
+		// The SSL/TLS handshake is now impossible, so this is an unrecoverable situation.
 		
 		shouldDisconnect = YES;
 		
@@ -5585,13 +5585,13 @@ enum GCDAsyncSocketConfig
 	}
 	else if (flags & kReadStreamClosed)
 	{
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// The preBuffer has already been drained.
+		// The config allows half-duplex connections.
+		// We've previously checked the socket, and it appeared writeable.
+		// So we marked the read stream as closed and notified the delegate.
+		// 
+		// As per the half-duplex contract, the socket will be closed when a write fails,
+		// or when the socket is manually closed.
 		
 		shouldDisconnect = NO;
 	}
@@ -5599,18 +5599,18 @@ enum GCDAsyncSocketConfig
 	{
 		LogVerbose(@"Socket reached EOF, but there is still data available in prebuffer");
 		
-		  
-		  
+		// Although we won't be able to read any more data from the socket,
+		// there is existing data that has been prebuffered that we can read.
 		
 		shouldDisconnect = NO;
 	}
 	else if (config & kAllowHalfDuplexConnection)
 	{
-		  
-		  
-		  
-		  
-		  
+		// We just received an EOF (end of file) from the socket's read stream.
+		// This means the remote end of the socket (the peer we're connected to)
+		// has explicitly stated that it will not be sending us any more data.
+		// 
+		// Query the socket to see if it is still writeable. (Perhaps the peer will continue reading data from us)
 		
 		int socketFD = (socket4FD != SOCKET_NULL) ? socket4FD : (socket6FD != SOCKET_NULL) ? socket6FD : socketUN;
 		
@@ -5623,12 +5623,12 @@ enum GCDAsyncSocketConfig
 		
 		if (pfd[0].revents & POLLOUT)
 		{
-			  
+			// Socket appears to still be writeable
 			
 			shouldDisconnect = NO;
 			flags |= kReadStreamClosed;
 			
-			  
+			// Notify the delegate that we're going half-duplex
 			
 			__strong id theDelegate = delegate;
 
@@ -5677,7 +5677,7 @@ enum GCDAsyncSocketConfig
 	{
 		if (![self usingCFStreamForTLS])
 		{
-			  
+			// Suspend the read source (if needed)
 			
 			[self suspendReadSource];
 		}
@@ -5695,17 +5695,17 @@ enum GCDAsyncSocketConfig
 	
 	if (currentRead->bufferOwner)
 	{
-		  
-		  
+		// We created the buffer on behalf of the user.
+		// Trim our buffer to be the proper size.
 		[currentRead->buffer setLength:currentRead->bytesDone];
 		
 		result = currentRead->buffer;
 	}
 	else
 	{
-		  
-		  
-		  
+		// We did NOT create the buffer.
+		// The buffer is owned by the caller.
+		// Only trim the buffer if we had to increase its size.
 		
 		if ([currentRead->buffer length] > currentRead->originalBufferLength)
 		{
@@ -5726,7 +5726,7 @@ enum GCDAsyncSocketConfig
 
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(socket:didReadData:withTag:)])
 	{
-		GCDAsyncReadPacket *theRead = currentRead;   
+		GCDAsyncReadPacket *theRead = currentRead; // Ensure currentRead retained since result may not own buffer
 		
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
 			
@@ -5790,10 +5790,10 @@ enum GCDAsyncSocketConfig
 
 - (void)doReadTimeout
 {
-	  
-	  
-	  
-	  
+	// This is a little bit tricky.
+	// Ideally we'd like to synchronously query the delegate about a timeout extension.
+	// But if we do so synchronously we risk a possible deadlock.
+	// So instead we have to do so asynchronously, and callback to ourselves from within the delegate block.
 	
 	flags |= kReadsPaused;
 	
@@ -5831,11 +5831,11 @@ enum GCDAsyncSocketConfig
 		{
 			currentRead->timeout += timeoutExtension;
 			
-			  
+			// Reschedule the timer
 			dispatch_time_t tt = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeoutExtension * NSEC_PER_SEC));
 			dispatch_source_set_timer(readTimer, tt, DISPATCH_TIME_FOREVER, 0);
 			
-			  
+			// Unpause reads, and continue
 			flags &= ~kReadsPaused;
 			[self doReadData];
 		}
@@ -5848,9 +5848,9 @@ enum GCDAsyncSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Writing
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)writeData:(NSData *)data withTimeout:(NSTimeInterval)timeout tag:(long)tag
 {
@@ -5869,8 +5869,8 @@ enum GCDAsyncSocketConfig
 		}
 	}});
 	
-	  
-	  
+	// Do not rely on the block being run in order to release the packet,
+	// as the queue might get released without the block completing.
 }
 
 - (float)progressOfWriteReturningTag:(long *)tagPtr bytesDone:(NSUInteger *)donePtr total:(NSUInteger *)totalPtr
@@ -5881,7 +5881,7 @@ enum GCDAsyncSocketConfig
 		
         if (!self->currentWrite || ![self->currentWrite isKindOfClass:[GCDAsyncWritePacket class]])
 		{
-			  
+			// We're not writing anything right now.
 			
 			if (tagPtr != NULL)   *tagPtr = 0;
 			if (donePtr != NULL)  *donePtr = 0;
@@ -5926,12 +5926,12 @@ enum GCDAsyncSocketConfig
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
 	
-	  
+	// If we're not currently processing a write AND we have an available write stream
 	if ((currentWrite == nil) && (flags & kConnected))
 	{
 		if ([writeQueue count] > 0)
 		{
-			  
+			// Dequeue the next object in the write queue
 			currentWrite = [writeQueue objectAtIndex:0];
 			[writeQueue removeObjectAtIndex:0];
 			
@@ -5940,20 +5940,20 @@ enum GCDAsyncSocketConfig
 			{
 				LogVerbose(@"Dequeued GCDAsyncSpecialPacket");
 				
-				  
+				// Attempt to start TLS
 				flags |= kStartingWriteTLS;
 				
-				  
+				// This method won't do anything unless both kStartingReadTLS and kStartingWriteTLS are set
 				[self maybeStartTLS];
 			}
 			else
 			{
 				LogVerbose(@"Dequeued GCDAsyncWritePacket");
 				
-				  
+				// Setup write timer (if needed)
 				[self setupWriteTimerWithTimeout:currentWrite->timeout];
 				
-				  
+				// Immediately write, if possible
 				[self doWriteData];
 			}
 		}
@@ -5978,23 +5978,23 @@ enum GCDAsyncSocketConfig
 {
 	LogTrace();
 	
-	  
+	// This method is called by the writeSource via the socketQueue
 	
 	if ((currentWrite == nil) || (flags & kWritesPaused))
 	{
 		LogVerbose(@"No currentWrite or kWritesPaused");
 		
-		  
+		// Unable to write at this time
 		
 		if ([self usingCFStreamForTLS])
 		{
-			  
-			  
+			// CFWriteStream only fires once when there is available data.
+			// It won't fire again until we've invoked CFWriteStreamWrite.
 		}
 		else
 		{
-			  
-			  
+			// If the writeSource is firing, we need to pause it
+			// or else it will continue to fire over and over again.
 			
 			if (flags & kSocketCanAcceptBytes)
 			{
@@ -6008,12 +6008,12 @@ enum GCDAsyncSocketConfig
 	{
 		LogVerbose(@"No space available to write...");
 		
-		  
+		// No space available to write.
 		
 		if (![self usingCFStreamForTLS])
 		{
-			  
-			  
+			// Need to wait for writeSource to fire and notify us of
+			// available space in the socket's internal write buffer.
 			
 			[self resumeWriteSource];
 		}
@@ -6024,26 +6024,26 @@ enum GCDAsyncSocketConfig
 	{
 		LogVerbose(@"Waiting for SSL/TLS handshake to complete");
 		
-		  
+		// The writeQueue is waiting for SSL/TLS handshake to complete.
 		
 		if (flags & kStartingReadTLS)
 		{
 			if ([self usingSecureTransportForTLS] && lastSSLHandshakeError == errSSLWouldBlock)
 			{
-				  
-				  
+				// We are in the process of a SSL Handshake.
+				// We were waiting for available space in the socket's internal OS buffer to continue writing.
 			
 				[self ssl_continueSSLHandshake];
 			}
 		}
 		else
 		{
-			  
-			  
+			// We are still waiting for the readQueue to drain and start the SSL/TLS process.
+			// We now know we can write to the socket.
 			
 			if (![self usingCFStreamForTLS])
 			{
-				  
+				// Suspend the write source or else it will continue to fire nonstop.
 				
 				[self suspendWriteSource];
 			}
@@ -6052,7 +6052,7 @@ enum GCDAsyncSocketConfig
 		return;
 	}
 	
-	  
+	// Note: This method is not called if currentWrite is a GCDAsyncSpecialPacket (startTLS packet)
 	
 	BOOL waiting = NO;
 	NSError *error = nil;
@@ -6064,15 +6064,15 @@ enum GCDAsyncSocketConfig
 		{
 			#if TARGET_OS_IPHONE
 			
-			  
-			  
-			  
+			// 
+			// Writing data using CFStream (over internal TLS)
+			// 
 			
 			const uint8_t *buffer = (const uint8_t *)[currentWrite->buffer bytes] + currentWrite->bytesDone;
 			
 			NSUInteger bytesToWrite = [currentWrite->buffer length] - currentWrite->bytesDone;
 			
-			if (bytesToWrite > SIZE_MAX)   
+			if (bytesToWrite > SIZE_MAX) // NSUInteger may be bigger than size_t (write param 3)
 			{
 				bytesToWrite = SIZE_MAX;
 			}
@@ -6088,9 +6088,9 @@ enum GCDAsyncSocketConfig
 			{
 				bytesWritten = (size_t)result;
 				
-				  
-				  
-				  
+				// We always set waiting to true in this scenario.
+				// CFStream may have altered our underlying socket to non-blocking.
+				// Thus if we attempt to write without a callback, we may end up blocking our queue.
 				waiting = YES;
 			}
 			
@@ -6098,47 +6098,47 @@ enum GCDAsyncSocketConfig
 		}
 		else
 		{
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
-			  
+			// We're going to use the SSLWrite function.
+			// 
+			// OSStatus SSLWrite(SSLContextRef context, const void *data, size_t dataLength, size_t *processed)
+			// 
+			// Parameters:
+			// context     - An SSL session context reference.
+			// data        - A pointer to the buffer of data to write.
+			// dataLength  - The amount, in bytes, of data to write.
+			// processed   - On return, the length, in bytes, of the data actually written.
+			// 
+			// It sounds pretty straight-forward,
+			// but there are a few caveats you should be aware of.
+			// 
+			// The SSLWrite method operates in a non-obvious (and rather annoying) manner.
+			// According to the documentation:
+			// 
+			//   Because you may configure the underlying connection to operate in a non-blocking manner,
+			//   a write operation might return errSSLWouldBlock, indicating that less data than requested
+			//   was actually transferred. In this case, you should repeat the call to SSLWrite until some
+			//   other result is returned.
+			// 
+			// This sounds perfect, but when our SSLWriteFunction returns errSSLWouldBlock,
+			// then the SSLWrite method returns (with the proper errSSLWouldBlock return value),
+			// but it sets processed to dataLength !!
+			// 
+			// In other words, if the SSLWrite function doesn't completely write all the data we tell it to,
+			// then it doesn't tell us how many bytes were actually written. So, for example, if we tell it to
+			// write 256 bytes then it might actually write 128 bytes, but then report 0 bytes written.
+			// 
+			// You might be wondering:
+			// If the SSLWrite function doesn't tell us how many bytes were written,
+			// then how in the world are we supposed to update our parameters (buffer & bytesToWrite)
+			// for the next time we invoke SSLWrite?
+			// 
+			// The answer is that SSLWrite cached all the data we told it to write,
+			// and it will push out that data next time we call SSLWrite.
+			// If we call SSLWrite with new data, it will push out the cached data first, and then the new data.
+			// If we call SSLWrite with empty data, then it will simply push out the cached data.
+			// 
+			// For this purpose we're going to break large writes into a series of smaller writes.
+			// This allows us to report progress back to the delegate.
 			
 			OSStatus result;
 			
@@ -6158,7 +6158,7 @@ enum GCDAsyncSocketConfig
 					
 					if ([currentWrite->buffer length] == (currentWrite->bytesDone + bytesWritten))
 					{
-						  
+						// We've written all data for the current write.
 						hasNewDataToWrite = NO;
 					}
 				}
@@ -6173,7 +6173,7 @@ enum GCDAsyncSocketConfig
 						error = [self sslError:result];
 					}
 					
-					  
+					// Can't write any new data since we were unable to write the cached data.
 					hasNewDataToWrite = NO;
 				}
 			}
@@ -6186,7 +6186,7 @@ enum GCDAsyncSocketConfig
 				
 				NSUInteger bytesToWrite = [currentWrite->buffer length] - currentWrite->bytesDone - bytesWritten;
 				
-				if (bytesToWrite > SIZE_MAX)   
+				if (bytesToWrite > SIZE_MAX) // NSUInteger may be bigger than size_t (write param 3)
 				{
 					bytesToWrite = SIZE_MAX;
 				}
@@ -6225,16 +6225,16 @@ enum GCDAsyncSocketConfig
 						keepLooping = NO;
 					}
 					
-				}   
+				} // while (keepLooping)
 				
-			}   
+			} // if (hasNewDataToWrite)
 		}
 	}
 	else
 	{
-		  
-		  
-		  
+		// 
+		// Writing data directly over raw socket
+		// 
 		
 		int socketFD = (socket4FD != SOCKET_NULL) ? socket4FD : (socket6FD != SOCKET_NULL) ? socket6FD : socketUN;
 		
@@ -6242,7 +6242,7 @@ enum GCDAsyncSocketConfig
 		
 		NSUInteger bytesToWrite = [currentWrite->buffer length] - currentWrite->bytesDone;
 		
-		if (bytesToWrite > SIZE_MAX)   
+		if (bytesToWrite > SIZE_MAX) // NSUInteger may be bigger than size_t (write param 3)
 		{
 			bytesToWrite = SIZE_MAX;
 		}
@@ -6250,7 +6250,7 @@ enum GCDAsyncSocketConfig
 		ssize_t result = write(socketFD, buffer, (size_t)bytesToWrite);
 		LogVerbose(@"wrote to socket = %zd", result);
 		
-		  
+		// Check results
 		if (result < 0)
 		{
 			if (errno == EWOULDBLOCK)
@@ -6268,14 +6268,14 @@ enum GCDAsyncSocketConfig
 		}
 	}
 	
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	// We're done with our writing.
+	// If we explictly ran into a situation where the socket told us there was no room in the buffer,
+	// then we immediately resume listening for notifications.
+	// 
+	// We must do this before we dequeue another write,
+	// as that may in turn invoke this method again.
+	// 
+	// Note that if CFStream is involved, it may have maliciously put our socket in blocking mode.
 	
 	if (waiting)
 	{
@@ -6287,17 +6287,17 @@ enum GCDAsyncSocketConfig
 		}
 	}
 	
-	  
+	// Check our results
 	
 	BOOL done = NO;
 	
 	if (bytesWritten > 0)
 	{
-		  
+		// Update total amount read for the current write
 		currentWrite->bytesDone += bytesWritten;
 		LogVerbose(@"currentWrite->bytesDone = %lu", (unsigned long)currentWrite->bytesDone);
 		
-		  
+		// Is packet done?
 		done = (currentWrite->bytesDone == [currentWrite->buffer length]);
 	}
 	
@@ -6315,12 +6315,12 @@ enum GCDAsyncSocketConfig
 	}
 	else
 	{
-		  
-		  
+		// We were unable to finish writing the data,
+		// so we're waiting for another callback to notify us of available space in the lower-level output buffer.
 		
 		if (!waiting && !error)
 		{
-			  
+			// This would be the case if our write was able to accept some data, but not all of it.
 			
 			flags &= ~kSocketCanAcceptBytes;
 			
@@ -6332,7 +6332,7 @@ enum GCDAsyncSocketConfig
 		
 		if (bytesWritten > 0)
 		{
-			  
+			// We're not done with the entire write, but we have written some bytes
 			
 			__strong id theDelegate = delegate;
 
@@ -6348,14 +6348,14 @@ enum GCDAsyncSocketConfig
 		}
 	}
 	
-	  
+	// Check for errors
 	
 	if (error)
 	{
 		[self closeWithError:[self errorWithErrno:errno reason:@"Error in write() function"]];
 	}
 	
-	  
+	// Do not add any code here without first adding a return statement in the error case above.
 }
 
 - (void)completeCurrentWrite
@@ -6433,10 +6433,10 @@ enum GCDAsyncSocketConfig
 
 - (void)doWriteTimeout
 {
-	  
-	  
-	  
-	  
+	// This is a little bit tricky.
+	// Ideally we'd like to synchronously query the delegate about a timeout extension.
+	// But if we do so synchronously we risk a possible deadlock.
+	// So instead we have to do so asynchronously, and callback to ourselves from within the delegate block.
 	
 	flags |= kWritesPaused;
 	
@@ -6474,11 +6474,11 @@ enum GCDAsyncSocketConfig
 		{
 			currentWrite->timeout += timeoutExtension;
 			
-			  
+			// Reschedule the timer
 			dispatch_time_t tt = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeoutExtension * NSEC_PER_SEC));
 			dispatch_source_set_timer(writeTimer, tt, DISPATCH_TIME_FOREVER, 0);
 			
-			  
+			// Unpause writes, and continue
 			flags &= ~kWritesPaused;
 			[self doWriteData];
 		}
@@ -6491,9 +6491,9 @@ enum GCDAsyncSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Security
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)startTLS:(NSDictionary *)tlsSettings
 {
@@ -6501,13 +6501,13 @@ enum GCDAsyncSocketConfig
 	
 	if (tlsSettings == nil)
     {
-          
-          
-          
-          
-          
-          
-          
+        // Passing nil/NULL to CFReadStreamSetProperty will appear to work the same as passing an empty dictionary,
+        // but causes problems if we later try to fetch the remote host's certificate.
+        // 
+        // To be exact, it causes the following to return NULL instead of the normal result:
+        // CFReadStreamCopyProperty(readStream, kCFStreamPropertySSLPeerCertificates)
+        // 
+        // So we use an empty dictionary instead, which works perfectly.
         
         tlsSettings = [NSDictionary dictionary];
     }
@@ -6532,11 +6532,11 @@ enum GCDAsyncSocketConfig
 
 - (void)maybeStartTLS
 {
-	  
-	  
-	  
-	  
-	  
+	// We can't start TLS until:
+	// - All queued reads prior to the user calling startTLS are complete
+	// - All queued writes prior to the user calling startTLS are complete
+	// 
+	// We'll know these conditions are met when both kStartingReadTLS and kStartingWriteTLS are set
 	
 	if ((flags & kStartingReadTLS) && (flags & kStartingWriteTLS))
 	{
@@ -6568,9 +6568,9 @@ enum GCDAsyncSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Security via SecureTransport
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (OSStatus)sslReadWithBuffer:(void *)buffer length:(size_t *)bufferLength
 {
@@ -6580,10 +6580,10 @@ enum GCDAsyncSocketConfig
 	{
 		LogVerbose(@"%@ - No data available to read...", THIS_METHOD);
 		
-		  
-		  
-		  
-		  
+		// No data available to read.
+		// 
+		// Need to wait for readSource to fire and notify us of
+		// available data in the socket's internal read buffer.
 		
 		[self resumeReadSource];
 		
@@ -6597,9 +6597,9 @@ enum GCDAsyncSocketConfig
 	BOOL done = NO;
 	BOOL socketError = NO;
 	
-	  
-	  
-	  
+	// 
+	// STEP 1 : READ FROM SSL PRE BUFFER
+	// 
 	
 	size_t sslPreBufferLength = [sslPreBuffer availableBytes];
 	
@@ -6628,9 +6628,9 @@ enum GCDAsyncSocketConfig
 		if (done) LogVerbose(@"%@: Complete", THIS_METHOD);
 	}
 	
-	  
-	  
-	  
+	// 
+	// STEP 2 : READ FROM SOCKET
+	// 
 	
 	if (!done && (socketFDBytesAvailable > 0))
 	{
@@ -6644,8 +6644,8 @@ enum GCDAsyncSocketConfig
 		
 		if (socketFDBytesAvailable > totalBytesLeftToBeRead)
 		{
-			  
-			  
+			// Read all available data from socket into sslPreBuffer.
+			// Then copy requested amount into dataBuffer.
 			
 			LogVerbose(@"%@: Reading into sslPreBuffer...", THIS_METHOD);
 			
@@ -6657,7 +6657,7 @@ enum GCDAsyncSocketConfig
 		}
 		else
 		{
-			  
+			// Read available data from socket directly into dataBuffer.
 			
 			LogVerbose(@"%@: Reading directly into dataBuffer...", THIS_METHOD);
 			
@@ -6739,10 +6739,10 @@ enum GCDAsyncSocketConfig
 {
 	if (!(flags & kSocketCanAcceptBytes))
 	{
-		  
-		  
-		  
-		  
+		// Unable to write.
+		// 
+		// Need to wait for writeSource to fire and notify us of
+		// available space in the socket's internal write buffer.
 		
 		[self resumeWriteSource];
 		
@@ -6818,7 +6818,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	OSStatus status;
 	
 	GCDAsyncSpecialPacket *tlsPacket = (GCDAsyncSpecialPacket *)currentRead;
-	if (tlsPacket == nil)   
+	if (tlsPacket == nil) // Code to quiet the analyzer
 	{
 		NSAssert(NO, @"Logic error");
 		
@@ -6827,7 +6827,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	}
 	NSDictionary *tlsSettings = tlsPacket->tlsSettings;
 	
-	  
+	// Create SSLContext, and setup IO callbacks and connection ref
 	
 	BOOL isServer = [[tlsSettings objectForKey:(__bridge NSString *)kCFStreamSSLIsServer] boolValue];
 	
@@ -6844,7 +6844,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 			return;
 		}
 	}
-	#else   
+	#else // (__MAC_OS_X_VERSION_MIN_REQUIRED < 1080)
 	{
 		status = SSLNewContext(isServer, &sslContext);
 		if (status != noErr)
@@ -6888,12 +6888,12 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		
 		#if !TARGET_OS_IPHONE && (__MAC_OS_X_VERSION_MIN_REQUIRED < 1080)
 		
-		  
-		  
-		  
-		  
-		  
-		  
+		// Note from Apple's documentation:
+		//
+		// It is only necessary to call SSLSetEnableCertVerify on the Mac prior to OS X 10.8.
+		// On OS X 10.8 and later setting kSSLSessionOptionBreakOnServerAuth always disables the
+		// built-in trust evaluation. All versions of iOS behave like OS X 10.8 and thus
+		// SSLSetEnableCertVerify is not available on that platform at all.
 		
 		status = SSLSetEnableCertVerify(sslContext, NO);
 		if (status != noErr)
@@ -6905,29 +6905,29 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		#endif
 	}
 
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	// Configure SSLContext from given settings
+	// 
+	// Checklist:
+	//  1. kCFStreamSSLPeerName
+	//  2. kCFStreamSSLCertificates
+	//  3. GCDAsyncSocketSSLPeerID
+	//  4. GCDAsyncSocketSSLProtocolVersionMin
+	//  5. GCDAsyncSocketSSLProtocolVersionMax
+	//  6. GCDAsyncSocketSSLSessionOptionFalseStart
+	//  7. GCDAsyncSocketSSLSessionOptionSendOneByteRecord
+	//  8. GCDAsyncSocketSSLCipherSuites
+	//  9. GCDAsyncSocketSSLDiffieHellmanParameters (Mac)
+	//
+	// Deprecated (throw error):
+	// 10. kCFStreamSSLAllowsAnyRoot
+	// 11. kCFStreamSSLAllowsExpiredRoots
+	// 12. kCFStreamSSLAllowsExpiredCertificates
+	// 13. kCFStreamSSLValidatesCertificateChain
+	// 14. kCFStreamSSLLevel
 	
 	id value;
 	
-	  
+	// 1. kCFStreamSSLPeerName
 	
 	value = [tlsSettings objectForKey:(__bridge NSString *)kCFStreamSSLPeerName];
 	if ([value isKindOfClass:[NSString class]])
@@ -6952,7 +6952,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 2. kCFStreamSSLCertificates
 	
 	value = [tlsSettings objectForKey:(__bridge NSString *)kCFStreamSSLCertificates];
 	if ([value isKindOfClass:[NSArray class]])
@@ -6974,7 +6974,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 3. GCDAsyncSocketSSLPeerID
 	
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLPeerID];
 	if ([value isKindOfClass:[NSData class]])
@@ -6998,7 +6998,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 4. GCDAsyncSocketSSLProtocolVersionMin
 	
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLProtocolVersionMin];
 	if ([value isKindOfClass:[NSNumber class]])
@@ -7022,7 +7022,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 5. GCDAsyncSocketSSLProtocolVersionMax
 	
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLProtocolVersionMax];
 	if ([value isKindOfClass:[NSNumber class]])
@@ -7046,7 +7046,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 6. GCDAsyncSocketSSLSessionOptionFalseStart
 	
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLSessionOptionFalseStart];
 	if ([value isKindOfClass:[NSNumber class]])
@@ -7066,7 +7066,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 7. GCDAsyncSocketSSLSessionOptionSendOneByteRecord
 	
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLSessionOptionSendOneByteRecord];
 	if ([value isKindOfClass:[NSNumber class]])
@@ -7088,7 +7088,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 8. GCDAsyncSocketSSLCipherSuites
 	
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLCipherSuites];
 	if ([value isKindOfClass:[NSArray class]])
@@ -7119,7 +7119,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 9. GCDAsyncSocketSSLDiffieHellmanParameters
 	
 	#if !TARGET_OS_IPHONE
 	value = [tlsSettings objectForKey:GCDAsyncSocketSSLDiffieHellmanParameters];
@@ -7143,9 +7143,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	}
 	#endif
 	
-	  
+	// DEPRECATED checks
 	
-	  
+	// 10. kCFStreamSSLAllowsAnyRoot
 	
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -7160,7 +7160,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 11. kCFStreamSSLAllowsExpiredRoots
 	
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -7175,7 +7175,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 12. kCFStreamSSLValidatesCertificateChain
 	
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -7190,7 +7190,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 13. kCFStreamSSLAllowsExpiredCertificates
 	
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -7205,7 +7205,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
+	// 14. kCFStreamSSLLevel
 	
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -7220,10 +7220,10 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		return;
 	}
 	
-	  
-	  
-	  
-	  
+	// Setup the sslPreBuffer
+	// 
+	// Any data in the preBuffer needs to be moved into the sslPreBuffer,
+	// as this data is now part of the secure read stream.
 	
 	sslPreBuffer = [[GCDAsyncSocketPreBuffer alloc] initWithCapacity:(1024 * 4)];
 	
@@ -7240,7 +7240,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	
 	sslErrCode = lastSSLHandshakeError = noErr;
 	
-	  
+	// Start the SSL Handshake process
 	
 	[self ssl_continueSSLHandshake];
 }
@@ -7249,12 +7249,12 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 {
 	LogTrace();
 	
-	  
-	  
-	  
-	  
-	  
-	  
+	// If the return value is noErr, the session is ready for normal secure communication.
+	// If the return value is errSSLWouldBlock, the SSLHandshake function must be called again.
+	// If the return value is errSSLServerAuthCompleted, we ask delegate if we should trust the
+	// server and then call SSLHandshake again to resume the handshake or close the connection
+	// errSSLPeerBadCert SSL error.
+	// Otherwise, the return value indicates an error code.
 	
 	OSStatus status = SSLHandshake(sslContext);
 	lastSSLHandshakeError = status;
@@ -7349,9 +7349,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	{
 		LogVerbose(@"SSLHandshake continues...");
 		
-		  
-		  
-		  
+		// Handshake continues...
+		// 
+		// This method will be called again from doReadData or doWriteData.
 	}
 	else
 	{
@@ -7367,15 +7367,15 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	{
 		LogInfo(@"Ignoring ssl_shouldTrustPeer - invalid state (maybe disconnected)");
 		
-		  
-		  
-		  
-		  
+		// One of the following is true
+		// - the socket was disconnected
+		// - the startTLS operation timed out
+		// - the completionHandler was already invoked once
 		
 		return;
 	}
 	
-	  
+	// Increment stateIndex to ensure completionHandler can only be called once.
 	stateIndex++;
 	
 	if (shouldTrust)
@@ -7389,9 +7389,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Security via CFStream
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if TARGET_OS_IPHONE
 
@@ -7484,32 +7484,32 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	GCDAsyncSpecialPacket *tlsPacket = (GCDAsyncSpecialPacket *)currentRead;
 	CFDictionaryRef tlsSettings = (__bridge CFDictionaryRef)tlsPacket->tlsSettings;
 	
-	  
-	  
+	// Getting an error concerning kCFStreamPropertySSLSettings ?
+	// You need to add the CFNetwork framework to your iOS application.
 	
 	BOOL r1 = CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, tlsSettings);
 	BOOL r2 = CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, tlsSettings);
 	
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+	// For some reason, starting around the time of iOS 4.3,
+	// the first call to set the kCFStreamPropertySSLSettings will return true,
+	// but the second will return false.
+	// 
+	// Order doesn't seem to matter.
+	// So you could call CFReadStreamSetProperty and then CFWriteStreamSetProperty, or you could reverse the order.
+	// Either way, the first call will return true, and the second returns false.
+	// 
+	// Interestingly, this doesn't seem to affect anything.
+	// Which is not altogether unusual, as the documentation seems to suggest that (for many settings)
+	// setting it on one side of the stream automatically sets it for the other side of the stream.
+	// 
+	// Although there isn't anything in the documentation to suggest that the second attempt would fail.
+	// 
+	// Furthermore, this only seems to affect streams that are negotiating a security upgrade.
+	// In other words, the socket gets connected, there is some back-and-forth communication over the unsecure
+	// connection, and then a startTLS is issued.
+	// So this mostly affects newer protocols (XMPP, IMAP) as opposed to older protocols (HTTPS).
 	
-	if (!r1 && !r2)   
+	if (!r1 && !r2) // Yes, the && is correct - workaround for apple bug.
 	{
 		[self closeWithError:[self otherError:@"Error in CFStreamSetProperty"]];
 		return;
@@ -7526,9 +7526,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 
 #endif
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark CFStream
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if TARGET_OS_IPHONE
 
@@ -7562,11 +7562,11 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 {
 	LogTrace();
 	
-	  
-	  
-	  
-	  
-	  
+	// The creation of the cfstreamThread is relatively expensive.
+	// So we'd like to keep it available for recycling.
+	// However, there's a tradeoff here, because it shouldn't remain alive forever.
+	// So what we're going to do is use a little delay before taking it down.
+	// This way it can be reused properly in situations where multiple sockets are continually in flux.
 	
 	int delayInSeconds = 30;
 	dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -7582,9 +7582,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 		
 		if (--cfstreamThreadRetainCount == 0)
 		{
-			[cfstreamThread cancel];   
+			[cfstreamThread cancel]; // set isCancelled flag
 			
-			  
+			// wake up the thread
             [[self class] performSelector:@selector(ignore:)
                                  onThread:cfstreamThread
                                withObject:[NSNull null]
@@ -7603,8 +7603,8 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	
 	LogInfo(@"CFStreamThread: Started");
 	
-	  
-	  
+	// We can't run the run loop unless it has an associated input source or a timer.
+	// So we'll just create a timer that will never fire - unless the server runs for decades.
 	[NSTimer scheduledTimerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow]
 	                                 target:self
 	                               selector:@selector(ignore:)
@@ -7669,8 +7669,8 @@ static void CFReadStreamCallback (CFReadStreamRef stream, CFStreamEventType type
 				
 				if ((asyncSocket->flags & kStartingReadTLS) && (asyncSocket->flags & kStartingWriteTLS))
 				{
-					  
-					  
+					// If we set kCFStreamPropertySSLSettings before we opened the streams, this might be a lie.
+					// (A callback related to the tcp stream, but not to the SSL layer).
 					
 					if (CFReadStreamHasBytesAvailable(asyncSocket->readStream))
 					{
@@ -7736,8 +7736,8 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 				
 				if ((asyncSocket->flags & kStartingReadTLS) && (asyncSocket->flags & kStartingWriteTLS))
 				{
-					  
-					  
+					// If we set kCFStreamPropertySSLSettings before we opened the streams, this might be a lie.
+					// (A callback related to the tcp stream, but not to the SSL layer).
 					
 					if (CFWriteStreamCanAcceptBytes(asyncSocket->writeStream))
 					{
@@ -7795,7 +7795,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	if (readStream || writeStream)
 	{
-		  
+		// Streams already created
 		return YES;
 	}
 	
@@ -7803,13 +7803,13 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	if (socketFD == SOCKET_NULL)
 	{
-		  
+		// Cannot create streams without a file descriptor
 		return NO;
 	}
 	
 	if (![self isConnected])
 	{
-		  
+		// Cannot create streams until file descriptor is connected
 		return NO;
 	}
 	
@@ -7817,8 +7817,8 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	CFStreamCreatePairWithSocket(NULL, (CFSocketNativeHandle)socketFD, &readStream, &writeStream);
 	
-	  
-	  
+	// The kCFStreamPropertyShouldCloseNativeSocket property should be false by default (for our case).
+	// But let's not take any chances.
 	
 	if (readStream)
 		CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
@@ -7958,16 +7958,16 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 
 #endif
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Advanced
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * See header file for big discussion of this method.
 **/
 - (BOOL)autoDisconnectOnClosedReadStream
 {
-	  
+	// Note: YES means kAllowHalfDuplexConnection is OFF
 	
 	if (dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey))
 	{
@@ -7990,7 +7990,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 **/
 - (void)setAutoDisconnectOnClosedReadStream:(BOOL)flag
 {
-	  
+	// Note: YES means kAllowHalfDuplexConnection is OFF
 	
 	dispatch_block_t block = ^{
 		
@@ -8120,7 +8120,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 {
 	if (![self createReadAndWriteStream])
 	{
-		  
+		// Error occurred creating streams (perhaps socket isn't open)
 		return NO;
 	}
 	
@@ -8163,11 +8163,11 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	return [self enableBackgroundingOnSocketWithCaveat:NO];
 }
 
-- (BOOL)enableBackgroundingOnSocketWithCaveat   
+- (BOOL)enableBackgroundingOnSocketWithCaveat // Deprecated in iOS 4.???
 {
-	  
-	  
-	  
+	// This method was created as a workaround for a bug in iOS.
+	// Apple has since fixed this bug.
+	// I'm not entirely sure which version of iOS they fixed it in...
 	
 	LogTrace();
 	
@@ -8193,9 +8193,9 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	return sslContext;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Class Utilities
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (NSMutableArray *)lookupHost:(NSString *)host port:(uint16_t)port error:(NSError **)errPtr
 {
@@ -8206,7 +8206,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	if ([host isEqualToString:@"localhost"] || [host isEqualToString:@"loopback"])
 	{
-		  
+		// Use LOOPBACK address
 		struct sockaddr_in nativeAddr4;
 		nativeAddr4.sin_len         = sizeof(struct sockaddr_in);
 		nativeAddr4.sin_family      = AF_INET;
@@ -8222,7 +8222,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 		nativeAddr6.sin6_addr       = in6addr_loopback;
 		nativeAddr6.sin6_scope_id   = 0;
 		
-		  
+		// Wrap the native address structures
 		
 		NSData *address4 = [NSData dataWithBytes:&nativeAddr4 length:sizeof(nativeAddr4)];
 		NSData *address6 = [NSData dataWithBytes:&nativeAddr6 length:sizeof(nativeAddr6)];
@@ -8264,19 +8264,19 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 			{
 				if (res->ai_family == AF_INET)
 				{
-					  
-					  
+					// Found IPv4 address.
+					// Wrap the native address structure, and add to results.
 					
 					NSData *address4 = [NSData dataWithBytes:res->ai_addr length:res->ai_addrlen];
 					[addresses addObject:address4];
 				}
 				else if (res->ai_family == AF_INET6)
 				{
-					  
-					  
+					// Fixes connection issues with IPv6
+					// https://github.com/robbiehanson/CocoaAsyncSocket/issues/429#issuecomment-222477158
 					
-					  
-					  
+					// Found IPv6 address.
+					// Wrap the native address structure, and add to results.
 					
 					struct sockaddr_in6 *sockaddr = (struct sockaddr_in6 *)res->ai_addr;
 					in_port_t *portPtr = &sockaddr->sin6_port;

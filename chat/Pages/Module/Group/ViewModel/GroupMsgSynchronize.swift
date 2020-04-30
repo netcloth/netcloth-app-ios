@@ -1,47 +1,47 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupRoomMsgSysManage.swift
+//  chat
+//
+//  Created by Grand on 2019/12/16.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
-  
+/// 群消息同步管理器 V2
 class GroupMsgSynchronize : NSObject {
     
     typealias Rsp = (errorCode: Int, ser_rsp_begin_id: Int64, ser_rsp_end_id: Int64)
     
-      
+    /// 防止tcp不返回
     var timer: Timer?
     
-      
+    //根据last_big_serverId 计算 每5个拉取
     var kDiff: Int64 = 5
     
-      
+    // 从middle 开始， 向上 (0, top)
     var top_msg_id: Int64 = 0
     
-      
+    //MARK: 打开room 时候，携带进入的。 从open_last_msg_Id 开始 （多少条未读）
     var anchor_open_msg_Id: Int64
     
-      
+    /// init 携入，不再变化
     var const_open_msg_id: Int64 = 0
     
-      
+    ///  (anchor_open_msg_Id , middle_msg_id)
     var middle_msg_id: Int64 = 0
     
-      
+    /// 锚点 计算得到 固定不变
     var anchor_middle_msg_id: Int64 = 0
     
-      
+    ///  (anchor_middle_msg_id  bottom_msg_id)
     var bottom_msg_id: Int64 = 0
     
-      
+    /// 锚点 请求获取 固定不变
     var anchor_bottom_msg_id: Int64 =  0
     
-      
-      
+    //MARK:- Life Cycle
+    /// 自己的状态
     var inFetching: Bool = true
     
     var unreadCountCallBack: ((Int64) -> Void)?
@@ -62,15 +62,15 @@ class GroupMsgSynchronize : NSObject {
     }
     
     
-      
+    //MARK:- Public
     func resetStart(openMsgId: Int64) {
         anchor_open_msg_Id = openMsgId
         configInit()
     }
     
-      
-      
-      
+    /// (0, top_msg_id)
+    /// (anchor_open_msg_Id , middle_msg_id)
+    /// (anchor_middle_msg_id  bottom_msg_id)
     func startSys() {
         
         if inFetching {
@@ -102,7 +102,7 @@ class GroupMsgSynchronize : NSObject {
         startTimer()
     }
     
-      
+    //MARK:- Private
     fileprivate func configInit(callUnreadCount: Bool = false) {
         disbag = DisposeBag()
         inFetching = true
@@ -130,7 +130,7 @@ class GroupMsgSynchronize : NSObject {
         self.top_msg_id = self.anchor_open_msg_Id
     }
     
-      
+    /// 获取了最后5个数据
     fileprivate func fetchingLastBigMsgId(callUnreadCount: Bool = false) -> Observable<Int64?> {
         return Observable.create { [weak self] (observer) -> Disposable in
             guard let prikey = self?.roomVC.roomService?.chatContact?.value.decodePrivateKey() else {
@@ -148,8 +148,9 @@ class GroupMsgSynchronize : NSObject {
                 if callUnreadCount {
                     let bodyRemainC = UInt(body?.remainCount ?? 0)
                     let arrayC = body?.msgsArray_Count ?? 0
-                      
-                    let remainC = max((bodyRemainC + arrayC - 1) , 0)
+                    //Note -1
+                    let rc = Int(bodyRemainC + arrayC) - 1
+                    let remainC = max(rc, 0)
                     self?.unreadCountCallBack?(Int64(remainC))
                 }
             }
@@ -157,8 +158,8 @@ class GroupMsgSynchronize : NSObject {
         }
     }
     
-      
-      
+    //MARK: syn
+    // [ 0 100] 传入的大区间 ， 不断修复 endid
     fileprivate func v2_syn(beginId:Int64, endId:Int64) -> Observable<Rsp?> {
         
         return Observable.create { [weak self] (observer) -> Disposable in
@@ -178,7 +179,7 @@ class GroupMsgSynchronize : NSObject {
 
             CPGroupManagerHelper.v2_queryMessages(inSession: Int(sessionId), beginId: beginId, endId: endId , count: Int(count)) { (needSyn, realCount, rBid, rEid) in
                 if needSyn == false {
-                      
+                    //本轮 不需要同步
                     print("syn group message local not need  bid \(rBid) eid \(rEid)")
                     observer.onNext((0, rBid == 1 ? 0 : rBid , rEid))
                     observer.onCompleted()
@@ -199,7 +200,7 @@ class GroupMsgSynchronize : NSObject {
     }
     
     
-      
+    //MARK:- Timer
     private func startTimer() {
         stopTimer()
         timer = Timer.init(timeInterval: 15, block: { [weak self] (t) in

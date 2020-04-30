@@ -1,35 +1,35 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  LRStreamPlayer.m
+//  AudioQueueCheck
+//
+//  Created by CIA on 2017/3/8.
+//  Copyright © 2017年 CIA. All rights reserved.
+//
 
 #import "LRSPlayer.h"
 @import AudioToolbox;
 
-static const int kNumberBuffers = 3;                               
-  
+static const int kNumberBuffers = 3;                             // 3
+//static const int kBuffterSize = 8*1024;                          //8K //60s 一个音频3M
 
 struct AQPlayerState {
-    AudioStreamBasicDescription   mDataFormat;                      
-    AudioQueueRef                 mQueue;                           
-    AudioQueueBufferRef           mBuffers[kNumberBuffers];         
-    UInt32                        bufferByteSize;                   
-    SInt64                        mCurrentPacket;                   
-    UInt32                        mNumPacketsToRead;                
-    AudioStreamPacketDescription  *mPacketDescs;                    
+    AudioStreamBasicDescription   mDataFormat;                    // 2
+    AudioQueueRef                 mQueue;                         // 3
+    AudioQueueBufferRef           mBuffers[kNumberBuffers];       //
+    UInt32                        bufferByteSize;                 // 6
+    SInt64                        mCurrentPacket;                 // 7
+    UInt32                        mNumPacketsToRead;              // 8
+    AudioStreamPacketDescription  *mPacketDescs;                  // 9
 };
 
 @interface LRSPlayer()
 
 @property (nonatomic, strong) NSData *pcmData;
 
-@property (nonatomic, assign) NSInteger pcmLength;   
-@property (nonatomic, assign) NSInteger readIndex;   
+@property (nonatomic, assign) NSInteger pcmLength; //data length
+@property (nonatomic, assign) NSInteger readIndex; //read data length
 
-@property (nonatomic, assign) NSInteger buffSize;   
+@property (nonatomic, assign) NSInteger buffSize; //buff
 
 @property (nonatomic, assign) BOOL isPaused;
 @property (nonatomic, assign) BOOL isPlaying;
@@ -43,7 +43,7 @@ struct AQPlayerState {
 @end
 
 
-  
+//播放完成 重用buffer
 static void HandleOutputBuffer (
                                 void                *aqData,
                                 AudioQueueRef       inAQ,
@@ -95,15 +95,15 @@ static void HandleOutputBuffer (
             return self;
         }
         self.readIndex = 0;
-        int bufferSize = 2 * playerState.mDataFormat.mBytesPerFrame * frequency;   
+        int bufferSize = 2 * playerState.mDataFormat.mBytesPerFrame * frequency; //2s buff 时长
         self.buffSize = bufferSize;
         for (int i = 0; i < kNumberBuffers; i += 1) {
             AudioQueueAllocateBuffer(playerState.mQueue, bufferSize,&playerState.mBuffers[i]);
         }
         
-          
+        //构造空数据，给buff 播放
         int emlen = bufferSize/10;
-        void *emptyDatas = malloc(emlen);   
+        void *emptyDatas = malloc(emlen); //0.2
         memset(emptyDatas, 0, emlen);
         emptyData = [NSData dataWithBytes:emptyDatas length:emlen];
         free(emptyDatas);
@@ -124,7 +124,7 @@ static void HandleOutputBuffer (
 - (BOOL)play{
     
     if (self.buffSize == 0) {
-          
+        //error
         [self stop];
         return NO;
     }
@@ -134,7 +134,7 @@ static void HandleOutputBuffer (
     _emptyUseCount = 0;
     
     if (self.isPaused == NO) {
-          
+        //need input data
         for (int i = 0; i < kNumberBuffers; i += 1) {
             HandleOutputBuffer((__bridge void *)self,playerState.mQueue,playerState.mBuffers[i]);
         }
@@ -188,7 +188,7 @@ static void HandleOutputBuffer (
 }
 
 
-  
+//MARK:- Helper
 - (void)needPCMDataForQueue:(AudioQueueRef)queueRef
                      buffer:(AudioQueueBufferRef)buffer
 {
@@ -204,7 +204,7 @@ static void HandleOutputBuffer (
             read_len = self.pcmLength - self.readIndex + 1;
         }
         else {
-              
+            //read over
             [self enQueueBufferData:emptyData inBuffer:buffer];
             _emptyUseCount++;
             if (_emptyUseCount > kNumberBuffers) {

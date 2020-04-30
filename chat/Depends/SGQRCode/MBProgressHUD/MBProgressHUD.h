@@ -1,30 +1,30 @@
-  
-  
-  
-  
-  
+//
+//  MBProgressHUD.h
+//  Version 1.1.0
+//  Created by Matej Bukovinski on 2.4.09.
+//
 
-  
+// This code is distributed under the terms and conditions of the MIT license. 
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+// Copyright © 2009-2016 Matej Bukovinski
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -37,35 +37,35 @@
 extern CGFloat const MBProgressMaxOffset;
 
 typedef NS_ENUM(NSInteger, MBProgressHUDMode) {
-      
+    /// UIActivityIndicatorView.
     MBProgressHUDModeIndeterminate,
-      
+    /// A round, pie-chart like, progress view.
     MBProgressHUDModeDeterminate,
-      
+    /// Horizontal progress bar.
     MBProgressHUDModeDeterminateHorizontalBar,
-      
+    /// Ring-shaped progress view.
     MBProgressHUDModeAnnularDeterminate,
-      
+    /// Shows a custom view.
     MBProgressHUDModeCustomView,
-      
+    /// Shows only labels.
     MBProgressHUDModeText
 };
 
 typedef NS_ENUM(NSInteger, MBProgressHUDAnimation) {
-      
+    /// Opacity animation
     MBProgressHUDAnimationFade,
-      
+    /// Opacity + scale animation (zoom in when appearing zoom out when disappearing)
     MBProgressHUDAnimationZoom,
-      
+    /// Opacity + scale animation (zoom out style)
     MBProgressHUDAnimationZoomOut,
-      
+    /// Opacity + scale animation (zoom in style)
     MBProgressHUDAnimationZoomIn
 };
 
 typedef NS_ENUM(NSInteger, MBProgressHUDBackgroundStyle) {
-      
+    /// Solid color background
     MBProgressHUDBackgroundStyleSolidColor,
-      
+    /// UIVisualEffectView or UIToolbar.layer background view
     MBProgressHUDBackgroundStyleBlur
 };
 
@@ -102,7 +102,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)showHUDAddedTo:(UIView *)view animated:(BOOL)animated;
 
-  
+/// @name Showing and hiding
 
 /**
  * Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is showHUDAddedTo:animated:.
@@ -207,7 +207,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (assign, nonatomic) BOOL removeFromSuperViewOnHide;
 
-  
+/// @name Appearance
 
 /** 
  * MBProgressHUD operation mode. The default is MBProgressHUDModeIndeterminate.
@@ -256,21 +256,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (assign, nonatomic, getter=areDefaultMotionEffectsEnabled) BOOL defaultMotionEffectsEnabled UI_APPEARANCE_SELECTOR;
 
-  
+/// @name Progress
 
 /**
  * The progress of the progress indicator, from 0.0 to 1.0. Defaults to 0.0.
  */
 @property (assign, nonatomic) float progress;
 
-  
+/// @name ProgressObject
 
 /**
  * The NSProgress object feeding the progress information to the progress indicator.
  */
 @property (strong, nonatomic, nullable) NSProgress *progressObject;
 
-  
+/// @name Views
 
 /**
  * The view containing the labels and indicator (or customView).

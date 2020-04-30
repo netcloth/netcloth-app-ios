@@ -5,5 +5,8 @@
 /* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "nZv-vz-Nfa"; */
 "nZv-vz-Nfa.title" = "Contacts";
 
+/* Class = "UITabBarItem"; title = "Item"; ObjectID = "tkG-YS-FqO"; */
+"tkG-YS-FqO.title" = "Apps";
+
 /* Class = "UITabBarItem"; title = "Me"; ObjectID = "ydJ-Tg-vQv"; */
 "ydJ-Tg-vQv.title" = "Me";

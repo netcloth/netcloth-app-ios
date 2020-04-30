@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  StrangerSessionListVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/22.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -45,7 +45,7 @@ class StrangerSessionListVC: BaseViewController {
         reloadTable()
     }
     
-      
+    //MARK:- Binding
     @objc func onTapEdit() {
         self.viewModel.inEditable = !self.viewModel.inEditable
     }
@@ -63,7 +63,7 @@ class StrangerSessionListVC: BaseViewController {
     }
     
     
-      
+    //MARK:- Config
     func configUI() {
         self.tableView.adjustFooter()
         self.tableView.adjustOffset()
@@ -71,7 +71,7 @@ class StrangerSessionListVC: BaseViewController {
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
         let barItem = UIBarButtonItem(title: "Edit".localized(), style: .plain, target: self, action: #selector(onTapEdit))
-        barItem.tintColor = UIColor(hexString: "#3D7EFF")
+        barItem.tintColor = UIColor(hexString: Color.blue)
         self.navigationItem.rightBarButtonItem = barItem
         
         self.bottomV?.setShadow(color: UIColor.lightGray, offset: CGSize(width: 0,height: -5), radius: 5, opacity: 0.1)
@@ -159,9 +159,24 @@ class StrangerSessionListVC: BaseViewController {
         
         CPSessionHelper.getStrengerAllSessionComplete { [weak self] (ok:Bool, msg, array:[CPSession]?) in
             self?.sessionQueue.async {
-  
+//
                 
-                  
+                var array = array?.filter({ (session) -> Bool in
+                    if session.relateContact.status == .strange {
+                        return true
+                    }
+                    
+                    if session.relateContact.status == .assistHelper {
+                        if let _ = session.relateContact.publicKey.isCurNodeAssist() {
+                            
+                        } else {
+                            return true
+                        }
+                    }
+                    return false
+                })
+                
+                //recovery
                 if let havedarr = self?.sessionsArray, let toinarr = array {
                     for have in havedarr {
                         for toin in toinarr {
@@ -175,7 +190,7 @@ class StrangerSessionListVC: BaseViewController {
                     }
                 }
                 
-                  
+                //decode
                 var count = 0
                 if let toinarr = array {
                     for toin in toinarr {

@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
 #ifndef SECP256K1_FIELD_REPR_H
@@ -46,4 +46,4 @@ typedef struct {
     (d6) | (((uint64_t)(d7)) << 32) \
 }}
 
-#endif  
+#endif /* SECP256K1_FIELD_REPR_H */

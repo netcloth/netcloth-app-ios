@@ -8,8 +8,8 @@
  * License/Waiver or the Apache Public License 2.0, at your option. The terms of
  * these licenses can be found at:
  *
- * - CC0 1.0 Universal : http:  
- * - Apache 2.0        : http:  
+ * - CC0 1.0 Universal : http://creativecommons.org/publicdomain/zero/1.0
+ * - Apache 2.0        : http://www.apache.org/licenses/LICENSE-2.0
  *
  * You should have received a copy of both of these licenses along with this
  * software. If not, they may be obtained at the above URLs.
@@ -22,7 +22,7 @@
 
 #include <emmintrin.h>
 #if defined(__SSSE3__)
-#include <tmmintrin.h>  
+#include <tmmintrin.h> /* for _mm_shuffle_epi8 and _mm_alignr_epi8 */
 #endif
 
 #if defined(__XOP__) && (defined(__GNUC__) || defined(__clang__))
@@ -137,7 +137,7 @@ static BLAKE2_INLINE __m128i fBlaMka(__m128i x, __m128i y) {
         D0 = t1;                                                               \
         D1 = t0;                                                               \
     } while ((void)0, 0)
-#else  
+#else /* SSE2 */
 #define DIAGONALIZE(A0, B0, C0, D0, A1, B1, C1, D1)                            \
     do {                                                                       \
         __m128i t0 = D0;                                                       \
@@ -178,7 +178,7 @@ static BLAKE2_INLINE __m128i fBlaMka(__m128i x, __m128i y) {
                                                                                \
         UNDIAGONALIZE(A0, B0, C0, D0, A1, B1, C1, D1);                         \
     } while ((void)0, 0)
-#else  
+#else /* __AVX2__ */
 
 #include <immintrin.h>
 
@@ -325,9 +325,9 @@ static BLAKE2_INLINE __m128i fBlaMka(__m128i x, __m128i y) {
         UNDIAGONALIZE_2(A0, A1, B0, B1, C0, C1, D0, D1) \
     } while((void)0, 0);
 
-#endif  
+#endif /* __AVX2__ */
 
-#else  
+#else /* __AVX512F__ */
 
 #include <immintrin.h>
 
@@ -467,5 +467,5 @@ static __m512i muladd(__m512i x, __m512i y)
         UNSWAP_QUARTERS(D0, D1); \
     } while ((void)0, 0)
 
-#endif  
-#endif  
+#endif /* __AVX512F__ */
+#endif /* BLAKE_ROUND_MKA_OPT_H */

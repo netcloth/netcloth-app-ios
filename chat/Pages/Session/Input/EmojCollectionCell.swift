@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  EmojCollectionCell.swift
+//  chat
+//
+//  Created by Grand on 2019/8/30.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -14,7 +14,7 @@ class EmojCollectionCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-          
+        // Initialization code
     }
     
     override func reloadData(data: Any) {

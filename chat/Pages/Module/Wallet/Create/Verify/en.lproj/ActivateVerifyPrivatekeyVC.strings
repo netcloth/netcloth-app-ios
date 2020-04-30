@@ -1,0 +1,15 @@
+
+/* Class = "UINavigationItem"; title = "验证备份"; ObjectID = "67r-Ue-pF0"; */
+"67r-Ue-pF0.title" = "Confirm";
+
+/* Class = "UILabel"; text = "如果本地账户丢失，或者需要更换设备，可通过导入私钥恢复账户。请确认私钥已在安全、离线的地方保存。请勿通过任何联网应用传输私钥。"; ObjectID = "Ecz-Ud-hA2"; */
+"Ecz-Ud-hA2.text" = "If the local account is lost, or if the device needs to be replaced, the account can be restored by importing the private key. Make sure your private key is stored in a secure, offline location. Do not transfer the private key through any networking application.";
+
+/* Class = "UIButton"; normalTitle = "激活钱包"; ObjectID = "dvh-wT-Sdy"; */
+"dvh-wT-Sdy.normalTitle" = "Confirm";
+
+/* Class = "UILabel"; text = "验证备份并激活钱包"; ObjectID = "i4U-dT-jLy"; */
+"i4U-dT-jLy.text" = "Verify the Backup and Activate Wallet";
+
+/* Class = "UILabel"; text = "请输入私钥验证备份并激活钱包"; ObjectID = "sSn-4j-hPf"; */
+"sSn-4j-hPf.text" = "Enter the private key and activate wallet.";

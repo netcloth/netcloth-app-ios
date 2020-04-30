@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  YCXMenu.m
+//  YCXMenuDemo_ObjC
+//
+//  Created by 牛萌 on 15/5/6.
+//  Copyright (c) 2015年 NiuMeng. All rights reserved.
+//
 
 #import "YCXMenu.h"
 #import <UIKit/UIKit.h>
@@ -15,9 +15,9 @@ NSString * const YCXMenuDidAppearNotification = @"YCXMenuDidAppearNotification";
 NSString * const YCXMenuWillDisappearNotification = @"YCXMenuWillDisappearNotification";
 NSString * const YCXMenuDidDisappearNotification = @"YCXMenuDidDisappearNotification";
 
-#define kArrowSize      10.0f     
-#define kCornerRadius   6.0f      
-#define kTintColor  [UIColor colorWithRed:0.267 green:0.303 blue:0.335 alpha:1]    
+#define kArrowSize      10.0f   //!< 箭头尺寸
+#define kCornerRadius   6.0f    //!< 圆角
+#define kTintColor  [UIColor colorWithRed:0.267 green:0.303 blue:0.335 alpha:1]  //!< 主题颜色
 #define kSelectedColor [UIColor colorWithRed:0.059 green:0.353 blue:0.839 alpha:1.0f]
 #define kTitleFont  [UIFont systemFontOfSize:16.0]
 
@@ -31,26 +31,26 @@ NSString * const YCXMenuDidDisappearNotification = @"YCXMenuDidDisappearNotifica
 const CGFloat kMenuItemMarginY = 12.f;
 
 
-  
+/// 背景色
 static UIColor  *gTintColor;
-  
+/// 箭头尺寸
 static CGFloat  gArrowSize = kArrowSize;
-  
+/// 圆角
 CGFloat         gCornerRadius = kCornerRadius;
-  
+/// 字体
 static UIFont   *gTitleFont;
-  
+/// 背景色效果
 static YCXMenuBackgrounColorEffect   gBackgroundColorEffect = YCXMenuBackgrounColorEffectSolid;
-  
+/// 是否显示阴影
 static BOOL     gHasShadow = NO;
-  
+/// 选中颜色（默认蓝色）
 static UIColor  *gSelectedColor;
-  
+/// 分割线颜色
 static UIColor  *gSeparatorColor;
-  
+/// 菜单原始的垂直边距值
 static CGFloat  gMenuItemMarginY = kMenuItemMarginY;
 
-  
+//@property (nonatomic) UIEdgeInsets separatorInset NS_AVAILABLE_IOS(7_0) UI_APPEARANCE_SELECTOR; // allows customization of the frame of cell separators
 
 typedef enum {
 
@@ -65,7 +65,12 @@ typedef enum {
 
 @interface YCXMenuView : UIView
 
- 
+/**
+ *  @method
+ *  @brief 隐藏Menu
+ *
+ *  @param animated 是否有动画
+ */
 - (void)dismissMenu:(BOOL)animated;
 
 @end
@@ -79,10 +84,10 @@ typedef enum {
 
 + (instancetype)sharedMenu;
 
-  
+/// 视图当前是否显示
 @property(nonatomic, assign) BOOL isShow;
 
-  
+/// 重置属性
 + (void)reset;
 
 @end
@@ -375,7 +380,7 @@ typedef enum {
     for (YCXMenuItem *menuItem in _menuItems) {
 
         const CGSize titleSize = [menuItem.title sizeWithAttributes:@{NSFontAttributeName:menuItem.titleFont?menuItem.titleFont:titleFont}];
-          
+        //const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
         const CGSize imageSize = menuItem.image.size;
 
         const CGFloat itemHeight = MAX(titleSize.height, imageSize.height) + [YCXMenu menuItemMarginY] * 2;
@@ -528,7 +533,9 @@ typedef enum {
 
     return point;
 }
- 
+/**
+ *  渐变颜色的图片
+ */
 + (UIImage *)selectedImage:(CGSize)size {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -592,8 +599,8 @@ typedef enum {
 
 - (void)drawRect:(CGRect)rect {
     [self drawBackground:self.bounds inContext:UIGraphicsGetCurrentContext()];
-      
-      
+    // 绘制完成后,初始静态变量值
+    // 防止下次调用控件时沿用上一次设置的属性
     [YCXMenu reset];
 }
 
@@ -619,11 +626,11 @@ typedef enum {
     CGFloat Y0 = frame.origin.y;
     CGFloat Y1 = frame.origin.y + frame.size.height;
 
-      
+    // render arrow
 
     UIBezierPath *arrowPath = [UIBezierPath bezierPath];
 
-      
+    // fix the issue with gap of arrow's base if on the edge
     const CGFloat kEmbedFix = 3.f;
 
     if (_arrowDirection == YCXMenuViewArrowDirectionUp) {
@@ -697,7 +704,7 @@ typedef enum {
 
     [arrowPath fill];
 
-      
+    // render body
     const CGRect bodyFrame = {X0, Y0, X1 - X0, Y1 - Y0};
 
     UIBezierPath *borderPath = [UIBezierPath bezierPathWithRoundedRect:bodyFrame
@@ -742,7 +749,7 @@ typedef enum {
 
 
 #pragma mark - YCXMenu
-  
+/// MenuView
 static YCXMenu                      *gMenu;
 
 @implementation YCXMenu {
@@ -816,7 +823,7 @@ static YCXMenu                      *gMenu;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationWillChange:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     }
 
-      
+    // 创建MenuView
     _menuView = [[YCXMenuView alloc] init];
     [_menuView showMenuInView:view fromRect:rect menuItems:menuItems selected:selectedItem];
     self.isShow = YES;
@@ -914,7 +921,7 @@ static YCXMenu                      *gMenu;
 }
 
 
-  
+/// 菜单元素垂直方向上的边距值
 + (CGFloat)menuItemMarginY {
     return gMenuItemMarginY > 0?gMenuItemMarginY:kMenuItemMarginY;
 }

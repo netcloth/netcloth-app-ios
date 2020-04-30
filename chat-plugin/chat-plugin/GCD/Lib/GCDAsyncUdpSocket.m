@@ -1,18 +1,18 @@
-  
-  
-  
-  
-  
-  
-  
-  
-  
+//  
+//  GCDAsyncUdpSocket
+//  
+//  This class is in the public domain.
+//  Originally created by Robbie Hanson of Deusty LLC.
+//  Updated and maintained by Deusty LLC and the Apple development community.
+//  
+//  https://github.com/robbiehanson/CocoaAsyncSocket
+//
 
 #import "GCDAsyncUdpSocket.h"
 
 #if ! __has_feature(objc_arc)
 #warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
-  
+// For more information see: https://github.com/robbiehanson/CocoaAsyncSocket/wiki/ARC
 #endif
 
 #if TARGET_OS_IPHONE
@@ -31,12 +31,12 @@
 
 #if 0
 
-  
+// Logging Enabled - See log level below
 
-  
-  
-  
-  
+// Logging uses the CocoaLumberjack framework (which is also GCD based).
+// http://code.google.com/p/cocoalumberjack/
+// 
+// It allows us to do a lot of logging without significantly slowing down the code.
 #import "DDLog.h"
 
 #define LogAsync   NO
@@ -58,12 +58,12 @@
 #define LogTrace()              LogObjc(LOG_FLAG_VERBOSE, @"%@: %@", THIS_FILE, THIS_METHOD)
 #define LogCTrace()             LogC(LOG_FLAG_VERBOSE, @"%@: %s", THIS_FILE, __FUNCTION__)
 
-  
+// Log levels : off, error, warn, info, verbose
 static const int logLevel = LOG_LEVEL_VERBOSE;
 
 #else
 
-  
+// Logging Disabled
 
 #define LogError(frmt, ...)     {}
 #define LogWarn(frmt, ...)      {}
@@ -110,39 +110,39 @@ NSString *const GCDAsyncUdpSocketThreadName = @"GCDAsyncUdpSocket-CFStream";
 
 enum GCDAsyncUdpSocketFlags
 {
-	kDidCreateSockets        = 1 <<  0,    
-	kDidBind                 = 1 <<  1,    
-	kConnecting              = 1 <<  2,    
-	kDidConnect              = 1 <<  3,    
-	kReceiveOnce             = 1 <<  4,    
-	kReceiveContinuous       = 1 <<  5,    
-	kIPv4Deactivated         = 1 <<  6,    
-	kIPv6Deactivated         = 1 <<  7,    
-	kSend4SourceSuspended    = 1 <<  8,    
-	kSend6SourceSuspended    = 1 <<  9,    
-	kReceive4SourceSuspended = 1 << 10,    
-	kReceive6SourceSuspended = 1 << 11,    
-	kSock4CanAcceptBytes     = 1 << 12,    
-	kSock6CanAcceptBytes     = 1 << 13,    
-	kForbidSendReceive       = 1 << 14,    
-	kCloseAfterSends         = 1 << 15,    
-	kFlipFlop                = 1 << 16,    
+	kDidCreateSockets        = 1 <<  0,  // If set, the sockets have been created.
+	kDidBind                 = 1 <<  1,  // If set, bind has been called.
+	kConnecting              = 1 <<  2,  // If set, a connection attempt is in progress.
+	kDidConnect              = 1 <<  3,  // If set, socket is connected.
+	kReceiveOnce             = 1 <<  4,  // If set, one-at-a-time receive is enabled
+	kReceiveContinuous       = 1 <<  5,  // If set, continuous receive is enabled
+	kIPv4Deactivated         = 1 <<  6,  // If set, socket4 was closed due to bind or connect on IPv6.
+	kIPv6Deactivated         = 1 <<  7,  // If set, socket6 was closed due to bind or connect on IPv4.
+	kSend4SourceSuspended    = 1 <<  8,  // If set, send4Source is suspended.
+	kSend6SourceSuspended    = 1 <<  9,  // If set, send6Source is suspended.
+	kReceive4SourceSuspended = 1 << 10,  // If set, receive4Source is suspended.
+	kReceive6SourceSuspended = 1 << 11,  // If set, receive6Source is suspended.
+	kSock4CanAcceptBytes     = 1 << 12,  // If set, we know socket4 can accept bytes. If unset, it's unknown.
+	kSock6CanAcceptBytes     = 1 << 13,  // If set, we know socket6 can accept bytes. If unset, it's unknown.
+	kForbidSendReceive       = 1 << 14,  // If set, no new send or receive operations are allowed to be queued.
+	kCloseAfterSends         = 1 << 15,  // If set, close as soon as no more sends are queued.
+	kFlipFlop                = 1 << 16,  // Used to alternate between IPv4 and IPv6 sockets.
 #if TARGET_OS_IPHONE
-	kAddedStreamListener     = 1 << 17,    
+	kAddedStreamListener     = 1 << 17,  // If set, CFStreams have been added to listener thread
 #endif
 };
 
 enum GCDAsyncUdpSocketConfig
 {
-	kIPv4Disabled  = 1 << 0,    
-	kIPv6Disabled  = 1 << 1,    
-	kPreferIPv4    = 1 << 2,    
-	kPreferIPv6    = 1 << 3,    
+	kIPv4Disabled  = 1 << 0,  // If set, IPv4 is disabled
+	kIPv6Disabled  = 1 << 1,  // If set, IPv6 is disabled
+	kPreferIPv4    = 1 << 2,  // If set, IPv4 is preferred over IPv6
+	kPreferIPv6    = 1 << 3,  // If set, IPv6 is preferred over IPv4
 };
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @interface GCDAsyncUdpSocket ()
 {
@@ -252,15 +252,15 @@ enum GCDAsyncUdpSocketConfig
 + (uint16_t)portFromSockaddr6:(const struct sockaddr_in6 *)pSockaddr6;
 
 #if TARGET_OS_IPHONE
-  
+// Forward declaration
 + (void)listenerThread;
 #endif
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * The GCDAsyncUdpSendPacket encompasses the instructions for a single send/write.
@@ -303,13 +303,13 @@ enum GCDAsyncUdpSocketConfig
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @interface GCDAsyncUdpSpecialPacket : NSObject {
 @public
-  	uint8_t type;
+//	uint8_t type;
 	
 	BOOL resolveInProgress;
 	
@@ -332,9 +332,9 @@ enum GCDAsyncUdpSocketConfig
 
 @end
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @implementation GCDAsyncUdpSocket
 
@@ -402,22 +402,22 @@ enum GCDAsyncUdpSocketConfig
 			socketQueue = dispatch_queue_create([GCDAsyncUdpSocketQueueName UTF8String], NULL);
 		}
 
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		// The dispatch_queue_set_specific() and dispatch_get_specific() functions take a "void *key" parameter.
+		// From the documentation:
+		//
+		// > Keys are only compared as pointers and are never dereferenced.
+		// > Thus, you can use a pointer to a static variable for a specific subsystem or
+		// > any other value that allows you to identify the value uniquely.
+		//
+		// We're just going to use the memory address of an ivar.
+		// Specifically an ivar that is explicitly named for our purpose to make the code more readable.
+		//
+		// However, it feels tedious (and less readable) to include the "&" all the time:
+		// dispatch_get_specific(&IsOnSocketQueueOrTargetQueueKey)
+		//
+		// So we're going to make it so it doesn't matter if we use the '&' or not,
+		// by assigning the value of the ivar to the address of the ivar.
+		// Thus: IsOnSocketQueueOrTargetQueueKey == &IsOnSocketQueueOrTargetQueueKey;
 
 		IsOnSocketQueueOrTargetQueueKey = &IsOnSocketQueueOrTargetQueueKey;
 
@@ -470,9 +470,9 @@ enum GCDAsyncUdpSocketConfig
 	LogInfo(@"%@ - %@ (finish)", THIS_METHOD, self);
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Configuration
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (id)delegate
 {
@@ -629,7 +629,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (BOOL)isIPv4Enabled
 {
-	  
+	// Note: YES means kIPv4Disabled is OFF
 	
 	__block BOOL result = NO;
 	
@@ -648,7 +648,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (void)setIPv4Enabled:(BOOL)flag
 {
-	  
+	// Note: YES means kIPv4Disabled is OFF
 	
 	dispatch_block_t block = ^{
 		
@@ -668,7 +668,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (BOOL)isIPv6Enabled
 {
-	  
+	// Note: YES means kIPv6Disabled is OFF
 	
 	__block BOOL result = NO;
 	
@@ -687,7 +687,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (void)setIPv6Enabled:(BOOL)flag
 {
-	  
+	// Note: YES means kIPv6Disabled is OFF
 	
 	dispatch_block_t block = ^{
 		
@@ -933,9 +933,9 @@ enum GCDAsyncUdpSocketConfig
 		dispatch_async(socketQueue, block);
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Delegate Helpers
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)notifyDidConnectToAddress:(NSData *)anAddress
 {
@@ -944,7 +944,7 @@ enum GCDAsyncUdpSocketConfig
 	__strong id theDelegate = delegate;
 	if (delegateQueue && [theDelegate respondsToSelector:@selector(udpSocket:didConnectToAddress:)])
 	{
-		NSData *address = [anAddress copy];   
+		NSData *address = [anAddress copy]; // In case param is NSMutableData
 		
 		dispatch_async(delegateQueue, ^{ @autoreleasepool {
 			
@@ -1025,9 +1025,9 @@ enum GCDAsyncUdpSocketConfig
 	}
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Errors
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (NSError *)badConfigError:(NSString *)errMsg
 {
@@ -1110,15 +1110,15 @@ enum GCDAsyncUdpSocketConfig
 	                       userInfo:userInfo];
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Utilities
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)preOp:(NSError **)errPtr
 {
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	if (delegate == nil)   
+	if (delegate == nil) // Must have delegate set
 	{
 		if (errPtr)
 		{
@@ -1128,7 +1128,7 @@ enum GCDAsyncUdpSocketConfig
 		return NO;
 	}
 	
-	if (delegateQueue == NULL)   
+	if (delegateQueue == NULL) // Must have delegate queue set
 	{
 		if (errPtr)
 		{
@@ -1151,14 +1151,14 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	  
+	// Check parameter(s)
 	
 	if (aHost == nil)
 	{
 		NSString *msg = @"The host param is nil. Should be domain name or IP address string.";
 		NSError *error = [self badParamError:msg];
 		
-		  
+		// We should still use dispatch_async since this method is expected to be asynchronous
 		
 		dispatch_async(socketQueue, ^{ @autoreleasepool {
 			
@@ -1168,9 +1168,9 @@ enum GCDAsyncUdpSocketConfig
 		return;
 	}
 	
-	  
-	  
-	  
+	// It's possible that the given aHost parameter is actually a NSMutableString.
+	// So we want to copy it now, within this block that will be executed synchronously.
+	// This way the asynchronous lookup block below doesn't have to worry about it changing.
 	
 	NSString *host = [aHost copy];
 	
@@ -1183,7 +1183,7 @@ enum GCDAsyncUdpSocketConfig
 		
 		if ([host isEqualToString:@"localhost"] || [host isEqualToString:@"loopback"])
 		{
-			  
+			// Use LOOPBACK address
 			struct sockaddr_in sockaddr4;
 			memset(&sockaddr4, 0, sizeof(sockaddr4));
 			
@@ -1200,7 +1200,7 @@ enum GCDAsyncUdpSocketConfig
 			sockaddr6.sin6_port      = htons(port);
 			sockaddr6.sin6_addr      = in6addr_loopback;
 			
-			  
+			// Wrap the native address structures and add to list
 			[addresses addObject:[NSData dataWithBytes:&sockaddr4 length:sizeof(sockaddr4)]];
 			[addresses addObject:[NSData dataWithBytes:&sockaddr6 length:sizeof(sockaddr6)]];
 		}
@@ -1227,24 +1227,24 @@ enum GCDAsyncUdpSocketConfig
 				{
 					if (res->ai_family == AF_INET)
 					{
-						  
-						  
+						// Found IPv4 address
+						// Wrap the native address structure and add to list
 						
 						[addresses addObject:[NSData dataWithBytes:res->ai_addr length:res->ai_addrlen]];
 					}
 					else if (res->ai_family == AF_INET6)
 					{
 
-                          
-                          
+                        // Fixes connection issues with IPv6, it is the same solution for udp socket.
+                        // https://github.com/robbiehanson/CocoaAsyncSocket/issues/429#issuecomment-222477158
                         struct sockaddr_in6 *sockaddr = (struct sockaddr_in6 *)res->ai_addr;
                         in_port_t *portPtr = &sockaddr->sin6_port;
                         if ((portPtr != NULL) && (*portPtr == 0)) {
                             *portPtr = htons(port);
                         }
 
-                          
-                          
+                        // Found IPv6 address
+                        // Wrap the native address structure and add to list
 						[addresses addObject:[NSData dataWithBytes:res->ai_addr length:res->ai_addrlen]];
 					}
 				}
@@ -1281,7 +1281,7 @@ enum GCDAsyncUdpSocketConfig
 	NSData *resultAddress = nil;
 	NSError *resultError = nil;
 	
-	  
+	// Check for problems
 	
 	BOOL resolvedIPv4Address = NO;
 	BOOL resolvedIPv6Address = NO;
@@ -1347,7 +1347,7 @@ enum GCDAsyncUdpSocketConfig
 		return resultAF;
 	}
 	
-	  
+	// Extract first IPv4 and IPv6 address in list
 	
 	BOOL ipv4WasFirstInList = YES;
 	NSData *address4 = nil;
@@ -1369,7 +1369,7 @@ enum GCDAsyncUdpSocketConfig
 					ipv4WasFirstInList = YES;
 			}
 		}
-		else   
+		else // af == AF_INET6
 		{
 			if (address6 == nil)
 			{
@@ -1383,7 +1383,7 @@ enum GCDAsyncUdpSocketConfig
 		}
 	}
 	
-	  
+	// Determine socket type
 	
 	BOOL preferIPv4 = (config & kPreferIPv4) ? YES : NO;
 	BOOL preferIPv6 = (config & kPreferIPv6) ? YES : NO;
@@ -1425,7 +1425,7 @@ enum GCDAsyncUdpSocketConfig
 	
 	if (interfaceDescription == nil)
 	{
-		  
+		// ANY address
 		
 		struct sockaddr_in sockaddr4;
 		memset(&sockaddr4, 0, sizeof(sockaddr4));
@@ -1449,7 +1449,7 @@ enum GCDAsyncUdpSocketConfig
 	else if ([interfaceDescription isEqualToString:@"localhost"] ||
 	         [interfaceDescription isEqualToString:@"loopback"])
 	{
-		  
+		// LOOPBACK address
 		
 		struct sockaddr_in sockaddr4;
 		memset(&sockaddr4, 0, sizeof(sockaddr4));
@@ -1484,13 +1484,13 @@ enum GCDAsyncUdpSocketConfig
 			{
 				if ((addr4 == nil) && (cursor->ifa_addr->sa_family == AF_INET))
 				{
-					  
+					// IPv4
 					
 					struct sockaddr_in *addr = (struct sockaddr_in *)cursor->ifa_addr;
 					
 					if (strcmp(cursor->ifa_name, iface) == 0)
 					{
-						  
+						// Name match
 						
 						struct sockaddr_in nativeAddr4 = *addr;
 						nativeAddr4.sin_port = htons(port);
@@ -1506,7 +1506,7 @@ enum GCDAsyncUdpSocketConfig
 						
 						if ((conversion != NULL) && (strcmp(ip, iface) == 0))
 						{
-							  
+							// IP match
 							
 							struct sockaddr_in nativeAddr4 = *addr;
 							nativeAddr4.sin_port = htons(port);
@@ -1517,13 +1517,13 @@ enum GCDAsyncUdpSocketConfig
 				}
 				else if ((addr6 == nil) && (cursor->ifa_addr->sa_family == AF_INET6))
 				{
-					  
+					// IPv6
 					
 					struct sockaddr_in6 *addr = (struct sockaddr_in6 *)cursor->ifa_addr;
 					
 					if (strcmp(cursor->ifa_name, iface) == 0)
 					{
-						  
+						// Name match
 						
 						struct sockaddr_in6 nativeAddr6 = *addr;
 						nativeAddr6.sin6_port = htons(port);
@@ -1539,7 +1539,7 @@ enum GCDAsyncUdpSocketConfig
 						
 						if ((conversion != NULL) && (strcmp(ip, iface) == 0))
 						{
-							  
+							// IP match
 							
 							struct sockaddr_in6 nativeAddr6 = *addr;
 							nativeAddr6.sin6_port = htons(port);
@@ -1582,7 +1582,7 @@ enum GCDAsyncUdpSocketConfig
 		hints.ai_family   = PF_UNSPEC;
 		hints.ai_socktype = SOCK_DGRAM;
 		hints.ai_protocol = IPPROTO_UDP;
-		hints.ai_flags    = AI_NUMERICHOST;   
+		hints.ai_flags    = AI_NUMERICHOST; // No name resolution should be attempted
 		
 		if (getaddrinfo([numericHost UTF8String], [portStr UTF8String], &hints, &res0) == 0)
 		{
@@ -1590,14 +1590,14 @@ enum GCDAsyncUdpSocketConfig
 			{
 				if ((addr4 == nil) && (res->ai_family == AF_INET))
 				{
-					  
-					  
+					// Found IPv4 address
+					// Wrap the native address structure
 					addr4 = [NSData dataWithBytes:res->ai_addr length:res->ai_addrlen];
 				}
 				else if ((addr6 == nil) && (res->ai_family == AF_INET6))
 				{
-					  
-					  
+					// Found IPv6 address
+					// Wrap the native address structure
 					addr6 = [NSData dataWithBytes:res->ai_addr length:res->ai_addrlen];
 				}
 			}
@@ -1681,7 +1681,7 @@ enum GCDAsyncUdpSocketConfig
 		{
 			if (cursor->ifa_addr->sa_family == AF_INET)
 			{
-				  
+				// IPv4
 				
 				struct sockaddr_in *addr = (struct sockaddr_in *)cursor->ifa_addr;
 				
@@ -1721,7 +1721,7 @@ enum GCDAsyncUdpSocketConfig
 		{
 			if (cursor->ifa_addr->sa_family == AF_INET6)
 			{
-				  
+				// IPv6
 				
 				struct sockaddr_in6 *addr = (struct sockaddr_in6 *)cursor->ifa_addr;
 				
@@ -1749,7 +1749,7 @@ enum GCDAsyncUdpSocketConfig
 	send4Source = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE, socket4FD, 0, socketQueue);
 	receive4Source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socket4FD, 0, socketQueue);
 	
-	  
+	// Setup event handlers
 	
 	dispatch_source_set_event_handler(send4Source, ^{ @autoreleasepool {
 		
@@ -1758,8 +1758,8 @@ enum GCDAsyncUdpSocketConfig
 		
         self->flags |= kSock4CanAcceptBytes;
 		
-		  
-		  
+		// If we're ready to send data, do so immediately.
+		// Otherwise pause the send source or it will continue to fire over and over again.
 		
         if (self->currentSend == nil)
 		{
@@ -1797,7 +1797,7 @@ enum GCDAsyncUdpSocketConfig
 		
 	}});
 	
-	  
+	// Setup cancel handlers
 	
 	__block int socketFDRefCount = 2;
 	
@@ -1840,10 +1840,10 @@ enum GCDAsyncUdpSocketConfig
 		}
 	});
 	
-	  
-	  
-	  
-	  
+	// We will not be able to receive until the socket is bound to a port,
+	// either explicitly via bind, or implicitly by connect or by sending data.
+	// 
+	// But we should be able to send immediately.
 	
 	socket4FDBytesAvailable = 0;
 	flags |= kSock4CanAcceptBytes;
@@ -1860,7 +1860,7 @@ enum GCDAsyncUdpSocketConfig
 	send6Source = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE, socket6FD, 0, socketQueue);
 	receive6Source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, socket6FD, 0, socketQueue);
 	
-	  
+	// Setup event handlers
 	
 	dispatch_source_set_event_handler(send6Source, ^{ @autoreleasepool {
 		
@@ -1869,8 +1869,8 @@ enum GCDAsyncUdpSocketConfig
 		
         self->flags |= kSock6CanAcceptBytes;
 		
-		  
-		  
+		// If we're ready to send data, do so immediately.
+		// Otherwise pause the send source or it will continue to fire over and over again.
 		
         if (self->currentSend == nil)
 		{
@@ -1908,7 +1908,7 @@ enum GCDAsyncUdpSocketConfig
 		
 	}});
 	
-	  
+	// Setup cancel handlers
 	
 	__block int socketFDRefCount = 2;
 	
@@ -1951,10 +1951,10 @@ enum GCDAsyncUdpSocketConfig
 		}
 	});
 	
-	  
-	  
-	  
-	  
+	// We will not be able to receive until the socket is bound to a port,
+	// either explicitly via bind, or implicitly by connect or by sending data.
+	// 
+	// But we should be able to send immediately.
 	
 	socket6FDBytesAvailable = 0;
 	flags |= kSock6CanAcceptBytes;
@@ -1970,8 +1970,8 @@ enum GCDAsyncUdpSocketConfig
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	NSAssert(((flags & kDidCreateSockets) == 0), @"Sockets have already been created");
 	
-	  
-	  
+	// CreateSocket Block
+	// This block will be invoked below.
 	
 	int(^createSocket)(int) = ^int (int domain) {
 		
@@ -1987,7 +1987,7 @@ enum GCDAsyncUdpSocketConfig
 		
 		int status;
 		
-		  
+		// Set socket options
 		
 		status = fcntl(socketFD, F_SETFL, O_NONBLOCK);
 		if (status == -1)
@@ -2057,7 +2057,7 @@ enum GCDAsyncUdpSocketConfig
 		return socketFD;
 	};
 	
-	  
+	// Create sockets depending upon given configuration.
 	
 	if (useIPv4)
 	{
@@ -2066,7 +2066,7 @@ enum GCDAsyncUdpSocketConfig
 		socket4FD = createSocket(AF_INET);
 		if (socket4FD == SOCKET_NULL)
 		{
-			  
+			// errPtr set in local createSocket() block
 			return NO;
 		}
 	}
@@ -2078,7 +2078,7 @@ enum GCDAsyncUdpSocketConfig
 		socket6FD = createSocket(AF_INET6);
 		if (socket6FD == SOCKET_NULL)
 		{
-			  
+			// errPtr set in local createSocket() block
 			
 			if (socket4FD != SOCKET_NULL)
 			{
@@ -2090,7 +2090,7 @@ enum GCDAsyncUdpSocketConfig
 		}
 	}
 	
-	  
+	// Setup send and receive sources
 	
 	if (useIPv4)
 		[self setupSendAndReceiveSourcesForSocket4];
@@ -2209,27 +2209,27 @@ enum GCDAsyncUdpSocketConfig
 		LogVerbose(@"dispatch_source_cancel(receive4Source)");
 		dispatch_source_cancel(receive4Source);
 		
-		  
-		  
-		  
-		  
+		// For some crazy reason (in my opinion), cancelling a dispatch source doesn't
+		// invoke the cancel handler if the dispatch source is paused.
+		// So we have to unpause the source if needed.
+		// This allows the cancel handler to be run, which in turn releases the source and closes the socket.
 		
 		[self resumeSend4Source];
 		[self resumeReceive4Source];
 		
-		  
+		// The sockets will be closed by the cancel handlers of the corresponding source
 		
 		send4Source = NULL;
 		receive4Source = NULL;
 		
 		socket4FD = SOCKET_NULL;
 		
-		  
+		// Clear socket states
 		
 		socket4FDBytesAvailable = 0;
 		flags &= ~kSock4CanAcceptBytes;
 		
-		  
+		// Clear cached info
 		
 		cachedLocalAddress4 = nil;
 		cachedLocalHost4 = nil;
@@ -2247,10 +2247,10 @@ enum GCDAsyncUdpSocketConfig
 		LogVerbose(@"dispatch_source_cancel(receive6Source)");
 		dispatch_source_cancel(receive6Source);
 		
-		  
-		  
-		  
-		  
+		// For some crazy reason (in my opinion), cancelling a dispatch source doesn't
+		// invoke the cancel handler if the dispatch source is paused.
+		// So we have to unpause the source if needed.
+		// This allows the cancel handler to be run, which in turn releases the source and closes the socket.
 		
 		[self resumeSend6Source];
 		[self resumeReceive6Source];
@@ -2258,16 +2258,16 @@ enum GCDAsyncUdpSocketConfig
 		send6Source = NULL;
 		receive6Source = NULL;
 		
-		  
+		// The sockets will be closed by the cancel handlers of the corresponding source
 		
 		socket6FD = SOCKET_NULL;
 		
-		  
+		// Clear socket states
 		
 		socket6FDBytesAvailable = 0;
 		flags &= ~kSock6CanAcceptBytes;
 		
-		  
+		// Clear cached info
 		
 		cachedLocalAddress6 = nil;
 		cachedLocalHost6 = nil;
@@ -2283,9 +2283,9 @@ enum GCDAsyncUdpSocketConfig
 	flags &= ~kDidCreateSockets;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Diagnostics
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)getLocalAddress:(NSData **)dataPtr
                    host:(NSString **)hostPtr
@@ -2760,9 +2760,9 @@ enum GCDAsyncUdpSocketConfig
 	return result;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Binding
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * This method runs through the various checks required prior to a bind attempt.
@@ -2798,7 +2798,7 @@ enum GCDAsyncUdpSocketConfig
 	BOOL isIPv4Disabled = (config & kIPv4Disabled) ? YES : NO;
 	BOOL isIPv6Disabled = (config & kIPv6Disabled) ? YES : NO;
 	
-	if (isIPv4Disabled && isIPv6Disabled)   
+	if (isIPv4Disabled && isIPv6Disabled) // Must have IPv4 or IPv6 enabled
 	{
 		if (errPtr)
 		{
@@ -2823,14 +2823,14 @@ enum GCDAsyncUdpSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Run through sanity checks
 		
 		if (![self preBind:&err])
 		{
 			return_from_block;
 		}
 		
-		  
+		// Check the given interface
 		
 		NSData *interface4 = nil;
 		NSData *interface6 = nil;
@@ -2864,12 +2864,12 @@ enum GCDAsyncUdpSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Determine protocol(s)
 		
 		BOOL useIPv4 = !isIPv4Disabled && (interface4 != nil);
 		BOOL useIPv6 = !isIPv6Disabled && (interface6 != nil);
 		
-		  
+		// Create the socket(s) if needed
 		
         if ((self->flags & kDidCreateSockets) == 0)
 		{
@@ -2879,7 +2879,7 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 		
-		  
+		// Bind the socket(s)
 		
 		LogVerbose(@"Binding socket to port(%hu) interface(%@)", port, interface);
 		
@@ -2911,7 +2911,7 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 		
-		  
+		// Update flags
 		
         self->flags |= kDidBind;
 		
@@ -2943,14 +2943,14 @@ enum GCDAsyncUdpSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Run through sanity checks
 		
 		if (![self preBind:&err])
 		{
 			return_from_block;
 		}
 		
-		  
+		// Check the given address
 		
 		int addressFamily = [[self class] familyFromAddress:localAddr];
 		
@@ -2984,12 +2984,12 @@ enum GCDAsyncUdpSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Determine protocol(s)
 		
 		BOOL useIPv4 = !isIPv4Disabled && (localAddr4 != nil);
 		BOOL useIPv6 = !isIPv6Disabled && (localAddr6 != nil);
 		
-		  
+		// Create the socket(s) if needed
 		
         if ((self->flags & kDidCreateSockets) == 0)
 		{
@@ -2999,7 +2999,7 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 		
-		  
+		// Bind the socket(s)
 		
 		if (useIPv4)
 		{
@@ -3036,7 +3036,7 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 		
-		  
+		// Update flags
 		
         self->flags |= kDidBind;
 		
@@ -3061,9 +3061,9 @@ enum GCDAsyncUdpSocketConfig
 	return result;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Connecting
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * This method runs through the various checks required prior to a connect attempt.
@@ -3089,7 +3089,7 @@ enum GCDAsyncUdpSocketConfig
 	BOOL isIPv4Disabled = (config & kIPv4Disabled) ? YES : NO;
 	BOOL isIPv6Disabled = (config & kIPv6Disabled) ? YES : NO;
 	
-	if (isIPv4Disabled && isIPv6Disabled)   
+	if (isIPv4Disabled && isIPv6Disabled) // Must have IPv4 or IPv6 enabled
 	{
 		if (errPtr)
 		{
@@ -3109,14 +3109,14 @@ enum GCDAsyncUdpSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Run through sanity checks.
 		
 		if (![self preConnect:&err])
 		{
 			return_from_block;
 		}
 		
-		  
+		// Check parameter(s)
 		
 		if (host == nil)
 		{
@@ -3126,7 +3126,7 @@ enum GCDAsyncUdpSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Create the socket(s) if needed
 		
         if ((self->flags & kDidCreateSockets) == 0)
 		{
@@ -3136,20 +3136,20 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 		
-		  
+		// Create special connect packet
 		
 		GCDAsyncUdpSpecialPacket *packet = [[GCDAsyncUdpSpecialPacket alloc] init];
 		packet->resolveInProgress = YES;
 		
-		  
+		// Start asynchronous DNS resolve for host:port on background queue
 		
 		LogVerbose(@"Dispatching DNS resolve for connect...");
 		
 		[self asyncResolveHost:host port:port withCompletionBlock:^(NSArray *addresses, NSError *error) {
 			
-			  
-			  
-			  
+			// The asyncResolveHost:port:: method asynchronously dispatches a task onto the global concurrent queue,
+			// and immediately returns. Once the async resolve task completes,
+			// this block is executed on our socketQueue.
 			
 			packet->resolveInProgress = NO;
 			
@@ -3159,7 +3159,7 @@ enum GCDAsyncUdpSocketConfig
 			[self maybeConnect];
 		}];
 		
-		  
+		// Updates flags, add connect packet to send queue, and pump send queue
 		
         self->flags |= kConnecting;
 		
@@ -3190,14 +3190,14 @@ enum GCDAsyncUdpSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Run through sanity checks.
 		
 		if (![self preConnect:&err])
 		{
 			return_from_block;
 		}
 		
-		  
+		// Check parameter(s)
 		
 		if (remoteAddr == nil)
 		{
@@ -3207,7 +3207,7 @@ enum GCDAsyncUdpSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Create the socket(s) if needed
 		
         if ((self->flags & kDidCreateSockets) == 0)
 		{
@@ -3217,8 +3217,8 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 		
-		  
-		  
+		// The remoteAddr parameter could be of type NSMutableData.
+		// So we copy it to be safe.
 		
 		NSData *address = [remoteAddr copy];
 		NSArray *addresses = [NSArray arrayWithObject:address];
@@ -3226,7 +3226,7 @@ enum GCDAsyncUdpSocketConfig
 		GCDAsyncUdpSpecialPacket *packet = [[GCDAsyncUdpSpecialPacket alloc] init];
 		packet->addresses = addresses;
 		
-		  
+		// Updates flags, add connect packet to send queue, and pump send queue
 		
         self->flags |= kConnecting;
 		
@@ -3279,7 +3279,7 @@ enum GCDAsyncUdpSocketConfig
 				
 				int addressFamily = [self getAddress:&address error:&error fromAddresses:connectPacket->addresses];
 				
-				  
+				// Perform connect
 				
 				BOOL result = NO;
 				
@@ -3355,9 +3355,9 @@ enum GCDAsyncUdpSocketConfig
 	return YES;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Multicast
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)preJoin:(NSError **)errPtr
 {
@@ -3396,7 +3396,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (BOOL)joinMulticastGroup:(NSString *)group onInterface:(NSString *)interface error:(NSError **)errPtr
 {
-      
+    // IP_ADD_MEMBERSHIP == IPV6_JOIN_GROUP
     return [self performMulticastRequest:IP_ADD_MEMBERSHIP forGroup:group onInterface:interface error:errPtr];
 }
 
@@ -3407,7 +3407,7 @@ enum GCDAsyncUdpSocketConfig
 
 - (BOOL)leaveMulticastGroup:(NSString *)group onInterface:(NSString *)interface error:(NSError **)errPtr
 {
-      
+    // IP_DROP_MEMBERSHIP == IPV6_LEAVE_GROUP
     return [self performMulticastRequest:IP_DROP_MEMBERSHIP forGroup:group onInterface:interface error:errPtr];
 }
 
@@ -3421,14 +3421,14 @@ enum GCDAsyncUdpSocketConfig
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
-		  
+		// Run through sanity checks
 		
 		if (![self preJoin:&err])
 		{
 			return_from_block;
 		}
 		
-		  
+		// Convert group to address
 		
 		NSData *groupAddr4 = nil;
 		NSData *groupAddr6 = nil;
@@ -3443,7 +3443,7 @@ enum GCDAsyncUdpSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Convert interface to address
 		
 		NSData *interfaceAddr4 = nil;
 		NSData *interfaceAddr6 = nil;
@@ -3458,7 +3458,7 @@ enum GCDAsyncUdpSocketConfig
 			return_from_block;
 		}
 		
-		  
+		// Perform join
 		
         if ((self->socket4FD != SOCKET_NULL) && groupAddr4 && interfaceAddr4)
 		{
@@ -3477,7 +3477,7 @@ enum GCDAsyncUdpSocketConfig
 				return_from_block;
 			}
 			
-			  
+			// Using IPv4 only
 			[self closeSocket6];
 			
 			result = YES;
@@ -3498,7 +3498,7 @@ enum GCDAsyncUdpSocketConfig
 				return_from_block;
 			}
 			
-			  
+			// Using IPv6 only
 			[self closeSocket4];
 			
 			result = YES;
@@ -3524,9 +3524,9 @@ enum GCDAsyncUdpSocketConfig
 	return result;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Reuse port
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)enableReusePort:(BOOL)flag error:(NSError **)errPtr
 {
@@ -3588,9 +3588,9 @@ enum GCDAsyncUdpSocketConfig
 	return result;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Broadcast
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)enableBroadcast:(BOOL)flag error:(NSError **)errPtr
 {
@@ -3626,8 +3626,8 @@ enum GCDAsyncUdpSocketConfig
 			result = YES;
 		}
 		
-		  
-		  
+		// IPv6 does not implement broadcast, the ability to send a packet to all hosts on the attached link.
+		// The same effect can be achieved by sending a packet to the link-local all hosts multicast group.
 		
 	}};
 	
@@ -3642,9 +3642,9 @@ enum GCDAsyncUdpSocketConfig
 	return result;
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Sending
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)sendData:(NSData *)data withTag:(long)tag
 {
@@ -3692,9 +3692,9 @@ enum GCDAsyncUdpSocketConfig
 	
 	[self asyncResolveHost:host port:port withCompletionBlock:^(NSArray *addresses, NSError *error) {
 		
-		  
-		  
-		  
+		// The asyncResolveHost:port:: method asynchronously dispatches a task onto the global concurrent queue,
+		// and immediately returns. Once the async resolve task completes,
+		// this block is executed on our socketQueue.
 		
 		packet->resolveInProgress = NO;
 		
@@ -3783,10 +3783,10 @@ enum GCDAsyncUdpSocketConfig
 	LogTrace();
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
-	  
+	// If we don't have a send operation already in progress
 	if (currentSend == nil)
 	{
-		  
+		// Create the sockets if needed
 		if ((flags & kDidCreateSockets) == 0)
 		{
 			NSError *err = nil;
@@ -3799,7 +3799,7 @@ enum GCDAsyncUdpSocketConfig
 		
 		while ([sendQueue count] > 0)
 		{
-			  
+			// Dequeue the next object in the queue
 			currentSend = [sendQueue objectAtIndex:0];
 			[sendQueue removeObjectAtIndex:0];
 			
@@ -3807,21 +3807,21 @@ enum GCDAsyncUdpSocketConfig
 			{
 				[self maybeConnect];
 				
-				return;   
+				return; // The maybeConnect method, if it connects, will invoke this method again
 			}
 			else if (currentSend->resolveError)
 			{
-				  
+				// Notify delegate
 				[self notifyDidNotSendDataWithTag:currentSend->tag dueToError:currentSend->resolveError];
 				
-				  
+				// Clear currentSend
 				currentSend = nil;
 				
 				continue;
 			}
 			else
 			{
-				  
+				// Start preprocessing checks on the send packet
 				[self doPreSend];
 				
 				break;
@@ -3846,16 +3846,16 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	  
-	  
-	  
+	// 
+	// 1. Check for problems with send packet
+	// 
 	
 	BOOL waitingForResolve = NO;
 	NSError *error = nil;
 	
 	if (flags & kDidConnect)
 	{
-		  
+		// Connected socket
 		
 		if (currentSend->resolveInProgress || currentSend->resolvedAddresses || currentSend->resolveError)
 		{
@@ -3870,11 +3870,11 @@ enum GCDAsyncUdpSocketConfig
 	}
 	else
 	{
-		  
+		// Non-Connected socket
 		
 		if (currentSend->resolveInProgress)
 		{
-			  
+			// We're waiting for the packet's destination to be resolved.
 			waitingForResolve = YES;
 		}
 		else if (currentSend->resolveError)
@@ -3890,7 +3890,7 @@ enum GCDAsyncUdpSocketConfig
 			}
 			else
 			{
-				  
+				// Pick the proper address to use (out of possibly several resolved addresses)
 				
 				NSData *address = nil;
 				int addressFamily = AF_UNSPEC;
@@ -3905,7 +3905,7 @@ enum GCDAsyncUdpSocketConfig
 	
 	if (waitingForResolve)
 	{
-		  
+		// We're waiting for the packet's destination to be resolved.
 		
 		LogVerbose(@"currentSend - waiting for address resolve");
 		
@@ -3921,8 +3921,8 @@ enum GCDAsyncUdpSocketConfig
 	
 	if (error)
 	{
-		  
-		  
+		// Unable to send packet due to some error.
+		// Notify delegate and move on.
 		
 		[self notifyDidNotSendDataWithTag:currentSend->tag dueToError:error];
 		[self endCurrentSend];
@@ -3931,17 +3931,17 @@ enum GCDAsyncUdpSocketConfig
 		return;
 	}
 	
-	  
-	  
-	  
+	// 
+	// 2. Query sendFilter (if applicable)
+	// 
 	
 	if (sendFilterBlock && sendFilterQueue)
 	{
-		  
+		// Query sendFilter
 		
 		if (sendFilterAsync)
 		{
-			  
+			// Scenario 1 of 3 - Need to asynchronously query sendFilter
 			
 			currentSend->filterInProgress = YES;
 			GCDAsyncUdpSendPacket *sendPacket = currentSend;
@@ -3973,7 +3973,7 @@ enum GCDAsyncUdpSocketConfig
 		}
 		else
 		{
-			  
+			// Scenario 2 of 3 - Need to synchronously query sendFilter
 			
 			__block BOOL allowed = YES;
 			
@@ -3996,9 +3996,9 @@ enum GCDAsyncUdpSocketConfig
 			}
 		}
 	}
-	else   
+	else // if (!sendFilterBlock || !sendFilterQueue)
 	{
-		  
+		// Scenario 3 of 3 - No sendFilter. Just go straight into sending.
 		
 		[self doSend];
 	}
@@ -4014,13 +4014,13 @@ enum GCDAsyncUdpSocketConfig
 	
 	NSAssert(currentSend != nil, @"Invalid logic");
 	
-	  
+	// Perform the actual send
 	
 	ssize_t result = 0;
 	
 	if (flags & kDidConnect)
 	{
-		  
+		// Connected socket
 		
 		const void *buffer = [currentSend->buffer bytes];
 		size_t length = (size_t)[currentSend->buffer length];
@@ -4038,7 +4038,7 @@ enum GCDAsyncUdpSocketConfig
 	}
 	else
 	{
-		  
+		// Non-Connected socket
 		
 		const void *buffer = [currentSend->buffer bytes];
 		size_t length = (size_t)[currentSend->buffer length];
@@ -4058,19 +4058,19 @@ enum GCDAsyncUdpSocketConfig
 		}
 	}
 	
-	  
+	// If the socket wasn't bound before, it is now
 	
 	if ((flags & kDidBind) == 0)
 	{
 		flags |= kDidBind;
 	}
 	
-	  
-	  
-	  
-	  
-	  
-	  
+	// Check the results.
+	// 
+	// From the send() & sendto() manpage:
+	// 
+	// Upon successful completion, the number of bytes which were sent is returned.
+	// Otherwise, -1 is returned and the global variable errno is set to indicate the error.
 	
 	BOOL waitingForSocket = NO;
 	NSError *socketError = nil;
@@ -4089,8 +4089,8 @@ enum GCDAsyncUdpSocketConfig
 	
 	if (waitingForSocket)
 	{
-		  
-		  
+		// Not enough room in the underlying OS socket send buffer.
+		// Wait for a notification of available space.
 		
 		LogVerbose(@"currentSend - waiting for socket");
 		
@@ -4103,8 +4103,8 @@ enum GCDAsyncUdpSocketConfig
 		
 		if ((sendTimer == NULL) && (currentSend->timeout >= 0.0))
 		{
-			  
-			  
+			// Unable to send packet right away.
+			// Start timer to timeout the send operation.
 			
 			[self setupSendTimerWithTimeout:currentSend->timeout];
 		}
@@ -4113,7 +4113,7 @@ enum GCDAsyncUdpSocketConfig
 	{
 		[self closeWithError:socketError];
 	}
-	else   
+	else // done
 	{
 		[self notifyDidSendDataWithTag:currentSend->tag];
 		[self endCurrentSend];
@@ -4174,9 +4174,9 @@ enum GCDAsyncUdpSocketConfig
 	dispatch_resume(sendTimer);
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Receiving
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)receiveOnce:(NSError **)errPtr
 {
@@ -4198,8 +4198,8 @@ enum GCDAsyncUdpSocketConfig
 				return_from_block;
 			}
 			
-            self->flags |=  kReceiveOnce;         
-            self->flags &= ~kReceiveContinuous;   
+            self->flags |=  kReceiveOnce;       // Enable
+            self->flags &= ~kReceiveContinuous; // Disable
 			
             dispatch_async(self->socketQueue, ^{ @autoreleasepool {
 				
@@ -4244,8 +4244,8 @@ enum GCDAsyncUdpSocketConfig
 				return_from_block;
 			}
 			
-            self->flags |= kReceiveContinuous;   
-            self->flags &= ~kReceiveOnce;        
+            self->flags |= kReceiveContinuous; // Enable
+            self->flags &= ~kReceiveOnce;      // Disable
 			
             dispatch_async(self->socketQueue, ^{ @autoreleasepool {
 				
@@ -4276,8 +4276,8 @@ enum GCDAsyncUdpSocketConfig
 	
 	dispatch_block_t block = ^{
 		
-        self->flags &= ~kReceiveOnce;         
-        self->flags &= ~kReceiveContinuous;   
+        self->flags &= ~kReceiveOnce;       // Disable
+        self->flags &= ~kReceiveContinuous; // Disable
 		
         if (self->socket4FDBytesAvailable > 0) {
 			[self suspendReceive4Source];
@@ -4379,42 +4379,42 @@ enum GCDAsyncUdpSocketConfig
 		return;
 	}
 	
-	  
+	// Figure out if we should receive on socket4 or socket6
 	
 	BOOL doReceive4;
 	
 	if (flags & kDidConnect)
 	{
-		  
+		// Connected socket
 		
 		doReceive4 = (socket4FD != SOCKET_NULL);
 	}
 	else
 	{
-		  
+		// Non-Connected socket
 		
 		if (socket4FDBytesAvailable > 0)
 		{
 			if (socket6FDBytesAvailable > 0)
 			{
-				  
+				// Bytes available on socket4 & socket6
 				
 				doReceive4 = (flags & kFlipFlop) ? YES : NO;
 				
-				flags ^= kFlipFlop;   
+				flags ^= kFlipFlop; // flags = flags xor kFlipFlop; (toggle flip flop bit)
 			}
 			else {
-				  
+				// Bytes available on socket4, but not socket6
 				doReceive4 = YES;
 			}
 		}
 		else {
-			  
+			// Bytes available on socket6, but not socket4
 			doReceive4 = NO;
 		}
 	}
 	
-	  
+	// Perform socket IO
 	
 	ssize_t result = 0;
 	
@@ -4430,8 +4430,8 @@ enum GCDAsyncUdpSocketConfig
 		struct sockaddr_in sockaddr4;
 		socklen_t sockaddr4len = sizeof(sockaddr4);
 		
-		  
-		  
+		// #222: GCD does not necessarily return the size of an entire UDP packet 
+		// from dispatch_source_get_data(), so we must use the maximum packet size.
 		size_t bufSize = max4ReceiveSize;
 		void *buf = malloc(bufSize);
 		
@@ -4467,8 +4467,8 @@ enum GCDAsyncUdpSocketConfig
 		struct sockaddr_in6 sockaddr6;
 		socklen_t sockaddr6len = sizeof(sockaddr6);
 		
-		  
-		  
+		// #222: GCD does not necessarily return the size of an entire UDP packet 
+		// from dispatch_source_get_data(), so we must use the maximum packet size.
 		size_t bufSize = max6ReceiveSize;
 		void *buf = malloc(bufSize);
 		
@@ -4531,7 +4531,7 @@ enum GCDAsyncUdpSocketConfig
 		{
 			if (receiveFilterBlock && receiveFilterQueue)
 			{
-				  
+				// Run data through filter, and if approved, notify delegate
 				
 				__block id filterContext = nil;
 				__block BOOL allowed = NO;
@@ -4543,7 +4543,7 @@ enum GCDAsyncUdpSocketConfig
 						
                         allowed = self->receiveFilterBlock(data, addr, &filterContext);
 						
-						  
+						// Transition back to socketQueue to get the current delegate / delegateQueue
                         dispatch_async(self->socketQueue, ^{ @autoreleasepool {
 							
                             self->pendingFilterOperations--;
@@ -4561,22 +4561,22 @@ enum GCDAsyncUdpSocketConfig
 							{
 								if (allowed)
 								{
-									  
-									  
+									// The delegate has been notified,
+									// so our receive once operation has completed.
                                     self->flags &= ~kReceiveOnce;
 								}
                                 else if (self->pendingFilterOperations == 0)
 								{
-									  
-									  
-									  
+									// All pending filter operations have completed,
+									// and none were allowed through.
+									// Our receive once operation hasn't completed yet.
 									[self doReceive];
 								}
 							}
 						}});
 					}});
 				}
-				else   
+				else // if (!receiveFilterAsync)
 				{
 					dispatch_sync(receiveFilterQueue, ^{ @autoreleasepool {
 						
@@ -4595,7 +4595,7 @@ enum GCDAsyncUdpSocketConfig
 					}
 				}
 			}
-			else   
+			else // if (!receiveFilterBlock || !receiveFilterQueue)
 			{
 				[self notifyDidReceiveData:data fromAddress:addr withFilterContext:nil];
 				notifiedDelegate = YES;
@@ -4605,7 +4605,7 @@ enum GCDAsyncUdpSocketConfig
 	
 	if (waitingForSocket)
 	{
-		  
+		// Wait for a notification of available data.
 		
 		if (socket4FDBytesAvailable == 0) {
 			[self resumeReceive4Source];
@@ -4622,16 +4622,16 @@ enum GCDAsyncUdpSocketConfig
 	{
 		if (flags & kReceiveContinuous)
 		{
-			  
+			// Continuous receive mode
 			[self doReceive];
 		}
 		else
 		{
-			  
+			// One-at-a-time receive mode
 			if (notifiedDelegate)
 			{
-				  
-				  
+				// The delegate has been notified (no set filter).
+				// So our receive once operation has completed.
 				flags &= ~kReceiveOnce;
 			}
 			else if (ignored)
@@ -4640,7 +4640,7 @@ enum GCDAsyncUdpSocketConfig
 			}
 			else
 			{
-				  
+				// Waiting on asynchronous receive filter...
 			}
 		}
 	}
@@ -4653,9 +4653,9 @@ enum GCDAsyncUdpSocketConfig
 	[self closeWithError:[self socketClosedError]];
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Closing
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)closeWithError:(NSError *)error
 {
@@ -4667,17 +4667,17 @@ enum GCDAsyncUdpSocketConfig
 	
 	[sendQueue removeAllObjects];
 	
-	  
+	// If a socket has been created, we should notify the delegate.
 	BOOL shouldCallDelegate = (flags & kDidCreateSockets) ? YES : NO;
 	
-	  
+	// Close all sockets, send/receive sources, cfstreams, etc
 #if TARGET_OS_IPHONE
 	[self removeStreamsFromRunLoop];
 	[self closeReadAndWriteStreams];
 #endif
 	[self closeSockets];
 	
-	  
+	// Clear all flags (config remains as is)
 	flags = 0;
 	
 	if (shouldCallDelegate)
@@ -4721,9 +4721,9 @@ enum GCDAsyncUdpSocketConfig
 		dispatch_async(socketQueue, block);
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark CFStream
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if TARGET_OS_IPHONE
 
@@ -4752,8 +4752,8 @@ static NSThread *listenerThread;
 		
 		LogInfo(@"ListenerThread: Started");
 		
-		  
-		  
+		// We can't run the run loop unless it has an associated input source or a timer.
+		// So we'll just create a timer that will never fire - unless the server runs for a decades.
 		[NSTimer scheduledTimerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow]
 		                                 target:self
 		                               selector:@selector(ignore:)
@@ -4919,7 +4919,7 @@ static void CFWriteStreamCallback(CFWriteStreamRef stream, CFStreamEventType typ
 	
 	if (readStream4 || writeStream4 || readStream6 || writeStream6)
 	{
-		  
+		// Streams already created
 		return YES;
 	}
 	
@@ -4929,7 +4929,7 @@ static void CFWriteStreamCallback(CFWriteStreamRef stream, CFStreamEventType typ
 		goto Failed;
 	}
 	
-	  
+	// Create streams
 	
 	LogVerbose(@"Creating read and write stream(s)...");
 	
@@ -4953,7 +4953,7 @@ static void CFWriteStreamCallback(CFWriteStreamRef stream, CFStreamEventType typ
 		}
 	}
 	
-	  
+	// Ensure the CFStream's don't close our underlying socket
 	
 	CFReadStreamSetProperty(readStream4, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
 	CFWriteStreamSetProperty(writeStream4, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
@@ -5013,8 +5013,8 @@ Failed:
 	CFOptionFlags readStreamEvents = kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered;
 	CFOptionFlags writeStreamEvents = kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered;
 	
-  	readStreamEvents  |= (kCFStreamEventOpenCompleted | kCFStreamEventHasBytesAvailable);
-  	writeStreamEvents |= (kCFStreamEventOpenCompleted | kCFStreamEventCanAcceptBytes);
+//	readStreamEvents  |= (kCFStreamEventOpenCompleted | kCFStreamEventHasBytesAvailable);
+//	writeStreamEvents |= (kCFStreamEventOpenCompleted | kCFStreamEventCanAcceptBytes);
 	
 	if (socket4FD != SOCKET_NULL)
 	{
@@ -5189,8 +5189,8 @@ Failed:
 {
 	LogTrace();
 	
-	  
-	  
+	// If the application was backgrounded, then iOS may have shut down our sockets.
+	// So we take a quick look to see if any of them received an EOF.
 	
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
@@ -5204,9 +5204,9 @@ Failed:
 		dispatch_async(socketQueue, block);
 }
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Advanced
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * See header file for big discussion of this method.
@@ -5290,7 +5290,7 @@ Failed:
 		return NULL;
 	}
 	
-	  
+	// Todo...
 	
 	if (readStream4)
 		return readStream4;
@@ -5329,61 +5329,61 @@ Failed:
 		return NO;
 	}
 	
-	  
-	  
+	// Why is this commented out?
+	// See comments below.
 	
-  	NSError *err = nil;
-  	if (![self createReadAndWriteStreams:&err])
-  	{
-  		LogError(@"Error creating CFStream(s): %@", err);
-  		return NO;
-  	}
-  	
-  	LogVerbose(@"Enabling backgrouding on socket");
-  	
-  	BOOL r1, r2;
-  	
-  	if (readStream4 && writeStream4)
-  	{
-  		r1 = CFReadStreamSetProperty(readStream4, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
-  		r2 = CFWriteStreamSetProperty(writeStream4, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
-  		
-  		if (!r1 || !r2)
-  		{
-  			LogError(@"Error setting voip type (IPv4)");
-  			return NO;
-  		}
-  	}
-  	
-  	if (readStream6 && writeStream6)
-  	{
-  		r1 = CFReadStreamSetProperty(readStream6, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
-  		r2 = CFWriteStreamSetProperty(writeStream6, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
-  		
-  		if (!r1 || !r2)
-  		{
-  			LogError(@"Error setting voip type (IPv6)");
-  			return NO;
-  		}
-  	}
-  	
-  	return YES;
+//	NSError *err = nil;
+//	if (![self createReadAndWriteStreams:&err])
+//	{
+//		LogError(@"Error creating CFStream(s): %@", err);
+//		return NO;
+//	}
+//	
+//	LogVerbose(@"Enabling backgrouding on socket");
+//	
+//	BOOL r1, r2;
+//	
+//	if (readStream4 && writeStream4)
+//	{
+//		r1 = CFReadStreamSetProperty(readStream4, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+//		r2 = CFWriteStreamSetProperty(writeStream4, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+//		
+//		if (!r1 || !r2)
+//		{
+//			LogError(@"Error setting voip type (IPv4)");
+//			return NO;
+//		}
+//	}
+//	
+//	if (readStream6 && writeStream6)
+//	{
+//		r1 = CFReadStreamSetProperty(readStream6, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+//		r2 = CFWriteStreamSetProperty(writeStream6, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+//		
+//		if (!r1 || !r2)
+//		{
+//			LogError(@"Error setting voip type (IPv6)");
+//			return NO;
+//		}
+//	}
+//	
+//	return YES;
 	
-	  
-	  
-	  
-	  
-	  
-	  
+	// The above code will actually appear to work.
+	// The methods will return YES, and everything will appear fine.
+	// 
+	// One tiny problem: the sockets will still get closed when the app gets backgrounded.
+	// 
+	// Apple does not officially support backgrounding UDP sockets.
 	
 	return NO;
 }
 
 #endif
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Class Methods
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (NSString *)hostFromSockaddr4:(const struct sockaddr_in *)pSockaddr4
 {

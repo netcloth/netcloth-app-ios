@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SearchVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/15.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -13,14 +13,14 @@ UISearchBarDelegate,
 UISearchControllerDelegate,
 UISearchResultsUpdating {
     
-    var resultVC: (UIViewController&Cell)?   
+    var resultVC: (UIViewController&Cell)? //must set before use
     var searchTextChange: ((_ input: String?, _ callBack: @escaping (Any) -> Void) -> Void)?
     
     @IBOutlet weak var searchContainerView: UIView?
     fileprivate var searchViewController: UISearchController?
     
     let disbag = DisposeBag()
-      
+    //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.isHideNavBar = true
@@ -35,7 +35,7 @@ UISearchResultsUpdating {
     }
     
     func configUI() {
-          
+        //search
         let result = resultVC!
         
         let searchVC = UISearchController(searchResultsController: result)

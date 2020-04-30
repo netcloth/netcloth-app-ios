@@ -46,17 +46,17 @@
 #define NB_CDBK_SIZE_HIGH1 64
 #define NB_CDBK_SIZE_HIGH2 64
 
- 
+/*Narrowband codebooks*/
 extern const signed char cdbk_nb[];
 extern const signed char cdbk_nb_low1[];
 extern const signed char cdbk_nb_low2[];
 extern const signed char cdbk_nb_high1[];
 extern const signed char cdbk_nb_high2[];
 
- 
+/* Quantizes narrowband LSPs with 30 bits */
 void lsp_quant_nb(spx_lsp_t *lsp, spx_lsp_t *qlsp, int order, SpeexBits *bits);
 
- 
+/* Decodes quantized narrowband LSPs */
 void lsp_unquant_nb(spx_lsp_t *lsp, int order, SpeexBits *bits);
 
 /* Quantizes low bit-rate narrowband LSPs with 18 bits */

@@ -303,7 +303,7 @@ static inline spx_word16_t spx_atan(spx_word32_t x)
 #else
 
 #ifndef M_PI
-#define M_PI           3.14159265358979323846   
+#define M_PI           3.14159265358979323846  /* pi */
 #endif
 
 #define C1 0.9999932946f

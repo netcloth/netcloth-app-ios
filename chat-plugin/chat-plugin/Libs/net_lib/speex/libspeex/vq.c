@@ -69,7 +69,7 @@ int scal_quant32(spx_word32_t in, const spx_word32_t *boundary, int entries)
    }
    return i;
 }
-#endif  
+#endif /* DISABLE_ENCODER */
 
 #if !defined(OVERRIDE_VQ_NBEST) && !defined(DISABLE_ENCODER)
 /*Finds the indices of the n-best entries in a codebook*/

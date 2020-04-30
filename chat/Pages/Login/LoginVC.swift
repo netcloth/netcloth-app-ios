@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  LoginVC.swift
+//  chat
+//
+//  Created by Grand on 2019/7/23.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import IQKeyboardManagerSwift
@@ -18,8 +18,8 @@ class LoginVC: BaseViewController  {
     @IBOutlet weak var accountTF: UITextField!
     @IBOutlet weak var accountMask: UIView!
     
-    @IBOutlet weak var switchIcon: UIImageView!   
-    @IBOutlet weak var switchBtn: UIButton!   
+    @IBOutlet weak var switchIcon: UIImageView! //switch icon
+    @IBOutlet weak var switchBtn: UIButton! //switch Btn
 
     @IBOutlet weak var pwdTF: UITextField!
     @IBOutlet weak var imageVEye: UIImageView!
@@ -62,7 +62,7 @@ class LoginVC: BaseViewController  {
     
     let disbag = DisposeBag()
     
-      
+    //MARK:- LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,14 +73,57 @@ class LoginVC: BaseViewController  {
         configEvent()
     }
     
+    /// 老用户login 弹出一次
+    fileprivate var once = 1
+    fileprivate func handleOlderLogic() {
+        if once != 1 {
+            return
+        }
+        once = 0
+        let isOlder = (self.sourceNames?.count ?? 0 > 0)
+        if isOlder {
+            //older user
+            if Config.Older_Had_Tip == false {
+                showOlderToast().subscribe(onNext: { [weak self] in
+                    Config.Older_Had_Tip = true
+                }).disposed(by: disbag)
+            }
+        }
+    }
+    
+    fileprivate func showOlderToast() -> Observable<Void>  {
+        return Observable.create { (observer) -> Disposable in
+            
+            if let alert = R.loadNib(name: "ProtocolAlertView") as? ProtocolAlertView {
+                //config
+                alert.titleLabel?.text = "NetCloth Terms of Service".localized()
+                alert.msgTV?.text = "Use_To_Tip".localized()
+                
+                alert.cancelButton?.setTitle("Disagree".localized(), for: .normal)
+                alert.okButton?.setTitle("Agree".localized(), for: .normal)
+                
+                alert.cancelBlock = {
+                    observer.onCompleted()
+                    exit(0)
+                }
+                alert.okBlock = {
+                    observer.onNext(())
+                    observer.onCompleted()
+                }
+                Router.showAlert(view: alert)
+            }
+            return Disposables.create()
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-  
+//        CPAccountHelper.requestDomain(0)
         fillWithLastUser()
         reloadTable()
     }
     
-      
+    //MARK:- Helper
     func reloadTable() {
         CPAccountHelper.allUserListCallback({(result) in
             self.sourceNames = result
@@ -99,7 +142,7 @@ class LoginVC: BaseViewController  {
                     print("索引：\(index)  元素：\(item)")
                 }
             }
-            
+            self.handleOlderLogic()
         })
     }
     
@@ -110,13 +153,13 @@ class LoginVC: BaseViewController  {
     
     func configUI() {
         self.accountTable.tableFooterView = UIView()
-        self.tableMask.setShadow(color: UIColor(hexString: "#BFC2CC")!, offset: CGSize(width: 0, height: 0), radius: 15, opacity: 0.18)
+        self.tableMask.setShadow(color: UIColor(hexString: Color.gray_bf)!, offset: CGSize(width: 0, height: 0), radius: 15, opacity: 0.18)
         
         if YYScreenSize().height <= 500 {
             loginBtnTop.constant = 40
         }
         
-        self.loginBtn.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.loginBtn.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     var tmp = 0
@@ -126,7 +169,7 @@ class LoginVC: BaseViewController  {
             cell.nameL?.text = model.accountName
             cell.selectionStyle  = .none
             
-              
+            //abserver button click
             cell.xbtn?.rx.tap.subscribe(onNext: { [weak self] in
                 self?.deleteAccount(model)
             }).disposed(by: cell.disposeBag)
@@ -156,17 +199,17 @@ class LoginVC: BaseViewController  {
         
         accountTF.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
-                self?.accountMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
+                self?.accountMask.backgroundColor = UIColor(hexString: Color.mask_bottom_fill)
             } else {
-                self?.accountMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_empty)
+                self?.accountMask.backgroundColor = UIColor(hexString: Color.mask_bottom_empty)
             }
         }.disposed(by: disbag)
         
         pwdTF.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
-                self?.pwdMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
+                self?.pwdMask.backgroundColor = UIColor(hexString: Color.mask_bottom_fill)
             } else {
-                self?.pwdMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_empty)
+                self?.pwdMask.backgroundColor = UIColor(hexString: Color.mask_bottom_empty)
             }
             }.disposed(by: disbag)
         
@@ -205,7 +248,7 @@ class LoginVC: BaseViewController  {
             
         }).disposed(by: disbag)
         
-          
+        //to import
         self.importControl.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             
             if let vc = R.loadSB(name: "Import", iden: "ImportAccountContainerVC") as? ImportAccountContainerVC {
@@ -233,12 +276,12 @@ class LoginVC: BaseViewController  {
         self.isSelectedAccount = false
     }
     
-      
+    //MARK:- Delete
     static func firstDel(_ user: User) -> Promise<String> {
         let alert =  Promise<String> { (resolver) in
             
             if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-                  
+                //config
                 alert.titleLabel?.text = "login_delete_title".localized()
                 
                 let msg = "login_delete_message".localized().replacingOccurrences(of: "#account#", with: user.accountName)
@@ -265,7 +308,7 @@ class LoginVC: BaseViewController  {
         let re_alert =  Promise<String> { (resolver) in
                    
                    if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView {
-                         
+                       //config
                        alert.titleLabel?.text = "login_delete_title".localized()
                        
                        let msg = "login_delete_re_message".localized().replacingOccurrences(of: "#account#", with: user.accountName)
@@ -293,7 +336,7 @@ class LoginVC: BaseViewController  {
         LoginVC.firstDel(user).then {(res) -> Promise<String>  in
             return LoginVC.reDel(user)
         }.done { (data) in
-              
+            //delete
             CPAccountHelper.deleteUser(Int(user.userId)) { [weak self] (r, msg) in
                 if r {
                     if user.accountName == self?.lastLoginUser {

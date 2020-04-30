@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPImageCaches.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/31.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPImageCaches.h"
 #import "NSString+YYAdd.h"
@@ -25,7 +25,7 @@
         [_cache.memoryCache setCountLimit:10];
         [_cache.memoryCache setCostLimit:10*1024*1024];
         
-  
+//        [_cache.diskCache setCostLimit:300*1024*1024];
         [_cache.diskCache setAutoTrimInterval:60];
                 
         _cache.diskCache.customFileNameBlock = ^NSString * _Nonnull(NSString * _Nonnull key) {

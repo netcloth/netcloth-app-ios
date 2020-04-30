@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  File.swift
+//  chat
+//
+//  Created by Grand on 2019/12/4.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
@@ -24,7 +24,7 @@ class MessageNotifyManager {
         }
     }
     
-      
+    //MARK:- private
     static private func shake() {
         if Config.Settings.shakeble == false {
             return
@@ -37,7 +37,7 @@ class MessageNotifyManager {
         if Config.Settings.bellable == false {
             return
         }
-          
+        //http://iphonedevwiki.net/index.php/AudioServices
         if sound == 0 {
             let path = "/System/Library/Audio/UISounds/sms-received1.caf"
             if let url = (NSURL.fileURL(withPath: path) as? CFURL) {

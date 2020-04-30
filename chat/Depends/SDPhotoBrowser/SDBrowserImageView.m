@@ -1,13 +1,13 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SDBrowserImageView.m
+//  SDPhotoBrowser
+//
+//  Created by aier on 15-2-6.
+//  Copyright (c) 2015年 GSD. All rights reserved.
+//
 
 #import "SDBrowserImageView.h"
-  
+//#import "UIImageView+WebCache.h"
 #import "SDPhotoBrowserConfig.h"
 
 @implementation SDBrowserImageView
@@ -30,7 +30,7 @@
         self.contentMode = UIViewContentModeScaleAspectFit;
         _totalScale = 1.0;
         
-          
+        // 捏合手势缩放图片
         UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomImage:)];
         pinch.delegate = self;
         [self addGestureRecognizer:pinch];
@@ -77,7 +77,7 @@
         _scroll.contentSize = CGSizeMake(0, _scrollImageView.bounds.size.height);
         
     } else {
-        if (_scroll) [_scroll removeFromSuperview];   
+        if (_scroll) [_scroll removeFromSuperview]; // 防止旋转时适配的scrollView的影响
     }
     
 }
@@ -108,7 +108,7 @@
 
 - (void)setTotalScale:(CGFloat)totalScale
 {
-    if ((_totalScale < 0.5 && totalScale < _totalScale) || (_totalScale > 2.0 && totalScale > _totalScale)) return;   
+    if ((_totalScale < 0.5 && totalScale < _totalScale) || (_totalScale > 2.0 && totalScale > _totalScale)) return; // 最大缩放 2倍,最小0.5倍
     
     [self zoomWithScale:totalScale];
 }
@@ -129,7 +129,7 @@
         
         CGPoint offset = _zoomingScroolView.contentOffset;
         offset.x = (contentW - _zoomingScroolView.frame.size.width) * 0.5;
-  
+//        offset.y = (contentH - _zoomingImageView.frame.size.height) * 0.5;
         _zoomingScroolView.contentOffset = offset;
         
     } else {
@@ -178,7 +178,7 @@
     [self setTotalScale:scale];
 }
 
-  
+// 清除缩放
 - (void)eliminateScale
 {
     [self clear];

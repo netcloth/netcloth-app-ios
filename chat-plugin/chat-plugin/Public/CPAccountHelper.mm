@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPAccountHelper.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/7/23.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPAccountHelper.h"
 #import "CPDataModel+secpri.h"
@@ -36,21 +36,21 @@ NSInteger _rand = 0;
     [super load];
     
 #if DEBUG
-      
-  
-  
-  
+    //SQL Execution Monitor
+//    [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+//        NSLog(@"SQL: %@", sql);
+//    }];
 #endif
     
     [self fixUserDbBeforeV1];
 }
 
-  
+//MARK:- Public
 + (void)registerUserByAccount:(NSString *)name
                      password:(NSString *)pwd
                      callback:(void (^)(BOOL success, NSString *msg, User * _Nullable registerUser))result
 {
-      
+    //bytes
     std::string prikey =  generationAccountPrivatekey();
     [self _registerUserAccount:name password:pwd privateKey:prikey callback:^(BOOL success, NSString *msg, User * _Nullable registerUser) {
         
@@ -74,11 +74,11 @@ NSInteger _rand = 0;
     };
     
     User *user = User.alloc.init;
-      
+    //bytes
     std::string prikey =  privateKey;
     std::string publicKey = GetPublicKeyByPrivateKey(prikey);
     
-      
+    //Byte2HexAsc
     user.publicKey = hexStringFromBytes(publicKey);
     user.accountName = name;
     long long sign_hash = (long long)GetHash(publicKey);
@@ -87,7 +87,7 @@ NSInteger _rand = 0;
     NSDate *date = NSDate.date;
     user.createTime = [date timeIntervalSince1970];
     
-      
+    //根据userid 直接插入
     user.isAutoIncrement = YES;
     
     [self createUsersBD];
@@ -101,7 +101,7 @@ NSInteger _rand = 0;
         int uid = user.lastInsertedRowID;
         user.userId = uid;
         
-          
+        //构建其内容数据库
         NSString *folder = [NSString stringWithFormat:@"%d",uid];
         [FCFileManager createDirectoriesForPath:folder];
         
@@ -110,7 +110,7 @@ NSInteger _rand = 0;
         [self createTabsAtDb:database];
         [database close];
         
-          
+        //ks
         NSData *dpk = bytes2nsdata(prikey);
         NSError *err;
         [NCKeyStore.shared registerWithOriginPrivateKey:dpk pwd:pwd uid:uid error:&err];
@@ -122,7 +122,7 @@ NSInteger _rand = 0;
     }
     
     if (result) {
-          
+        //not backup contact
         NSInteger userId = user.userId;
         NSString *key = [UserSettings sourceKey:@"contactBackup" ofUser:userId];
         [UserSettings setObject:@"1" forSourceKey:key];
@@ -143,7 +143,7 @@ NSInteger _rand = 0;
         };
     };
     
-      
+    //Important: verify password before
     NSError *err;
     [NCKeyStore.shared login:uid pwd:pwd error:&err];
     if (err) {
@@ -151,7 +151,7 @@ NSInteger _rand = 0;
         return;
     }
     
-      
+    //password ok
     if (![self loginUserForUid:uid fromPassword:pwd]) {
         error(nil);
         return;
@@ -159,25 +159,24 @@ NSInteger _rand = 0;
     
     [CPInnerState.shared asynWriteTask:^{
         try {
-              
+            //init resource
             [CPInnerState.shared userlogin];
             
-              
+            //success, notify
             [CPInnerState.shared asynDoTask:^{
                 if (result) {
                     result(YES, nil);
                 }
             }];
             
-            [self addObserverAccount];
-            
+            [CPSessionHelper fakeAddRecommendedGroupSession];
             [CPChatLog enableFileLog];
         }
         catch (std::exception) {
-              
+            //runtime_error 捕获所有异常. TODO:
         }
         catch (NSError *err) {
-              
+            //objc error
             NSLog(@"%@",err);
         }
         
@@ -191,7 +190,7 @@ NSInteger _rand = 0;
     return false;
 }
 
-  
+//MARK:- Connect
 + (void)connectAllChatEnterPoint:(NSArray<NSString *> *)points {
     _allEndPoints = points;
     _rand = 0;
@@ -251,7 +250,7 @@ NSInteger _rand = 0;
 + (void)logoutWithComplete:(void (^)(BOOL succsss, NSString * _Nullable msg))callBack {
     [CPSendMsgHelper unbindDeviceTokenComplete:^(NSDictionary *response) {
         [CPInnerState.shared.chatDelegates removeAllObjects];
-        [CPInnerState.shared disconnect];   
+        [CPInnerState.shared disconnect]; //asyn
         
         _allEndPoints = nil;
         [self setNetworkEnterPoint:@""];
@@ -264,7 +263,7 @@ NSInteger _rand = 0;
     }];
 }
 
-  
+//MARK:- User
 
 + (BOOL)checkLoginUserPwd:(NSString *)pwd {
     if ([self isLogin] == false) {
@@ -293,7 +292,7 @@ NSInteger _rand = 0;
     }];
 }
 
-  
+// MARK:- Fix
 + (BOOL)fixUserDbBeforeV1 {
     [self createUsersBD];
     return NO;
@@ -313,32 +312,7 @@ NSInteger _rand = 0;
     [CPSendMsgHelper setDeviceToken:token];
 }
 
-+ (void)addObserverAccount {
-    
-    [CPContactHelper addContactUser:support_account_pubkey
-                            comment:@"NetCloth Support".localized
-                           callback:^(BOOL succss, NSString * _Nonnull msg, CPContact * _Nullable contact) {
-        
-        if (succss && contact) {
-              
-            CPMessage *msg = CPMessage.alloc.init;
-            msg.senderPubKey = support_account_pubkey;
-            msg.toPubkey = CPInnerState.shared.loginUser.publicKey;
-            msg.msgType = MessageTypeText;
-            msg.read = YES;
-            
-            std::string sign =  nsstring2bytes(NSUUID.UUID.UUIDString);
-            long long hash = (long long)GetHash(sign);
-            msg.signHash = hash;
-            
-            [CPInnerState.shared.msgRecieve storeMessge:msg isCacheMsg:false];
-        }
-        
-    }];
-}
-
-
-  
+//MARK:- DeleteUser
 + (void)deleteUser:(NSInteger)uid
           callback:(void (^)(BOOL success, NSString *msg))result
 {
@@ -350,7 +324,7 @@ NSInteger _rand = 0;
            }
        };
     
-      
+    //delete db folder , delete user , delete cache
     NSString *path = [self dbFolderForUUID:@(uid).stringValue];
     NSError *err;
     [FCFileManager removeItemAtPath:path error:&err];
@@ -370,7 +344,7 @@ NSInteger _rand = 0;
     }
 }
 
-  
+//MARK:- Export
 + (void)exportKeystoreAndPrivateKey:(NSString *)loginPwd
                     exportPassword:(NSString *)exportPwd
                           callback:(void (^)(BOOL success, NSString *msg, NSString *keystore, NSString *oriPriKey))result;
@@ -384,13 +358,13 @@ NSInteger _rand = 0;
         }
     };
     
-      
+    //get current wallet
     std::string oriPrikey = getDecodePrivateKeyForUser(CPInnerState.shared.loginUser, loginPwd);
     if (oriPrikey.length() > 0) {
         NSData *bridgeBytes = bytes2nsdata(oriPrikey); 
         NSAssert(bridgeBytes.length == kPrivateKeySize, @"bridgeBytes must fill data");
         
-          
+        //export
         NSError *err;
         NSString *keystore = [CPWalletWraper encodeKeystore:bridgeBytes exportPwd:exportPwd error:&err];
         
@@ -399,7 +373,7 @@ NSInteger _rand = 0;
         }
         else {
             NSString *priKey =  hexStringFromBytes(oriPrikey);
-              
+            //restore to wcdb
             if ([exportPwd isEqualToString:loginPwd] == NO) {
                 
                 NSError *err;
@@ -446,7 +420,7 @@ NSInteger _rand = 0;
     }
 }
 
-  
+//MARK:- Import
 + (void)importKeystore:(NSString *)keystore
            accountName:(NSString *)name
               password:(NSString *)exportPwd
@@ -460,7 +434,7 @@ NSInteger _rand = 0;
         }
     };
     
-      
+    //verify
     NSError *err;
     NSData *decodePrikey = [CPWalletWraper decodeKeystore:keystore password:exportPwd error:&err];
     if (err) {
@@ -488,7 +462,7 @@ NSInteger _rand = 0;
         }
     };
     
-      
+    //verify
     std::string prikey = bytesFromHexString(privateKey);
     if (prikey.length() != kPrivateKeySize) {
         block(false, @"WalletManager.Error.invalidData".localized, nil);
@@ -500,7 +474,7 @@ NSInteger _rand = 0;
     }
 }
 
-  
+//MARK:- Change PWD
 + (void)verifyPrivateKey:(NSString *)inputPrivateKey
                 callback:(void (^)(BOOL valid, NSString *msg))result
 {
@@ -517,7 +491,7 @@ NSInteger _rand = 0;
         block(false, @"WalletManager.Error.invalidData".localized);
     }
     else {
-        std::string publicKey = GetPublicKeyByPrivateKey(prikey);   
+        std::string publicKey = GetPublicKeyByPrivateKey(prikey); //cla
         NSString *spbkey = [CPInnerState.shared.loginUser publicKey];
         std::string storePbkey = bytesFromHexString(spbkey);
         
@@ -553,7 +527,7 @@ NSInteger _rand = 0;
     }
 }
 
-  
+//MARK:- Change Name
 + (void)changeLoginUserName:(NSString *)userName
                 callback:(void (^)(BOOL success, NSString *msg))result
 {
@@ -576,7 +550,7 @@ NSInteger _rand = 0;
     }];
 }
 
-  
+//MARK:-  Helper
 + (User *)loginUserForUid:(NSInteger)uid
               fromPassword:(NSString *)pwd {
     
@@ -646,6 +620,9 @@ NSInteger _rand = 0;
     [db createTableAndIndexesOfName:kTableName_GroupMessage withClass:CPMessage.class];
     [db createTableAndIndexesOfName:kTableName_GroupMember withClass:CPGroupMember.class];
     [db createTableAndIndexesOfName:kTableName_GroupNotify withClass:CPGroupNotify.class];
+    
+    [db createTableAndIndexesOfName:kTableName_AssetToken withClass:CPAssetToken.class];
+    [db createTableAndIndexesOfName:kTableName_TradeRecord withClass:CPTradeRsp.class];
 }
 
 static NSString *_domain;
@@ -659,7 +636,7 @@ dispatch_semaphore_t _domainlock = dispatch_semaphore_create(1);
         return;
     }
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https:  
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://www.netcloth.org/userinfo.php"]];
     request.timeoutInterval = 30;
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration];

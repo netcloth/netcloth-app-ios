@@ -1,16 +1,16 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  MoreInputView.swift
+//  chat
+//
+//  Created by Grand on 2019/10/11.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import Photos
 
 @objc protocol MoreInputViewDelegate: NSObjectProtocol {
-      
+    /// tap input image Data
     func onSelectedPicture(image: UIImage?)
     func onSelectedGifData(data: Data?)
 }
@@ -24,12 +24,27 @@ class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationContro
     @IBOutlet weak var cameraBtn: UIButton!
     let disbag = DisposeBag()
     
+    @IBOutlet weak var stackTop: UIStackView?
+    @IBOutlet weak var stackBottom: UIStackView?
+    
+    @IBOutlet weak var tranferBtn: UIButton?
+    @IBOutlet weak var tranferL: UILabel?
+    
+    @IBOutlet weak var redPackBtn: UIButton?
+    @IBOutlet weak var redPackL: UILabel?
+    
+    @IBOutlet weak var voiceBtn: UIButton?
+    @IBOutlet weak var filesBtn: UIButton?
+    
+    
+    
+
     override var intrinsicContentSize: CGSize {
-        var h = 180
+        var h = 209
         if #available(iOS 11.0, *) {
             h += Int(Router.currentViewOfVC?.safeAreaInsets.bottom ?? 0)
         } else {
-              
+            // Fallback on earlier versions
         }
         return CGSize(width: UIView.noIntrinsicMetric, height: CGFloat(h))
     }
@@ -45,7 +60,36 @@ class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationContro
         configEvent()
     }
     
+    
+    func hideTransfer() {
+        tranferL?.isHidden = true
+        tranferBtn?.isHidden = true
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let diff =  cameraBtn.frame.minX - albumBtn.frame.maxX
+        stackBottom?.spacing =  diff
+    }
+    
     func configUI() {
+        
+        var voice = "语音通话-开发中"
+        var files = "发送文件-开发中"
+        var transfer = "转账-开发中"
+        var red = "红包-开发中"
+        if Bundle.is_zh_Hans() == false {
+            voice.append("-en")
+            files.append("-en")
+            transfer.append("-en")
+            red.append("-en")
+        }
+        
+        voiceBtn?.setImage(UIImage(named: voice), for: .normal)
+        filesBtn?.setImage(UIImage(named: files), for: .normal)
+        tranferBtn?.setImage(UIImage(named: transfer), for: .normal)
+        redPackBtn?.setImage(UIImage(named: red), for: .normal)
     }
     
     func configEvent() {
@@ -87,7 +131,7 @@ class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationContro
         Router.present(vc: imgpicker)
     }
     
-      
+    //MARK:- Image Delegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
@@ -96,12 +140,12 @@ class MoreInputView: UIView, UIImagePickerControllerDelegate, UINavigationContro
         picker.dismiss(animated: true, completion: nil)
         DispatchQueue.global().async { [weak self] in
             let type:String = (info[UIImagePickerController.InfoKey.mediaType] as! String)
-              
+            //当选择的类型是图片
             if type == "public.image" {
                 var imgUrl:URL?
                 var imageAsset: PHAsset?
                 
-                var img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage   
+                var img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage //or first frame
                 if let editImg = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
                     img = editImg
                 }

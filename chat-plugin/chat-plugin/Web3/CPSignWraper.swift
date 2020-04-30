@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPSignWraper.swift
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/17.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 import web3swift
@@ -35,8 +35,8 @@ class CPSignWraper: NSObject {
         return result.serializedSignature
     }
     
-      
-      
+    //MARK:- v1.1.3
+    ///获取一个非压缩的 公钥
     @objc public
     static func recoverUnzipPublicKey(hash: Data, signature_64: Data, judgePubkey_unzip: Data ) -> Data? {
         assert(signature_64.count == 64, "must be 64")

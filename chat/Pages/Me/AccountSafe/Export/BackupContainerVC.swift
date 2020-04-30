@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ViewController.swift
+//  chat
+//
+//  Created by Grand on 2019/9/9.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import WMPageController
@@ -25,7 +25,7 @@ class BackupContainerVC: WMPageController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
         } else {
-              
+            // Fallback on earlier versions
         }
         self.configUI()
         self.configEvent()
@@ -41,12 +41,12 @@ class BackupContainerVC: WMPageController {
         self.menuItemWidth = YYScreenSize().width / 2
         self.menuView?.backgroundColor = UIColor(hexString: "#F7F8FA")
         
-        self.titleColorSelected = UIColor(hexString: "#3D7EFF")!
-        self.titleColorNormal = UIColor(hexString: "#909399")!
+        self.titleColorSelected = UIColor(hexString: Color.blue)!
+        self.titleColorNormal = UIColor(hexString: Color.gray_90)!
         
         self.reloadData()
         
-        self.sureBtn.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.sureBtn.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
         
     }
     
@@ -71,19 +71,19 @@ class BackupContainerVC: WMPageController {
         
         alert.checkPreview = { [weak alert, weak self] in
             let pwd = alert?.inputTextField?.text
-              
+            //check if error
             if CPAccountHelper.checkLoginUserPwd(pwd) == false {
                 alert?.checkTipsLabel?.isHidden = false
                 return false
             }
-              
+            //check strong
             if pwd?.checkPassthrough().passthrough == false {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.15, execute: {
                     self?.toResignPwd(loginPwd: pwd)
                 })
                 return true
             }
-              
+            //ok
             self?.toNextStep(loginPwd: pwd)
             return true
         }
@@ -102,7 +102,7 @@ class BackupContainerVC: WMPageController {
     struct MyError: Error {
         var msg: String
     }
-      
+    // export
     func toNextStep(loginPwd: String?) {
         if let lpw = loginPwd {
             
@@ -120,48 +120,48 @@ class BackupContainerVC: WMPageController {
                 
             }
             
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
+            //            let toKeystore = Observable<String>.create { (observer) -> Disposable in
+            //                CPAccountHelper.exportKeystore(withLoginPwd: lpw, exportPassword: lpw) { (r, msg, keystore) in
+            //                    if r == false {
+            //                        Toast.show(msg: msg)
+            //                        observer.onError(MyError(msg: msg))
+            //                    } else {
+            //                        observer.onNext(keystore)
+            //                    }
+            //                }
+            //                return Disposables.create()
+            //            }
+            //
+            //            let toPrikey = Observable<String>.create { (observer) -> Disposable in
+            //                CPAccountHelper.exportKeystore(withLoginPwd: lpw, exportPassword: lpw) { (r, msg, keystore) in
+            //                    if r == false {
+            //                        Toast.show(msg: msg)
+            //                        observer.onError(MyError(msg: msg))
+            //                    } else {
+            //                        observer.onNext(keystore)
+            //                    }
+            //                }
+            //
+            //                return Disposables.create()
+            //            }
+            //
+            //            //auto free
+            //            Observable.zip(toKeystore, toPrikey).subscribe(onNext: { (ks, prikey) in
+            //
+            //                if let vc = R.loadSB(name: "Export", iden: "ExportDetailVC") as? ExportDetailVC {
+            //                    vc.keyStore = ks
+            //                    Router.pushViewController(vc: vc)
+            //                }
+            //
+            //            }, onError: { error in
+            //                if let e = error as? MyError {
+            //                    Toast.show(msg: e.msg)
+            //                }
+            //            })
         }
     }
     
-      
+    //MARK:- Delegate
     override func numbersOfChildControllers(in pageController: WMPageController) -> Int {
         return 2
     }

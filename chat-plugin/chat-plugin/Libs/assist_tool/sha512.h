@@ -1,4 +1,4 @@
-#ifndef _SHA512_111H_
+﻿#ifndef _SHA512_111H_
 #define _SHA512_111H_
 
 #include <stdint.h>
@@ -23,46 +23,46 @@ typedef struct
     uint8_t      bytes [SHA512_HASH_SIZE];
 } SHA512_HASH;
 
-  
-  
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PUBLIC FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  
-  
-  
-  
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Sha512Initialise
+//
+//  Initialises a SHA512 Context. Use this to initialise/reset a context.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
     Sha512Initialise
     (
-        Sha512Context*      Context           
+        Sha512Context*      Context         // [out]
     );
 
-  
-  
-  
-  
-  
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Sha512Update
+//
+//  Adds data to the SHA512 context. This will process the data and update the internal state of the context. Keep on
+//  calling this function until all the data has been added. Then call Sha512Finalise to calculate the hash.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
     Sha512Update
     (
-        Sha512Context*      Context,          
-        void const*         Buffer,           
-        uint32_t            BufferSize        
+        Sha512Context*      Context,        // [in out]
+        void const*         Buffer,         // [in]
+        uint32_t            BufferSize      // [in]
     );
 
-  
-  
-  
-  
-  
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Sha512Finalise
+//
+//  Performs the final calculation of the hash and returns the digest (64 byte buffer containing 512bit hash). After
+//  calling this, Sha512Initialised must be used to reuse the context.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
     Sha512Finalise
     (
-        Sha512Context*      Context,          
-        SHA512_HASH*        Digest            
+        Sha512Context*      Context,        // [in out]
+        SHA512_HASH*        Digest          // [out]
     );
 #ifdef __cplusplus
 }

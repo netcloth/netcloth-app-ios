@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2017 Andrew Poelstra	                              *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
 #ifndef _SECP256K1_SCRATCH_
@@ -27,10 +27,10 @@ static void secp256k1_scratch_destroy(secp256k1_scratch* scratch);
 /** Attempts to allocate a new stack frame with `n` available bytes. Returns 1 on success, 0 on failure */
 static int secp256k1_scratch_allocate_frame(secp256k1_scratch* scratch, size_t n, size_t objects);
 
- 
+/** Deallocates a stack frame */
 static void secp256k1_scratch_deallocate_frame(secp256k1_scratch* scratch);
 
- 
+/** Returns the maximum allocation the scratch space will allow */
 static size_t secp256k1_scratch_max_allocation(const secp256k1_scratch* scratch, size_t n_objects);
 
 /** Returns a pointer into the most recently allocated frame, or NULL if there is insufficient available space */

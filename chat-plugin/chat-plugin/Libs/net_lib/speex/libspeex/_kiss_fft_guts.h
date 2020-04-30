@@ -83,7 +83,7 @@ struct kiss_fft_state{
     do{ (c).r =  sround( smul( (c).r , s ) ) ;\
         (c).i =  sround( smul( (c).i , s ) ) ; }while(0)
 
-#else   
+#else  /* not FIXED_POINT*/
 
 #   define S_MUL(a,b) ( (a)*(b) )
 #define C_MUL(m,a,b) \
@@ -92,14 +92,14 @@ struct kiss_fft_state{
 
 #define C_MUL4(m,a,b) C_MUL(m,a,b)
 
-#   define C_FIXDIV(c,div)  
+#   define C_FIXDIV(c,div) /* NOOP */
 #   define C_MULBYSCALAR( c, s ) \
     do{ (c).r *= (s);\
         (c).i *= (s); }while(0)
 #endif
 
 #ifndef CHECK_OVERFLOW_OP
-#  define CHECK_OVERFLOW_OP(a,op,b)  
+#  define CHECK_OVERFLOW_OP(a,op,b) /* noop */
 #endif
 
 #define  C_ADD( res, a,b)\
@@ -155,6 +155,6 @@ struct kiss_fft_state{
 }while(0)
 
 
- 
+/* a debugging function */
 #define pcpx(c)\
     fprintf(stderr,"%g + %gi\n",(double)((c)->r),(double)((c)->i) )

@@ -1,7 +1,7 @@
 /*****************************************************************************
  * Copyright (c) 2013, 2014, 2017 Pieter Wuille, Andrew Poelstra, Jonas Nick *
  * Distributed under the MIT software license, see the accompanying          *
- * file COPYING or http:  
+ * file COPYING or http://www.opensource.org/licenses/mit-license.php.       *
  *****************************************************************************/
 
 #ifndef SECP256K1_ECMULT_IMPL_H
@@ -53,13 +53,13 @@
 /** The number of entries a table with precomputed multiples needs to have. */
 #define ECMULT_TABLE_SIZE(w) (1 << ((w)-2))
 
- 
+/* The number of objects allocated on the scratch space for ecmult_multi algorithms */
 #define PIPPENGER_SCRATCH_OBJECTS 6
 #define STRAUSS_SCRATCH_OBJECTS 6
 
 #define PIPPENGER_MAX_BUCKET_WINDOW 12
 
- 
+/* Minimum number of points for which pippenger_wnaf is faster than strauss wnaf */
 #ifdef USE_ENDOMORPHISM
     #define ECMULT_PIPPENGER_THRESHOLD 88
 #else
@@ -263,7 +263,7 @@ static void secp256k1_ecmult_odd_multiples_table_storage_var(const int n, secp25
         secp256k1_fe_add(&p_ge.x, &dx_over_dz_squared);
         /* y is stored_y/z^3, as we expect */
         secp256k1_fe_mul(&p_ge.y, &p_ge.y, &zi3);
-         
+        /* Store */
         secp256k1_ge_to_storage(&pre[i], &p_ge);
     }
 }
@@ -308,12 +308,12 @@ static void secp256k1_ecmult_context_build(secp256k1_ecmult_context *ctx, const 
         return;
     }
 
-     
+    /* get the generator */
     secp256k1_gej_set_ge(&gj, &secp256k1_ge_const_g);
 
     ctx->pre_g = (secp256k1_ge_storage (*)[])checked_malloc(cb, sizeof((*ctx->pre_g)[0]) * ECMULT_TABLE_SIZE(WINDOW_G));
 
-     
+    /* precompute the tables with odd multiples */
     secp256k1_ecmult_odd_multiples_table_storage_var(ECMULT_TABLE_SIZE(WINDOW_G), *ctx->pre_g, &gj);
 
 #ifdef USE_ENDOMORPHISM
@@ -535,7 +535,7 @@ static void secp256k1_ecmult_strauss_wnaf(const secp256k1_ecmult_context *ctx, c
         /* split ng into ng_1 and ng_128 (where gn = gn_1 + gn_128*2^128, and gn_1 and gn_128 are ~128 bit) */
         secp256k1_scalar_split_128(&ng_1, &ng_128, ng);
 
-         
+        /* Build wnaf representation for ng_1 and ng_128 */
         bits_ng_1   = secp256k1_ecmult_wnaf(wnaf_ng_1,   129, &ng_1,   WINDOW_G);
         bits_ng_128 = secp256k1_ecmult_wnaf(wnaf_ng_128, 129, &ng_128, WINDOW_G);
         if (bits_ng_1 > bits) {
@@ -665,7 +665,7 @@ static int secp256k1_ecmult_strauss_batch(const secp256k1_ecmult_context *ctx, s
     return 1;
 }
 
- 
+/* Wrapper for secp256k1_ecmult_multi_func interface */
 static int secp256k1_ecmult_strauss_batch_single(const secp256k1_ecmult_context *actx, secp256k1_scratch *scratch, secp256k1_gej *r, const secp256k1_scalar *inp_g_sc, secp256k1_ecmult_multi_callback cb, void *cbdata, size_t n) {
     return secp256k1_ecmult_strauss_batch(actx, scratch, r, inp_g_sc, cb, cbdata, n, 0);
 }
@@ -795,7 +795,7 @@ static int secp256k1_ecmult_pippenger_wnaf(secp256k1_gej *buckets, int bucket_wi
             int idx;
 
             if (i == 0) {
-                 
+                /* correct for wnaf skew */
                 int skew = point_state.skew_na;
                 if (skew) {
                     secp256k1_ge_neg(&tmp, &pt[point_state.input_pos]);
@@ -1023,7 +1023,7 @@ static int secp256k1_ecmult_pippenger_batch(const secp256k1_ecmult_context *ctx,
 
     secp256k1_ecmult_pippenger_wnaf(buckets, bucket_window, state_space, r, scalars, points, idx);
 
-     
+    /* Clear data */
     for(i = 0; (size_t)i < idx; i++) {
         secp256k1_scalar_clear(&scalars[i]);
         state_space->ps[i].skew_na = 0;
@@ -1038,7 +1038,7 @@ static int secp256k1_ecmult_pippenger_batch(const secp256k1_ecmult_context *ctx,
     return 1;
 }
 
- 
+/* Wrapper for secp256k1_ecmult_multi_func interface */
 static int secp256k1_ecmult_pippenger_batch_single(const secp256k1_ecmult_context *actx, secp256k1_scratch *scratch, secp256k1_gej *r, const secp256k1_scalar *inp_g_sc, secp256k1_ecmult_multi_callback cb, void *cbdata, size_t n) {
     return secp256k1_ecmult_pippenger_batch(actx, scratch, r, inp_g_sc, cb, cbdata, n, 0);
 }
@@ -1111,7 +1111,8 @@ static int secp256k1_ecmult_multi_simple_var(const secp256k1_ecmult_context *ctx
     return 1;
 }
 
- 
+/* Compute the number of batches and the batch size given the maximum batch size and the
+ * total number of points */
 static int secp256k1_ecmult_multi_batch_size_helper(size_t *n_batches, size_t *n_batch_points, size_t max_n_batch_points, size_t n) {
     if (max_n_batch_points == 0) {
         return 0;
@@ -1177,4 +1178,4 @@ static int secp256k1_ecmult_multi_var(const secp256k1_ecmult_context *ctx, secp2
     return 1;
 }
 
-#endif  
+#endif /* SECP256K1_ECMULT_IMPL_H */

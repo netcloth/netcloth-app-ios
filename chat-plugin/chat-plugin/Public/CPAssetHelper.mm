@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPAssetHelper.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/11/9.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPAssetHelper.h"
 #import "CPDataModel+secpri.h"
@@ -63,7 +63,10 @@
     
     [CPInnerState.shared asynWriteTask:^{
            BOOL r =
-           [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Claim onProperties:CPChainClaim.chain_status withRow:@[@(status)] where:CPChainClaim.txhash == txhash];
+           [CPInnerState.shared.loginUserDataBase updateRowsInTable:kTableName_Claim
+                                                       onProperties:CPChainClaim.chain_status
+                                                            withRow:@[@(status)]
+                                                              where:CPChainClaim.txhash == txhash];
            
            finalBack(r, nil);
        }];
@@ -107,12 +110,67 @@
         [CPInnerState.shared.loginUserDataBase
          getObjectsOfClass:CPChainClaim.class
          fromTable:kTableName_Claim
+         where:CPChainClaim.type == 1
          orderBy:CPChainClaim.createTime.order(WCTOrderedDescending)
          limit:100];
         
         finalBack(carray);
     }];
+}
+
+//MARK:- AIPAL
++ (void)insertAIPALHistroyMoniker:(NSString * _Nullable)moniker
+                   server_address:(NSString * _Nullable)address //server address
+                         endPoint:(NSString *_Nullable)endPoint
+                         callback:(void(^)(BOOL succss, NSString *msg))result {
+    void (^finalBack)(BOOL, NSString *) = ^(BOOL succss, NSString *msg) {
+        if (result) {
+            dispatch_main_async_safe(^{
+                result(succss, msg);
+            });
+        }
+    };
     
+    [CPInnerState.shared asynWriteTask:^{
+        
+        CPChainClaim *cla = CPChainClaim.alloc.init;
+        cla.type = 3;
+        cla.endpoint = endPoint;
+        cla.txhash = [NSUUID UUID].UUIDString; //mock
+        cla.moniker = moniker;
+        cla.operator_address = address;
+        cla.createTime = NSDate.date.timeIntervalSince1970;
+        cla.chain_status = 1;
+        
+        
+        BOOL r =
+        [CPInnerState.shared.loginUserDataBase insertObject:cla into:kTableName_Claim];
+        
+        finalBack(r, nil);
+    }];
+}
+
++ (void)getAIPALHistoryLimited:(void (^)(NSArray <CPChainClaim *> * _Nullable))result {
+    void (^finalBack)(NSArray *) = ^(NSArray *arrays) {
+           if (result) {
+               dispatch_main_async_safe(^{
+                   result(arrays);
+               });
+           }
+       };
+       
+       [CPInnerState.shared asynWriteTask:^{
+           
+           NSArray *carray =
+           [CPInnerState.shared.loginUserDataBase
+            getObjectsOfClass:CPChainClaim.class
+            fromTable:kTableName_Claim
+            where:CPChainClaim.type == 3
+            orderBy:CPChainClaim.createTime.order(WCTOrderedDescending)
+            limit:100];
+           
+           finalBack(carray);
+       }];
 }
 
 @end

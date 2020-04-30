@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPTools.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/11/1.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPTools.h"
 
@@ -17,6 +17,9 @@ NSString *kTableName_Claim = @"claim";
 NSString *kTableName_GroupMember = @"groupmember";
 NSString *kTableName_GroupMessage = @"groupmessage";
 NSString *kTableName_GroupNotify = @"groupnotify";
+
+NSString *kTableName_AssetToken = @"assettoken";
+NSString *kTableName_TradeRecord = @"traderecord";
 
 @implementation CPTools
 

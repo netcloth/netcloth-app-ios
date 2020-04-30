@@ -1,6 +1,6 @@
 
 /* Class = "UIButton"; normalTitle = "Contacts Backup"; ObjectID = "22Q-d4-d70"; */
-"22Q-d4-d70.normalTitle" = "备份通讯录";
+"22Q-d4-d70.normalTitle" = "备份联系人";
 
 /* Class = "UINavigationItem"; title = "New Group Chat"; ObjectID = "CdV-uh-SUM"; */
 "CdV-uh-SUM.title" = "创建群聊";
@@ -18,7 +18,7 @@
 "ksq-XJ-6MO.text" = "创建成功";
 
 /* Class = "UILabel"; text = "Group manager has the private key of the group, you can back up the private key by backing up the contracts, in case your group chats can't use normally."; ObjectID = "vN4-Yi-dvt"; */
-"vN4-Yi-dvt.text" = "群主拥有群私钥，请通过备份通讯录来备份群私钥，以免您的群无法正常使用";
+"vN4-Yi-dvt.text" = "群主拥有群私钥，请通过备份联系人来备份群私钥，以免您的群无法正常使用";
 
 /* Class = "UINavigationItem"; title = "Add Group Members"; ObjectID = "wPa-sz-YB4"; */
 "wPa-sz-YB4.title" = "添加群员";

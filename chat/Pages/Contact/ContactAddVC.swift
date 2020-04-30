@@ -1,15 +1,15 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactAddVC.swift
+//  chat
+//
+//  Created by Grand on 2019/7/25.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
 
-  
+/// 添加联系人
 class ContactAddVC: BaseViewController {
     
     @IBOutlet weak var pubkeyLabel: AutoHeightTextView!
@@ -25,9 +25,9 @@ class ContactAddVC: BaseViewController {
     var wantAddPublicKey: String?
     var wantRemark: String?
     
-      
+    //discard vcInitData 获取参数类型
     
-      
+    //MARK:- Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -45,7 +45,7 @@ class ContactAddVC: BaseViewController {
     }
     
     
-      
+    //MARK:- Helper
     var contacts:[CPContact]? = nil
     func checkPubKeyStatus(pbkey: String?) {
         guard let pk = pbkey, let cts = contacts else {
@@ -63,9 +63,9 @@ class ContactAddVC: BaseViewController {
         
         refreshInput()
         
-        self.addBtn.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
+        self.addBtn.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
         
-          
+        //config scan
         let img = UIImage(named: "扫一扫1")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: img, style: .plain, target: self, action: #selector(onTapScan))
     }
@@ -87,14 +87,14 @@ class ContactAddVC: BaseViewController {
             if (can) {
                 let vc = WCQRCodeVC()
                 vc.callBack = { [weak vc, weak self] (output) in
-                      
+                    //add contact
                     if let svc = self {
                         vc?.dismiss(animated: false, completion: nil)
                         let v2 = InnerHelper.v2_decodeScanInput(str: output, wantType: "contact")
                         if v2.valid {
                             let publickey = v2.data as? String  ?? ""
                             if v2.type == SessionType.P2P {
-                                  
+                                //remove WCQRCodeVC
                                 svc.navigationController?.popToViewController(svc, animated: true)
                                 svc.wantAddPublicKey = publickey
                                 svc.wantRemark = v2.minorData as? String
@@ -103,7 +103,7 @@ class ContactAddVC: BaseViewController {
                             }
                             else if v2.type == SessionType.group {
                                 svc.navigationController?.popToViewController(svc, animated: false)
-                                  
+                                //to detail
                                 if let vc = R.loadSB(name: "GroupInviteDetailVC", iden: "GroupInviteDetailVC") as?  GroupInviteDetailVC {
                                     vc.qr_groupPublickKey = publickey
                                     Router.pushViewController(vc: vc)
@@ -125,21 +125,21 @@ class ContactAddVC: BaseViewController {
     
     func configEvent() {
     
-          
+        ///: Input
         pubkeyLabel.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
-                self?.pbkeyMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
+                self?.pbkeyMask.backgroundColor = UIColor(hexString: Color.mask_bottom_fill)
                 self?.checkPubKeyStatus(pbkey: e)
             } else {
-                self?.pbkeyMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_empty)
+                self?.pbkeyMask.backgroundColor = UIColor(hexString: Color.mask_bottom_empty)
             }
             }.disposed(by: disbag)
         
         remarkTF.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
-                self?.remarkMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_fill)
+                self?.remarkMask.backgroundColor = UIColor(hexString: Color.mask_bottom_fill)
             } else {
-                self?.remarkMask.backgroundColor = UIColor(hexString: Config.Color.mask_bottom_empty)
+                self?.remarkMask.backgroundColor = UIColor(hexString: Color.mask_bottom_empty)
             }
             }.disposed(by: disbag)
         
@@ -157,20 +157,15 @@ class ContactAddVC: BaseViewController {
                         return
                     }
                     
-                      
+                    //jump to chat
                     if let vc = R.loadSB(name: "ChatRoom", iden: "ChatRoomVC") as? ChatRoomVC, let contact = addedcontact {
                         vc.toPublicKey = contact.publicKey
                         vc.remark = contact.remark
                         vc.sessionId = Int(contact.sessionId)
                         
-                        Router.pushViewController(vc: vc)
-                        
-                          
-                        if let _ = vc.navigationController {
-                            withUnsafeMutablePointer(to: &vc.navigationController!.viewControllers, { (v) in
-                                v.pointee.removeSubrange((v.pointee.count - 2 ..< v.pointee.count - 1))
-                            })
-                        }
+                        Router.dismissVC(animate: false, completion: {
+                            Router.pushViewController(vc: vc)
+                        }, toRoot: true)
                     }
                     else {
                         Router.dismissVC()

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  NotificationService.swift
+//  NotificationExt
+//
+//  Created by Grand on 2019/10/7.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UserNotifications
 
@@ -22,7 +22,7 @@ class NotificationService: UNNotificationServiceExtension {
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
         
         if let bestAttemptContent = bestAttemptContent {
-              
+            // Modify the notification content here...
             let userinfo = bestAttemptContent.userInfo
             let message = userinfo["message"]
             var msg_name = "unknown"
@@ -48,13 +48,13 @@ class NotificationService: UNNotificationServiceExtension {
             if let message = message as? NSDictionary {
                 msg_name = message["msg_name"] as? String ?? "unknown"
                 public_key = message["public_key"] as? String
-                  
+                //for group
                 groupName = message["group_name"] as? String
                 senderNickName = message["sender_nick_name"] as? String ?? ""
                 group_pub_key = message["group_pub_key"] as? String ?? ""
             }
             else {
-                  
+                //error type
                 contentHandler(bestAttemptContent)
                 return;
             }
@@ -88,7 +88,7 @@ class NotificationService: UNNotificationServiceExtension {
             
             bestAttemptContent.body = body
             
-              
+            //from pub key
             var isInDisturb = false
             if let fromPubkey = public_key {
                 isInDisturb = ExtensionShare.noDisturb.isInDisturb(pubkey: fromPubkey)
@@ -99,7 +99,7 @@ class NotificationService: UNNotificationServiceExtension {
                 }
             }
             
-              
+            //group
             if group_pub_key.isEmpty == false {
                 isInDisturb = ExtensionShare.noDisturb.isInDisturb(pubkey: group_pub_key)
                 if isInDisturb {
@@ -109,7 +109,7 @@ class NotificationService: UNNotificationServiceExtension {
                 }
             }
             
-              
+            //badge
             var count = ExtensionShare.unreadStore.getUnreadCount()
             if isInDisturb == false {
                 count += 1
@@ -124,8 +124,8 @@ class NotificationService: UNNotificationServiceExtension {
     }
     
     override func serviceExtensionTimeWillExpire() {
-          
-          
+        // Called just before the extension will be terminated by the system.
+        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
             contentHandler(bestAttemptContent)
         }

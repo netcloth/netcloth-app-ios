@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  WCQRCodeVC.m
+//  SGQRCodeExample
+//
+//  Created by kingsic on 17/3/20.
+//  Copyright © 2017年 kingsic. All rights reserved.
+//
 
 #import "WCQRCodeVC.h"
 #import "SGQRCode.h"
@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      
+    // Do any additional setup after loading the view from its nib.
     self.view.backgroundColor = [UIColor blackColor];
     obtain = [SGQRCodeObtain QRCodeObtain];
     
@@ -38,20 +38,20 @@
     [self setupNavigationBar];
     [self.view addSubview:self.scanView];
     [self.view addSubview:self.promptLabel];
-      
+    /// 为了 UI 效果
     [self.view addSubview:self.bottomView];
     
     if (@available(iOS 11.0, *)) {
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     } else {
-          
+        // Fallback on earlier versions
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
-      
+    /// 二维码开启方法
     [obtain startRunningWithBefore:nil completion:nil];
 }
 
@@ -71,7 +71,7 @@
     return UIStatusBarStyleDefault;
 }
 
-  
+//MARK:- Open
 - (void)openCallBack:(NSString *)pbkey {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.callBack) {
@@ -81,7 +81,7 @@
 }
 
 
-  
+//MARK:- Helper
 
 
 - (void)setupQRCodeScan {
@@ -99,16 +99,16 @@
             [weakSelf openCallBack:result];
         }
     }];
-      
-  
-  
-  
-  
-  
-  
-  
-  
-  
+    //闪光灯回调
+//    [obtain setBlockWithQRCodeObtainScanBrightness:^(SGQRCodeObtain *obtain, CGFloat brightness) {
+//        if (brightness < -1) {
+//            [weakSelf.view addSubview:weakSelf.flashlightBtn];
+//        } else {
+//            if (weakSelf.isSelectedFlashlightBtn == NO) {
+//                [weakSelf removeFlashlightBtn];
+//            }
+//        }
+//    }];
 }
 
 - (void)setupNavigationBar {
@@ -185,7 +185,7 @@
 #pragma mark - - - 闪光灯按钮
 - (UIButton *)flashlightBtn {
     if (!_flashlightBtn) {
-          
+        // 添加闪光灯按钮
         _flashlightBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
         CGFloat flashlightBtnW = 30;
         CGFloat flashlightBtnH = 30;

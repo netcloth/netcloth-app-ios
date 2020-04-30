@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  NCClearRecordsVC.swift
+//  chat
+//
+//  Created by Grand on 2019/11/19.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -21,22 +21,16 @@ class NCClearRecordsVC: BaseTableViewController {
         if #available(iOS 11.0, *) {
             self.isShowLargeTitleMode = true
         } else {
-              
+            // Fallback on earlier versions
         }
         super.viewDidLoad()
         configUI()
         refreshCells()
         configEvent()
-        fixConfigUI()
-    }
-    
-    func fixConfigUI() {
-       
-       clearRecordL?.text = "Clear Chat History".localized()
     }
     
     func configUI() {
-        clearSwitch?.onTintColor = UIColor(hexString: "#3D7EFF")
+        clearSwitch?.onTintColor = UIColor(hexString: Color.blue)
         clearSwitch?.tintColor = UIColor(hexString: "#E1E4E9")
         self.tableView.adjustFooter()
     }
@@ -81,7 +75,7 @@ class NCClearRecordsVC: BaseTableViewController {
                 self?.dismissLoading()
                 self?.navigationController?.popToRootViewController(animated: false)
                 
-                  
+                //select home
                 if let rootVC = Router.rootVC as? UINavigationController,
                     let baseTabVC = rootVC.topViewController as? GrandTabBarVC {
                     baseTabVC.switchToTab(index: 0)
@@ -98,7 +92,7 @@ class NCClearRecordsVC: BaseTableViewController {
         }
     }
     
-      
+    //MARK:- Helper
     func popRecoredAlert() -> Promise<String> {
         let _promise = Promise<String> { ( resolver :Resolver<String>) in
             if let alert = R.loadNib(name: "OneButtonOneMsgAlert") as? OneButtonOneMsgAlert {

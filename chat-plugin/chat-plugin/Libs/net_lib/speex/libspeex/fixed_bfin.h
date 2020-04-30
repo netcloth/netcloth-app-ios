@@ -48,7 +48,7 @@ static inline spx_word16_t PDIV32_16(spx_word32_t a, spx_word16_t b)
          "P0 = 15;\n\t"
          "R0 = %1;\n\t"
          "R1 = %2;\n\t"
-           
+         //"R0 = R0 + R1;\n\t"
          "R0 <<= 1;\n\t"
          "DIVS (R0, R1);\n\t"
          "LOOP divide%= LC0 = P0;\n\t"

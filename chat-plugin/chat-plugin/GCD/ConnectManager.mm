@@ -1,15 +1,16 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ConnectManager.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/14.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "ConnectManager.h"
 #import "SocketConnect.h"
 #import "MessageObjects.h"
 #import "CPInnerState.h"
+#import "CPChatLog.h"
 
 @interface ConnectManager () <SocketConnectDelegate>
 {
@@ -57,7 +58,7 @@ static ConnectManager *_instance;
     return self;
 }
 
-  
+//MARK:- Connect
 
 - (void)connectHost:(NSString *)host
                port:(uint16_t)port
@@ -76,8 +77,9 @@ static ConnectManager *_instance;
     [self stopHeartTimer];
 }
 
-  
+//initiative disconnect
 - (void)disconnect {
+    LogFormat(@"connect-disconnect");
     [self disconnectDeleteStore:false];
 }
 
@@ -118,10 +120,10 @@ static ConnectManager *_instance;
 }
 
 - (void)_reconnect {
-      
+    //for timer
     double diff = MIN(pow(2, _reconnectCount) * 0.5, 5);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(diff * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          
+        //Note: if it is connected, then recieve error triger reconnect
         if ([self checkCanReConnect]) {
             if (self->_reconnectCount >= 3) {
                 NSLog(@"coremsg-connect-reinit");
@@ -130,7 +132,7 @@ static ConnectManager *_instance;
                 if ([self.delegate respondsToSelector:@selector(onShouldReinitConnectToUseNewHostAndPort)]) {
                     [self.delegate onShouldReinitConnectToUseNewHostAndPort];
                 }
-  
+//                [self connectHost:self->_host port:self->_port delegate:self.delegate];
             } else {
                 [self.connect connect];
             }
@@ -140,13 +142,13 @@ static ConnectManager *_instance;
     [self stopHeartTimer];
 }
 
-  
-  
+//MARK:- Public
+//Note: not data, because of easy debug
 - (void)sendMsg:(NCProtoNetMsg *)message {
     [self.connect sendMsg:message];
 }
 
-  
+//MARK:- Tool
 
 - (BOOL)checkCanReConnect {
     if (self.isConnected || self->_initiativeDisconnect || [NSString cp_isEmpty:self->_host]) {
@@ -155,7 +157,7 @@ static ConnectManager *_instance;
     return YES;
 }
 
-  
+//MARK:- Timer
 - (void)startHeartTimer {
     [self stopHeartTimer];
     self.heartTimer = [NSTimer timerWithTimeInterval:kSendHeartInterval target:self selector:@selector(sendHeartMsg) userInfo:nil repeats:YES];
@@ -174,7 +176,7 @@ static ConnectManager *_instance;
     }
 }
 
-  
+//MARK:- SocketConnect Delegate
 - (void)onSocketError {
     self.isConnected = false;
     [self stopHeartTimer];
@@ -198,24 +200,24 @@ static ConnectManager *_instance;
 }
 
 - (void)onSocketReadPack:(NCProtoNetMsg *)netmsg {
-      
+    //filer
     if ([netmsg.name isEqualToString:kMsg_Heartbeat]) {
         return;
     }
     
-      
+    //dispath msgs
     if ([self.delegate respondsToSelector:@selector(onConnectReadPack:)]) {
         [self.delegate onConnectReadPack:netmsg];
     }
     
-      
+    //register
     if ([netmsg.name isEqualToString:kMsg_RegisterRsp]) {
         NCProtoRegisterRsp *rsp = [NCProtoRegisterRsp parseFromData:netmsg.data_p error:nil];
         if (!rsp) {
             return;
         }
         if (rsp.result != 0) {
-              
+            //error
         } else {
             self->_reconnectCount = 0;
             [self startHeartTimer];

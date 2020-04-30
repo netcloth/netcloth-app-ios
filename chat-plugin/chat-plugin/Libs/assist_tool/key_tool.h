@@ -1,4 +1,4 @@
-#ifndef KEYTOOL_H
+﻿#ifndef KEYTOOL_H
 #define KEYTOOL_H
 #include <string>
 #include <array>
@@ -29,7 +29,12 @@ std::string CreatePrivateKey();
  */
 std::string GetPublicKeyByPrivateKey(const std::string private_key_org);
 
- 
+/**
+ * @brief 使用私钥对一段内存数据进行签名
+ * @param buf 内存的地址
+ * @param 内存的长度
+ * @return 随机数
+ */
 std::string GetSignByPrivateKey(const uint8_t* buf, size_t length, const std::string pri_key);
 
 /**
@@ -77,4 +82,4 @@ bool AesEncode(const std::string& key, const std::string& iv, const std::string&
 bool AesDecode(const std::string& key, const std::string& iv, const std::string& in, std::string& out);
 
 uint64_t GetHash(const std::string& str);
-#endif   
+#endif // KEYTOOL_H

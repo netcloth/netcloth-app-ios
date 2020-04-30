@@ -1,9 +1,9 @@
-  
-  
-  
-  
-  
-  
+//
+//  SwiftBTC
+//
+//  Created by Otto Suess on 27.02.18.
+//  Copyright © 2018 Zap. All rights reserved.
+//
 
 import Foundation
 import web3swift

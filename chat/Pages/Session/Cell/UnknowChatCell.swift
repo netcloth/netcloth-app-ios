@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  UnknowChatCell.swift
+//  chat
+//
+//  Created by Grand on 2019/8/19.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
@@ -26,7 +26,7 @@ import Foundation
     
     @IBOutlet weak var createTimeL: UILabel?
     @IBOutlet weak var avatarTop: NSLayoutConstraint?
-      
+    /// avatar tap
     @IBOutlet weak var avatarBtn: UIButton?
     
     
@@ -37,7 +37,7 @@ import Foundation
     }
     @objc func onTapAvatar() {
         if let d = dataMsg {
-            delegate?.onTapAvatar?(pubkey: d.toPubkey)
+            delegate?.onTapAvatar?(pubkey: d.senderPubKey)
         }
     }
     
@@ -49,13 +49,13 @@ import Foundation
         }
     }
     
-      
+    //MARK:- Interface
     override func msgContentView() -> UIView? {
         return self.msgContentL
     }
 
 
-      
+    //MARK:- Public
     
     override func reloadData(data: Any) {
         guard let msg = data as? CPMessage else {
@@ -70,42 +70,53 @@ import Foundation
     }
     
     func updateSelf(msg: CPMessage) {
-          
+        //时间戳
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
-          
-        var img = UIImage(named: "蓝色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+        //背景图
+//        var img = UIImage(named: "蓝色-聊天")
+//        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
+//        msgBgImgView?.image = img
+        msgBgImgView?.backgroundColor = UIColor(hexString: Color.blue)
         
-          
+        //内容
         msgContentL?.text = "[你发送了一条未知消息]"
         
-          
+        //头像
         smallRemarkL?.text = (CPAccountHelper.loginUser()?.accountName ?? "").getSmallRemark()
+        let color = CPAccountHelper.loginUser()?.publicKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
         sendStateImgV?.isHidden = !(msg.toServerState == 1)
         sendErrorBtn?.isHidden = !(msg.toServerState == 2)
     }
     
     func updateOthers(msg: CPMessage) {
-          
+        //时间戳
         self.isHideTimeL = !msg.showCreateTime
         if msg.showCreateTime {
             self.createTimeL?.text = Time.timeDesc(from: msg.createTime, includeH_M: true)
         }
         
-          
-        var img = UIImage(named: "灰色-聊天")
-        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
-        msgBgImgView?.image = img
+        //背景图
+//        var img = UIImage(named: "灰色-聊天")
+//        img = img?.resizableImage(withCapInsets: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12), resizingMode: .stretch)
+//        msgBgImgView?.image = img
+        msgBgImgView?.backgroundColor = UIColor.white
         
-          
+        //内容
         msgContentL?.text = "Msg_Recieve_Unknown".localized()
         
-          
-        smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
+        //头像
+        if msg.isGroupChat {
+            smallRemarkL?.text = msg.senderRemark.getSmallRemark()
+        }
+        else {
+            smallRemarkL?.text = RoomStatus.remark?.getSmallRemark()
+        }
+        let color = msg.senderPubKey.randomColor() ?? RelateDefaultColor
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
     }
 }

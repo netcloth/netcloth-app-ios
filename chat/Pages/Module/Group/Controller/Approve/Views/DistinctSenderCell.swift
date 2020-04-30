@@ -1,14 +1,14 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  DistinctSenderCell.swift
+//  chat
+//
+//  Created by Grand on 2019/12/26.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
-  
+/// 获取群成员昵称
 @objc class DistinctSenderCell: UITableViewCell {
     
     @IBOutlet weak var smallRemarkL: UILabel?
@@ -56,19 +56,21 @@ import UIKit
         
         remarkL?.text = senderNickName
         smallRemarkL?.text = senderNickName.getSmallRemark()
+        let color = notice.senderPublicKey.randomColor()
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
-          
+        //Msg
         msgL?.text = desc
     
-          
+        //time
         timeL?.text = Time.timeDesc(from: notice.createTime ?? NSDate().timeIntervalSince1970, includeH_M: false)
         
-          
+        //状态
         reloadStatus(notice: notice)
     }
     
     fileprivate func reloadStatus(notice: CPGroupNotify) {
-          
+        //unread status
         let r = getStatusDesc(status: notice.status)
         unreadL?.text = r.desc
         unreadL?.textColor = r.color
@@ -83,11 +85,11 @@ import UIKit
         case .read:
             return ("Notify_status_read".localized(), UIColor(hexString: "#F77221"))
         case .fulfilled:
-            return ("Notify_status_fulfilled".localized(), UIColor(hexString: "#BFC2CC"))
+            return ("Notify_status_fulfilled".localized(), UIColor(hexString: Color.gray_bf))
         case .reject:
-            return ("Notify_status_reject".localized(), UIColor(hexString: "#FF4141"))
+            return ("Notify_status_reject".localized(), UIColor(hexString: Color.red))
         case .expired:
-            return ("Notify_status_expired".localized(), UIColor(hexString: "#BFC2CC"))
+            return ("Notify_status_expired".localized(), UIColor(hexString: Color.gray_bf))
             
         default:
             return (nil, nil)

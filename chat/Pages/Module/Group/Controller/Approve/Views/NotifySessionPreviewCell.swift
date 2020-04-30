@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupNotifyPreviewCell.swift
+//  chat
+//
+//  Created by Grand on 2019/12/26.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -31,30 +31,32 @@ import UIKit
     fileprivate func _reloadData(_ session: CPGroupNotifySession) {
         remarkL?.text = session.relateContact.remark
         smallRemarkL?.text = session.relateContact.remark.getSmallRemark()
+        let color = session.relateContact.publicKey.randomColor()
+        smallRemarkL?.backgroundColor = UIColor(hexString: color)
         
-        if session.groupRelateMemberNick.isEmpty == false {
+        if session.groupRelateMember.isEmpty == false {
             groupAvatar?.isHidden = false
             smallRemarkL?.isHidden = true
-            groupAvatar?.reloadData(nickNames: session.groupRelateMemberNick)
+            groupAvatar?.reloadData(members: session.groupRelateMember)
             
         } else {
             groupAvatar?.isHidden = true
             smallRemarkL?.isHidden = false
         }
         
-          
+        //Msg
         msgL?.text = "[\("Group Confirmation".localized())]"
         if session.unreadCount == 0 {
-            msgL?.textColor = UIColor(hexString: "#909399")
+            msgL?.textColor = UIColor(hexString: Color.gray_90)
         } else {
-            msgL?.textColor = UIColor(hexString: "#FF4141")
+            msgL?.textColor = UIColor(hexString: Color.red)
         }
         
         
-          
+        //time
         timeL?.text = Time.timeDesc(from: session.lastNotice?.createTime ?? NSDate().timeIntervalSince1970, includeH_M: false)
         
-          
+        //unread
         unreadL?.text = session.unreadCount > 99 ? "99+" : "\(session.unreadCount)"
         unreadL?.isHidden = session.unreadCount == 0
     }

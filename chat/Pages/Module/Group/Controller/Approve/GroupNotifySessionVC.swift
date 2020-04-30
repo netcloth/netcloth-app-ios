@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupNotifyPreviewVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/26.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -56,7 +56,7 @@ class GroupNotifySessionVC: BaseViewController, UITableViewDelegate, UITableView
     }
     
     
-      
+    //MARK:- TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArray?.count ?? 0
     }

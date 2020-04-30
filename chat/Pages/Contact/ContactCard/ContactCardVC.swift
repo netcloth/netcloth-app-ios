@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ContactCardVC.swift
+//  chat
+//
+//  Created by Grand on 2019/9/24.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -13,7 +13,7 @@ class ContactCardVC: BaseViewController {
     var contact: CPContact?
     var contactPublicKey: String?
     
-      
+    //1 from chat,
     var sourceTag: Int? = 0
     
     @IBOutlet weak var smallRemark: UILabel?
@@ -34,10 +34,12 @@ class ContactCardVC: BaseViewController {
     @IBOutlet weak var strangerContainer: UIView?
     weak var strangerContactVC: StrangerCardVC?
     
+    @IBOutlet weak var topMaskView: UIView?
+    
     
     let disbag = DisposeBag()
     
-      
+    //MARK:- Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
@@ -91,48 +93,55 @@ class ContactCardVC: BaseViewController {
         }
         smallRemark?.text = ct.remark.getSmallRemark()
         remark?.text = ct.remark
+        let color = ct.publicKey.randomColor()
+        smallRemark?.backgroundColor = UIColor(hexString: color)
+        
         nickremark?.text = "Contact_Alias".localized() + ": " + ct.remark;
         publicKeyLabel?.text = ct.publicKey
         addBlackSwitch?.isOn =  ct.isBlack
     }
     
-      
+    //MARK:- Config
     func configUI() {
+        
         publicKeyLabel?.edgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         publicKeyLabel?.preferredMaxLayoutWidth = YYScreenSize().width - 27*2
         
-        addBlackSwitch?.onTintColor = UIColor(hexString: "#3D7EFF")
+        addBlackSwitch?.onTintColor = UIColor(hexString: Color.blue)
         addBlackSwitch?.tintColor = UIColor(hexString: "#E1E4E9")
         
         scrollView?.adjustOffset()
         
-        sendMsgBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        sendMsgBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        
+        let colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor(rgb: 0xffffff, alpha: 0).cgColor]
+        topMaskView?.fakeGradientLayer(colors)
     }
     
     func configEvent() {
         
-          
+        //show qr
         qrcodeBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.onActionShowQR()
         }).disposed(by: disbag)
         
-          
+        //send
         sendMsgBtn?.rx.tap.subscribe(onNext: { [weak self] in
             self?.onActionSend()
         }).disposed(by: disbag)
         
-          
+        //change remark
         changeRemark?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.onActionRemark()
         }).disposed(by: disbag)
         
-          
+        //delete contact
         deleteContact?.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.onActionDeleteContact()
         }).disposed(by: disbag)
         
         
-          
+        //add black
         addBlackSwitch?.rx.value.subscribe(onNext: { [weak self] (isOn) in
             if isOn {
                 self?.onActionAddBlack()
@@ -144,21 +153,20 @@ class ContactCardVC: BaseViewController {
     }
     
     
-      
+    //MARK:- Action
     func onActionShowQR() {
         if let ct = self.contact {
             if let json = InnerHelper.v2_toString(contact: ct) {
-                QrCodeVC.generateQRCode(data: json) { (img) in
-                    
-                    let aname = ct.remark 
-                    guard let img = QrCodeVC.createBigImage(accountName: aname, qrImg: img) else {
-                        return
+                
+                _ = QrCodeVC.v2_createShareAppImage(withContact: ct)
+                .observeOn(MainScheduler.instance)
+                .subscribe(onNext: { (image) in
+                    if let img = image {
+                        let qr = QRPhotoImgView(image: img)
+                        qr.contentMode = .scaleAspectFill
+                        Router.showAlert(view: qr)
                     }
-                    
-                    let qr = QRPhotoImgView(image: img)
-                    qr.contentMode = .scaleAspectFill
-                    Router.showAlert(view: qr)
-                }
+                })
             }
         }
     }
@@ -210,7 +218,7 @@ class ContactCardVC: BaseViewController {
             }
         }
     }
-      
+    //MARK:- 黑名单
     func onActionAddBlack() {
         
         if let alert = R.loadNib(name: "NormalAlertView") as? NormalAlertView,
@@ -223,13 +231,8 @@ class ContactCardVC: BaseViewController {
             alert.okButton?.setTitle("Confirm".localized(), for: .normal)
             Router.showAlert(view: alert)
             
-            alert.okBlock = {
-                CPContactHelper.addUser(toBlacklist: contact.publicKey) { [weak self] (r, msg) in
-                    if r == false {
-                        Toast.show(msg: msg)
-                        self?.addBlackSwitch?.isOn = false
-                    }
-                }
+            alert.okBlock = { [weak self]  in
+                InnerHelper.addToBlack(hexPubkey: contact.publicKey, target: self?.addBlackSwitch)
             }
             alert.cancelBlock = { [weak self] in
                 self?.addBlackSwitch?.isOn = false
@@ -239,16 +242,13 @@ class ContactCardVC: BaseViewController {
     
     func onActionDeleteFromBlack() {
         if let contact = self.contact {
-            CPContactHelper.removeUser(fromBlacklist: contact.publicKey) { (r, msg) in
-                if r == false {
-                    Toast.show(msg: msg)
-                }
-            }
+            InnerHelper.removeBlack(hexPubkey: contact.publicKey,
+                                    target: self.addBlackSwitch)
         }
     }
 }
 
-  
+//MARK:- Stranger
 class StrangerCardVC: ContactCardVC {
     @IBOutlet weak var addToNewFriend: UIControl?
     
@@ -270,7 +270,7 @@ class StrangerCardVC: ContactCardVC {
                 if r == false {
                     Toast.show(msg: msg)
                 } else {
-                      
+                    //delete StrangerSessionListVC
                     if let toVcs = self.navigationController?.viewControllers.filter({ (vc) -> Bool in
                         if vc is StrangerSessionListVC {
                             return false
@@ -281,7 +281,7 @@ class StrangerCardVC: ContactCardVC {
                     }
                     NotificationCenter.post(name: NoticeNameKey.newFriendsCountChange)
                     
-                      
+                    //fake store
                     let msg = CPMessage()
                     msg.senderPubKey = CPAccountHelper.loginUser()?.publicKey ?? ""
                     msg.toPubkey = contact.publicKey
@@ -292,7 +292,7 @@ class StrangerCardVC: ContactCardVC {
                     
                     CPChatHelper.fakeSendMsg(msg, complete: nil)
                     
-                      
+                    //dismiss
                     Router.dismissVC()
                     
                 }

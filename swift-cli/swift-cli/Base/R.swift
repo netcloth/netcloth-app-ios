@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  R.swift
+//  swift-cli
+//
+//  Created by Grand on 2019/7/25.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 

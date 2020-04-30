@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SGQRCodeObtain.m
+//  SGQRCodeExample
+//
+//  Created by kingsic on 2016/8/16.
+//  Copyright © 2016年 kingsic. All rights reserved.
+//
 
 #import "SGQRCodeObtain.h"
 #import "SGQRCodeObtainConfigure.h"
@@ -37,24 +37,36 @@
 }
 
 #pragma mark - - 生成二维码相关方法
- 
+/**
+ *  生成二维码
+ *
+ *  @param data    二维码数据
+ *  @param size    二维码大小
+ */
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size {
     return [self generateQRCodeWithData:data size:size color:[UIColor blackColor] backgroundColor:[UIColor whiteColor]];
 }
- 
+/**
+ *  生成二维码
+ *
+ *  @param data     二维码数据
+ *  @param size     二维码大小
+ *  @param color    二维码颜色
+ *  @param backgroundColor    二维码背景颜色
+ */
 + (UIImage *)generateQRCodeWithData:(NSString *)data size:(CGFloat)size color:(UIColor *)color backgroundColor:(UIColor *)backgroundColor {
     NSData *string_data = [data dataUsingEncoding:NSUTF8StringEncoding];
-      
+    // 1、二维码滤镜
     CIFilter *fileter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
     [fileter setValue:string_data forKey:@"inputMessage"];
     [fileter setValue:@"H" forKey:@"inputCorrectionLevel"];
     CIImage *ciImage = fileter.outputImage;
-      
+    // 2、颜色滤镜
     CIFilter *color_filter = [CIFilter filterWithName:@"CIFalseColor"];
     [color_filter setValue:ciImage forKey:@"inputImage"];
     [color_filter setValue:[CIColor colorWithCGColor:color.CGColor] forKey:@"inputColor0"];
     [color_filter setValue:[CIColor colorWithCGColor:backgroundColor.CGColor] forKey:@"inputColor1"];
-      
+    // 3、生成处理
     CIImage *outImage = color_filter.outputImage;
     CGFloat scale = size / outImage.extent.size.width;
     outImage = [outImage imageByApplyingTransform:CGAffineTransformMakeScale(scale, scale)];
@@ -93,7 +105,7 @@
     CGFloat logoImageX = 0.5 * (image.size.width - logoImageW);
     CGFloat logoImageY = 0.5 * (image.size.height - logoImageH);
     CGRect logoImageRect = CGRectMake(logoImageX, logoImageY, logoImageW, logoImageH);
-      
+    // 绘制logo
     UIGraphicsBeginImageContextWithOptions(image.size, false, [UIScreen mainScreen].scale);
     [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
     if (logoImageCornerRadius < 0.0 || logoImageCornerRadius > 10) {
@@ -126,39 +138,39 @@
     _configure = configure;
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-      
+    // 1、捕获设备输入流
     AVCaptureDeviceInput *deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
-      
+    // 2、捕获元数据输出流
     AVCaptureMetadataOutput *metadataOutput = [[AVCaptureMetadataOutput alloc] init];
     [metadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
     
-      
-      
+    // 设置扫描范围（每一个取值 0 ～ 1，以屏幕右上角为坐标原点）
+    // 注：微信二维码的扫描范围是整个屏幕，这里并没有做处理（可不用设置）
     if (configure.rectOfInterest.origin.x == 0 && configure.rectOfInterest.origin.y == 0 && configure.rectOfInterest.size.width == 0 && configure.rectOfInterest.size.height == 0) {
     } else {
         metadataOutput.rectOfInterest = configure.rectOfInterest;
     }
 
-      
+    // 3、设置会话采集率
     self.captureSession.sessionPreset = configure.sessionPreset;
     
-      
+    // 4(1)、添加捕获元数据输出流到会话对象
     [_captureSession addOutput:metadataOutput];
-      
+    // 4(2)、添加捕获输出流到会话对象；构成识了别光线强弱
     if (configure.sampleBufferDelegate == YES) {
         AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
         [videoDataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
         [_captureSession addOutput:videoDataOutput];
     }
-      
+    // 4(3)、添加捕获设备输入流到会话对象
     [_captureSession addInput:deviceInput];
     
-      
+    // 5、设置数据输出类型，需要将数据输出添加到会话后，才能指定元数据类型，否则会报错
     metadataOutput.metadataObjectTypes = configure.metadataObjectTypes;
     
-      
+    // 6、预览图层
     AVCaptureVideoPreviewLayer *videoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
-      
+    // 保持纵横比，填充层边界
     videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     videoPreviewLayer.frame = controller.view.frame;
     [controller.view.layer insertSublayer:videoPreviewLayer atIndex:0];
@@ -231,10 +243,10 @@
 }
 
 - (void)playSoundName:(NSString *)name {
-      
+    /// 静态库 path 的获取
     NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:nil];
     if (!path) {
-          
+        /// 动态库 path 的获取
         path = [[NSBundle bundleForClass:[self class]] pathForResource:name ofType:nil];
     }
     NSURL *fileUrl = [NSURL fileURLWithPath:path];
@@ -259,12 +271,12 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if (device) {
-          
+        // 判断授权状态
         PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-        if (status == PHAuthorizationStatusNotDetermined) {   
-              
+        if (status == PHAuthorizationStatusNotDetermined) { // 用户还没有做出选择
+            // 弹框请求用户授权
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {   
+                if (status == PHAuthorizationStatusAuthorized) { // 用户第一次同意了访问相册权限
                     self.isPHAuthorization = YES;
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [self P_enterImagePickerController];
@@ -272,19 +284,19 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
                     if (self.configure.openLog == YES) {
                         NSLog(@"用户第一次同意了访问相册权限");
                     }
-                } else {   
+                } else { // 用户第一次拒绝了访问相机权限
                     if (self.configure.openLog == YES) {
                         NSLog(@"用户第一次拒绝了访问相册权限");
                     }
                 }
             }];
-        } else if (status == PHAuthorizationStatusAuthorized) {   
+        } else if (status == PHAuthorizationStatusAuthorized) { // 用户允许当前应用访问相册
             self.isPHAuthorization = YES;
             if (self.configure.openLog == YES) {
                 NSLog(@"用户允许访问相册权限");
             }
             [self P_enterImagePickerController];
-        } else if (status == PHAuthorizationStatusDenied) {   
+        } else if (status == PHAuthorizationStatusDenied) { // 用户拒绝当前应用访问相册
             NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
             NSString *app_Name = [infoDict objectForKey:@"CFBundleDisplayName"];
             if (app_Name == nil) {
@@ -327,9 +339,9 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-      
+    // 创建 CIDetector，并设定识别类型：CIDetectorTypeQRCode
     CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@{CIDetectorAccuracy: CIDetectorAccuracyHigh}];
-      
+    // 获取识别结果
     NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];
     if (features.count == 0) {
         [_controller dismissViewControllerAnimated:YES completion:^{
@@ -382,5 +394,31 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
         [captureDevice unlockForConfiguration];
     }
 }
+
+//MARK:- Add
++ (void)checkImage:(UIImage *)image haveQrCodeInfo:(void (^)(BOOL have,  NSString * _Nullable  result))complete {
+    
+    if (image == nil) {
+        complete(NO, nil);
+        return;
+    }
+    // 创建 CIDetector，并设定识别类型：CIDetectorTypeQRCode
+    CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@{CIDetectorAccuracy: CIDetectorAccuracyHigh}];
+    
+    // 获取识别结果
+    NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];
+    if (features.count == 0) {
+        // no result
+        complete(NO, nil);
+        return;
+    }
+    NSString *resultStr = nil;
+    for (int index = 0; index < [features count]; index ++) {
+        CIQRCodeFeature *feature = [features objectAtIndex:index];
+        resultStr = feature.messageString;
+    }
+    complete(YES, resultStr);
+}
+
 
 @end

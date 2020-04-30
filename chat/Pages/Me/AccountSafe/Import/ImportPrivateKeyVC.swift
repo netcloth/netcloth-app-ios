@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ViewController.swift
+//  chat
+//
+//  Created by Grand on 2019/9/12.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 import UIKit
 
 class ImportPrivateKeyVC: BaseViewController {
@@ -25,7 +25,7 @@ class ImportPrivateKeyVC: BaseViewController {
     
     var disbag = DisposeBag()
     
-      
+    /// pwd
     var isShowPwd = false {
         didSet {
             passwordInput.isSecureTextEntry = !self.isShowPwd
@@ -35,7 +35,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-      
+    /// repwd
     var ShowRePwd = false {
         didSet {
             repwdInput.isSecureTextEntry = !self.ShowRePwd
@@ -44,7 +44,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-      
+    /// strength
     var strength: Int = 0 {
         didSet {
             var p:Float = 0.25
@@ -77,7 +77,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-      
+    /// Must set before strength
     var inputLength: Int = 0 {
         didSet {
             let len = self.inputLength
@@ -89,37 +89,37 @@ class ImportPrivateKeyVC: BaseViewController {
         }
     }
     
-      
+    //MARK:- Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
         configEvent()
         self.inputLength = 0
-        self.strength = 0   
+        self.strength = 0 //default
     }
     
     func configUI() {
         
-          
+        //config
         var att1 = NSMutableAttributedString(string: "Export_tip_1".localized(),
                                              attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13),
-                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: "#909399")!])
+                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: Color.gray_90)!])
         
         let att2 = NSMutableAttributedString(string: "Export_tip_2".localized(),
                                              attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13),
-                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: "#3D7EFF")!])
+                                                          NSAttributedString.Key.foregroundColor: UIColor(hexString: Color.blue)!])
         
         att1.append(att2)
         
         passTips.attributedText = att1
         
         self.view?.backgroundColor = UIColor(hexString: "#F7F8FA")
-        self.sureBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.sureBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     func configEvent() {
-          
+        ///Secrite
         self.pwdEyeBtn.rx.tap.subscribe(onNext: { [weak self] in
             self?.isShowPwd = !((self?.isShowPwd)!)
         }).disposed(by: disbag)
@@ -128,7 +128,7 @@ class ImportPrivateKeyVC: BaseViewController {
             self?.ShowRePwd = !((self?.ShowRePwd)!)
         }).disposed(by: disbag)
         
-          
+        ///Input
         accountInput.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             } else {
@@ -144,7 +144,7 @@ class ImportPrivateKeyVC: BaseViewController {
             
         }.disposed(by: disbag)
         
-          
+        // import
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             let r = (self?.checkInputAvalid())!
             if r.result == false {
@@ -173,7 +173,7 @@ class ImportPrivateKeyVC: BaseViewController {
         }).disposed(by: disbag)
     }
     
-      
+    //MARK:- Helper
     func checkInputAvalid() -> (result:Bool,msg:String) {
         
         guard let priK = privateKeyInput.text, priK.count > 0  else {

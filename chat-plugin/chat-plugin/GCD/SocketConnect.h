@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SocketConnect.h
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/14.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 
@@ -15,7 +15,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-  
+/// It can resend by one socket
 @interface SocketConnect : NSObject
 
 - (instancetype)initWithHost:(NSString *)host

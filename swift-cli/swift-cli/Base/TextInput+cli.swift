@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  TextInput+cli.swift
+//  swift-cli
+//
+//  Created by Grand on 2019/8/11.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
@@ -39,7 +39,7 @@ extension TextInput where Self : UITextInput {
 }
 
 extension String {
-      
+    /// LocalizedString
     public func localized() -> String {
         return NSLocalizedString(self, comment: "")
     }
@@ -87,7 +87,7 @@ extension UITextField : TextInput {
 
                     if let subStr = no_marked.appley(rule: rule, maxLength: maxLength) {
                         if subStr == no_marked {
-                              
+                            //Note: import
                             return
                         }
                        self.text = subStr
@@ -120,7 +120,7 @@ extension UITextView : TextInput {
 
                     if let subStr = no_marked.appley(rule: rule, maxLength: maxLength) {
                         if subStr == no_marked {
-                              
+                            //Note: import
                             return
                         }
                        self.text = subStr

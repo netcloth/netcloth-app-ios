@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPImageCaches.h
+//  chat-plugin
+//
+//  Created by Grand on 2019/10/31.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 #import "YYCache.h"

@@ -1,12 +1,12 @@
 
-/* Class = "UILabel"; text = "您的通讯录将用您的非对称密钥进行加密，服务器无法解密通讯录信息。"; ObjectID = "Cef-me-y9Y"; */
-"Cef-me-y9Y.text" = "您的通讯录将用您的非对称密钥进行加密，服务器无法解密通讯录信息。";
+/* Class = "UILabel"; text = "您的联系人将用您的非对称密钥进行加密，服务器无法解密联系人信息。"; ObjectID = "Cef-me-y9Y"; */
+"Cef-me-y9Y.text" = "您的联系人将用您的非对称密钥进行加密，服务器无法解密联系人信息。";
 
-/* Class = "UILabel"; text = "Netcloth不会自动帮您同步通讯录，需要您每次手动完成备份。"; ObjectID = "I5x-Cd-THs"; */
-"I5x-Cd-THs.text" = "Netcloth不会自动帮您同步通讯录，需要您每次手动完成备份。";
+/* Class = "UILabel"; text = "Netcloth不会自动帮您同步联系人，需要您每次手动完成备份。"; ObjectID = "I5x-Cd-THs"; */
+"I5x-Cd-THs.text" = "Netcloth不会自动帮您同步联系人，需要您每次手动完成备份。";
 
-/* Class = "UINavigationItem"; title = "备份通讯录"; ObjectID = "Ift-Ag-VcD"; */
-"Ift-Ag-VcD.title" = "备份通讯录";
+/* Class = "UINavigationItem"; title = "备份联系人"; ObjectID = "Ift-Ag-VcD"; */
+"Ift-Ag-VcD.title" = "备份联系人";
 
 /* Class = "UIButton"; normalTitle = "确认备份"; ObjectID = "IvD-c5-dAZ"; */
 "IvD-c5-dAZ.normalTitle" = "确认备份";
@@ -26,14 +26,14 @@
 /* Class = "UILabel"; text = " "; ObjectID = "Ydp-x5-kCQ"; */
 "Ydp-x5-kCQ.text" = " ";
 
-/* Class = "UINavigationItem"; title = "备份通讯录"; ObjectID = "uQE-Ut-xez"; */
-"uQE-Ut-xez.title" = "备份通讯录";
+/* Class = "UINavigationItem"; title = "备份联系人"; ObjectID = "uQE-Ut-xez"; */
+"uQE-Ut-xez.title" = "备份联系人";
 
 /* Class = "UILabel"; text = "名单"; ObjectID = "uRh-F9-kDq"; */
 "uRh-F9-kDq.text" = "名单";
 
-/* Class = "UILabel"; text = "NetCloth不设服务器存储用户的通讯录，您需要手动加密上传至云端服务器从而备份通讯录。"; ObjectID = "vuv-rP-ZIh"; */
-"vuv-rP-ZIh.text" = "NetCloth不设服务器存储用户的通讯录，您需要手动加密上传至云端服务器从而备份通讯录。";
+/* Class = "UILabel"; text = "NetCloth不设服务器存储用户的联系人，您需要手动加密上传至云端服务器从而备份NetCloth联系人。"; ObjectID = "vuv-rP-ZIh"; */
+"vuv-rP-ZIh.text" = "NetCloth不设服务器存储用户的联系人，您需要手动加密上传至云端服务器从而备份NetCloth联系人。";
 
-/* Class = "UIButton"; normalTitle = "备份通讯录"; ObjectID = "xas-7b-d9g"; */
-"xas-7b-d9g.normalTitle" = "备份通讯录";
+/* Class = "UIButton"; normalTitle = "备份联系人"; ObjectID = "xas-7b-d9g"; */
+"xas-7b-d9g.normalTitle" = "备份联系人";

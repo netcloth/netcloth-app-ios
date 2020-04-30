@@ -39,17 +39,17 @@
 static void compute_weighted_codebook(const signed char *shape_cb, const spx_word16_t *r, spx_word16_t *resp, spx_word16_t *resp2, spx_word32_t *E, int shape_cb_size, int subvect_size, char *stack)
 {
    int i, j, k;
-    
+  //const signed char *shape;
    for (i=0;i<shape_cb_size;i+=4)
    {
 
-        
+      //shape = shape_cb;
       E[0]=0;
       E[1]=0;
       E[2]=0;
       E[3]=0;
 
-       
+      /* Compute codeword response using convolution with impulse response */
       for(j=0;j<subvect_size;j++)
       {
 #if 1
@@ -114,7 +114,7 @@ static void compute_weighted_codebook(const signed char *shape_cb, const spx_wor
           resj3 *= 0.03125;
 #endif
 
-           
+          /* Compute codeword energy */
           E[0]=ADD32(E[0],MULT16_16(resj0,resj0));
           E[1]=ADD32(E[1],MULT16_16(resj1,resj1));
           E[2]=ADD32(E[2],MULT16_16(resj2,resj2));

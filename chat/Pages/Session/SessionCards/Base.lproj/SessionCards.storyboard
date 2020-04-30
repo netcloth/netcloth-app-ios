@@ -113,10 +113,6 @@
                                                             </label>
                                                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="bmq-ug-QES">
                                                                 <rect key="frame" x="388" y="22.5" width="11" height="10"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="10" id="klW-fG-6WH"/>
-                                                                    <constraint firstAttribute="width" constant="11" id="nji-eg-z3H"/>
-                                                                </constraints>
                                                             </imageView>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FGU-Yx-Cnn">
                                                                 <rect key="frame" x="350" y="12" width="51" height="31"/>
@@ -154,10 +150,6 @@
                                                             </label>
                                                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="Ajt-Pi-Ijp">
                                                                 <rect key="frame" x="388" y="22.5" width="11" height="10"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="10" id="LUT-wZ-EfJ"/>
-                                                                    <constraint firstAttribute="width" constant="11" id="a3m-kG-dUm"/>
-                                                                </constraints>
                                                             </imageView>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="QRY-lK-lh5">
                                                                 <rect key="frame" x="350" y="12" width="51" height="31"/>
@@ -194,10 +186,6 @@
                                                             </label>
                                                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="xNJ-5e-c1D">
                                                                 <rect key="frame" x="388" y="22.5" width="11" height="10"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="11" id="5wc-Ul-e7d"/>
-                                                                    <constraint firstAttribute="height" constant="10" id="mVq-1M-ve7"/>
-                                                                </constraints>
                                                             </imageView>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="XN9-qt-l31">
                                                                 <rect key="frame" x="350" y="12" width="51" height="31"/>
@@ -239,10 +227,6 @@
                                                             </label>
                                                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_rigth" translatesAutoresizingMaskIntoConstraints="NO" id="4dv-sO-PF6">
                                                                 <rect key="frame" x="388" y="22.5" width="11" height="10"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="11" id="isx-mh-Jeb"/>
-                                                                    <constraint firstAttribute="height" constant="10" id="qc3-S4-B6c"/>
-                                                                </constraints>
                                                             </imageView>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vEW-yu-vas" userLabel="mask">
                                                                 <rect key="frame" x="15" y="54" width="399" height="1"/>

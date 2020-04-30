@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  GroupCreateResponseVC.swift
+//  chat
+//
+//  Created by Grand on 2019/12/3.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -27,7 +27,7 @@ class GroupCreateResponseVC: BaseViewController {
         noteLabel?.preferredMaxLayoutWidth = YYScreenSize().width - 12*2
         noteLabel?.edgeInsets = UIEdgeInsets(top: 20, left: 18, bottom: 20, right: 18)
 
-        backupBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
+        backupBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20, opacity: 0.3)
     }
     
     @IBAction func onTapBackup() {

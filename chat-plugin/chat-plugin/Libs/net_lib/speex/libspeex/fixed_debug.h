@@ -167,8 +167,8 @@ static inline int SHL32(long long a, int shift)
 #define SATURATE16(x,a) (((x)>(a) ? (a) : (x)<-(a) ? -(a) : (x)))
 #define SATURATE32(x,a) (((x)>(a) ? (a) : (x)<-(a) ? -(a) : (x)))
 
-  
-  
+//#define SHR(a,shift) ((a) >> (shift))
+//#define SHL(a,shift) ((a) << (shift))
 
 #define ADD16(a, b) _ADD16(a, b, __FILE__, __LINE__)
 static inline short _ADD16(int a, int b, char *file, int line) 
@@ -235,7 +235,7 @@ static inline int SUB32(long long a, long long b)
 
 #define ADD64(a,b) (MIPS_INC(a)+(b))
 
- 
+/* result fits in 16 bits */
 static inline short MULT16_16_16(int a, int b) 
 {
    int res;

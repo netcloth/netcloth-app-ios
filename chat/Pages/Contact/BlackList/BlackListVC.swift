@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  BlackListVC.swift
+//  chat
+//
+//  Created by Grand on 2019/10/24.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -17,7 +17,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
     var indexArray: [String] = []
     var models: [String: [CPContact]] = [:]
     
-      
+    //MARK:- Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
         CPContactHelper.getBlackListContacts { [weak self]  (contacts) in
         
             let contacts: [CPContact]? = contacts
-              
+            //group
             self?.models.removeAll()
             if let array = contacts {
                 for contact in array {
@@ -58,7 +58,7 @@ class BlackListVC: BaseViewController, UITableViewDelegate, UITableViewDataSourc
                 }
             }
             
-              
+            //sort index
             let titles = self?.models.keys.sorted(by: { l, r in
                 let lIsEn = l.isEnglish()
                 let rIsEn = r.isEnglish()
@@ -155,15 +155,15 @@ extension BlackListVC {
     }
 }
 
-  
+//MARK:- Index
 extension BlackListVC {
     
-      
+    //numbers
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.indexArray
     }
     
-      
+    //selection
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index
     }

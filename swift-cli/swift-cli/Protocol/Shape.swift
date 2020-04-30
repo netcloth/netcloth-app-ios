@@ -1,12 +1,14 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  Shape.swift
+//  swift-cli
+//
+//  Created by Grand on 2019/7/24.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
+fileprivate var key_gradientLay = "key_gradientLay"
+
 
 public protocol Cell {
     func reloadData(data: Any) -> Void;
@@ -51,7 +53,7 @@ extension UIScrollView: Cell {
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = .never
         } else {
-              
+            // Fallback on earlier versions
         }
     }
 }
@@ -126,12 +128,12 @@ extension UIView {
     }
     
     
-      
-      
-      
-      
-      
-      
+    /// shadow layer
+    ///
+    /// - Parameters:
+    ///   - color: <#color description#>
+    ///   - offset: <#offset description#>
+    ///   - radius: blur of ps、 sketch
     open func setShadow(color: UIColor,
                         offset: CGSize = CGSize(width: 0,height: -3),
                         radius:CGFloat = 3.0,
@@ -142,12 +144,12 @@ extension UIView {
         self.layer.shadowOpacity = Float(opacity)
     }
     
-      
+    //set sub self, color to default, then clear it self
     open func fakesetLayerCornerRadiusAndShadow(_ cornerRadius: CGFloat,
-    color: UIColor,
-    offset: CGSize = CGSize(width: 0,height: -3),
-    radius:CGFloat = 3.0,
-    opacity: CGFloat = 1.0) {
+                                                color: UIColor,
+                                                offset: CGSize = CGSize(width: 0,height: -3),
+                                                radius:CGFloat = 3.0,
+                                                opacity: CGFloat = 1.0) {
         
         let targetLayer =  self.layer
         
@@ -159,6 +161,66 @@ extension UIView {
         targetLayer.shadowOffset = offset
         targetLayer.shadowRadius = radius
         targetLayer.shadowOpacity = Float(opacity)
+    }
+    
+    
+    /// 实现背景渐变
+    open func fakeGradientLayer(_ colors:[CGColor],
+                                startPoint: CGPoint =  CGPoint(x: 0.5, y: 0),
+                                endPoint: CGPoint =  CGPoint(x: 0.5, y: 1),
+                                locations: [NSNumber] = [0, 0.5, 1] ) {
+        
+        if let gl = self.gradientLay {
+            gl.removeFromSuperlayer()
+        }
+        
+        let glayer = CAGradientLayer()
+        glayer.frame = self.bounds
+        self.layer.addSublayer(glayer)
+        
+        glayer.colors = colors
+        glayer.startPoint = startPoint
+        glayer.endPoint = endPoint
+        glayer.locations = locations
+        
+        self.gradientLay = glayer
+    }
+    
+    
+    private var gradientLay: CAGradientLayer? {
+        get {
+            return objc_getAssociatedObject(self, &key_gradientLay) as? CAGradientLayer
+        }
+        set {
+            objc_setAssociatedObject(self, &key_gradientLay, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    /// 设置部分圆角
+    open func setCorner(size:CGFloat, maskedCorners:[CACornerMask])  {
+        // 设置左上，右上
+        if #available(iOS 11.0, *) {
+            self.layer.cornerRadius = size
+            
+            var raw: UInt = 0
+            for item in maskedCorners {
+                raw |= item.rawValue
+            }
+            let corners = CACornerMask(rawValue: raw)
+            self.layer.maskedCorners = corners
+        }
+        else {
+            
+            //            let roundingCorners = UIRectCorner()
+            //
+            //            let fieldPath = UIBezierPath.init(roundedRect: self.bounds,
+            //                                              byRoundingCorners: roundingCorners,
+            //                                              cornerRadii:CGSize(width: size, height: size) )
+            //            let fieldLayer = CAShapeLayer()
+            //            fieldLayer.frame = self.bounds
+            //            fieldLayer.path = fieldPath.cgPath
+            //            self.layer.mask = fieldLayer
+        }
     }
     
     open var viewController: UIViewController? {
@@ -216,7 +278,7 @@ extension ExpandHotZone where Self: UIView {
     }
 }
 
-  
+/// MARK:- Expand Hot Tap Rect
 open class ExpandBtn: UIButton, ExpandHotZone {
 }
 

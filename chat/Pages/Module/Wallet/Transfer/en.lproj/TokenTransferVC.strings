@@ -1,0 +1,45 @@
+
+/* Class = "UILabel"; text = "0.00001522NCH≈0.1USD"; ObjectID = "6Rq-AJ-7fH"; */
+"6Rq-AJ-7fH.text" = "";
+
+/* Class = "UILabel"; text = "收款地址"; ObjectID = "82m-Mf-V1s"; */
+"82m-Mf-V1s.text" = "To";
+
+/* Class = "UILabel"; text = "The address is wrong, please check again."; ObjectID = "Hu2-XL-4nC"; */
+"Hu2-XL-4nC.text" = "The address is wrong, please check again.";
+
+/* Class = "UITextField"; placeholder = "请输入转账金额"; ObjectID = "Vec-NC-Vro"; */
+"Vec-NC-Vro.placeholder" = "Input amount";
+
+/* Class = "UILabel"; text = "备注（本地备注，非链上）"; ObjectID = "XrR-7C-lYK"; */
+"XrR-7C-lYK.text" = "Memo（Local note only）";
+
+/* Class = "UILabel"; text = "矿工费"; ObjectID = "Y4f-Le-o44"; */
+"Y4f-Le-o44.text" = "Tx Fees";
+
+/* Class = "UIButton"; normalTitle = "下一步"; ObjectID = "arQ-ar-J2q"; */
+"arQ-ar-J2q.normalTitle" = "NEXT";
+
+/* Class = "UILabel"; text = "NCH余额"; ObjectID = "cG8-yi-XHd"; */
+"cG8-yi-XHd.text" = "";
+
+/* Class = "UILabel"; text = "NCH"; ObjectID = "hdN-7U-PH7"; */
+"hdN-7U-PH7.text" = "";
+
+/* Class = "UILabel"; text = "The wallet balance is insufficient, please recharge."; ObjectID = "k4K-Vy-EqL"; */
+"k4K-Vy-EqL.text" = "The wallet balance is insufficient, please recharge.";
+
+/* Class = "UILabel"; text = "3902.000763253201"; ObjectID = "m6V-xI-tax"; */
+"m6V-xI-tax.text" = "";
+
+/* Class = "UITextField"; placeholder = "选填（不超过20字）"; ObjectID = "sdA-bc-XHw"; */
+"sdA-bc-XHw.placeholder" = "Optional（No more than 20 characters）";
+
+/* Class = "UIButton"; normalTitle = "全部"; ObjectID = "ssD-4F-3fw"; */
+"ssD-4F-3fw.normalTitle" = "All";
+
+/* Class = "UILabel"; text = "转账金额"; ObjectID = "wMY-0L-9m5"; */
+"wMY-0L-9m5.text" = "Transfer Amount";
+
+/* Class = "UITextField"; placeholder = "请输入收款地址"; ObjectID = "z3I-Cz-Us9"; */
+"z3I-Cz-Us9.placeholder" = "Please input the NetCloth address";

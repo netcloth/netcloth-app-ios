@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  SRAudioRecordToast.m
+//  SRAudioRecorderDemo
+//
+//  Created by SRRecorderTool on 2018/8/2.
+//  Copyright © 2018年 SR. All rights reserved.
+//
 
 #import "SRAudioRecordToast.h"
 

@@ -1,16 +1,16 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  PaddingLabel.swift
+//  swift-cli
+//
+//  Created by Grand on 2019/8/2.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import Foundation
 
 open class PaddingLabel: UILabel {
     
-      
+    //set line height
     @IBInspectable public var lineSpace:CGFloat = 0 {
         didSet {
             let text = self.text ?? ""
@@ -24,11 +24,11 @@ open class PaddingLabel: UILabel {
 
             self.attributedText = attrString;
 
-  
+//            self.setNeedsDisplay()
         }
     }
     
-      
+    //set edge
     public var edgeInsets: UIEdgeInsets? {
         didSet {
             self.setNeedsDisplay()

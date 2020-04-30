@@ -1,0 +1,9 @@
+
+/* Class = "UIButton"; normalTitle = "确认转账"; ObjectID = "KUR-bh-xbI"; */
+"KUR-bh-xbI.normalTitle" = "确认转账";
+
+/* Class = "UILabel"; text = "密码错误，请重新输入"; ObjectID = "c8p-76-hny"; */
+"c8p-76-hny.text" = "密码错误，请重新输入";
+
+/* Class = "UILabel"; text = "请输入账户密码"; ObjectID = "jVh-En-avm"; */
+"jVh-En-avm.text" = "请输入账户密码";

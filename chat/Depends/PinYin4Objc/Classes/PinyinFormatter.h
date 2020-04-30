@@ -1,8 +1,8 @@
-  
-  
-  
-  
-  
+//
+//  
+//
+//  Created by kimziv on 13-9-14.
+//
 
 #ifndef _PinyinFormatter_H_
 #define _PinyinFormatter_H_
@@ -18,4 +18,4 @@
 - (id)init;
 @end
 
-#endif   
+#endif // _PinyinFormatter_H_

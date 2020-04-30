@@ -62,7 +62,7 @@
 #define forced_pitch_quant NULL
 #define lsp_quant_nb NULL
 #define lsp_quant_lbr NULL
-#endif  
+#endif /* DISABLE_ENCODER */
 
 #ifdef DISABLE_DECODER
 #define nb_decoder_init NULL
@@ -76,9 +76,9 @@
 #define lsp_unquant_lbr NULL
 #define pitch_unquant_3tap NULL
 #define forced_pitch_unquant NULL
-#endif  
+#endif /* DISABLE_DECODER */
 
- 
+/* Extern declarations for all codebooks we use here */
 extern const signed char gain_cdbk_nb[];
 extern const signed char gain_cdbk_lbr[];
 extern const signed char exc_5_256_table[];
@@ -119,56 +119,56 @@ static const ltp_params ltp_params_med = {
 
 /* Split-VQ innovation parameters for very low bit-rate narrowband */
 static const split_cb_params split_cb_nb_vlbr = {
-   10,                
-   4,                
-   exc_10_16_table,  
-   4,                
+   10,               /*subvect_size*/
+   4,               /*nb_subvect*/
+   exc_10_16_table, /*shape_cb*/
+   4,               /*shape_bits*/
    0,
 };
 
 /* Split-VQ innovation parameters for very low bit-rate narrowband */
 static const split_cb_params split_cb_nb_ulbr = {
-   20,                
-   2,                
-   exc_20_32_table,  
-   5,                
+   20,               /*subvect_size*/
+   2,               /*nb_subvect*/
+   exc_20_32_table, /*shape_cb*/
+   5,               /*shape_bits*/
    0,
 };
 
 /* Split-VQ innovation parameters for low bit-rate narrowband */
 static const split_cb_params split_cb_nb_lbr = {
-   10,               
-   4,                
-   exc_10_32_table,  
-   5,                
+   10,              /*subvect_size*/
+   4,               /*nb_subvect*/
+   exc_10_32_table, /*shape_cb*/
+   5,               /*shape_bits*/
    0,
 };
 
 
 /* Split-VQ innovation parameters narrowband */
 static const split_cb_params split_cb_nb = {
-   5,                
-   8,                
-   exc_5_64_table,  
-   6,                
+   5,               /*subvect_size*/
+   8,               /*nb_subvect*/
+   exc_5_64_table, /*shape_cb*/
+   6,               /*shape_bits*/
    0,
 };
 
 /* Split-VQ innovation parameters narrowband */
 static const split_cb_params split_cb_nb_med = {
-   8,                
-   5,                
-   exc_8_128_table,  
-   7,                
+   8,               /*subvect_size*/
+   5,               /*nb_subvect*/
+   exc_8_128_table, /*shape_cb*/
+   7,               /*shape_bits*/
    0,
 };
 
 /* Split-VQ innovation for low-band wideband */
 static const split_cb_params split_cb_sb = {
-   5,                
-   8,               
-   exc_5_256_table,     
-   8,                
+   5,               /*subvect_size*/
+   8,              /*nb_subvect*/
+   exc_5_256_table,    /*shape_cb*/
+   8,               /*shape_bits*/
    0,
 };
 
@@ -180,10 +180,10 @@ static const SpeexSubmode nb_submode1 = {
    1,
    0,
    0,
-    
+   /* LSP quantization */
    lsp_quant_lbr,
    lsp_unquant_lbr,
-    
+   /* No pitch quantization */
    forced_pitch_quant,
    forced_pitch_unquant,
    NULL,
@@ -201,14 +201,14 @@ static const SpeexSubmode nb_submode8 = {
    1,
    0,
    0,
-    
+   /*LSP quantization*/
    lsp_quant_lbr,
    lsp_unquant_lbr,
-    
+   /*No pitch quantization*/
    forced_pitch_quant,
    forced_pitch_unquant,
    NULL,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_nb_ulbr,
@@ -222,14 +222,14 @@ static const SpeexSubmode nb_submode2 = {
    0,
    0,
    0,
-    
+   /*LSP quantization*/
    lsp_quant_lbr,
    lsp_unquant_lbr,
-    
+   /*No pitch quantization*/
    pitch_search_3tap,
    pitch_unquant_3tap,
    &ltp_params_vlbr,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_nb_vlbr,
@@ -243,14 +243,14 @@ static const SpeexSubmode nb_submode3 = {
    0,
    1,
    0,
-    
+   /*LSP quantization*/
    lsp_quant_lbr,
    lsp_unquant_lbr,
-    
+   /*Pitch quantization*/
    pitch_search_3tap,
    pitch_unquant_3tap,
    &ltp_params_lbr,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_nb_lbr,
@@ -264,14 +264,14 @@ static const SpeexSubmode nb_submode4 = {
    0,
    1,
    0,
-    
+   /*LSP quantization*/
    lsp_quant_lbr,
    lsp_unquant_lbr,
-    
+   /*Pitch quantization*/
    pitch_search_3tap,
    pitch_unquant_3tap,
    &ltp_params_med,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_nb_med,
@@ -285,14 +285,14 @@ static const SpeexSubmode nb_submode5 = {
    0,
    3,
    0,
-    
+   /*LSP quantization*/
    lsp_quant_nb,
    lsp_unquant_nb,
-    
+   /*Pitch quantization*/
    pitch_search_3tap,
    pitch_unquant_3tap,
    &ltp_params_nb,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_nb,
@@ -306,14 +306,14 @@ static const SpeexSubmode nb_submode6 = {
    0,
    3,
    0,
-    
+   /*LSP quantization*/
    lsp_quant_nb,
    lsp_unquant_nb,
-    
+   /*Pitch quantization*/
    pitch_search_3tap,
    pitch_unquant_3tap,
    &ltp_params_nb,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_sb,
@@ -327,14 +327,14 @@ static const SpeexSubmode nb_submode7 = {
    0,
    3,
    1,
-    
+   /*LSP quantization*/
    lsp_quant_nb,
    lsp_unquant_nb,
-    
+   /*Pitch quantization*/
    pitch_search_3tap,
    pitch_unquant_3tap,
    &ltp_params_nb,
-    
+   /*Innovation quantization*/
    split_cb_search_shape_sign,
    split_cb_shape_sign_unquant,
    &split_cb_nb,
@@ -343,16 +343,16 @@ static const SpeexSubmode nb_submode7 = {
 };
 
 
- 
+/* Default mode for narrowband */
 static const SpeexNBMode nb_mode = {
-   NB_FRAME_SIZE,     
-   NB_SUBFRAME_SIZE,  
-   NB_ORDER,          
-   NB_PITCH_START,                
-   NB_PITCH_END,               
-   QCONST16(0.92,15),   
-   QCONST16(0.6,15),    
-   QCONST16(.0002,15),  
+   NB_FRAME_SIZE,    /*frameSize*/
+   NB_SUBFRAME_SIZE, /*subframeSize*/
+   NB_ORDER,         /*lpcSize*/
+   NB_PITCH_START,               /*pitchStart*/
+   NB_PITCH_END,              /*pitchEnd*/
+   QCONST16(0.92,15),  /* gamma1 */
+   QCONST16(0.6,15),   /* gamma2 */
+   QCONST16(.0002,15), /*lpc_floor*/
    {NULL, &nb_submode1, &nb_submode2, &nb_submode3, &nb_submode4, &nb_submode5, &nb_submode6, &nb_submode7,
    &nb_submode8, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
    5,
@@ -360,7 +360,7 @@ static const SpeexNBMode nb_mode = {
 };
 
 
- 
+/* Default mode for narrowband */
 EXPORT const SpeexMode speex_nb_mode = {
    &nb_mode,
    nb_mode_query,

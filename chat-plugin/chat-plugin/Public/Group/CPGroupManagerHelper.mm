@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPGroupManagerHelper.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/12/2.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPGroupManagerHelper.h"
 #import "CPDataModel+secpri.h"
@@ -123,7 +123,7 @@
         }
         
         
-          
+        //        ct.groupNodeAddress = serverAddress;
         ct.groupProgress = GroupCreateProgressJoinedOk;
         
         NSDate *date = NSDate.date;
@@ -159,7 +159,7 @@
     }];
 }
 
-  
+//MARK:- Group Info
 
 + (void)updateGroupModifyTime:(int64_t)modifyTime
                      byPubkey:(NSString *)pubkey
@@ -251,7 +251,7 @@
             NSDictionary *group = data[@"group"];
             int result = [data[@"result"] intValue];
             if (result != ChatErrorCodeOK) {
-                  
+                //Todo:
                 finalBlock(false, nil, nil);
                 return;
             }
@@ -352,7 +352,7 @@
     
     [CPInnerState.shared asynWriteTask:^{
         
-          
+        //group
         CPContact *ct = [CPInnerState.shared.loginUserDataBase getOneObjectOfClass:CPContact.class fromTable:kTableName_Contact where:CPContact.publicKey == hexpubkey];
         if (ct.sessionId <= 0) {
             finalBlock(false,nil);
@@ -369,7 +369,7 @@
     }];
     
 }
-  
+//MARK:- 群通知
 + (void)updateGroupInviteType:(int)type
                 byGroupPubkey:(NSString *)hexpubkey
                      callback:(void(^ __nullable)(BOOL succss, NSString *msg))result {
@@ -393,7 +393,7 @@
     
 }
 
-  
+//MARK: Get
 + (void)getGroupNotifyPreviewSessionCallback:(void(^ __nullable)(BOOL succss, NSString *msg, CPGroupNotifyPreview * _Nullable notify))result {
     
     void (^finalBlock)(BOOL, NSString *, CPGroupNotifyPreview *) = ^(BOOL succss, NSString *msg, CPGroupNotifyPreview *notify) {
@@ -410,7 +410,7 @@
         
         WCTDatabase *db = CPInnerState.shared.loginUserDataBase;
         
-          
+        //1 unread count
         NSTimeInterval _start =  [NSDate.date timeIntervalSince1970] - 259200;
         NSNumber *unReadCount = [db getOneValueOnResult:CPGroupNotify.AnyProperty.count()
                                               fromTable:kTableName_GroupNotify
@@ -423,7 +423,7 @@
         notifys.unreadCount = unReadCount.integerValue;
         notifys.readCount = readCount.integerValue;
         
-          
+        //3 last notice
         CPGroupNotify *latestMsg = [db getOneObjectOfClass:CPGroupNotify.class
                                                  fromTable:kTableName_GroupNotify
                                                      where:((CPGroupNotify.status == DMNotifyStatusUnread) || (CPGroupNotify.status == DMNotifyStatusRead)) && (CPGroupNotify.createTime >= _start)
@@ -449,7 +449,7 @@
         
         WCTDatabase *db = CPInnerState.shared.loginUserDataBase;
         
-          
+        //1
         NSArray<NSNumber *> * sessionIds =
         [db getOneDistinctColumnOnResult:CPGroupNotify.sessionId
                                fromTable:kTableName_GroupNotify
@@ -459,7 +459,7 @@
         NSMutableArray *array = NSMutableArray.array;
         for (NSNumber *sid in sessionIds) {
             int sessionId = sid.intValue;
-              
+            //2 relate contact
             CPContact *group = [db getOneObjectOfClass:CPContact.class
                                              fromTable:kTableName_Contact
                                                  where:CPContact.sessionId == sessionId && CPContact.sessionType == SessionTypeGroup];
@@ -471,20 +471,17 @@
             notifys.sessionId = sessionId;
             notifys.relateContact = group;
             
-              
+            //3 group members
             NSArray *firstMembers =
-            [CPInnerState.shared.loginUserDataBase getObjectsOnResults:{CPGroupMember.nickName}
+            [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPGroupMember.class
                                                              fromTable:kTableName_GroupMember
                                                                  where:CPGroupMember.sessionId == sessionId
                                                                orderBy:CPGroupMember.join_time.order(WCTOrderedAscending)
                                                                  limit:4];
-            NSMutableArray *nicks = NSMutableArray.array;
-            for (CPGroupMember *member in firstMembers) {
-                [nicks addObject:member.nickName];
-            }
-            notifys.groupRelateMemberNick = nicks;
             
-              
+            notifys.groupRelateMember = firstMembers;
+            
+            //4 unread count
             NSTimeInterval _start =  [NSDate.date timeIntervalSince1970] - 259200;
             NSNumber *count = [db getOneValueOnResult:CPGroupNotify.AnyProperty.count()
                                             fromTable:kTableName_GroupNotify
@@ -494,7 +491,7 @@
             
             notifys.unreadCount = count.integerValue;
             
-              
+            //5 last notice
             CPGroupNotify *latestMsg = [db getOneObjectOfClass:CPGroupNotify.class
                                                      fromTable:kTableName_GroupNotify
                                                          where:CPGroupNotify.sessionId == sessionId
@@ -506,7 +503,7 @@
             [array addObject:notifys];
         }
         
-          
+        //sort array
         [self sortNotifySessionArray:array];
         finalBlock(true, nil, array);
     }];
@@ -515,7 +512,7 @@
 
 
 
-  
+//群通知会话内 所有不同发送者消息
 + (void)getGroupDistinctSenderOfLatestNotifyInSession:(int)sessionId
                                              callback:(void(^ __nullable)(BOOL succss, NSString *msg, NSArray <CPGroupNotify *>* notices))result {
     
@@ -531,7 +528,7 @@
         
         WCTDatabase *db = CPInnerState.shared.loginUserDataBase;
         
-          
+        //1
         NSArray<NSString *> * sendersHex =
         [db getOneDistinctColumnOnResult:CPGroupNotify.senderPublicKey
                                fromTable:kTableName_GroupNotify
@@ -540,7 +537,7 @@
         
         NSMutableArray<CPGroupNotify *> *array = NSMutableArray.array;
         for (NSString *senderPubKey in sendersHex) {
-              
+            //2 last notice
             CPGroupNotify *latestMsg = [db getOneObjectOfClass:CPGroupNotify.class
                                                      fromTable:kTableName_GroupNotify
                                                          where:CPGroupNotify.sessionId == sessionId && CPGroupNotify.senderPublicKey == senderPubKey
@@ -556,7 +553,7 @@
     }];
 }
 
-  
+//同一个人 最近三条
 + (void)getGroupNotifyInSession:(int)sessionId
                   ofRequestUser:(NSString *)hexPubkey
                        callback:(void(^ __nullable)(BOOL succss, NSString *msg, NSArray <CPGroupNotify *>* notices))result {
@@ -589,13 +586,13 @@
     }];
 }
 
-  
+//MARK:  sort helper
 + (void)filterNotifyStatus:(CPGroupNotify *)notice {
     if (notice.status == DMNotifyStatusUnread ||
         notice.status == DMNotifyStatusRead) {
         NSTimeInterval now = [NSDate.date timeIntervalSince1970];
         double diff = fabs(now - notice.createTime);
-        if (diff > 259200) {   
+        if (diff > 259200) { //3*24*3600
             notice.status = DMNotifyStatusExpired;
         }
     }
@@ -693,7 +690,7 @@
     }];
 }
 
-  
+/// 更新未读消息 到 已读
 + (void)updateGroupNotifyToReadInNoticeId:(int64_t)noticeId
                     whereInUnreadCallback:(void(^ __nullable)(BOOL succss, NSString *msg))result {
     void (^finalBlock)(BOOL, NSString *) = ^(BOOL succss, NSString *msg) {
@@ -718,7 +715,7 @@
             finalBlock(false, nil);
         }
         else {
-              
+            //Note： 不存在也会 rtn  ok
             BOOL r = [db updateRowsInTable:kTableName_GroupNotify
             onProperties:{CPGroupNotify.status}
                  withRow:@[@(DMNotifyStatusRead)]
@@ -729,8 +726,8 @@
     }];
 }
 
-  
-  
+//MARK:- Group Member
+///批量更新一组群成员数据
 + (void)insertOrReplaceGroupAllMember:(NSArray<CPGroupMember *> *)member
                              callback:(void(^ __nullable)(BOOL succss, NSString *msg))result {
     
@@ -818,7 +815,7 @@
         
         [old minusSet:toadd];
         
-          
+        //delete old
         BOOL del = YES;
         if (old.count) {
             NSInteger sessionId = member[0].sessionId;
@@ -963,7 +960,7 @@
 }
 
 
-  
+//MARK:- Module Search
 + (void)searchContacts:(NSString *)text
               callback:(void(^ __nullable)(BOOL succss, NSString *msg, NSArray<CPContact *> * _Nullable contact))result {
     
@@ -989,16 +986,13 @@
         for (CPContact *contact in contacts) {
             if (contact.sessionType == SessionTypeGroup) {
                 NSArray *firstMembers =
-                [CPInnerState.shared.loginUserDataBase getObjectsOnResults:{CPGroupMember.nickName}
-                                                                 fromTable:kTableName_GroupMember
+                [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPGroupMember.class
+                                                               fromTable:kTableName_GroupMember
                                                                      where:CPGroupMember.sessionId == contact.sessionId
                                                                    orderBy:CPGroupMember.join_time.order(WCTOrderedAscending)
                                                                      limit:4];
-                NSMutableArray *nicks = NSMutableArray.array;
-                for (CPGroupMember *member in firstMembers) {
-                    [nicks addObject:member.nickName];
-                }
-                contact.groupRelateMemberNick = nicks;
+                
+                contact.groupRelateMember = firstMembers;
             }
         }
         
@@ -1056,21 +1050,21 @@
     }];
 }
 
-  
+//discard
 + (void)getMessagesInSession:(NSInteger)sessionId
                   createTime:(double)createTime
-                   fromMsgId:(long long)msgId   
-                        size:(NSInteger)size   
+                   fromMsgId:(long long)msgId //-1 from latest page
+                        size:(NSInteger)size //default 20
                     complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete
 {
     
     
 }
 
-  
+//MARK:- Custom
 + (void)queryMessagesInSession:(NSInteger)sessionId
-              lessThenServerId:(int64_t)serverId   
-                          size:(NSInteger)size   
+              lessThenServerId:(int64_t)serverId //-1 from last
+                          size:(NSInteger)size //default 20
                       complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete {
     
     NSInteger fsize = MAX(size, 0) ?: 20;
@@ -1078,7 +1072,7 @@
         
         NSArray<CPMessage *> *array;
         
-          
+        //find from bottom rows to top, then, latest on the top
         WCTSelect *select = [CPInnerState.shared.loginUserDataBase prepareSelectObjectsOnResults:CPMessage.AllProperties
                                                                                        fromTable:kTableName_GroupMessage];
         
@@ -1114,11 +1108,11 @@
 }
 
 
-  
+//[)  优先使用endid 定位
 + (void)v2_queryMessagesInSession:(NSInteger)sessionId
-                          beginId:(int64_t)beginId   
+                          beginId:(int64_t)beginId //-1 from last
                             endId:(int64_t)endid
-                            count:(NSInteger)wantCount   
+                            count:(NSInteger)wantCount //default 20
                          complete:(void (^ __nullable)(BOOL needSyn, int realCount, int64_t realBeginId, int64_t realEndId))complete {
     
     int64_t l_beginId = MAX(1, beginId);
@@ -1127,7 +1121,7 @@
     NSAssert(l_endId >= l_beginId, @"Must >");
     
     if (l_beginId > l_endId || l_count <= 0) {
-          
+        //error
         NSLog(@"syn group message error query bid %lld eid %lld", beginId, endid);
         if (complete) {
             complete(false, 0, l_beginId, l_endId);
@@ -1139,17 +1133,17 @@
     }
     
     NSInteger size = l_endId - l_beginId;
-    size = MIN(size, l_count);   
+    size = MIN(size, l_count); // ( 12 ,1)
     
-      
-    l_beginId = l_endId - size;   
+    //重新 定位 begin id
+    l_beginId = l_endId - size; // 2 -1
     
     
     [CPInnerState.shared asynWriteTask:^{
         
         NSArray<CPMessage *> *array;
         
-          
+        //find from bottom rows to top, then, latest on the top
         WCTSelect *select = [CPInnerState.shared.loginUserDataBase prepareSelectObjectsOnResults:CPMessage.AllProperties
                                                                                        fromTable:kTableName_GroupMessage];
         array = [[[select where:
@@ -1170,19 +1164,27 @@
 
 + (void)V2GetMessagesInSession:(NSInteger)sessionId
               beforeCreateTime:(double)createTime
-                beforeServerId:(long long)serverMsgId   
-                          size:(NSInteger)size   
-                      complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete
+                beforeServerId:(long long)serverMsgId //-1 from latest page
+                          size:(NSInteger)size //default 20
+                      complete:(void (^)(BOOL success,
+                                         NSString *msg,
+                                         NSArray<CPMessage *> * _Nullable recentSessions,
+                                         long long firstReadServerMsgId,
+                                         CPMessage * __nullable firstReadMsg, // serid == firstread
+                                         CPMessage * __nullable atRelateMsg))complete
 {
     NSInteger fsize = MAX(size, 0) ?: 20;
     [CPInnerState.shared asynWriteTask:^{
         
-        NSArray<CPMessage *> *array;
+        NSMutableArray <CPMessage *> *array;
         
-          
+        //find from bottom rows to top, then, latest on the top
         WCTSelect *select = [CPInnerState.shared.loginUserDataBase prepareSelectObjectsOnResults:CPMessage.AllProperties
                                                                                        fromTable:kTableName_GroupMessage];
         
+        CPMessage *atMsg = nil;
+        long long firstId = 0;
+        CPMessage *firstReadMsg = nil;
         if (serverMsgId == -1 || createTime == -1) {
             array = [[[select where:CPMessage.sessionId == sessionId &&
                        CPMessage.isDelete != 1]
@@ -1191,6 +1193,59 @@
                 CPMessage.server_msg_id.order(WCTOrderedDescending)}]
                      
                      limit:fsize].allObjects;
+            
+            //第一次已读情况
+            CPMessage *readMsg =
+            [CPInnerState.shared.loginUserDataBase getOneObjectOfClass:CPMessage.class
+                                                             fromTable:kTableName_GroupMessage
+                                                                 where:CPMessage.sessionId == sessionId
+             && (CPMessage.isDelete != 2 && CPMessage.isDelete != 1)
+             && CPMessage.read == YES
+                                                               orderBy:{CPMessage.createTime.order(WCTOrderedDescending),
+                CPMessage.server_msg_id.order(WCTOrderedDescending)}];
+            
+            readMsg.isGroupChat = YES;
+            firstId = readMsg.server_msg_id;
+            firstReadMsg = readMsg;
+            
+            
+            //第一次@情况
+            NSArray *msgs = [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPMessage.class
+                                                                   fromTable:kTableName_GroupMessage
+                                                                       where:CPMessage.sessionId == sessionId
+                             && (CPMessage.isDelete != 2 && CPMessage.isDelete != 1)
+                             && CPMessage.read == false
+                             && (CPMessage.useway == MessageUseWayAtMe || CPMessage.useway == MessageUseWayAtAll)
+                             && (CPMessage.server_msg_id > firstId)
+                     
+                     orderBy:{CPMessage.createTime.order(WCTOrderedDescending),
+                     CPMessage.server_msg_id.order(WCTOrderedDescending)}
+                             limit:30
+                     ];
+            
+            atMsg = msgs.lastObject;
+            atMsg.isGroupChat = true;
+            
+            /// 从已读 获取 后续未读
+            if (atMsg != nil) {
+                NSArray *unreadMsgArray = [CPInnerState.shared.loginUserDataBase getObjectsOfClass:CPMessage.class
+                                                                fromTable:kTableName_GroupMessage
+                                                                    where:CPMessage.sessionId == sessionId
+                && (CPMessage.isDelete != 2 && CPMessage.isDelete != 1)
+                && (CPMessage.server_msg_id > firstId && CPMessage.server_msg_id < atMsg.server_msg_id)
+                                            && CPMessage.read == false
+                                                                  orderBy:{CPMessage.createTime.order(WCTOrderedDescending),
+                   CPMessage.server_msg_id.order(WCTOrderedDescending)} limit:10];
+                
+                /// Note add
+                if (array == nil || array.count == 0) {
+                    array = NSMutableArray.array;
+                }
+                for (CPMessage *item in unreadMsgArray) {
+                    item.isDelete = 10; //mock
+                }
+                [array insertObjects:unreadMsgArray atIndex:0];
+            }
         }
         else {
             
@@ -1209,7 +1264,7 @@
         
         [CPInnerState.shared asynDoTask:^{
             if (complete) {
-                complete(YES,nil,array);
+                complete(YES,nil,array, firstId,firstReadMsg,atMsg);
             }
         }];
     }];

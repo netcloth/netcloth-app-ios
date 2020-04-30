@@ -1,7 +1,7 @@
 /**********************************************************************
  * Copyright (c) 2014 Pieter Wuille                                   *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
 #ifndef SECP256K1_SCALAR_IMPL_H
@@ -122,99 +122,99 @@ static void secp256k1_scalar_inverse(secp256k1_scalar *r, const secp256k1_scalar
     for (i = 0; i < 3; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5);  
-    for (i = 0; i < 4; i++) {  
+    secp256k1_scalar_mul(t, t, &u5); /* 101 */
+    for (i = 0; i < 4; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3);  
-    for (i = 0; i < 4; i++) {  
+    secp256k1_scalar_mul(t, t, &x3); /* 111 */
+    for (i = 0; i < 4; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5);  
-    for (i = 0; i < 5; i++) {  
+    secp256k1_scalar_mul(t, t, &u5); /* 101 */
+    for (i = 0; i < 5; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u11);  
+    secp256k1_scalar_mul(t, t, &u11); /* 1011 */
     for (i = 0; i < 4; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u11);  
-    for (i = 0; i < 4; i++) {  
+    secp256k1_scalar_mul(t, t, &u11); /* 1011 */
+    for (i = 0; i < 4; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3);  
-    for (i = 0; i < 5; i++) {  
+    secp256k1_scalar_mul(t, t, &x3); /* 111 */
+    for (i = 0; i < 5; i++) { /* 00 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3);  
-    for (i = 0; i < 6; i++) {  
+    secp256k1_scalar_mul(t, t, &x3); /* 111 */
+    for (i = 0; i < 6; i++) { /* 00 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13);  
-    for (i = 0; i < 4; i++) {  
+    secp256k1_scalar_mul(t, t, &u13); /* 1101 */
+    for (i = 0; i < 4; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5);  
+    secp256k1_scalar_mul(t, t, &u5); /* 101 */
     for (i = 0; i < 3; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3);  
-    for (i = 0; i < 5; i++) {  
+    secp256k1_scalar_mul(t, t, &x3); /* 111 */
+    for (i = 0; i < 5; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u9);  
-    for (i = 0; i < 6; i++) {  
+    secp256k1_scalar_mul(t, t, &u9); /* 1001 */
+    for (i = 0; i < 6; i++) { /* 000 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u5);  
-    for (i = 0; i < 10; i++) {  
+    secp256k1_scalar_mul(t, t, &u5); /* 101 */
+    for (i = 0; i < 10; i++) { /* 0000000 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3);  
-    for (i = 0; i < 4; i++) {  
+    secp256k1_scalar_mul(t, t, &x3); /* 111 */
+    for (i = 0; i < 4; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x3);  
-    for (i = 0; i < 9; i++) {  
+    secp256k1_scalar_mul(t, t, &x3); /* 111 */
+    for (i = 0; i < 9; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x8);  
-    for (i = 0; i < 5; i++) {  
+    secp256k1_scalar_mul(t, t, &x8); /* 11111111 */
+    for (i = 0; i < 5; i++) { /* 0 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u9);  
-    for (i = 0; i < 6; i++) {  
+    secp256k1_scalar_mul(t, t, &u9); /* 1001 */
+    for (i = 0; i < 6; i++) { /* 00 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u11);  
+    secp256k1_scalar_mul(t, t, &u11); /* 1011 */
     for (i = 0; i < 4; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13);  
+    secp256k1_scalar_mul(t, t, &u13); /* 1101 */
     for (i = 0; i < 5; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &x2);  
-    for (i = 0; i < 6; i++) {  
+    secp256k1_scalar_mul(t, t, &x2); /* 11 */
+    for (i = 0; i < 6; i++) { /* 00 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13);  
-    for (i = 0; i < 10; i++) {  
+    secp256k1_scalar_mul(t, t, &u13); /* 1101 */
+    for (i = 0; i < 10; i++) { /* 000000 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u13);  
+    secp256k1_scalar_mul(t, t, &u13); /* 1101 */
     for (i = 0; i < 4; i++) {
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, &u9);  
-    for (i = 0; i < 6; i++) {  
+    secp256k1_scalar_mul(t, t, &u9); /* 1001 */
+    for (i = 0; i < 6; i++) { /* 00000 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(t, t, x);  
-    for (i = 0; i < 8; i++) {  
+    secp256k1_scalar_mul(t, t, x); /* 1 */
+    for (i = 0; i < 8; i++) { /* 00 */
         secp256k1_scalar_sqr(t, t);
     }
-    secp256k1_scalar_mul(r, t, &x6);  
+    secp256k1_scalar_mul(r, t, &x6); /* 111111 */
 }
 
 SECP256K1_INLINE static int secp256k1_scalar_is_even(const secp256k1_scalar *a) {
@@ -318,7 +318,7 @@ static void secp256k1_scalar_split_lambda(secp256k1_scalar *r1, secp256k1_scalar
     );
     VERIFY_CHECK(r1 != a);
     VERIFY_CHECK(r2 != a);
-     
+    /* these _var calls are constant time since the shift amount is constant */
     secp256k1_scalar_mul_shift_var(&c1, a, &g1, 272);
     secp256k1_scalar_mul_shift_var(&c2, a, &g2, 272);
     secp256k1_scalar_mul(&c1, &c1, &minus_b1);
@@ -330,4 +330,4 @@ static void secp256k1_scalar_split_lambda(secp256k1_scalar *r1, secp256k1_scalar
 #endif
 #endif
 
-#endif  
+#endif /* SECP256K1_SCALAR_IMPL_H */

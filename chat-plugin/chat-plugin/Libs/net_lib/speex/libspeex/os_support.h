@@ -143,7 +143,7 @@ static inline void speex_notify(const char *str)
 #endif
 
 #ifndef OVERRIDE_SPEEX_PUTC
- 
+/** Speex wrapper for putc */
 static inline void _speex_putc(int ch, void *file)
 {
    FILE *f = (FILE *)file;

@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ChatService.swift
+//  chat
+//
+//  Created by Grand on 2019/11/13.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 import PromiseKit
@@ -18,9 +18,9 @@ class ChatService: NSObject {
      }
      */
     
-      
+    /// get the chat connect server
     static func requestLoadBalancing(endPoint: String) -> Promise<[String]> {
-          
+        //        /v1/service/gateway?pub_key=XXXXXX.   根据ip获取tcp链接地址
         let _promise = Promise<[String]> { (resolver) in
             let path = endPoint + "/v1/service/gateway?pub_key=" + (CPAccountHelper.loginUser()?.publicKey ?? "")
             NW.requestUrl(path: path, method: .get, para: nil) { (r, res) in

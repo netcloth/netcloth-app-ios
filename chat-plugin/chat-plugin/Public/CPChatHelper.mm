@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  CPChatHelper.m
+//  chat-plugin
+//
+//  Created by Grand on 2019/7/31.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 #import "CPChatHelper.h"
 #import "CPDataModel+secpri.h"
@@ -71,7 +71,7 @@
     }];
 }
 
-  
+//MARK:- 删除消息
 + (void)sendDeleteMsgAction:(NCProtoDeleteAction)action
                        hash:(int64_t)hash
             relateHexPubkey:(NSString * _Nullable)hexPubkey
@@ -153,8 +153,8 @@
 
 + (void)getMessagesInSession:(NSInteger)sessionId
                   createTime:(double)createTime
-                   fromMsgId:(long long)msgId   
-                        size:(NSInteger)size   
+                   fromMsgId:(long long)msgId //-1 from latest page
+                        size:(NSInteger)size //default 20
                     complete:(void (^)(BOOL success, NSString *msg, NSArray<CPMessage *> * _Nullable recentSessions))complete
 {
     
@@ -163,7 +163,7 @@
         
         NSArray<CPMessage *> *array;
         
-          
+        //find from bottom rows to top, then, latest on the top
         WCTSelect *select = [CPInnerState.shared.loginUserDataBase prepareSelectObjectsOnResults:CPMessage.AllProperties
                                                                                        fromTable:kTableName_Message];
         

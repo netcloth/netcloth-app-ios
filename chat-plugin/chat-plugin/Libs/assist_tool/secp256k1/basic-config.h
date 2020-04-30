@@ -1,13 +1,13 @@
 /**********************************************************************
  * Copyright (c) 2013, 2014 Pieter Wuille                             *
  * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http:  
+ * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
 #ifndef SECP256K1_BASIC_CONFIG_H
 #define SECP256K1_BASIC_CONFIG_H
 
-  
+//#ifdef USE_BASIC_CONFIG
 
 #undef USE_ASM_X86_64
 #undef USE_ENDOMORPHISM
@@ -28,6 +28,6 @@
 #define USE_FIELD_10X26 1
 #define USE_SCALAR_8X32 1
 
-  
+//#endif /* USE_BASIC_CONFIG */
 
-#endif  
+#endif /* SECP256K1_BASIC_CONFIG_H */

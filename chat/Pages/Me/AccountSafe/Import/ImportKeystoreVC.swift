@@ -1,10 +1,10 @@
-  
-  
-  
-  
-  
-  
-  
+//
+//  ImportKeystoreVC.swift
+//  chat
+//
+//  Created by Grand on 2019/9/12.
+//  Copyright © 2019 netcloth. All rights reserved.
+//
 
 import UIKit
 
@@ -19,7 +19,7 @@ class ImportKeystoreVC: BaseViewController {
     
     var disbag = DisposeBag()
 
-      
+    //MARK:- Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +31,11 @@ class ImportKeystoreVC: BaseViewController {
         self.view?.backgroundColor = UIColor(hexString: "#F7F8FA")
         self.adjustLabel.adjustsFontSizeToFitWidth = true
         
-        self.sureBtn?.setShadow(color: UIColor(hexString: Config.Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
+        self.sureBtn?.setShadow(color: UIColor(hexString: Color.shadow_Layer)!, offset: CGSize(width: 0,height: 10), radius: 20,opacity: 0.3)
     }
     
     func configEvent() {
-          
+        ///Input
         accountInput.rx.text.subscribe { [weak self] (event: Event<String?>) in
             if let e = event.element, e?.isEmpty == false {
             } else {
@@ -48,7 +48,7 @@ class ImportKeystoreVC: BaseViewController {
             }
             }.disposed(by: disbag)
         
-          
+        // import
         self.sureBtn?.rx.tap.subscribe(onNext: { [weak self] in
             let r = (self?.checkInputAvalid())!
             if r.result == false {
@@ -79,7 +79,7 @@ class ImportKeystoreVC: BaseViewController {
     
     
     
-      
+    //MARK:- Helper
     func checkInputAvalid() -> (result:Bool,msg:String) {
         
         guard let ks = keystoreInput.text, ks.count > 0  else {
